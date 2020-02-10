@@ -1,0 +1,18 @@
+<section class="flex">
+    <nav class="w-full relative z-50 {{ ngtStyle.compile(['color.bg']) }}" #element>
+      <div class="h-full">
+        <!-- Float Left -->
+        <div class="float-left flex">
+          <ng-content select="[left-header]"></ng-content>
+        </div>
+  
+        <!-- Float Right -->
+        <div class="float-right flex h-full">
+          <ng-content select="[right-header]"></ng-content>
+        </div>
+  
+        <!-- Fallback -->
+        <ng-content></ng-content>
+      </div>
+    </nav>
+</section>

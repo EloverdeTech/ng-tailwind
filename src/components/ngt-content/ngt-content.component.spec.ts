@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NgtSidenavComponent } from './ngt-sidenav.component';
+import { NgtContentComponent } from './ngt-content.component';
 
-describe('NgtSidenavComponent', () => {
-  let component: NgtSidenavComponent;
-  let fixture: ComponentFixture<NgtSidenavComponent>;
+describe('NgtContentComponent', () => {
+  let component: NgtContentComponent;
+  let fixture: ComponentFixture<NgtContentComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NgtSidenavComponent ]
+      declarations: [ NgtContentComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NgtSidenavComponent);
+    fixture = TestBed.createComponent(NgtContentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
