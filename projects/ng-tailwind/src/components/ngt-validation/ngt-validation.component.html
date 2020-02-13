@@ -1,0 +1,55 @@
+<div type="hidden" class="text-xs text-red-700 font-bold">
+    <span class="help-block has-error" *ngIf="control?.errors?.maxlength">
+        Número máximo de caracteres excedido.
+    </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.required && (control?.dirty || (container && container['submitted']))">
+        Campo obrigatório.
+    </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.email && (control?.dirty || (container && container['submitted']))">
+        E-mail inválido.
+    </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.unique && (control?.dirty || (container && container['submitted']))">
+        Já existe.
+    </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.cnpj && (control?.dirty || (container && container['submitted']))">
+        CNPJ inválido.
+    </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.cpf && (control?.dirty || (container && container['submitted']))">
+        CPF inválido.
+    </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.password && (control?.dirty || (container && container['submitted']))">
+        O Campo deve ter no minimo 8 caracteres.
+    </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.match && (control?.dirty || (container && container['submitted']))">
+        Os campos não coincidem.
+    </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.invalidDate && (control?.dirty || (container && container['submitted']))">
+        Data inválida
+    </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.time && (control?.dirty || (container && container['submitted']))">
+        Previsão inválida.
+    </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.externalServerDependency && (control?.dirty || (container && container['submitted']))">
+        Servidor externo indisponível.
+    </span>
+</div>
