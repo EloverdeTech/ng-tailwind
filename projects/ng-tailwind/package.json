@@ -5,5 +5,8 @@
     "@angular/common": ">6.0.0",
     "@angular/core": ">6.0.0",
     "inputmask": "^4.0.9"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.1"
   }
 }
