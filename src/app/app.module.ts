@@ -1,12 +1,17 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import {
+  NgtContentModule,
+  NgtHeaderNavModule,
+  NgtInputModule,
+  NgtSectionModule,
+  NgtSidenavModule,
+  NgtStylizableModule,
+} from 'ng-tailwind';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgtSectionModule, NgtHeaderNavModule, NgtSidenavModule } from 'ng-tailwind';
-import { NgtInputModule } from 'ng-tailwind';
-import { FormsModule } from '@angular/forms';
-import { NgtContentModule } from 'ng-tailwind';
 
 @NgModule({
   declarations: [
@@ -20,7 +25,8 @@ import { NgtContentModule } from 'ng-tailwind';
     NgtInputModule,
     NgtHeaderNavModule,
     NgtSidenavModule,
-    NgtContentModule
+    NgtContentModule,
+    NgtStylizableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

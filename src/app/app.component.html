@@ -1,19 +1,29 @@
-<ngt-section>
-  <form #form='ngForm'>
-    {{ test }}
-    <ngt-input [(ngModel)]='input_test1' name='input_test1' label='Input test'></ngt-input>
-  </form>
+<ngt-header-nav>
+  Header test
+</ngt-header-nav>
 
-  <ngt-header-nav>
-    Header test
-  </ngt-header-nav>
+<div class="min-h-screen">
+  <ngt-sidenav style="min-height: 89vh;" size='sm' color.bg='blue-500' ngt-stylizable #tailSidenav>
+    <div body>
+      <ul>
+        <li>
+          Menu 1
+        </li>
+        <li>
+          Menu 2
+        </li>
+      </ul>
+    </div>
 
-  <ngt-sidenav>
-    Sidenav test
+    <div class="flex min-h-screen relative w-full">
+      <ngt-content class="w-full" color.bg='gray-200' ngt-stylizable>
+        <ngt-content>
+          <form #form='ngForm'>
+            {{ input_test1 }}
+            <ngt-input [(ngModel)]='input_test1' type='email' [isRequired]='true' name='input_test1' label='Input test'></ngt-input>
+          </form>
+        </ngt-content>
+      </ngt-content>
+    </div>
   </ngt-sidenav>
-  
-  <ngt-content>
-    Content test
-  </ngt-content>
-
-</ngt-section>
+</div>
