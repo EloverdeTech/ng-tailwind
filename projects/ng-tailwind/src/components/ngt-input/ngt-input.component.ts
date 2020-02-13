@@ -5,9 +5,9 @@ import { NgtHttpValidationService } from '../../services/http/ngt-http-validatio
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
-import { Inputmask } from 'inputmask';
 import { Observable } from 'rxjs';
 
+var Inputmask = require('inputmask');
 @Component({
   selector: 'ngt-input',
   templateUrl: './ngt-input.component.html',
@@ -238,11 +238,11 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     };
 
     if (this.mask == "decimal") {
-      //Inputmask('decimal', masks[this.mask]).mask(this.element.nativeElement);
+      Inputmask('decimal', masks[this.mask]).mask(this.element.nativeElement);
     } else if (this.mask == "numeric") {
-      //Inputmask("numeric", masks[this.mask]).mask(this.element.nativeElement);
+      Inputmask("numeric", masks[this.mask]).mask(this.element.nativeElement);
     } else {
-      //Inputmask(masks[this.mask]).mask(this.element.nativeElement);
+      Inputmask(masks[this.mask]).mask(this.element.nativeElement);
     }
   }
 
