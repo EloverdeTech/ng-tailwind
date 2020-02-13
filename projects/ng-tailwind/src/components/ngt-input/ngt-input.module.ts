@@ -1,14 +1,18 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { NgtValidationModule } from '../ngt-validation/ngt-validation.module';
 import { NgtInputComponent } from './ngt-input.component';
-import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [NgtInputComponent],
   exports: [NgtInputComponent],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    NgtValidationModule
   ]
 })
 export class NgtInputModule { }
