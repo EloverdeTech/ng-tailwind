@@ -2,6 +2,17 @@
  * Public API Surface of ng-tailwind
  */
 
+//NgtButton
+export * from './components/ngt-button/ngt-button.module';
+export * from './components/ngt-button/ngt-button.component';
+
+//NgtPortlet
+export * from './components/ngt-portlet/ngt-portlet.module';
+export * from './components/ngt-portlet/ngt-portlet.component';
+export * from './components/ngt-portlet/ngt-portlet-header/ngt-portlet-header.component';
+export * from './components/ngt-portlet/ngt-portlet-body/ngt-portlet-body.component';
+export * from './components/ngt-portlet/ngt-portlet-footer/ngt-portlet-footer.component';
+
 //NgtSidenav
 export * from './components/ngt-sidenav/ngt-sidenav.module';
 export * from './components/ngt-sidenav/ngt-sidenav.component';
