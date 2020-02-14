@@ -1,0 +1,36 @@
+<ng-template #content>
+    <ng-content></ng-content>
+</ng-template>
+
+<div class="h-full w-full">
+    <ng-container *ngIf='!link'>
+        <button (click)='onClick($event)' [type]="(loading || isDisabled || noSubmit) ? 'button' : 'submit'"
+            [disabled]="isDisabled"
+            class="{{ getClass() }} {{ ngtStyle.compile(['color.bg']) }} h-full w-full focus:outline-none flex align-items-center font-normal py-2 px-4 rounded text-sm text-white">
+            <ng-container *ngTemplateOutlet="content"></ng-container>
+            <span *ngIf="loading" class="ml-1">
+                <svg class="ngt-rotate-center-infinity" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                    width="20" height="20">
+                    <path fill="#FFFFFF"
+                        d="M10 3v2a5 5 0 0 0-3.54 8.54l-1.41 1.41A7 7 0 0 1 10 3zm4.95 2.05A7 7 0 0 1 10 17v-2a5 5 0 0 0 3.54-8.54l1.41-1.41zM10 20l-4-4 4-4v8zm0-12V0l4 4-4 4z" />
+                </svg>
+            </span>
+        </button>
+    </ng-container>
+
+    <ng-container *ngIf='link'>
+        <a (click)='onClick($event)' [routerLink]='href ? href : null'
+            class="{{ getClass() }} {{ ngtStyle.compile(['color.bg']) }} h-full w-full focus:outline-none flex align-items-center font-normal py-2 px-4 rounded text-sm text-white">
+            <span class="w-full">
+                <ng-container *ngTemplateOutlet="content"></ng-container>
+            </span>
+
+            <span *ngIf="loading" class="ml-1">
+                <svg class="ngt-rotate-center-infinity" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20">
+                    <path fill="#FFFFFF"
+                        d="M10 3v2a5 5 0 0 0-3.54 8.54l-1.41 1.41A7 7 0 0 1 10 3zm4.95 2.05A7 7 0 0 1 10 17v-2a5 5 0 0 0 3.54-8.54l1.41-1.41zM10 20l-4-4 4-4v8zm0-12V0l4 4-4 4z" />
+                </svg>
+            </span>
+        </a>
+    </ng-container>
+</div>
