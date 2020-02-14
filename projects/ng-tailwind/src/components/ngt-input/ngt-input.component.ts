@@ -1,11 +1,24 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, Injector, Optional, Self, Host, SkipSelf, Renderer2 } from '@angular/core';
-import { ControlContainer, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn, NgForm } from '@angular/forms';
-import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtHttpValidationService } from '../../services/http/ngt-http-validation.service';
-import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
-import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import {
+  Component,
+  ElementRef,
+  Host,
+  Injector,
+  Input,
+  OnInit,
+  Optional,
+  Renderer2,
+  Self,
+  SkipSelf,
+  ViewChild,
+} from '@angular/core';
+import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, ValidationErrors, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
+
+import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtHttpValidationService } from '../../services/http/ngt-http-validation.service';
+import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 
 var Inputmask = require('inputmask');
 @Component({

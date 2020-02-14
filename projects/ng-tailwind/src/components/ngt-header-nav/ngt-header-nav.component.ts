@@ -23,7 +23,7 @@ export class NgtHeaderNavComponent {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    this.ngtStyle.load(this.injector, 'PortletHeader', {
+    this.ngtStyle.load(this.injector, 'HeaderNav', {
       h: 'auto',
       color: {}
     });

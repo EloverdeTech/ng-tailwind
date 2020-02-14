@@ -30,7 +30,7 @@ export class NgtSidenavComponent {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    this.ngtStyle.load(this.injector, 'PortletHeader', {
+    this.ngtStyle.load(this.injector, 'Sidenav', {
       h: 'auto',
       color: {}
     });

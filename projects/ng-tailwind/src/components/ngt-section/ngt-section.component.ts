@@ -1,6 +1,7 @@
-import { Component, Injector, Input, Self, Optional } from '@angular/core';
-import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { Component, Injector, Input, Optional, Self } from '@angular/core';
+
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
   selector: 'ngt-section',
