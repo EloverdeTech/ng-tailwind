@@ -8,6 +8,8 @@ import {
   NgtSectionModule,
   NgtSidenavModule,
   NgtStylizableModule,
+  NgtPortletModule,
+  NgtButtonModule,
 } from 'ng-tailwind';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -26,7 +28,9 @@ import { AppComponent } from './app.component';
     NgtHeaderNavModule,
     NgtSidenavModule,
     NgtContentModule,
-    NgtStylizableModule
+    NgtStylizableModule,
+    NgtPortletModule,
+    NgtButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
