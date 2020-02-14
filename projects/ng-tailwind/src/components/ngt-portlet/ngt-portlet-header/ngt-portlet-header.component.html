@@ -1,0 +1,22 @@
+<div class='border-b leading-loose {{ ngtStyle.compile(["h", "color.text", "color.bg"]) }}'>
+    <div class="flex align-items-center px-3 md:px-8 py-2">
+        <div class="clearfix w-full">
+            <div class="float-left flex">
+                <i class='{{ icon }} text-xl self-center mr-3' *ngIf="icon"></i>
+                <p class='text-xl font-medium self-center'>{{ caption }}</p>
+            </div>
+
+            <div class="float-left w-full md:w-auto">
+                <ng-content select="[header]"></ng-content>
+            </div>
+
+            <div class="float-left w-full md:w-auto">
+                <ng-content select="[left-header]"></ng-content>
+            </div>
+
+            <div class="float-right w-full md:w-auto">
+                <ng-content select="[right-header]"></ng-content>
+            </div>
+        </div>
+    </div>
+</div>
