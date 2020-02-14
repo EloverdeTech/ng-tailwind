@@ -1,0 +1,43 @@
+<section class='flex'>
+    <div class="shadow-lg overflow-hidden w-full mx-3 md:mx-6 my-8 {{ ngtStyle.compile(['h', 'color.bg', 'color.text']) }}"
+        @fadeUp>
+        <!--Header-->
+        <div *ngIf="!customLayout">
+            <ngt-portlet-header [ngtStyle]='ngtStyle' [icon]='icon' [caption]='caption'>
+                <div right-header>
+                    <ng-content select='[right-header]'></ng-content>
+                </div>
+                <div left-header>
+                    <ng-content select='[left-header]'></ng-content>
+                </div>
+                <div header>
+                    <ng-content select='[header]'></ng-content>
+                </div>
+            </ngt-portlet-header>
+        </div>
+
+        <!--Body-->
+        <ng-container *ngIf="!customLayout && withBody">
+            <ngt-portlet-body>
+                <ng-content select='[body]'></ng-content>
+            </ngt-portlet-body>
+        </ng-container>
+
+        <!--Footer-->
+        <ng-container *ngIf="!customLayout && withFooter">
+            <ngt-portlet-footer [ngtStyle]='ngtStyle'>
+                <div right-footer>
+                    <ng-content select='[right-footer]'></ng-content>
+                </div>
+                <div left-footer>
+                    <ng-content select='[left-footer]'></ng-content>
+                </div>
+                <div footer>
+                    <ng-content select='[footer]'></ng-content>
+                </div>
+            </ngt-portlet-footer>
+        </ng-container>
+
+        <ng-content></ng-content>
+    </div>
+</section>
