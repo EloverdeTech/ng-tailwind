@@ -1,0 +1,31 @@
+@import "../../../node_modules/flatpickr/dist/flatpickr.min.css";
+.border-error {
+    border: solid #c53030 1px !important;
+    background-color: unset !important;
+    border-radius: 0.25rem;
+    padding: 1px;
+}
+
+.border-normal {
+    border: solid #cbd5e0 1px !important;
+    background-color: unset !important;
+    border-radius: 0.25rem;
+    padding: 1px;
+}
+
+.ng2-flatpickr-input:focus {
+    outline: none;
+}
+
+.ng2-flatpickr-input {
+    border: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 46px;
+    padding-left: 0.8rem;
+}
+
+.disabledDiv {
+    background-color: rgb(235, 235, 235);
+    min-height: 46px;
+}

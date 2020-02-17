@@ -2,6 +2,10 @@
  * Public API Surface of ng-tailwind
  */
 
+//NgtDate
+export * from './components/ngt-date/ngt-date.module';
+export * from './components/ngt-date/ngt-date.component';
+
 //NgtButton
 export * from './components/ngt-button/ngt-button.module';
 export * from './components/ngt-button/ngt-button.component';

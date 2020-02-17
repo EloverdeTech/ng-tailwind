@@ -2,14 +2,15 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
+  NgtButtonModule,
   NgtContentModule,
+  NgtDateModule,
   NgtHeaderNavModule,
   NgtInputModule,
+  NgtPortletModule,
   NgtSectionModule,
   NgtSidenavModule,
   NgtStylizableModule,
-  NgtPortletModule,
-  NgtButtonModule,
 } from 'ng-tailwind';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -30,7 +31,8 @@ import { AppComponent } from './app.component';
     NgtContentModule,
     NgtStylizableModule,
     NgtPortletModule,
-    NgtButtonModule
+    NgtButtonModule,
+    NgtDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]
