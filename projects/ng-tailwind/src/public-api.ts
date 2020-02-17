@@ -2,6 +2,13 @@
  * Public API Surface of ng-tailwind
  */
 
+//NgtModal
+export * from './components/ngt-modal/ngt-modal.module';
+export * from './components/ngt-modal/ngt-modal.component';
+export * from './components/ngt-modal/ngt-modal-header/ngt-modal-header.component';
+export * from './components/ngt-modal/ngt-modal-body/ngt-modal-body.component';
+export * from './components/ngt-modal/ngt-modal-footer/ngt-modal-footer.component';
+
 //NgtDate
 export * from './components/ngt-date/ngt-date.module';
 export * from './components/ngt-date/ngt-date.component';
