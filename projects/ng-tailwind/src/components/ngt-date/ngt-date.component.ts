@@ -1,4 +1,4 @@
-import { Component, Host, Input, OnInit, Optional, Renderer2, SkipSelf, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Host, Input, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
 import { FlatpickrOptions, Ng2FlatpickrComponent } from 'ng2-flatpickr';
 
@@ -57,8 +57,6 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
   constructor(
     @Optional() @Host()
     public formContainer: ControlContainer,
-    @Optional() @SkipSelf()
-    private renderer: Renderer2,
     //@Optional() @SkipSelf()
     //private tailFormComponent: TailFormComponent
   ) {
