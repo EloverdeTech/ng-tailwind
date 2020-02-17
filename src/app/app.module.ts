@@ -15,6 +15,7 @@ import {
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NgtModalModule } from 'projects/ng-tailwind/src/public-api';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { AppComponent } from './app.component';
     NgtStylizableModule,
     NgtPortletModule,
     NgtButtonModule,
-    NgtDateModule
+    NgtDateModule,
+    NgtModalModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgtModalComponent } from 'projects/ng-tailwind/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'lib-test';
+
+  @ViewChild('ngtModal', { static: true }) ngtModal: NgtModalComponent;
+
+  openModal() {
+    this.ngtModal.open();
+  }
+
+  closeModal() {
+    this.ngtModal.close();
+  }
 }

@@ -42,7 +42,7 @@
 
                             <div class="flex flex-wrap">
                                 <div class="mt-3 mr-6 w-3/12">
-                                    <ngt-button type='success' color.bg='red-900' ngt-stylizable>
+                                    <ngt-button type='success' (click)='openModal()' color.bg='red-900' ngt-stylizable>
                                         <span class="text-center w-full">
                                             Success
                                         </span>
@@ -73,6 +73,23 @@
                                     </ngt-button>
                                 </div>
                             </div>
+
+                            <ngt-modal #ngtModal>
+                                <div header>
+                                    <p class="font-bold font-sans">Ngt Modal</p>
+                                </div>
+                                
+                                <div body>
+                                    <div class="flex flex-wrap w-full">
+                                        <ngt-input class="mt-3 w-full" label='Nome' name='taskName'>
+                                        </ngt-input>
+                                    </div>
+                                </div>
+
+                                <div footer>
+                                    <ngt-button type='success' (click)='closeModal()'>Confirmar</ngt-button>
+                                </div>
+                            </ngt-modal>
                         </form>
                     </div>
 
