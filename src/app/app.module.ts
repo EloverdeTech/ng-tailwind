@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
+  NgtActionModule,
   NgtButtonModule,
   NgtContentModule,
   NgtDateModule,
@@ -11,12 +12,13 @@ import {
   NgtSectionModule,
   NgtSidenavModule,
   NgtStylizableModule,
+  NgtTagModule,
   NgtTextareaModule,
 } from 'ng-tailwind';
+import { NgtCheckboxModule, NgtModalModule } from 'projects/ng-tailwind/src/public-api';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgtModalModule } from 'projects/ng-tailwind/src/public-api';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,10 @@ import { NgtModalModule } from 'projects/ng-tailwind/src/public-api';
     NgtButtonModule,
     NgtDateModule,
     NgtModalModule,
-    NgtTextareaModule
+    NgtTextareaModule,
+    NgtCheckboxModule,
+    NgtActionModule,
+    NgtTagModule
   ],
   providers: [],
   bootstrap: [AppComponent]

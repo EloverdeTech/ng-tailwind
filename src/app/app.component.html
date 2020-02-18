@@ -38,6 +38,23 @@
                             {{ textarea_test1 }}                            
                             <ngt-textarea name='textarea' label='Ngt Textarea' [(ngModel)]="textarea_test1"></ngt-textarea>
 
+                            <br>
+
+                            {{ checkbox1 }}
+                            <ngt-checkbox name='checkbox' [(ngModel)]="checkbox1" label='Ngt Checkbox'></ngt-checkbox>
+
+                            <br><br>
+
+                            <div class="w-6 h-6">
+                                <ngt-action icon='fas fa-plus' color.bg='blue-700' color.text='blue-200' ngt-stylizable></ngt-action>
+                            </div>
+
+                            <br><br>
+
+                            <div class="w-32">
+                                <ngt-tag icon='fas fa-times' color.bg='blue-500' color.text='black' ngt-stylizable>Ngt Tag</ngt-tag>
+                            </div>
+
                             <!-- {{ date_test1 }}
                             <div class="w-full pr-0 md:w-4/12 mt-4 md:pr-6">
                                 <ngt-date label='Previsão' [(ngModel)]='date_test1' name='ngtDate'></ngt-date>
