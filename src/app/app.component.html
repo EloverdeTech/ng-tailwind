@@ -1,9 +1,28 @@
-<ngt-header-nav>
-    Header test
+<ngt-header-nav color.bg='gray-700' ngt-stylizable>
+    <div class="flex py-3 px-3 relative w-full justify-end">
+        <ngt-dropdown
+            imageIcon='https://i2.wp.com/marketingcomcafe.com.br/wp-content/uploads/2017/12/banco-imagens-gratis.png?fit=623%2C415&ssl=1'
+            label='Dropdown'
+            headerBg='url("https://i2.wp.com/marketingcomcafe.com.br/wp-content/uploads/2017/12/banco-imagens-gratis.png?fit=623%2C415&ssl=1")'>
+
+            <!-- HEADER -->
+            <div header class="text-center">
+                <h3 class="font-semibold text-gray-100 truncate">username</h3>
+                <h3 class="font-semibold text-gray-100 truncate">userEmail</h3>
+            </div>
+
+            <!-- BODY -->
+            <div body class="w-full cursor-pointer">
+                <p class="block px-4 py-4 font-semibold text-gray-700 hover:bg-blue-500 w-full hover:text-white truncate">Editar Perfil</p>
+                <p class="block px-4 py-4 font-semibold text-gray-700 hover:bg-blue-500 w-full hover:text-white truncate">Ajuda</p>
+                <p class="block px-4 py-4 font-semibold text-gray-700 hover:bg-blue-500 w-full hover:text-white truncate">Sair</p>
+            </div>
+        </ngt-dropdown>
+    </div>
 </ngt-header-nav>
 
 <div class="min-h-screen">
-    <ngt-sidenav style="min-height: 89vh;" size='sm' color.bg='blue-500' ngt-stylizable #tailSidenav>
+    <ngt-sidenav style="min-height: 89vh;" size='sm' color.bg='blue-500' ngt-stylizable>
         <div body>
             <ul>
                 <li>
@@ -35,8 +54,9 @@
                                 label='Input test'>
                             </ngt-input>
 
-                            {{ textarea_test1 }}                            
-                            <ngt-textarea name='textarea' label='Ngt Textarea' [(ngModel)]="textarea_test1"></ngt-textarea>
+                            {{ textarea_test1 }}
+                            <ngt-textarea name='textarea' label='Ngt Textarea' [(ngModel)]="textarea_test1">
+                            </ngt-textarea>
 
                             <br>
 
@@ -46,25 +66,32 @@
                             <br><br>
 
                             <div class="w-6 h-6">
-                                <ngt-action icon='fas fa-plus' color.bg='blue-700' color.text='blue-200' ngt-stylizable></ngt-action>
+                                <ngt-action icon='fas fa-plus' color.bg='blue-700' color.text='blue-200' ngt-stylizable>
+                                </ngt-action>
                             </div>
 
                             <br><br>
 
                             <div class="w-32">
-                                <ngt-tag icon='fas fa-times' color.bg='blue-500' color.text='black' ngt-stylizable>Ngt Tag</ngt-tag>
+                                <ngt-tag icon='fas fa-times' color.bg='red-500' color.text='black' ngt-stylizable>Ngt
+                                    Tag</ngt-tag>
                             </div>
 
-                            <!-- {{ date_test1 }}
+                            <div class="fixed bottom-0 right-0 mr-8 mb-6 z-50 w-12">
+                                <ngt-floating-button [withAnimation]='true' icon='fas fa-plus'
+                                    [menus]="floatingButtonMenus" ngt-stylizable></ngt-floating-button>
+                            </div>
+
+                            {{ date_test1 }}
                             <div class="w-full pr-0 md:w-4/12 mt-4 md:pr-6">
                                 <ngt-date label='Previsão' [(ngModel)]='date_test1' name='ngtDate'></ngt-date>
-                            </div> -->
+                            </div>
 
                             <div class="flex flex-wrap">
                                 <div class="mt-3 mr-6 w-3/12">
                                     <ngt-button type='success' (click)='openModal()' color.bg='red-900' ngt-stylizable>
                                         <span class="text-center w-full">
-                                            Success
+                                            NgtModal
                                         </span>
                                     </ngt-button>
                                 </div>
@@ -77,12 +104,37 @@
                                     </ngt-button>
                                 </div>
 
-                                <div class="mt-3 mr-6 w-3/12">
-                                    <ngt-button type='info'>
+                                <div class="relative mt-3 mr-6 w-3/12">
+                                    <ngt-button type='info' (click)='dropdownReverse.toggleMenuOnClick()'>
                                         <span class="text-center w-full">
-                                            Info
+                                            DropdownReverse
                                         </span>
                                     </ngt-button>
+
+                                    <ngt-dropdown class="absolute" [withArrow]='false' [withHeader]='false'
+                                        [reversePosition]='true' [openOnHover]='false'
+                                        iconClass='ml-2 text-3xl self-center mt-1 text-gray-600' #dropdownReverse>
+                                        <div body
+                                            class="flex flex-col w-full cursor-pointer font-semibold text-gray-700">
+                                            <div class="flex relative items-center">
+                                                <i class="fas fa-pencil-alt absolute ml-5 text-xl text-blue-300"></i>
+                                                <span
+                                                    class="w-full rounded-t-lg pl-12 px-4 py-2 hover:bg-blue-500 hover:text-white">Editar</span>
+                                            </div>
+
+                                            <div class="flex relative items-center">
+                                                <i class="fas fa-check absolute ml-5 text-xl text-blue-300"></i>
+                                                <span
+                                                    class="w-full pl-12 px-4 py-2 hover:bg-blue-500 hover:text-white">Concluir</span>
+                                            </div>
+
+                                            <div class="flex relative items-center">
+                                                <i class="fas fa-times absolute ml-5 text-xl text-blue-300"></i>
+                                                <span
+                                                    class="w-full rounded-b-lg pl-12 px-4 py-2 hover:bg-blue-500 hover:text-white">Cancelar</span>
+                                            </div>
+                                        </div>
+                                    </ngt-dropdown>
                                 </div>
 
                                 <div class="mt-3 mr-6 w-3/12">
@@ -98,7 +150,7 @@
                                 <div header>
                                     <p class="font-bold font-sans">Ngt Modal</p>
                                 </div>
-                                
+
                                 <div body>
                                     <div class="flex flex-wrap w-full">
                                         <ngt-input class="mt-3 w-full" label='Nome' name='taskName'>
@@ -135,8 +187,6 @@
 
                     <ngt-portlet-body>
                         <ngt-content>
-                            <p>Portlet Body</p>
-
                             <form #form='ngForm'>
                                 {{ input_test1 }}
                                 <ngt-input [(ngModel)]='input_test1' type='email' [isRequired]='true' name='input_test1'

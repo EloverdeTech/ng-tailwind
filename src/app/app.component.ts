@@ -7,9 +7,30 @@ import { NgtModalComponent } from 'projects/ng-tailwind/src/public-api';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  @ViewChild('ngtModal', { static: true }) ngtModal: NgtModalComponent;
+
   title = 'lib-test';
 
-  @ViewChild('ngtModal', { static: true }) ngtModal: NgtModalComponent;
+  public floatingButtonMenus = [
+    {
+      name: '',
+      action: '/menus/incluir',
+      icon: 'fa fa-bars',
+      tooltip: 'Novo Menu'
+    },
+    {
+      name: '',
+      action: '/gerenciar-usuarios/incluir',
+      icon: 'fas fa-users',
+      tooltip: 'Novo Usuário'
+    },
+    {
+      name: '',
+      action: '/empresas/incluir',
+      icon: 'fas fa-briefcase',
+      tooltip: 'Nova Empresa'
+    }
+  ];
 
   openModal() {
     this.ngtModal.open();

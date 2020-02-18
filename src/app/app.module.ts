@@ -4,18 +4,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import {
   NgtActionModule,
   NgtButtonModule,
+  NgtCheckboxModule,
   NgtContentModule,
   NgtDateModule,
+  NgtFloatingButtonModule,
   NgtHeaderNavModule,
   NgtInputModule,
+  NgtModalModule,
   NgtPortletModule,
   NgtSectionModule,
   NgtSidenavModule,
   NgtStylizableModule,
   NgtTagModule,
   NgtTextareaModule,
+  NgtDropdownModule,
 } from 'ng-tailwind';
-import { NgtCheckboxModule, NgtModalModule } from 'projects/ng-tailwind/src/public-api';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -41,7 +44,9 @@ import { AppComponent } from './app.component';
     NgtTextareaModule,
     NgtCheckboxModule,
     NgtActionModule,
-    NgtTagModule
+    NgtTagModule,
+    NgtFloatingButtonModule,
+    NgtDropdownModule
   ],
   providers: [],
   bootstrap: [AppComponent]
