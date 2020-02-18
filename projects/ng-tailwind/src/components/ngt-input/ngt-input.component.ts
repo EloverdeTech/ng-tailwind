@@ -24,7 +24,7 @@ var Inputmask = require('inputmask');
 @Component({
   selector: 'ngt-input',
   templateUrl: './ngt-input.component.html',
-  styleUrls: ['./ngt-input.component.css'],
+  styleUrls: ['./ngt-input.component.css', '../../animations.css'],
   providers: [
     NgtMakeProvider(NgtInputComponent),
   ],
