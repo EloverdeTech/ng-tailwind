@@ -2,6 +2,18 @@
  * Public API Surface of ng-tailwind
  */
 
+//NgtTag
+export * from './components/ngt-tag/ngt-tag.module';
+export * from './components/ngt-tag/ngt-tag.component';
+
+//NgtAction
+export * from './components/ngt-action/ngt-action.module';
+export * from './components/ngt-action/ngt-action.component';
+
+//NgtCheckbox
+export * from './components/ngt-checkbox/ngt-checkbox.module';
+export * from './components/ngt-checkbox/ngt-checkbox.component';
+
 //NgtTextarea
 export * from './components/ngt-textarea/ngt-textarea.module';
 export * from './components/ngt-textarea/ngt-textarea.component';
