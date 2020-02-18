@@ -11,6 +11,7 @@ import {
   NgtSectionModule,
   NgtSidenavModule,
   NgtStylizableModule,
+  NgtTextareaModule,
 } from 'ng-tailwind';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -34,7 +35,8 @@ import { NgtModalModule } from 'projects/ng-tailwind/src/public-api';
     NgtPortletModule,
     NgtButtonModule,
     NgtDateModule,
-    NgtModalModule
+    NgtModalModule,
+    NgtTextareaModule
   ],
   providers: [],
   bootstrap: [AppComponent]
