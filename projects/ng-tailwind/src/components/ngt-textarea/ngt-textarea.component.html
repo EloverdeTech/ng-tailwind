@@ -1,0 +1,26 @@
+<label class="{{ shining ? '' : 'flex'}} mb-2 text-sm mt-2" *ngIf="label" [hidden]="shining">
+    {{label}}:
+    <span class="text-red-500 font-bold text-md" *ngIf="isRequired">*</span>
+    <a *ngIf='helpText' [title]="helpTitle" [attr.data-content]="helpText">
+        &nbsp;[?]
+    </a>
+</label>
+
+<div class="{{ shining ? '' : 'flex'}}" [hidden]='shining'>
+    <textarea [rows]='rows' autocomplete="new-password"
+        class="appearance-none block border border-gray-400 focus:bg-white focus:border-blue-500 focus:outline-none leading-tight px-4 py-3 rounded w-full h-full"
+        [disabled]="isDisabled" [readonly]="isReadonly" placeholder="{{placeholder ? placeholder : ''}}"
+        [ngClass]="{'textarea-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
+        #element></textarea>
+</div>
+
+<ng-container *ngIf='shining'>
+    <div class="flex">
+        <span class="h-10 w-full ngt-shining"></span>
+    </div>
+</ng-container>
+
+<input *ngIf='componentReady' type="hidden" [ngModel]="value" [name]="name" [value]="value">
+
+<ng-content></ng-content>
+<ngt-validation [control]="formControl" [container]="formContainer"></ngt-validation>
