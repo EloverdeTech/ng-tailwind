@@ -2,6 +2,15 @@
  * Public API Surface of ng-tailwind
  */
 
+//NgtDropdown
+export * from './components/ngt-dropdown/ngt-dropdown.module';
+export * from './components/ngt-dropdown/ngt-dropdown.component';
+export * from './components/ngt-dropdown/ngt-dropdown-container/ngt-dropdown-container.component';
+
+//NgtFloatingButton
+export * from './components/ngt-floating-button/ngt-floating-button.module';
+export * from './components/ngt-floating-button/ngt-floating-button.component';
+
 //NgtTag
 export * from './components/ngt-tag/ngt-tag.module';
 export * from './components/ngt-tag/ngt-tag.component';
