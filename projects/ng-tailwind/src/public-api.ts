@@ -2,6 +2,10 @@
  * Public API Surface of ng-tailwind
  */
 
+//NgtTextarea
+export * from './components/ngt-textarea/ngt-textarea.module';
+export * from './components/ngt-textarea/ngt-textarea.component';
+
 //NgtModal
 export * from './components/ngt-modal/ngt-modal.module';
 export * from './components/ngt-modal/ngt-modal.component';
