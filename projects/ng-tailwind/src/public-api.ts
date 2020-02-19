@@ -2,6 +2,20 @@
  * Public API Surface of ng-tailwind
  */
 
+//NgtHttpService
+export * from './services/http/ngt-http.service';
+
+//NgtDatatable
+export * from './components/ngt-datatable/ngt-datatable.module';
+export * from './components/ngt-datatable/ngt-datatable.component';
+export * from './components/ngt-datatable/ngt-tbody/ngt-tbody.component';
+export * from './components/ngt-datatable/ngt-td/ngt-td.component';
+export * from './components/ngt-datatable/ngt-td-check/ngt-td-check.component';
+export * from './components/ngt-datatable/ngt-th/ngt-th.component';
+export * from './components/ngt-datatable/ngt-th-check/ngt-th-check.component';
+export * from './components/ngt-datatable/ngt-thead/ngt-thead.component';
+export * from './components/ngt-datatable/ngt-tr/ngt-tr.component';
+
 //NgtDropdown
 export * from './components/ngt-dropdown/ngt-dropdown.module';
 export * from './components/ngt-dropdown/ngt-dropdown.component';
