@@ -1,15 +1,18 @@
-import { Component, ViewChild } from '@angular/core';
-import { NgtModalComponent } from 'projects/ng-tailwind/src/public-api';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { NgtDatatableComponent, NgtDatatableType, NgtModalComponent } from 'projects/ng-tailwind/src/public-api';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   @ViewChild('ngtModal', { static: true }) ngtModal: NgtModalComponent;
+  @ViewChild('ngtTable', { static: true }) ngtTable: NgtDatatableComponent;
 
   title = 'lib-test';
+
+  public ngtTableType = NgtDatatableType.remote;
 
   public floatingButtonMenus = [
     {
@@ -31,6 +34,10 @@ export class AppComponent {
       tooltip: 'Nova Empresa'
     }
   ];
+
+  ngAfterViewInit() {
+    this.ngtTable.init();
+  }
 
   openModal() {
     this.ngtModal.open();

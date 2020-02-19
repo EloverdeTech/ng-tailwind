@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
   NgtActionModule,
   NgtButtonModule,
   NgtCheckboxModule,
   NgtContentModule,
+  NgtDatatableModule,
   NgtDateModule,
+  NgtDropdownModule,
   NgtFloatingButtonModule,
   NgtHeaderNavModule,
   NgtInputModule,
@@ -17,11 +19,12 @@ import {
   NgtStylizableModule,
   NgtTagModule,
   NgtTextareaModule,
-  NgtDropdownModule,
+  NgtHttpService
 } from 'ng-tailwind';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NgtHttpTest } from './services/ngt-http-test.service';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,7 @@ import { AppComponent } from './app.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     NgtSectionModule,
     NgtInputModule,
     NgtHeaderNavModule,
@@ -46,9 +50,23 @@ import { AppComponent } from './app.component';
     NgtActionModule,
     NgtTagModule,
     NgtFloatingButtonModule,
-    NgtDropdownModule
+    NgtDropdownModule,
+    NgtDatatableModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: NgtHttpService,
+      useClass: NgtHttpTest
+    },
+    {
+      provide: 'NgtStyleSuccessButton',
+      useValue: {
+        color: {
+          bg: 'teal-500'
+        }
+      }
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
