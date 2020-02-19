@@ -1,0 +1,30 @@
+<div class="md:flex md:items-center">
+    <span (click)='sort()' [class.cursor-pointer]='sortable'>
+        <ng-content></ng-content>
+        <ng-container *ngIf='sortable && isCurrentSort'>
+            &nbsp;<i class="{{ sortDirection == 'desc' ? 'fas fa-sort-amount-down' : 'fas fa-sort-amount-up' }} text-gray-700 cursor-pointer"></i>
+        </ng-container>
+    </span>
+
+    <ng-container *ngIf='searchable'>
+        <span (click)='enableSearch()' title="Filtrar"
+            class="fas fa-filter float-right md:block px-2 py-0 text-gray-700 md:hover:bg-blue-500 md:hover:text-white rounded-full md:py-2 md:ml-1 cursor-pointer"></span>
+    </ng-container>
+</div>
+
+<ng-template #modal>
+    <ngt-modal-header [ngtModal]='ngtDataTable.searchModal'>
+        <span class="font-semibold text-gray-800 text-sm">{{ searchLabel }}</span>
+    </ngt-modal-header>
+
+    <ngt-modal-body>
+        <div [hidden]='hasCustomSearch'>
+            <ngt-input #searchInput jit='true' [(ngModel)]='searchTerm' (ngModelChange)='search($event)'
+                placeholder='Pesquisar...' name='{{ reference }}_filter'></ngt-input>
+        </div>
+
+        <div [hidden]='!hasCustomSearch'>
+            <ng-content select='[customSearch]'></ng-content>
+        </div>
+    </ngt-modal-body>
+</ng-template>
