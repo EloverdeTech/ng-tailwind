@@ -1,0 +1,60 @@
+<ul class="flex justify-center md:float-left">
+    <!-- FIRST -->
+    <li (click)='goToFirstPage()'
+        class="mr-2 rounded-full hover:bg-blue-500 bg-gray-700 w-8 h-8 cursor-pointer text-center text-white font-semibold py-1">
+        <a>
+            <i class='fas fa-angle-double-left'></i>
+        </a>
+    </li>
+
+    <!-- PREVIOUS -->
+    <li (click)='goToPreviousPage()'
+        class="mr-2 rounded-full hover:bg-blue-500 bg-gray-500 w-8 h-8 cursor-pointer text-center text-white font-semibold py-1">
+        <a>
+            <i class='fas fa-angle-left'></i>
+        </a>
+    </li>
+
+    <ng-container *ngFor='let page of pages'>
+        <ng-container *ngIf='page == pagination.page'>
+            <li class="mr-2 rounded-full font-semibold bg-blue-500 w-8 h-8 cursor-pointer text-center text-white py-1">
+                <a>
+                    {{ page }}
+                </a>
+            </li>
+        </ng-container>
+
+        <ng-container *ngIf='page !== pagination.page'>
+            <li (click)='goToPage(page)'
+                class="mr-2 rounded-full font-semibold hover:bg-blue-500 w-8 h-8 cursor-pointer text-center hover:text-white text-gray-700 font-semibold py-1">
+                <a href="javascript:;">
+                    {{ page }}
+                </a>
+            </li>
+        </ng-container>
+
+    </ng-container>
+
+    <!-- NEXT -->
+    <li (click)='goToNextPage()'
+        class="mr-2 rounded-full hover:bg-blue-500 bg-gray-500 w-8 h-8 cursor-pointer text-center text-white font-semibold py-1">
+        <a>
+            <i class='fas fa-angle-right'></i>
+        </a>
+    </li>
+
+    <!-- LAST -->
+    <li (click)='goToLastPage()'
+        class="mr-2 rounded-full hover:bg-blue-500 bg-gray-700 w-8 h-8 cursor-pointer text-center text-white font-semibold py-1">
+        <a>
+            <i class='fas fa-angle-double-right'></i>
+        </a>
+    </li>
+
+</ul>
+
+<!-- ITEMS PER PAGE -->
+<div class="flex float-left md:float-right mt-2 md:mt-0">
+    <span>Visualizando {{ pagination.from }} - {{ pagination.to }} de
+        {{ pagination.total }} registros</span>
+</div>
