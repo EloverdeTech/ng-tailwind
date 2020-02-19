@@ -8,7 +8,7 @@ import { NgtModalComponent } from '../ngt-modal.component';
   styleUrls: ['./ngt-modal-header.component.css']
 })
 export class NgtModalHeaderComponent {
-  @Input() public ngtModal: NgtModalComponent;
+  @Input() ngtModal: NgtModalComponent;
 
   constructor(
     @Optional() @SkipSelf()

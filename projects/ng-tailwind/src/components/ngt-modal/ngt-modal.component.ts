@@ -1,5 +1,14 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'ngt-modal',
@@ -19,18 +28,24 @@ export class NgtModalComponent implements AfterViewInit {
   @Input() customLayout: boolean = false;
   @Input() disableDefaultCloses: boolean = false;
 
-  @Output() onModalClose: EventEmitter<any> = new EventEmitter();
+  @Output() onCloseModal: EventEmitter<any> = new EventEmitter();
+  @Output() onOpenModal: EventEmitter<any> = new EventEmitter();
 
   public closeButton = document.querySelectorAll('.modal-close');
   public isOpen: boolean = false;
 
+  constructor(private changeDetectorRef: ChangeDetectorRef) { }
+
   close() {
-    this.onModalClose.emit();
     this.isOpen = false;
+    this.changeDetectorRef.detectChanges();
+    this.onCloseModal.emit();
   }
 
   open() {
     this.isOpen = true;
+    this.changeDetectorRef.detectChanges();
+    this.onOpenModal.emit();
   }
 
   ngAfterViewInit() {
