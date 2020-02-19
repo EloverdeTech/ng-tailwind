@@ -1,0 +1,41 @@
+<div class="w-full overflow-x-auto">
+    <div class="my-6">
+        <div class="flex flex-wrap w-full">
+            <ngt-tag *ngIf="hasAppliedFilters()" (click)="removeFilter()" class="mr-0 sm:mr-4 mb-4 w-full sm:w-auto"
+                color.bg="red-500" icon='fas fa-times' ngt-stylizable>Limpar Filtros</ngt-tag>
+
+            <ng-container *ngIf="hasAppliedFilters()">
+                <ng-container *ngFor="let filter of filtersTranslated">
+                    <ngt-tag (click)="removeFilter(filter.reference)" class="mr-0 sm:mr-4 mb-4 w-full sm:w-auto"
+                        [color.bg]="filterTagBgColor" icon='fas fa-times' ngt-stylizable>
+                        {{ filter.translation + ': ' + (filter?.value?.customName ? filter.value.customName : filter.value)}}
+                    </ngt-tag>
+                </ng-container>
+            </ng-container>
+        </div>
+
+        <!-- <img *ngIf="emptyStateVisible" class="self-center mx-auto" src="../../assets/images/no-results.png"> -->
+
+        <table style="display: table;" *ngIf="!emptyStateVisible"
+            class="text-left w-full border-collapse table-responsive">
+            <ng-content></ng-content>
+        </table>
+
+        <!-- LOADING ANIMATION -->
+        <div *ngIf="loading">
+            <div *ngFor="let i of [1, 2, 3, 4]" class="flex w-full mt-3">
+                <ngt-shining class="h-10 w-full">aaa</ngt-shining>
+                <ngt-shining class="h-10 w-full mr-10 ml-10"></ngt-shining>
+                <ngt-shining class="h-10 w-full"></ngt-shining>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="clearfix mt-2 md:mt-8" [hidden]='!data || data.length == 0'>
+    <ngt-pagination [pagesInterval]='4' (onPageChange)='apply($event)' #ngtPagination></ngt-pagination>
+</div>
+
+<ngt-modal #searchModal [customLayout]='true'>
+    <ng-container *ngTemplateOutlet="searchModalTemplate"></ng-container>
+</ngt-modal>
