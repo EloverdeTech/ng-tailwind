@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Ng2FlatpickrModule } from 'ng2-flatpickr';
 
+import { NgtShiningModule } from '../ngt-shining/ngt-shining.module';
 import { NgtValidationModule } from '../ngt-validation/ngt-validation.module';
 import { NgtDateComponent } from './ngt-date.component';
 
@@ -15,7 +16,8 @@ import { NgtDateComponent } from './ngt-date.component';
     CommonModule,
     NgtValidationModule,
     Ng2FlatpickrModule,
-    FormsModule
+    FormsModule,
+    NgtShiningModule
   ]
 })
 export class NgtDateModule { }

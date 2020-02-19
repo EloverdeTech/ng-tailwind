@@ -6,7 +6,7 @@ import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 @Component({
   selector: 'ngt-textarea',
   templateUrl: './ngt-textarea.component.html',
-  styleUrls: ['./ngt-textarea.component.css', '../../animations.css'],
+  styleUrls: ['./ngt-textarea.component.css'],
   providers: [
     NgtMakeProvider(NgtTextareaComponent),
   ],

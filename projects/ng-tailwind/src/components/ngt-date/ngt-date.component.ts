@@ -11,7 +11,7 @@ var moment = require('moment');
 @Component({
   selector: 'ngt-date',
   templateUrl: './ngt-date.component.html',
-  styleUrls: ['./ngt-date.component.css', '../../animations.css'],
+  styleUrls: ['./ngt-date.component.css'],
   encapsulation: ViewEncapsulation.None,
   providers: [
     NgtMakeProvider(NgtDateComponent),
