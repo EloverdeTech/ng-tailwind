@@ -1,8 +1,8 @@
 <div class='border-b leading-loose {{ ngtStyle.compile(["h", "color.text", "color.bg"]) }}'>
     <div class="flex align-items-center px-3 md:px-8 py-2">
         <div class="clearfix w-full">
-            <div class="float-left flex">
-                <i class='{{ icon }} text-xl self-center mr-3' *ngIf="icon"></i>
+            <div class="float-left flex text-xl">
+                <ngt-svg [src]="icon" class='mr-2' *ngIf="icon"></ngt-svg>
                 <p class='text-xl font-medium self-center'>{{ caption }}</p>
             </div>
 
