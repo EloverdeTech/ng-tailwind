@@ -25,7 +25,8 @@
     "inputmask": "^4.0.9",
     "flatpickr": "^4.6.3",
     "moment": "^2.24.0",
-    "ng2-flatpickr": "^9.0.0"
+    "ng2-flatpickr": "^9.0.0",
+    "angular-svg-icon": "^8.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.23",

@@ -10,6 +10,8 @@
   "whitelistedNonPeerDependencies": [
     "flatpickr",
     "moment",
-    "ng2-flatpickr"
+    "ng2-flatpickr",
+    "inputmask",
+    "angular-svg-icon"
   ]
 }

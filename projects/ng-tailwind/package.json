@@ -1,10 +1,9 @@
 {
   "name": "ng-tailwind",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "peerDependencies": {
     "@angular/common": ">6.0.0",
-    "@angular/core": ">6.0.0",
-    "inputmask": "^4.0.9"
+    "@angular/core": ">6.0.0"
   },
   "devDependencies": {
     "@types/node": "^13.7.1"
@@ -12,6 +11,8 @@
   "dependencies": {
     "flatpickr": "^4.6.3",
     "moment": "^2.24.0",
-    "ng2-flatpickr": "^9.0.0"
+    "ng2-flatpickr": "^9.0.0",
+    "angular-svg-icon": "^8.0.0",
+    "inputmask": "^4.0.9"
   }
 }
