@@ -19,7 +19,8 @@ import {
   NgtStylizableModule,
   NgtTagModule,
   NgtTextareaModule,
-  NgtHttpService
+  NgtHttpService,
+  NgtSelectModule
 } from 'ng-tailwind';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -51,7 +52,8 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
     NgtTagModule,
     NgtFloatingButtonModule,
     NgtDropdownModule,
-    NgtDatatableModule
+    NgtDatatableModule,
+    NgtSelectModule
   ],
   providers: [
     {
