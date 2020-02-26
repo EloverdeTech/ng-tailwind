@@ -46,37 +46,52 @@ export class NgtDropdownComponent {
     }
   }
 
-  openMenuOnTouch(menu: any, subMenu: any) {
-    if (this.openOnHover) {
-      if (this.ngtDropdownContainer) {
-        this.ngtDropdownContainer.activeMenu.emit(this);
-      } else {
-        this.isOpen = true;
-      }
-
-      let interval = setInterval(() => {
-        if (!menu || !subMenu || !this.isMenuInHover(menu, subMenu)) {
-          this.isOpen = false;
-          clearInterval(interval);
-        }
-      }, 1000);
+  open() {
+    if (this.ngtDropdownContainer) {
+      this.ngtDropdownContainer.activeMenu.emit(this);
+    } else {
+      this.isOpen = true;
     }
   }
 
-  toggleMenuOnClick() {
+  close() {
+    this.isOpen = false;
+  }
+
+  toogle() {
     setTimeout(() => {
-      if (!this.openOnHover) {
-        if (this.ngtDropdownContainer) {
-          this.ngtDropdownContainer.activeMenu.emit(this);
-        } else {
-          this.isOpen = !this.isOpen;
-        }
+      if (this.isOpen) {
+        this.close();
+      } else {
+        this.open();
       }
     });
   }
 
-  isMenuInHover(menu: any, subMenu: any) {
-    return menu.parentElement.querySelector(':hover') == menu ||
-      subMenu.parentElement.querySelector(':hover') == subMenu;
+  onHover(host, container) {
+    if (this.openOnHover && host && container) {
+      this.open();
+      this.watchHover(host, container);
+    }
+  }
+
+  onClick() {
+    if (!this.openOnHover) {
+      this.toogle();
+    }
+  }
+
+  watchHover(host, container) {
+    let interval = setInterval(() => {
+      if (!host || !container || !this.isInHover(host, container)) {
+        this.isOpen = false;
+        clearInterval(interval);
+      }
+    }, 1000);
+  }
+
+  isInHover(host: any, container: any) {
+    return host.parentElement.querySelector(':hover') == host ||
+      container.parentElement.querySelector(':hover') == container;
   }
 }
