@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Optional, Output, SkipSelf, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Optional, Output, SkipSelf, TemplateRef, ViewChild, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
 
 import { NgtInputComponent } from '../../ngt-input/ngt-input.component';
 import { NgtDatatableComponent } from '../ngt-datatable.component';
@@ -9,7 +9,7 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
   styleUrls: ['./ngt-th.component.css'],
   host: { class: 'py-4 px-6 font-bold uppercase text-sm border-b' },
 })
-export class NgtThComponent {
+export class NgtThComponent implements OnChanges {
   @ViewChild('searchInput', { static: false }) searchInput: NgtInputComponent;
   @ViewChild('modal', { static: true }) modal: TemplateRef<any>;
 
@@ -48,7 +48,13 @@ export class NgtThComponent {
     }
   }
 
-  async sort() {
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.searchLabel && this.checkDataTable) {
+      this.ngtDataTable.setFilterDescription(this.reference, this.searchLabel);
+    }
+  }
+
+  public async sort() {
     if (this.sortable && this.checkDataTable() && this.checkReference()) {
       let sortDirection = this.getNextSortDirection();
       if (sortDirection) {
@@ -61,15 +67,7 @@ export class NgtThComponent {
     }
   }
 
-  private getNextSortDirection() {
-    switch (this.sortDirection) {
-      case 'asc': return 'desc';
-      case 'desc': return '';
-      case '': return 'asc';
-    }
-  }
-
-  enableSearch() {
+  public enableSearch() {
     this.ngtDataTable.setSearchModalTemplate(this.modal);
     this.ngtDataTable.openSearchModal();
 
@@ -82,12 +80,16 @@ export class NgtThComponent {
     this.onEnableSearch.emit();
   }
 
-  search(term: any) {
+  public search(term: any) {
     if (this.searchable && this.reference) {
       let filter = {};
       filter[this.reference] = term;
       this.ngtDataTable.search(filter);
     }
+  }
+
+  public customSearch(term: any) {
+    this.customSearchTerm = term;
   }
 
   private checkDataTable() {
@@ -108,7 +110,12 @@ export class NgtThComponent {
     return true;
   }
 
-  public customSearch(term: any) {
-    this.customSearchTerm = term;
+  private getNextSortDirection() {
+    switch (this.sortDirection) {
+      case 'asc': return 'desc';
+      case 'desc': return '';
+      case '': return 'asc';
+    }
   }
+
 }

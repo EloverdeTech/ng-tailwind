@@ -22,7 +22,7 @@ export class NgtDatatableComponent implements OnInit {
   @Input() defaultFilters: any = {};
   @Input() filtersDescription = {
     reference: name
-  }
+  };
 
   @Output() onDataChange = new EventEmitter();
   @Output() onClearFilter = new EventEmitter();
@@ -75,7 +75,7 @@ export class NgtDatatableComponent implements OnInit {
 
   public async search(filters?: any) {
     this.currentState.filters = { ...this.currentState.filters, ...filters };
-    this.setFiltersDescription();
+    this.applyFiltersDescription();
 
     return this.apply(1);
   }
@@ -101,10 +101,9 @@ export class NgtDatatableComponent implements OnInit {
     return this.currentState.sort;
   }
 
-  public setFiltersDescription() {
+  public applyFiltersDescription() {
     if (!this.cleaningFilter) {
       this.filtersTranslated = [];
-
       for (let reference in this.currentState.filters) {
         if (this.filtersDescription[reference] && this.currentState.filters[reference]) {
           this.filtersTranslated.push({
@@ -117,6 +116,10 @@ export class NgtDatatableComponent implements OnInit {
     }
   }
 
+  public setFilterDescription(reference: string, description: string) {
+    this.filtersDescription[reference] = description;
+  }
+
   public removeFilter(reference?: any) {
     this.cleaningFilter = true;
 
@@ -125,13 +128,12 @@ export class NgtDatatableComponent implements OnInit {
       this.filtersTranslated = [];
     } else {
       delete this.currentState.filters[reference];
-
       this.filtersTranslated = this.filtersTranslated.filter(element => element && element.reference !== reference);
     }
 
     this.onClearFilter.emit(reference);
 
-    if (reference === 'term' || !reference) {
+    if (this.inputSearch && (reference === 'term' || !reference)) {
       this.inputSearch.value = '';
     }
 
@@ -177,7 +179,7 @@ export class NgtDatatableComponent implements OnInit {
           let pagination = { ...this.ngtPagination.getPagination(), ...{ page: page } };
 
           this.ngtHttpService.get(
-            this.remoteResource, this.currentState.filters, pagination, this.currentState.sort
+            this.remoteResource, this.getQualifiedFilters(), pagination, this.currentState.sort
           ).subscribe(
             (response: NgtHttpResponse) => {
               this.proccessRemoteResponse(response.data);
@@ -198,6 +200,24 @@ export class NgtDatatableComponent implements OnInit {
     } else if (this.type == NgtDatatableType.fixed) {
       this.bindVisibilityAttributes();
     }
+  }
+
+  private getQualifiedFilters() {
+    let qualifiedFilter = {};
+
+    if (this.currentState.filters) {
+      for (let filterName in this.currentState.filters) {
+        let filter = this.currentState.filters[filterName];
+
+        if (filter instanceof NgtCustomFilter) {
+          qualifiedFilter[filterName] = filter.term;
+        } else {
+          qualifiedFilter[filterName] = filter;
+        }
+      }
+    }
+
+    return qualifiedFilter;
   }
 
   private bindVisibilityAttributes() {

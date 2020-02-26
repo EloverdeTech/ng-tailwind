@@ -18,8 +18,6 @@ import { NgtThComponent } from './ngt-th/ngt-th.component';
 import { NgtTheadComponent } from './ngt-thead/ngt-thead.component';
 import { NgtTrComponent } from './ngt-tr/ngt-tr.component';
 
-
-
 @NgModule({
   declarations: [
     NgtDatatableComponent,
