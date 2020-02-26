@@ -1,3 +1,7 @@
+svg {
+    height: 1rem;
+}
+
 .text-xs svg {
     height:  .75rem;
 }

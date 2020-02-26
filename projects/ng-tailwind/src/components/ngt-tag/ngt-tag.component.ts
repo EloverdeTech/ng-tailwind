@@ -23,7 +23,7 @@ export class NgtTagComponent {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    this.ngtStyle.load(this.injector, 'Action', {
+    this.ngtStyle.load(this.injector, 'Tag', {
       color: {
         bg: 'gray-500',
         text: 'white'
