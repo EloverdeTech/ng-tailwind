@@ -101,7 +101,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    this.ngtStyle.load(this.injector, 'Input', {
+    this.ngtStyle.load(this.injector, 'NgtInput', {
       h: '12',
       color: {}
     });
