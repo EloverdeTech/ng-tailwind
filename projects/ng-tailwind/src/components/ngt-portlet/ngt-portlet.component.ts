@@ -36,7 +36,7 @@ export class NgtPortletComponent {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    this.ngtStyle.load(this.injector, 'Portlet', {
+    this.ngtStyle.load(this.injector, 'NgtPortlet', {
       h: 'auto',
       color: {}
     });
