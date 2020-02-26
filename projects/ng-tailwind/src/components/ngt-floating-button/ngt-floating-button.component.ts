@@ -51,7 +51,7 @@ export class NgtFloatingButtonComponent {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    this.ngtStyle.load(this.injector, 'FloatingButton', {
+    this.ngtStyle.load(this.injector, 'NgtFloatingButton', {
       color: {
         bg: 'blue-500',
         text: 'white',
