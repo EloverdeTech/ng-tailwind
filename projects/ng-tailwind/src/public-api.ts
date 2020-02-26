@@ -86,3 +86,8 @@ export * from './components/ngt-input/ngt-input.component';
 //NgtStylizable
 export * from './directives/ngt-stylizable/ngt-stylizable.module';
 export * from './directives/ngt-stylizable/ngt-stylizable.directive';
+
+//NgtSelect
+export * from './components/ngt-select/ngt-select.module';
+export * from './components/ngt-select/ngt-select.component';
+export * from './components/ngt-select/ngt-select.directive';
