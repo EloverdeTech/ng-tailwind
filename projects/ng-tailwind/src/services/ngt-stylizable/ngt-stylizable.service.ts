@@ -124,7 +124,7 @@ export class NgtStylizableService {
         let ngtGlobalStyle = injector.get('NgtStyleGlobal', {});
         defaultValue = defaultValue ? defaultValue : {};
 
-        let requestedStyle = <NgtStylizableService>injector.get('NgtStyle' + style, defaultValue);
+        let requestedStyle = <NgtStylizableService>injector.get(style + 'Style', defaultValue);
 
         this.loadObjectProperties(this, ngtGlobalStyle, this.getAllowedKeys(ngtGlobalStyle));
         this.loadObjectProperties(this, requestedStyle, this.getAllowedKeys(requestedStyle));
