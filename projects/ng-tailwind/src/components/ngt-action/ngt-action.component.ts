@@ -11,8 +11,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 export class NgtActionComponent {
   @Input() public href: string;
   @Input() public icon: string;
-
-  public ngtStyle: NgtStylizableService;
+  @Input() public ngtStyle: NgtStylizableService;
 
   constructor(
     private injector: Injector,
@@ -24,7 +23,9 @@ export class NgtActionComponent {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    this.ngtStyle.load(this.injector, 'Action', {
+    this.ngtStyle.load(this.injector, 'NgtAction', {
+      h: 'full',
+      w: 'full',
       color: {
         bg: 'gray-500',
         text: 'white'

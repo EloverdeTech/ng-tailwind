@@ -1,5 +1,6 @@
 <a class="cursor-pointer" [routerLink]='href'>
-    <div class="rounded-full w-full h-full text-center {{ ngtStyle.compile(['color.bg', 'color.text']) }}">
-        <i class='{{ icon }}'></i>
+    <div class="flex align-items-center justify-center rounded-full {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text']) }}">
+        <ngt-svg [src]="icon" class='self-center' *ngIf="icon"></ngt-svg>
+        <div class="self-center"><ng-content></ng-content></div>
     </div>
 </a>

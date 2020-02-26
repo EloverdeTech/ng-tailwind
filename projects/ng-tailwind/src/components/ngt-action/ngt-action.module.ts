@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { NgtActionComponent } from './ngt-action.component';
+import { NgtSvgModule } from '../ngt-svg/ngt-svg.module';
 
 
 
@@ -11,7 +12,8 @@ import { NgtActionComponent } from './ngt-action.component';
   exports: [NgtActionComponent],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    NgtSvgModule
   ]
 })
 export class NgtActionModule { }
