@@ -23,8 +23,7 @@ import { NgtModalComponent } from './ngt-modal.component';
     NgtModalFooterComponent
   ],
   imports: [
-    CommonModule,
-    BrowserAnimationsModule
+    CommonModule
   ]
 })
 export class NgtModalModule { }
