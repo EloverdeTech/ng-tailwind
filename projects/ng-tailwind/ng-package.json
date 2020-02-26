@@ -12,6 +12,7 @@
     "moment",
     "ng2-flatpickr",
     "inputmask",
-    "angular-svg-icon"
+    "angular-svg-icon",
+    "@ng-select/ng-select"
   ]
 }

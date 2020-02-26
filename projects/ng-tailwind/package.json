@@ -1,6 +1,6 @@
 {
   "name": "ng-tailwind",
-  "version": "0.0.11",
+  "version": "0.0.27",
   "peerDependencies": {
     "@angular/common": ">6.0.0",
     "@angular/core": ">6.0.0"
@@ -13,6 +13,7 @@
     "moment": "^2.24.0",
     "ng2-flatpickr": "^9.0.0",
     "angular-svg-icon": "^8.0.0",
-    "inputmask": "^4.0.9"
+    "inputmask": "^4.0.9",
+    "@ng-select/ng-select": "^2.20.5"
   }
 }

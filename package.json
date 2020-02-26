@@ -19,14 +19,15 @@
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
-    "rxjs": "~6.4.0",
-    "tslib": "^1.10.0",
-    "zone.js": "~0.9.1",
-    "inputmask": "^4.0.9",
+    "@ng-select/ng-select": "^2.20.5",
+    "angular-svg-icon": "^8.0.0",
     "flatpickr": "^4.6.3",
+    "inputmask": "^4.0.9",
     "moment": "^2.24.0",
     "ng2-flatpickr": "^9.0.0",
-    "angular-svg-icon": "^8.0.0"
+    "rxjs": "~6.4.0",
+    "tslib": "^1.11.0",
+    "zone.js": "~0.9.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.23",
