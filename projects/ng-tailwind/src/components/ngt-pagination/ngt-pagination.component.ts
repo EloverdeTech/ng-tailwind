@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, Injector } from '@angular/core';
 
 import { NgtHttpMeta, NgtHttpPagination } from '../../services/http/ngt-http.service';
+import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
   selector: 'ngt-pagination',
@@ -8,9 +9,12 @@ import { NgtHttpMeta, NgtHttpPagination } from '../../services/http/ngt-http.ser
   styleUrls: ['./ngt-pagination.component.css']
 })
 export class NgtPaginationComponent {
-  @Input() pagesInterval: number;
 
+  @Input() pagesInterval: number;
   @Output() onPageChange: EventEmitter<number> = new EventEmitter();
+
+  public ngtPaginationButtonStyle: NgtStylizableService;
+  public ngtPaginationActiveButtonStyle: NgtStylizableService;
 
   public pagination: NgtHttpPagination = {
     count: null,
@@ -23,6 +27,31 @@ export class NgtPaginationComponent {
   };
 
   public pages = [];
+
+  constructor(
+    private injector: Injector
+  ) {
+    this.ngtPaginationButtonStyle = new NgtStylizableService();
+    this.ngtPaginationActiveButtonStyle = new NgtStylizableService();
+
+    this.ngtPaginationButtonStyle.load(this.injector, 'NgtPaginationButton', {
+      h: '8',
+      w: '8',
+      color: {
+        text: 'text-black hover:text-white',
+        bg: 'bg-none hover:bg-blue-500'
+      }
+    });
+
+    this.ngtPaginationActiveButtonStyle.load(this.injector, 'NgtPaginationActiveButton', {
+      h: '8',
+      w: '8',
+      color: {
+        text: 'white',
+        bg: 'blue-500'
+      }
+    });
+  }
 
   public async goToPage(page: number) {
     this.onPageChange.emit(page);
