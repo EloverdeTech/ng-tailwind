@@ -64,25 +64,25 @@ export class NgtButtonComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.type) {
       if (changes.type.currentValue == 'success') {
-        this.ngtStyle.load(this.injector, 'SuccessButton', {
+        this.ngtStyle.load(this.injector, 'NgtSuccessButton', {
           color: {
             bg: 'green-500'
           }
         });
       } else if (changes.type.currentValue == 'warning') {
-        this.ngtStyle.load(this.injector, 'WarningButton', {
+        this.ngtStyle.load(this.injector, 'NgtWarningButton', {
           color: {
             bg: 'orange-500'
           }
         });
       } else if (changes.type.currentValue == 'danger') {
-        this.ngtStyle.load(this.injector, 'DangerButton', {
+        this.ngtStyle.load(this.injector, 'NgtDangerButton', {
           color: {
             bg: 'red-500'
           }
         });
       } else {
-        this.ngtStyle.load(this.injector, 'InfoButton', {
+        this.ngtStyle.load(this.injector, 'NgtInfoButton', {
           color: {
             bg: 'blue-500'
           }
