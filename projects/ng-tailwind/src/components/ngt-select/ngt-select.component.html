@@ -1,0 +1,47 @@
+<label class="{{shining ? '' : 'block'}} mb-2 text-sm" *ngIf="label" [hidden]='shining'>
+    {{label}}:
+    <span class="text-red-500 font-bold text-md" *ngIf="isRequired">*</span>
+    <a *ngIf='helpText' [title]="helpTitle" [attr.data-content]="helpText">
+        &nbsp;[?]
+    </a>
+</label>
+
+<div [hidden]='shining'>
+    <div class="{{getSelectClass()}} {{ ngtStyle.compile(['h', 'color.bg', 'color.text']) }}">
+        <ng-select class="custom" [(ngModel)]='nativeValue' [name]='nativeName' (change)="onNativeChange($event)"
+            [addTagText]="createText" bindLabel="selectedName" [multiple]="multiple" [hideSelected]="hideSelected"
+            [notFoundText]="notFoundText" [searchable]="searchable" [disabled]='isDisabled'
+            [clearable]="clearable && hasSelectedValue()" [closeOnSelect]="closeOnSelect" [trackByFn]="trackBy"
+            [labelForId]="labelForId" [clearSearchOnAdd]="clearSearchOnAdd" [typeahead]="typeahead"
+            [typeToSearchText]="typeToSearchText" [placeholder]="placeholder" dropdownPosition="auto"
+            [groupBy]="groupBy" [clearAllText]="clearAllText" [virtualScroll]="virtualScroll" [tabIndex]="tabIndex"
+            [items]="ngSelectItems | async" (scroll)="onScroll($event)" [bindValue]="bindValue"
+            [groupValue]="groupValue" [loading]="loading" [loadingText]="loadingText"
+            [maxSelectedItems]="maxSelectedItems" (clear)='onClearSelect()'>
+
+            <ng-template ng-label-tmp let-item="item" let-index="index" let-search="searchTerm">
+                <ng-template *ngIf='ngtOptionSelectedTemplate' [ngTemplateOutlet]="ngtOptionSelectedTemplate"
+                    [ngTemplateOutletContext]="{ item: item, index: index, searchTerm: search }">
+                </ng-template>
+                <ng-template *ngIf='!ngtOptionSelectedTemplate' [ngTemplateOutlet]="ngtOptionTemplate"
+                    [ngTemplateOutletContext]="{ item: item, index: index, searchTerm: search }">
+                </ng-template>
+            </ng-template>
+
+            <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                <ng-template [ngTemplateOutlet]="ngtOptionTemplate"
+                    [ngTemplateOutletContext]="{ item: item, index: index, searchTerm: search }">
+                </ng-template>
+            </ng-template>
+
+        </ng-select>
+    </div>
+</div>
+
+<ng-container *ngIf='shining'>
+    <div class="flex">
+        <span class="{{ ngtStyle.h }} w-full ngt-shining"></span>
+    </div>
+</ng-container>
+
+<ngt-validation [control]="formControl" [container]="formContainer"></ngt-validation>
