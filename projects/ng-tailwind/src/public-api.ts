@@ -91,3 +91,7 @@ export * from './directives/ngt-stylizable/ngt-stylizable.directive';
 export * from './components/ngt-select/ngt-select.module';
 export * from './components/ngt-select/ngt-select.component';
 export * from './components/ngt-select/ngt-select.directive';
+
+//NgtSvg
+export * from './components/ngt-svg/ngt-svg.module';
+export * from './components/ngt-svg/ngt-svg.component';
