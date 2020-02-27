@@ -71,8 +71,8 @@
                             <br><br>
 
                             <div class="w-12 h-12">
-                                <ngt-action icon='assets/images/test.svg' color.bg='blue-700' color.text='blue-200'
-                                    ngt-stylizable>
+                                <ngt-action [isDisabled]='true' icon='assets/images/test.svg' color.bg='blue-700' color.text='blue-200'
+                                    ngt-stylizable (click)='clickAction()'>
                                 </ngt-action>
                             </div>
 
