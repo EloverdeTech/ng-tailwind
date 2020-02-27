@@ -240,6 +240,13 @@ export class NgtStylizableService {
                     'pr',
                     'pb',
                     'pl',
+                    'm',
+                    'mx',
+                    'my',
+                    'mt',
+                    'mr',
+                    'mb',
+                    'ml',
                 ].includes(key);
             });
         }
