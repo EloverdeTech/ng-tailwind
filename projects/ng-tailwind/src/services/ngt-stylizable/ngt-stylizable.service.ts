@@ -1,4 +1,4 @@
-import { Injector } from "@angular/core";
+import { Injector } from '@angular/core';
 
 export class NgtStylizableService {
 
@@ -12,6 +12,13 @@ export class NgtStylizableService {
     private _pr: string;
     private _pb: string;
     private _pl: string;
+    private _m: string;
+    private _mx: string;
+    private _my: string;
+    private _mt: string;
+    private _mr: string;
+    private _mb: string;
+    private _ml: string;
 
     get color() {
         return this._color;
@@ -118,6 +125,62 @@ export class NgtStylizableService {
 
     set pl(pl: string) {
         this._pl = this.getQualifiedValue('pl-', pl);
+    }
+
+    get m(): string {
+        return this._m;
+    }
+
+    set m(m: string) {
+        this._m = this.getQualifiedValue('m-', m);
+    }
+
+    get mx(): string {
+        return this._mx;
+    }
+
+    set mx(mx: string) {
+        this._mx = this.getQualifiedValue('mx-', mx);
+    }
+
+    get my(): string {
+        return this._my;
+    }
+
+    set my(my: string) {
+        this._my = this.getQualifiedValue('my-', my);
+    }
+
+    get mt(): string {
+        return this._mt;
+    }
+
+    set mt(mt: string) {
+        this._mt = this.getQualifiedValue('mt-', mt);
+    }
+
+    get mr(): string {
+        return this._mr;
+    }
+
+    set mr(mr: string) {
+        this._mr = this.getQualifiedValue('mr-', mr);
+    }
+
+    get mb(): string {
+        return this._mb;
+    }
+
+    set mb(mb: string) {
+        this._mb = this.getQualifiedValue('mb-', mb);
+    }
+
+    get ml(): string {
+        return this._ml;
+    }
+
+    set ml(ml: string) {
+        this._ml = this.getQualifiedValue('ml-', ml);
     }
 
     public load(injector: Injector, style: string, defaultValue = null) {
