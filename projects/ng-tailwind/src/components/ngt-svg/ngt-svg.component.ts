@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewChecked, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, AfterViewChecked, ViewChild, ElementRef, ViewEncapsulation, OnChanges, SimpleChanges } from '@angular/core';
 import { SvgIconComponent } from 'angular-svg-icon';
 
 @Component({
@@ -10,16 +10,25 @@ import { SvgIconComponent } from 'angular-svg-icon';
   },
   encapsulation: ViewEncapsulation.None
 })
-export class NgtSvgComponent implements AfterViewChecked {
+export class NgtSvgComponent implements AfterViewChecked, OnChanges {
 
-  @Input() src;
-  @Input() class: string = null;
+  @Input() src: string;
+  @Input() class: string = null;  
 
   @ViewChild(SvgIconComponent, { static: true, read: ElementRef }) private svgIconElement: ElementRef;
 
   private appliedClass = null;
 
   ngAfterViewChecked() {
+    this.checkClassChange();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.appliedClass = null;
+    this.checkClassChange();
+  }
+
+  private checkClassChange() {
     if (this.appliedClass !== this.class) {
       if (this.svgIconElement && this.svgIconElement.nativeElement) {
         let svgElement = <SVGAElement>this.svgIconElement.nativeElement.querySelector('svg');
@@ -31,12 +40,11 @@ export class NgtSvgComponent implements AfterViewChecked {
 
           svgElement.classList.add('fill-current');
           svgElement.classList.add('self-center');
-          
+
           this.class.split(' ').forEach(className => svgElement.classList.add(className));
           this.appliedClass = this.class;
         }
       }
     }
   }
-
 }
