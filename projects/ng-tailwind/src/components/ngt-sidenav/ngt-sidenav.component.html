@@ -1,6 +1,6 @@
 <div class="flex h-full w-full">
     <ng-container *ngIf="visible">
-        <div class="{{ getNavSize() }} {{ ngtStyle.compile(['color.bg']) }} md:h-auto h-screen md:top-auto top-0 md:static fixed md:block {{ open ? 'block' : 'hidden' }} z-20"
+        <div class="{{ getNavSize() }} {{ ngtStyle.compile(['color.bg']) }} md:h-auto h-screen top-auto md:static fixed md:block {{ open ? 'block' : 'hidden' }} z-20"
             #element>
             <ng-content select='[body]'></ng-content>
         </div>
