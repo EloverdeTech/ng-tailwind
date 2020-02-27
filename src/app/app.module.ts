@@ -67,6 +67,17 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
           bg: 'teal-500'
         }
       }
+    },
+    {
+      provide: 'NgtPortletStyle',
+      useValue: {
+        mx: '12',
+        my: '12',
+        h: 'auto',
+        color: {
+          bg: 'white'
+        }
+      }
     }
   ],
   bootstrap: [AppComponent]
