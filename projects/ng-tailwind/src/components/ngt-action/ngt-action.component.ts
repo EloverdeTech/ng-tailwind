@@ -12,6 +12,7 @@ export class NgtActionComponent {
   @Input() public href: string;
   @Input() public icon: string;
   @Input() public ngtStyle: NgtStylizableService;
+  @Input() public isDisabled: boolean;
 
   constructor(
     private injector: Injector,
@@ -31,5 +32,11 @@ export class NgtActionComponent {
         text: 'white'
       }
     });
+  }
+
+  onClick(event: Event) {
+    if (this.isDisabled) {
+      event.stopPropagation();
+    }
   }
 }

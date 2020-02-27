@@ -46,4 +46,8 @@ export class AppComponent implements AfterViewInit {
   closeModal() {
     this.ngtModal.close();
   }
+
+  clickAction() {
+    console.log('Click Action');    
+  }
 }

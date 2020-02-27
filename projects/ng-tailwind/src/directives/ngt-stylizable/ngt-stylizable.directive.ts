@@ -1,4 +1,5 @@
 import { Directive, Input } from '@angular/core';
+
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Directive({
@@ -121,4 +122,66 @@ export class NgtStylizableDirective {
     this.pl = this.ngtStylizableService.pl;
   }
 
+  get m(): string {
+    return this.ngtStylizableService.m;
+  }
+
+  @Input('m')
+  set m(m: string) {
+    this.ngtStylizableService.m = m;
+  }
+
+  get mx(): string {
+    return this.ngtStylizableService.mx;
+  }
+
+  @Input('mx')
+  set mx(mx: string) {
+    this.ngtStylizableService.mx = mx;
+  }
+
+  get my(): string {
+    return this.ngtStylizableService.my;
+  }
+
+  @Input('my')
+  set my(my: string) {
+    this.ngtStylizableService.my = my;
+  }
+
+  get mt(): string {
+    return this.ngtStylizableService.mt;
+  }
+
+  @Input('mt')
+  set mt(mt: string) {
+    this.ngtStylizableService.mt = mt;
+  }
+
+  get mr(): string {
+    return this.ngtStylizableService.mr;
+  }
+
+  @Input('mr')
+  set mr(mr: string) {
+    this.ngtStylizableService.mr = mr;
+  }
+
+  get mb(): string {
+    return this.ngtStylizableService.mb;
+  }
+
+  @Input('mb')
+  set mb(mb: string) {
+    this.ngtStylizableService.mb = mb;
+  }
+
+  get ml(): string {
+    return this.ngtStylizableService.ml;
+  }
+
+  @Input('ml')
+  set ml(ml: string) {
+    this.ml = this.ngtStylizableService.ml;
+  }
 }
