@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Host, Inject, Input, OnInit, Optional, Output } from '@angular/core';
+import { Component, EventEmitter, Host, Input, OnInit, Optional, Output } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router, RouteReuseStrategy } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -39,8 +39,7 @@ export class NgtFormComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     public cachedRouteReuseStrategy: RouteReuseStrategy,
-    @Inject('NgtFormService')
-    public ngtHttpFormService: NgtHttpFormService
+    private ngtHttpFormService: NgtHttpFormService
   ) { }
 
   ngOnInit() {
@@ -129,9 +128,10 @@ export class NgtFormComponent implements OnInit {
       if (isValidNgForm(this.ngForm)) {
         this.setLoading(true);
         this.ngtHttpFormService.saveResource(this.resource)
-          .subscribe(() => {
+          .subscribe((response: any) => {
             this.clearCachedRoute();
             this.setLoading(false);
+            observer.next(response);
             observer.complete();
           });
       } else {
