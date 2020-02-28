@@ -1,0 +1,5 @@
+<ng-container *ngIf='ngtForm'>
+    <div [hidden]="!ngtForm.canShowValidationMessage()" class="mb-5 p-2 rounded bg-red-500 text-white">
+        {{ ngtForm.message }}
+    </div>
+</ng-container>
