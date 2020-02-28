@@ -69,15 +69,26 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
       }
     },
     {
+      provide: 'NgtInputStyle',
+      useValue: {
+        h: '12',
+        color: {
+          border: 'border-gray-400 focus:border-blue-500',
+          text: 'gray-700'
+        }
+      }
+    },
+    {
       provide: 'NgtPortletStyle',
       useValue: {
         mx: '12',
         my: '12',
         h: 'auto',
         color: {
-          bg: 'white'
+          bg: 'white',
+          text: 'text-blue-500'
         }
-      }
+      },      
     }
   ],
   bootstrap: [AppComponent]

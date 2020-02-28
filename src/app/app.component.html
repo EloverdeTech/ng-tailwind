@@ -48,14 +48,21 @@
 
                     <div left-header>
                         <p class="text-3xl">Left Header</p>
+                        <form>
+                            <ngt-input class="block w-8/12" [allowClear]='true' innerRightIcon='assets/images/add-solid.svg'
+                                innerLeftIcon='assets/images/test.svg' [isRequired]='true' name='input_test1'
+                                label='Input test'>
+                            </ngt-input>
+                        </form>
                     </div>
 
                     <div body>
                         <p>Portlet Body</p>
 
                         <form #form='ngForm'>
-                            <ngt-input class="block w-8/12" [allowClear]='true' innerRightIcon='assets/images/add-solid.svg'  innerLeftIcon='assets/images/test.svg' [isRequired]='true' name='input_test1'
-                                label='Input test'>
+                            <ngt-input class="block w-8/12" [allowClear]='true'
+                                innerRightIcon='assets/images/add-solid.svg' innerLeftIcon='assets/images/test.svg'
+                                [isRequired]='true' name='input_test1' label='Input test'>
                             </ngt-input>
 
                             {{ textarea_test1 }}
@@ -70,8 +77,8 @@
                             <br><br>
 
                             <div class="w-12 h-12">
-                                <ngt-action [isDisabled]='true' icon='assets/images/test.svg' color.bg='blue-700' color.text='blue-200'
-                                    ngt-stylizable (click)='clickAction()'>
+                                <ngt-action [isDisabled]='true' icon='assets/images/test.svg' color.bg='blue-700'
+                                    color.text='blue-200' ngt-stylizable (click)='clickAction()'>
                                 </ngt-action>
                             </div>
 
