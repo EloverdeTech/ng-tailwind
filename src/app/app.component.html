@@ -54,8 +54,7 @@
                         <p>Portlet Body</p>
 
                         <form #form='ngForm'>
-                            {{ input_test1 }}
-                            <ngt-input [(ngModel)]='input_test1' type='email' [isRequired]='true' name='input_test1'
+                            <ngt-input class="block w-8/12" [allowClear]='true' innerRightIcon='assets/images/add-solid.svg'  innerLeftIcon='assets/images/test.svg' [isRequired]='true' name='input_test1'
                                 label='Input test'>
                             </ngt-input>
 
