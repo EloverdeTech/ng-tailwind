@@ -95,3 +95,7 @@ export * from './components/ngt-select/ngt-select.directive';
 //NgtSvg
 export * from './components/ngt-svg/ngt-svg.module';
 export * from './components/ngt-svg/ngt-svg.component';
+
+//NgtShining
+export * from './components/ngt-shining/ngt-shining.module';
+export * from './components/ngt-shining/ngt-shining.component';
