@@ -44,7 +44,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
   @Input() helpText: boolean = false;
   @Input() outerIcon = null;
   @Input() innerLeftIcon: string = null;
-  @Input() innerRightIcon: string = 'fas fa-times';
+  @Input() innerRightIcon: string = null;
 
   //Behavior
   @Input() isDisabled: boolean = false;
@@ -103,7 +103,11 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
 
     this.ngtStyle.load(this.injector, 'NgtInput', {
       h: '12',
-      color: {}
+      px: '4',
+      color: {
+        border: 'gray-400 focus:border-gray-700',
+        bg: 'bg-white focus:bg-white'
+      }
     });
   }
 
@@ -130,10 +134,13 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
         });
       });
 
-      this.renderer.listen(this.element.nativeElement, "keydown", () => {
+      this.renderer.listen(this.element.nativeElement, "keydown", (event) => {
         if (this.element.nativeElement && this.element.nativeElement.value && this.element.nativeElement.value.length == this.maxlength) {
-          event.preventDefault();
-          return false;
+          // Backspace and delete
+          if (event.keyCode != 8 && event.keyCode != 46) {
+            event.preventDefault();
+            return false;
+          }
         }
       });
 
@@ -545,4 +552,27 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     this.value = '';
   }
 
+  getInputPaddings() {
+    let paddingClass: string = '';
+
+    if (this.innerLeftIcon) {
+      paddingClass += 'pl-8 pr-4 ';
+    } else {
+      paddingClass += 'px-4 ';
+    }
+
+    if (this.innerRightIcon && this.allowClear && this.value) {
+      paddingClass += 'pr-16 ';
+    }
+
+    if (this.innerRightIcon && this.allowClear && !this.value) {
+      paddingClass += 'pr-6 ';
+    }
+
+    if (this.innerRightIcon && !this.allowClear || !this.innerRightIcon && this.allowClear) {
+      paddingClass += 'pr-6 ';
+    }
+
+    return paddingClass;
+  }
 }

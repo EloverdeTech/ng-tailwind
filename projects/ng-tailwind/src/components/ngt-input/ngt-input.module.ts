@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NgtShiningModule } from '../ngt-shining/ngt-shining.module';
+import { NgtSvgModule } from '../ngt-svg/ngt-svg.module';
 import { NgtValidationModule } from '../ngt-validation/ngt-validation.module';
 import { NgtInputComponent } from './ngt-input.component';
 
@@ -14,7 +15,8 @@ import { NgtInputComponent } from './ngt-input.component';
     FormsModule,
     ReactiveFormsModule,
     NgtValidationModule,
-    NgtShiningModule
+    NgtShiningModule,
+    NgtSvgModule
   ]
 })
 export class NgtInputModule { }
