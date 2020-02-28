@@ -7,7 +7,7 @@
             <ng-container *ngFor="let filter of filtersTranslated">
                 <ngt-tag (click)="removeFilter(filter.reference)" class="mr-0 sm:mr-4 mb-4 w-full sm:w-auto"
                     [color.bg]="filterTagBgColor" icon='fas fa-times' ngt-stylizable>
-                    {{ filter.translation + ': ' + (filter?.value?.customName ? filter.value.customName : filter.value)}}
+                    {{ filter.translation + ': ' + (filter?.value?.tagValue ? filter.value.tagValue : filter.value)}}
                 </ngt-tag>
             </ng-container>
         </ng-container>

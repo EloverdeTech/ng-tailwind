@@ -206,13 +206,18 @@ export class NgtDatatableComponent implements OnInit {
     let qualifiedFilter = {};
 
     if (this.currentState.filters) {
-      for (let filterName in this.currentState.filters) {
-        let filter = this.currentState.filters[filterName];
+      for (let reference in this.currentState.filters) {
+        let filter = this.currentState.filters[reference];
 
         if (filter instanceof NgtCustomFilter) {
-          qualifiedFilter[filterName] = filter.term;
+          if (filter.tagLabel) {
+            this.filtersDescription[reference] = filter.tagLabel;
+            this.applyFiltersDescription();
+          }
+
+          qualifiedFilter[reference] = filter.term;
         } else {
-          qualifiedFilter[filterName] = filter;
+          qualifiedFilter[reference] = filter;
         }
       }
     }
@@ -264,5 +269,6 @@ export class NgtCheckedElement {
 
 export class NgtCustomFilter {
   term: string;
-  customName: string;
+  tagValue: string;
+  tagLabel?: string;
 }
