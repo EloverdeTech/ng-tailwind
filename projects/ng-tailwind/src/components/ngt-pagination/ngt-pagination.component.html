@@ -1,11 +1,5 @@
 <ul class="flex justify-center md:float-left">
     <!-- FIRST -->
-    <!-- <li (click)='goToFirstPage()'
-        class="mr-2 rounded-full hover:bg-blue-500 bg-gray-700 w-8 h-8 cursor-pointer text-center text-white font-semibold py-1">
-        <a>
-            <i class='fas fa-angle-double-left'></i>
-        </a>
-    </li> -->
     <li (click)='goToFirstPage()' class="mr-2">
         <ngt-action [ngtStyle]='ngtPaginationActiveButtonStyle'>
             <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -16,9 +10,6 @@
                     d="M18.41 7.41L17 6l-6 6l6 6l1.41-1.41L13.83 12l4.58-4.59m-6 0L11 6l-6 6l6 6l1.41-1.41L7.83 12l4.58-4.59z" />
             </svg>
         </ngt-action>
-        <!-- <a>
-            <i class='fas fa-angle-double-left'></i>
-        </a> -->
     </li>
 
     <!-- PREVIOUS -->
@@ -53,7 +44,6 @@
 
     <!-- NEXT -->
     <li (click)='goToNextPage()' class="mr-2">
-        <!-- h='8' w='8' color.text='white' ngt-stylizable -->
         <ngt-action [ngtStyle]='ngtPaginationActiveButtonStyle'>
             <svg class="fill-current" xmlns="http://www.w3.org/2000/svg"
                 style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
