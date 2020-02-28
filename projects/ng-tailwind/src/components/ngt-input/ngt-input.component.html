@@ -8,12 +8,12 @@
 
 <div class="{{ shining ? '' : 'flex relative'}}" [hidden]='shining'>
   <input autocomplete="new-password"
-    class="flex border appearance-none focus:outline-none leading-tight rounded w-full {{ getInputPaddings() }} {{ ngtStyle.compile(['h', 'color.border', 'color.bg']) }}"
+    class="flex border appearance-none focus:outline-none leading-tight rounded w-full {{ getInputPaddings() }} {{ ngtStyle.compile(['h', 'color.border', 'color.bg', 'color.text']) }}"
     [disabled]="isDisabled" [readonly]="isReadonly" placeholder="{{ placeholder ? placeholder : '' }}"
     [ngClass]="{'input-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
     [attr.type]="inputProperties.htmlType" #element>
   <span *ngIf="innerLeftIcon" class="absolute self-center px-2">
-    <ngt-svg [src]='innerLeftIcon'></ngt-svg>
+    <ngt-svg class="fill-current" [src]='innerLeftIcon'></ngt-svg>
   </span>
 
   <div class="flex absolute h-full justify-end right-0 w-auto">
@@ -26,7 +26,7 @@
     </span>
 
     <span *ngIf="innerRightIcon" class="self-center px-2">
-      <ngt-svg [src]='innerRightIcon'></ngt-svg>
+      <ngt-svg class="fill-current" [src]='innerRightIcon'></ngt-svg>
     </span>
   </div>
 </div>

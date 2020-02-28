@@ -103,10 +103,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
 
     this.ngtStyle.load(this.injector, 'NgtInput', {
       h: '12',
-      px: '4',
       color: {
         border: 'gray-400 focus:border-gray-700',
-        bg: 'bg-white focus:bg-white'
+        bg: 'bg-white focus:bg-white',
+        text: 'black'
       }
     });
   }
