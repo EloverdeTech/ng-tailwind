@@ -12,7 +12,7 @@
     [disabled]="isDisabled" [readonly]="isReadonly" placeholder="{{ placeholder ? placeholder : '' }}"
     [ngClass]="{'input-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
     [attr.type]="inputProperties.htmlType" #element>
-  <span *ngIf="innerLeftIcon" class="absolute self-center px-2">
+  <span *ngIf="innerLeftIcon" class="absolute self-center px-3">
     <ngt-svg class="fill-current" [src]='innerLeftIcon'></ngt-svg>
   </span>
 
