@@ -17,6 +17,7 @@ import { NgtThCheckComponent } from './ngt-th-check/ngt-th-check.component';
 import { NgtThComponent } from './ngt-th/ngt-th.component';
 import { NgtTheadComponent } from './ngt-thead/ngt-thead.component';
 import { NgtTrComponent } from './ngt-tr/ngt-tr.component';
+import { NgtActionModule } from '../ngt-action/ngt-action.module';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { NgtTrComponent } from './ngt-tr/ngt-tr.component';
     NgtInputModule,
     NgtModalModule,
     NgtTagModule,
+    NgtActionModule,
     NgtStylizableModule
   ]
 })
