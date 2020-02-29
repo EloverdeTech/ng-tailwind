@@ -1,14 +1,21 @@
 <div class="md:flex md:items-center">
-    <span (click)='sort()' [class.cursor-pointer]='sortable'>
+    <div (click)='sort()' [class.cursor-pointer]='sortable'>
         <ng-content></ng-content>
         <ng-container *ngIf='sortable && isCurrentSort'>
-            &nbsp;<i class="{{ sortDirection == 'desc' ? 'fas fa-sort-amount-down' : 'fas fa-sort-amount-up' }} text-gray-700 cursor-pointer"></i>
+            &nbsp;
+            <i
+                class="{{ sortDirection == 'desc' ? 'fas fa-sort-amount-down' : 'fas fa-sort-amount-up' }} text-gray-700 cursor-pointer"></i>
         </ng-container>
-    </span>
+    </div>
 
     <ng-container *ngIf='searchable'>
-        <span (click)='enableSearch()' title="Filtrar"
-            class="fas fa-filter float-right md:block px-2 py-0 text-gray-700 md:hover:bg-blue-500 md:hover:text-white rounded-full md:py-2 md:ml-1 cursor-pointer"></span>
+        <div (click)='enableSearch()' class="float-right ml-2" title="Filtrar">
+            <ngt-action h='h-6' w='w-6' ngt-stylizable>
+                <svg xmlns="http://www.w3.org/2000/svg" class="fill-current" viewBox="0 0 20 20">
+                    <path d="M12 12l8-8V0H0v4l8 8v8l4-4v-4z" />
+                </svg>
+            </ngt-action>
+        </div>
     </ng-container>
 </div>
 
