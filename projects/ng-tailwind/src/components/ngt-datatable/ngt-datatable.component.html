@@ -13,7 +13,7 @@
         </ng-container>
     </div>
 
-    <p *ngIf="emptyStateVisible" class="mt-8 mx-auto ng-star-inserted self-center text-center text-xl">
+    <p *ngIf="emptyStateVisible" class="mt-8 mx-auto self-center text-center text-xl">
         Nenhum registro encontrado
     </p>
     <!-- <img *ngIf="emptyStateVisible" class="self-center mx-auto" src="../../assets/images/no-results.png"> -->
@@ -25,7 +25,7 @@
     <!-- LOADING ANIMATION -->
     <div *ngIf="loading">
         <div *ngFor="let i of [1, 2, 3, 4]" class="flex w-full mt-3">
-            <ngt-shining class="h-10 w-full">aaa</ngt-shining>
+            <ngt-shining class="h-10 w-full"></ngt-shining>
             <ngt-shining class="h-10 w-full mr-10 ml-10"></ngt-shining>
             <ngt-shining class="h-10 w-full"></ngt-shining>
         </div>
