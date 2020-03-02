@@ -1,77 +1,79 @@
-<ul class="flex justify-center md:float-left">
-    <!-- FIRST -->
-    <li (click)='goToFirstPage()' class="mr-2">
-        <ngt-action [ngtStyle]='ngtPaginationFirstLastButtonStyle'>
-            <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true" focusable="false"
-                style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
-                preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                <path
-                    d="M18.41 7.41L17 6l-6 6l6 6l1.41-1.41L13.83 12l4.58-4.59m-6 0L11 6l-6 6l6 6l1.41-1.41L7.83 12l4.58-4.59z" />
-            </svg>
-        </ngt-action>
-    </li>
+<div class="flex items-center w-full h-full">
+    <ul class="flex justify-start">
+        <!-- FIRST -->
+        <li (click)='goToFirstPage()' class="mr-2">
+            <ngt-action [ngtStyle]='ngtPaginationFirstLastButtonStyle'>
+                <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    aria-hidden="true" focusable="false"
+                    style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                    <path
+                        d="M18.41 7.41L17 6l-6 6l6 6l1.41-1.41L13.83 12l4.58-4.59m-6 0L11 6l-6 6l6 6l1.41-1.41L7.83 12l4.58-4.59z" />
+                </svg>
+            </ngt-action>
+        </li>
 
-    <!-- PREVIOUS -->
-    <li (click)='goToPreviousPage()' class="mr-2">
-        <ngt-action [ngtStyle]='ngtPaginationNextPreviousButtonStyle'>
-            <svg class="fill-current" xmlns="http://www.w3.org/2000/svg"
-                style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
-                preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                <path d="M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6l6 6l1.41-1.42z" />
-            </svg>
-        </ngt-action>
-    </li>
+        <!-- PREVIOUS -->
+        <li (click)='goToPreviousPage()' class="mr-2">
+            <ngt-action [ngtStyle]='ngtPaginationNextPreviousButtonStyle'>
+                <svg class="fill-current" xmlns="http://www.w3.org/2000/svg"
+                    style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                    <path d="M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6l6 6l1.41-1.42z" />
+                </svg>
+            </ngt-action>
+        </li>
 
-    <ng-container *ngFor='let page of pages'>
-        <ng-container *ngIf='page == pagination.page'>
-            <li class="mr-2">
-                <ngt-action [ngtStyle]='ngtPaginationActivePageButtonStyle'>
-                    {{ page }}
-                </ngt-action>
-            </li>
+        <ng-container *ngFor='let page of pages'>
+            <ng-container *ngIf='page == pagination.page'>
+                <li class="mr-2">
+                    <ngt-action [ngtStyle]='ngtPaginationActivePageButtonStyle'>
+                        {{ page }}
+                    </ngt-action>
+                </li>
+            </ng-container>
+
+            <ng-container *ngIf='page !== pagination.page'>
+                <li (click)='goToPage(page)' class="mr-2">
+                    <ngt-action [ngtStyle]='ngtPaginationPageButtonStyle'>
+                        {{ page }}
+                    </ngt-action>
+                </li>
+            </ng-container>
+
         </ng-container>
 
-        <ng-container *ngIf='page !== pagination.page'>
-            <li (click)='goToPage(page)' class="mr-2">
-                <ngt-action [ngtStyle]='ngtPaginationPageButtonStyle'>
-                    {{ page }}
-                </ngt-action>
-            </li>
-        </ng-container>
+        <!-- NEXT -->
+        <li (click)='goToNextPage()' class="mr-2">
+            <ngt-action [ngtStyle]='ngtPaginationNextPreviousButtonStyle'>
+                <svg class="fill-current" xmlns="http://www.w3.org/2000/svg"
+                    style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                    <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6l6 6l-6 6l-1.41-1.42z" />
+                </svg>
+            </ngt-action>
+        </li>
 
-    </ng-container>
+        <!-- LAST -->
+        <li (click)='goToLastPage()' class="mr-2">
+            <ngt-action [ngtStyle]='ngtPaginationFirstLastButtonStyle'>
+                <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    aria-hidden="true" focusable="false"
+                    style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+                    preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
+                    <path
+                        d="M5.59 7.41L7 6l6 6l-6 6l-1.41-1.41L10.17 12L5.59 7.41m6 0L13 6l6 6l-6 6l-1.41-1.41L16.17 12l-4.58-4.59z" />
+                </svg>
+            </ngt-action>
+        </li>
+    </ul>
 
-    <!-- NEXT -->
-    <li (click)='goToNextPage()' class="mr-2">
-        <ngt-action [ngtStyle]='ngtPaginationNextPreviousButtonStyle'>
-            <svg class="fill-current" xmlns="http://www.w3.org/2000/svg"
-                style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
-                preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                <path d="M8.59 16.58L13.17 12L8.59 7.41L10 6l6 6l-6 6l-1.41-1.42z" />
-            </svg>
-        </ngt-action>
-    </li>
-
-    <!-- LAST -->
-    <li (click)='goToLastPage()' class="mr-2">
-        <ngt-action [ngtStyle]='ngtPaginationFirstLastButtonStyle'>
-            <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                aria-hidden="true" focusable="false"
-                style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
-                preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-                <path
-                    d="M5.59 7.41L7 6l6 6l-6 6l-1.41-1.41L10.17 12L5.59 7.41m6 0L13 6l6 6l-6 6l-1.41-1.41L16.17 12l-4.58-4.59z" />
-            </svg>
-        </ngt-action>
-    </li>
-</ul>
-
-<!-- ITEMS PER PAGE -->
-<div class="flex float-left md:float-right mt-2 md:mt-0">
-    <span>
-        Visualizando {{ pagination.from }} -
-        {{ pagination.to }} de
-        {{ pagination.total }} registros
-    </span>
+    <!-- ITEMS PER PAGE -->
+    <div class="flex w-full justify-end">
+        <span>
+            Visualizando {{ pagination.from }} -
+            {{ pagination.to }} de
+            {{ pagination.total }} registros
+        </span>
+    </div>
 </div>
