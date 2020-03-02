@@ -1,4 +1,4 @@
-import { Component, Injector, Input, Optional, Self } from '@angular/core';
+import { Component, Injector, Optional, Self } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
@@ -9,7 +9,7 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
   styleUrls: ['./ngt-portlet-footer.component.css']
 })
 export class NgtPortletFooterComponent {
-  @Input() ngtStyle: NgtStylizableService;
+  public ngtStyle: NgtStylizableService;
 
   constructor(
     private injector: Injector,
@@ -21,11 +21,11 @@ export class NgtPortletFooterComponent {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    this.ngtStyle.load(this.injector, 'PortletFooter', {
+    this.ngtStyle.load(this.injector, 'NgtPortletFooter', {
       color: {
         bg: 'gray-200',
         text: 'black'
       }
-    });
+    }, ['NgtPortletStyle']);
   }
 }
