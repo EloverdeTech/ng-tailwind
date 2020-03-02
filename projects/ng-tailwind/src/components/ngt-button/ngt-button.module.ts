@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-
-import { NgtButtonComponent } from './ngt-button.component';
 import { RouterModule } from '@angular/router';
+
+import { NgtFormModule } from '../ngt-form/ngt-form.module';
+import { NgtButtonComponent } from './ngt-button.component';
 
 
 
@@ -11,7 +12,8 @@ import { RouterModule } from '@angular/router';
   exports: [NgtButtonComponent],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    NgtFormModule
   ]
 })
 export class NgtButtonModule { }

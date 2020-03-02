@@ -1,7 +1,8 @@
-import { Component, Injector, Input, OnChanges, Optional, Self, SimpleChanges } from '@angular/core';
+import { Component, Injector, Input, OnChanges, Optional, Self, SimpleChanges, SkipSelf } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 @Component({
   selector: 'ngt-button',
@@ -19,8 +20,8 @@ export class NgtButtonComponent implements OnChanges {
   public ngtStyle: NgtStylizableService;
 
   constructor(
-    // @Optional() @SkipSelf()
-    // private ngtFormComponent: NgtFormComponent
+    @Optional() @SkipSelf()
+    private ngtFormComponent: NgtFormComponent,
     private injector: Injector,
     @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
   ) {
@@ -30,11 +31,11 @@ export class NgtButtonComponent implements OnChanges {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    // if (this.ngtFormComponent) {
-    //   this.ngtFormComponent.onLoadingChange.subscribe((loading) => {
-    //     this.loading = loading;
-    //   });
-    // }
+    if (this.ngtFormComponent) {
+      this.ngtFormComponent.onLoadingChange.subscribe((loading: boolean) => {
+        this.loading = loading;
+      });
+    }
   }
 
   getClass() {
