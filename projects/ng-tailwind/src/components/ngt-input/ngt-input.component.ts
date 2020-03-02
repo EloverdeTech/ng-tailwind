@@ -18,6 +18,7 @@ import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtHttpValidationService } from '../../services/http/ngt-http-validation.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 
 var Inputmask = require('inputmask');
@@ -81,19 +82,19 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     public formContainer: ControlContainer,
     @Optional() @SkipSelf()
     private ngtSectionComponent: NgtSectionComponent,
-    //@Optional() @SkipSelf()
-    //private tailFormComponent: TailFormComponent,
+    @Optional() @SkipSelf()
+    private ngtFormComponent: NgtFormComponent,
     private renderer: Renderer2,
     @Optional() @SkipSelf()
     private ngtValidationService: NgtHttpValidationService
   ) {
     super();
 
-    // if (this.tailFormComponent) {
-    //   this.tailFormComponent.onShiningChange.subscribe((shining) => {
-    //     this.shining = shining;
-    //   });
-    // }
+    if (this.ngtFormComponent) {
+      this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+        this.shining = shining;
+      });
+    }
 
     if (this.tailStylizableDirective) {
       this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
