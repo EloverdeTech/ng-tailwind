@@ -12,7 +12,7 @@ export class NgtPortletHeaderComponent {
   @Input() caption: string;
   @Input() icon: string = null;
 
-  @Input() ngtStyle: NgtStylizableService;
+  public ngtStyle: NgtStylizableService;
 
   constructor(
     private injector: Injector,
@@ -27,6 +27,6 @@ export class NgtPortletHeaderComponent {
     this.ngtStyle.load(this.injector, 'NgtPortletHeader', {
       h: 'auto',
       color: {}
-    });
+    }, ['NgtPortletStyle']);
   }
 }
