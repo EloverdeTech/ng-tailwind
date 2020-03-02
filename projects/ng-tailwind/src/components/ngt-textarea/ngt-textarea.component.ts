@@ -1,7 +1,8 @@
-import { Component, ElementRef, Host, Input, OnInit, Optional, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Host, Input, OnInit, Optional, Renderer2, SkipSelf, ViewChild } from '@angular/core';
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 @Component({
   selector: 'ngt-textarea',
@@ -41,17 +42,17 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
   constructor(
     @Optional() @Host()
     public formContainer: ControlContainer,
-    // @Optional() @SkipSelf()
-    // private tailFormComponent: TailFormComponent,
+    @Optional() @SkipSelf()
+    private ngtFormComponent: NgtFormComponent,
     private renderer: Renderer2
   ) {
     super();
 
-    // if (this.tailFormComponent) {
-    //   this.tailFormComponent.onShiningChange.subscribe((shining) => {
-    //     this.shining = shining;
-    //   });
-    // }
+    if (this.ngtFormComponent) {
+      this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+        this.shining = shining;
+      });
+    }
   }
 
   private initComponent() {
