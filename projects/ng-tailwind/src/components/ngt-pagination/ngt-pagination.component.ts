@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, Injector } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, Output } from '@angular/core';
 
 import { NgtHttpMeta, NgtHttpPagination } from '../../services/http/ngt-http.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -13,8 +13,10 @@ export class NgtPaginationComponent {
   @Input() pagesInterval: number;
   @Output() onPageChange: EventEmitter<number> = new EventEmitter();
 
-  public ngtPaginationButtonStyle: NgtStylizableService;
-  public ngtPaginationActiveButtonStyle: NgtStylizableService;
+  public ngtPaginationActivePageButtonStyle: NgtStylizableService;
+  public ngtPaginationNextPreviousButtonStyle: NgtStylizableService;
+  public ngtPaginationFirstLastButtonStyle: NgtStylizableService;
+  public ngtPaginationPageButtonStyle: NgtStylizableService;
 
   public pagination: NgtHttpPagination = {
     count: null,
@@ -29,26 +31,46 @@ export class NgtPaginationComponent {
   public pages = [];
 
   constructor(
-    private injector: Injector
+    private injector: Injector,
   ) {
-    this.ngtPaginationButtonStyle = new NgtStylizableService();
-    this.ngtPaginationActiveButtonStyle = new NgtStylizableService();
+    this.ngtPaginationNextPreviousButtonStyle = new NgtStylizableService();
+    this.ngtPaginationFirstLastButtonStyle = new NgtStylizableService();
+    this.ngtPaginationActivePageButtonStyle = new NgtStylizableService();
+    this.ngtPaginationPageButtonStyle = new NgtStylizableService();
 
-    this.ngtPaginationButtonStyle.load(this.injector, 'NgtPaginationButton', {
-      h: '8',
-      w: '8',
-      color: {
-        text: 'text-black hover:text-white',
-        bg: 'bg-none hover:bg-blue-500'
-      }
-    });
-
-    this.ngtPaginationActiveButtonStyle.load(this.injector, 'NgtPaginationActiveButton', {
+    this.ngtPaginationNextPreviousButtonStyle.load(this.injector, 'NgtPaginationNextPreviousButton', {
       h: '8',
       w: '8',
       color: {
         text: 'white',
-        bg: 'blue-500'
+        bg: 'gray-700'
+      }
+    });
+
+    this.ngtPaginationFirstLastButtonStyle.load(this.injector, 'NgtPaginationFirstLastButton', {
+      h: '8',
+      w: '8',
+      color: {
+        text: 'white',
+        bg: 'gray-900'
+      }
+    });
+
+    this.ngtPaginationActivePageButtonStyle.load(this.injector, 'NgtPaginationActivePageButton', {
+      h: '8',
+      w: '8',
+      color: {
+        text: 'white',
+        bg: 'gray-500'
+      }
+    });
+
+    this.ngtPaginationPageButtonStyle.load(this.injector, 'NgtPaginationPageButton', {
+      h: '8',
+      w: '8',
+      color: {
+        text: 'white',
+        bg: 'gray-300'
       }
     });
   }

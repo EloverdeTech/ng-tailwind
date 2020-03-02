@@ -1,7 +1,7 @@
 <ul class="flex justify-center md:float-left">
     <!-- FIRST -->
     <li (click)='goToFirstPage()' class="mr-2">
-        <ngt-action [ngtStyle]='ngtPaginationActiveButtonStyle'>
+        <ngt-action [ngtStyle]='ngtPaginationFirstLastButtonStyle'>
             <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                 aria-hidden="true" focusable="false"
                 style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
@@ -14,7 +14,7 @@
 
     <!-- PREVIOUS -->
     <li (click)='goToPreviousPage()' class="mr-2">
-        <ngt-action [ngtStyle]='ngtPaginationActiveButtonStyle'>
+        <ngt-action [ngtStyle]='ngtPaginationNextPreviousButtonStyle'>
             <svg class="fill-current" xmlns="http://www.w3.org/2000/svg"
                 style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
                 preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
@@ -26,7 +26,7 @@
     <ng-container *ngFor='let page of pages'>
         <ng-container *ngIf='page == pagination.page'>
             <li class="mr-2">
-                <ngt-action [ngtStyle]='ngtPaginationActiveButtonStyle'>
+                <ngt-action [ngtStyle]='ngtPaginationActivePageButtonStyle'>
                     {{ page }}
                 </ngt-action>
             </li>
@@ -34,7 +34,7 @@
 
         <ng-container *ngIf='page !== pagination.page'>
             <li (click)='goToPage(page)' class="mr-2">
-                <ngt-action [ngtStyle]='ngtPaginationButtonStyle'>
+                <ngt-action [ngtStyle]='ngtPaginationPageButtonStyle'>
                     {{ page }}
                 </ngt-action>
             </li>
@@ -44,7 +44,7 @@
 
     <!-- NEXT -->
     <li (click)='goToNextPage()' class="mr-2">
-        <ngt-action [ngtStyle]='ngtPaginationActiveButtonStyle'>
+        <ngt-action [ngtStyle]='ngtPaginationNextPreviousButtonStyle'>
             <svg class="fill-current" xmlns="http://www.w3.org/2000/svg"
                 style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
                 preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
@@ -55,7 +55,7 @@
 
     <!-- LAST -->
     <li (click)='goToLastPage()' class="mr-2">
-        <ngt-action [ngtStyle]='ngtPaginationActiveButtonStyle'>
+        <ngt-action [ngtStyle]='ngtPaginationFirstLastButtonStyle'>
             <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                 aria-hidden="true" focusable="false"
                 style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
