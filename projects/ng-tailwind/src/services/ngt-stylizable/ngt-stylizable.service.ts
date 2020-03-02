@@ -183,13 +183,19 @@ export class NgtStylizableService {
         this._ml = this.getQualifiedValue('ml-', ml);
     }
 
-    public load(injector: Injector, style: string, defaultValue = null) {
+    public load(injector: Injector, style: string, defaultValue = null, inheritanceStyles = []) {
         let ngtGlobalStyle = injector.get('NgtStyleGlobal', {});
         defaultValue = defaultValue ? defaultValue : {};
 
         let requestedStyle = <NgtStylizableService>injector.get(style + 'Style', defaultValue);
 
         this.loadObjectProperties(this, ngtGlobalStyle, this.getAllowedKeys(ngtGlobalStyle));
+
+        inheritanceStyles.forEach(style => {
+            let requestedStyle = <NgtStylizableService>injector.get(style, {});
+            this.loadObjectProperties(this, requestedStyle, this.getAllowedKeys(requestedStyle));
+        });
+
         this.loadObjectProperties(this, requestedStyle, this.getAllowedKeys(requestedStyle));
     }
 
