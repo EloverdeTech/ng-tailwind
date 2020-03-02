@@ -60,10 +60,12 @@
                         <p>Portlet Body</p>
 
                         <form #form='ngForm'>
-                            <ngt-input class="block w-8/12" [allowClear]='true'
-                                innerRightIcon='assets/images/add-solid.svg' innerLeftIcon='assets/images/test.svg'
-                                [isRequired]='true' name='input_test1' label='Input test'>
-                            </ngt-input>
+                            <ngt-section icon='assets/images/test.svg' color.text='blue-500' ngt-stylizable>
+                                <ngt-input class="block w-8/12" [allowClear]='true'
+                                    innerRightIcon='assets/images/add-solid.svg' innerLeftIcon='assets/images/test.svg'
+                                    [isRequired]='true' name='input_test1' label='Input test'>
+                                </ngt-input>
+                            </ngt-section>
 
                             {{ textarea_test1 }}
                             <ngt-textarea name='textarea' label='Ngt Textarea' [(ngModel)]="textarea_test1">

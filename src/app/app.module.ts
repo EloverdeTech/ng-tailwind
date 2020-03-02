@@ -141,6 +141,18 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
           text: 'text-blue-500'
         }
       },
+    },
+    {
+      provide: 'NgtSectionStyle',
+      useValue: {
+        h: '8',
+        w: '8',
+        my: '1',
+        pr: '1',
+        color: {
+          text: 'text-red-500'
+        }
+      }
     }
   ],
   bootstrap: [AppComponent]
