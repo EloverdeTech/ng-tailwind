@@ -137,8 +137,32 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
         my: '12',
         h: 'auto',
         color: {
-          bg: 'white',
-          text: 'text-blue-500'
+          bg: 'bg-blue-200',
+          text: 'text-gray-700'
+        }
+      },
+    },
+    {
+      provide: 'NgtPortletBodyStyle',
+      useValue: {
+        color: {}
+      },
+    },
+    {
+      provide: 'NgtPortletHeaderStyle',
+      useValue: {
+        color: {
+          bg: 'bg-orange-200',
+          text: 'text-gray-700'
+        }
+      },
+    },
+    {
+      provide: 'NgtPortletFooterStyle',
+      useValue: {
+        color: {
+          bg: 'bg-orange-200',
+          text: 'text-gray-900'
         }
       },
     },
