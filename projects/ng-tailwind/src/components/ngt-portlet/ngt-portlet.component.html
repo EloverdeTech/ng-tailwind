@@ -3,7 +3,7 @@
         @fadeUp>
         <!--Header-->
         <div *ngIf="!customLayout">
-            <ngt-portlet-header [ngtStyle]='ngtStyle' [icon]='icon' [caption]='caption'>
+            <ngt-portlet-header [icon]='icon' [caption]='caption'>
                 <div right-header>
                     <ng-content select='[right-header]'></ng-content>
                 </div>
@@ -25,7 +25,7 @@
 
         <!--Footer-->
         <ng-container *ngIf="!customLayout && withFooter">
-            <ngt-portlet-footer [ngtStyle]='ngtStyle'>
+            <ngt-portlet-footer>
                 <div right-footer>
                     <ng-content select='[right-footer]'></ng-content>
                 </div>
