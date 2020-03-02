@@ -1,14 +1,14 @@
 <div class="flex flex-wrap mb-6">
-    <i class="hidden md:block h-12 w-12 my-1 text-4xl {{icon + ' ' + ngtStyle.compile(['color.text'])}}" *ngIf="icon"></i>
-    <div class="{{icon ? 'pb-4 border-b-4 w-full border-dashed md:pb-0 md:border-solid md:border-b-0 md:border-l md:w-11/12' : 'pb-4 border-b-4 w-full border-dashed md:pb-0 md:border-b-0'}}">
-      <div class="px-5">
-        <span *ngIf='!accordion'>{{ caption }}</span>
-        <a (click)='toogleSectionVisibility()' *ngIf='accordion'>{{caption}}</a>
-        <p class="text-xs">{{ subtitle }}</p>
-      </div>
-  
-      <div class="md:px-5 py-0" *ngIf='showSection'>
-        <ng-content></ng-content>
-      </div>
+  <ngt-svg *ngIf="icon" [src]='icon' class="hidden md:block {{ ngtStyle.compile(['color.text', 'h', 'w', 'my', 'pr']) }}"></ngt-svg>
+  <div class="{{ icon ? 'pb-4 border-b-4 w-full border-dashed md:pb-0 md:border-solid md:border-b-0 md:border-l md:w-11/12' : 'pb-4 border-b-4 w-full border-dashed md:pb-0 md:border-b-0' }}">
+    <div class="px-5">
+      <span *ngIf='!accordion'>{{ caption }}</span>
+      <a (click)='toogleSectionVisibility()' *ngIf='accordion'>{{caption}}</a>
+      <p class="text-xs">{{ subtitle }}</p>
     </div>
-  </div> 
+
+    <div class="md:px-5 py-0" *ngIf='showSection'>
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

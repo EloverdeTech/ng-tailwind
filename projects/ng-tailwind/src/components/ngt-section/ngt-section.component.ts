@@ -28,8 +28,14 @@ export class NgtSectionComponent {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    this.ngtStyle.load(this.injector, 'Section', {
-      color: {}
+    this.ngtStyle.load(this.injector, 'NgtSection', {
+      h: '12',
+      w: '12',
+      my: '1',
+      pr: '1',
+      color: {
+        text: 'gray-500'
+      }
     });
   }
 
