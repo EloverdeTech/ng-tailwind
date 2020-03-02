@@ -21,15 +21,15 @@ export class NgtFormComponent implements OnInit {
 
   @Output() onCreating: EventEmitter<any> = new EventEmitter;
   @Output() onEditing: EventEmitter<any> = new EventEmitter;
-  @Output() onLoadingChange: EventEmitter<any> = new EventEmitter;
-  @Output() onShiningChange: EventEmitter<any> = new EventEmitter;
+  @Output() onLoadingChange: EventEmitter<boolean> = new EventEmitter;
+  @Output() onShiningChange: EventEmitter<boolean> = new EventEmitter;
   @Output() setupComponent: EventEmitter<any> = new EventEmitter;
 
   public formState: NgtFormState;
   public uriId: any;
 
-  private loading = false;
-  private shining = false;
+  private loading: boolean = false;
+  private shining: boolean = false;
 
   constructor(
     @Optional() @Host()
