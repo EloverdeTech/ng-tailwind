@@ -79,6 +79,58 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
       }
     },
     {
+      provide: 'NgtPaginationNextPreviousButtonStyle',
+      useValue: {
+        h: '8',
+        w: '8',
+        color: {
+          text: 'white',
+          bg: 'blue-700'
+        }
+      }
+    },
+    {
+      provide: 'NgtPaginationFirstLastButtonStyle',
+      useValue: {
+        h: '8',
+        w: '8',
+        color: {
+          text: 'white',
+          bg: 'blue-900'
+        }
+      }
+    },
+    {
+      provide: 'NgtPaginationActivePageButtonStyle',
+      useValue: {
+        h: '8',
+        w: '8',
+        color: {
+          text: 'white',
+          bg: 'blue-500'
+        }
+      }
+    },
+    {
+      provide: 'NgtPaginationPageButtonStyle',
+      useValue: {
+        h: '8',
+        w: '8',
+        color: {
+          text: 'white',
+          bg: 'blue-300'
+        }
+      }
+    },
+    {
+      provide: 'NgtCheckboxStyle',
+      useValue: {
+        color: {
+          bg: 'green-500'
+        }
+      }
+    },
+    {
       provide: 'NgtPortletStyle',
       useValue: {
         mx: '12',
@@ -88,7 +140,7 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
           bg: 'white',
           text: 'text-blue-500'
         }
-      },      
+      },
     }
   ],
   bootstrap: [AppComponent]
