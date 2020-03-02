@@ -21,10 +21,10 @@ export class NgtPortletBodyComponent {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    this.ngtStyle.load(this.injector, 'PortletBody', {
+    this.ngtStyle.load(this.injector, 'NgtPortletBody', {
       color: {
         text: 'black'
       }
-    });
+    }, ['NgtPortletStyle']);
   }
 }
