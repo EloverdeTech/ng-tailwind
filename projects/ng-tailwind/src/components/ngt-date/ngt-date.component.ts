@@ -1,9 +1,10 @@
-import { Component, Host, Input, OnInit, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, Host, Input, OnInit, Optional, SkipSelf, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
 import { FlatpickrOptions, Ng2FlatpickrComponent } from 'ng2-flatpickr';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { uuid } from '../../helpers/uuid';
+import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 const Brazil = require("flatpickr/dist/l10n/pt.js").default.pt;
 var moment = require('moment');
@@ -57,16 +58,16 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
   constructor(
     @Optional() @Host()
     public formContainer: ControlContainer,
-    //@Optional() @SkipSelf()
-    //private tailFormComponent: TailFormComponent
+    @Optional() @SkipSelf()
+    private ngtFormComponent: NgtFormComponent
   ) {
     super();
 
-    /*if (this.tailFormComponent) {
-      this.tailFormComponent.onShiningChange.subscribe((shining) => {
+    if (this.ngtFormComponent) {
+      this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
         this.shining = shining;
       });
-    }*/
+    }
   }
 
   private initComponent() {
