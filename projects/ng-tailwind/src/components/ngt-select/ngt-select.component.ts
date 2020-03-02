@@ -1,13 +1,28 @@
-import { Component, ContentChild, Input, TemplateRef, Optional, Host, SkipSelf, ChangeDetectorRef, Injector, Self, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Observable, Observer, Subject } from 'rxjs';
-import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
-import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
-import { ControlContainer, AbstractControl, NgForm } from '@angular/forms';
-import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
-import { uuid } from '../../helpers/uuid';
-import { NgtSelectOptionTmp, NgtSelectOptionSelectedTmp } from './ngt-select.directive';
+import {
+  ChangeDetectorRef,
+  Component,
+  ContentChild,
+  Host,
+  Injector,
+  Input,
+  Optional,
+  Self,
+  SkipSelf,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { Observable, Observer, Subject } from 'rxjs';
+
+import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { uuid } from '../../helpers/uuid';
+import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
+import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+import { NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } from './ngt-select.directive';
 
 @Component({
   selector: 'ngt-select',
@@ -70,7 +85,7 @@ export class NgtSelectComponent extends NgtBaseNgModel {
 
   public ngtStyle: NgtStylizableService;
   public ngSelectItems: any = [];
-  public nativeValue;
+  public nativeValue: any;
   public nativeName = uuid();
 
   private ngSearchObserver: Observer<any>;
@@ -99,18 +114,18 @@ export class NgtSelectComponent extends NgtBaseNgModel {
     private injector: Injector,
     @Optional() @Host()
     public formContainer: ControlContainer,
-    //@Optional() @SkipSelf()
-    //public ngtFormComponent: NgtFormComponent,
+    @Optional() @SkipSelf()
+    public ngtFormComponent: NgtFormComponent,
     private ngtHttp: NgtHttpService,
     private changeDetector: ChangeDetectorRef,
   ) {
     super();
 
-    // if (this.ngtFormComponent) {
-    // 	this.ngtFormComponent.onShiningChange.subscribe((shining) => {
-    // 		this.shining = shining;
-    // 	});
-    // }
+    if (this.ngtFormComponent) {
+      this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+        this.shining = shining;
+      });
+    }
 
     if (this.ngtStylizableDirective) {
       this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
@@ -118,11 +133,11 @@ export class NgtSelectComponent extends NgtBaseNgModel {
       this.ngtStyle = new NgtStylizableService();
     }
 
-    this.ngtStyle.load(this.injector, 'NgtSelect', { 
-      h: '12', 
+    this.ngtStyle.load(this.injector, 'NgtSelect', {
+      h: '12',
       color: {
         bg: 'white'
-      } 
+      }
     });
   }
 
