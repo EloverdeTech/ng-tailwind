@@ -20,12 +20,14 @@ import {
   NgtTagModule,
   NgtTextareaModule,
   NgtHttpService,
+  NgtHttpValidationService,
   NgtSelectModule
 } from 'ng-tailwind';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgtHttpTest } from './services/ngt-http-test.service';
+import { NgtHttpValidationTestService } from './services/ngt-http-validation-test';
 
 @NgModule({
   declarations: [
@@ -59,6 +61,10 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
     {
       provide: NgtHttpService,
       useClass: NgtHttpTest
+    },
+    {
+      provide: NgtHttpValidationService,
+      useClass: NgtHttpValidationTestService
     },
     {
       provide: 'NgtStyleSuccessButton',

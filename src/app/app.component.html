@@ -49,10 +49,11 @@
                     <div left-header>
                         <p class="text-3xl">Left Header</p>
                         <form>
-                            <ngt-input class="block w-8/12" [allowClear]='true' innerRightIcon='assets/images/add-solid.svg'
-                                innerLeftIcon='assets/images/test.svg' [isRequired]='true' name='input_test1'
-                                label='Input test'>
+                            <ngt-input [uniqueResource]='{}' class="block w-8/12" [allowClear]='true' innerRightIcon='assets/images/add-solid.svg'
+                                [(ngModel)]='uniqueTest' innerLeftIcon='assets/images/test.svg' [isRequired]='true' name='input_test1'
+                                label='Unique Validation test'>
                             </ngt-input>
+                            {{ uniqueTest }}
                         </form>
                     </div>
 
@@ -61,7 +62,7 @@
 
                         <form #form='ngForm'>
                             <ngt-section icon='assets/images/test.svg' color.text='blue-500' ngt-stylizable>
-                                <ngt-input class="block w-8/12" [allowClear]='true'
+                                <ngt-input [loading]='true' class="block w-8/12" [allowClear]='true'
                                     innerRightIcon='assets/images/add-solid.svg' innerLeftIcon='assets/images/test.svg'
                                     [isRequired]='true' name='input_test1' label='Input test'>
                                 </ngt-input>
