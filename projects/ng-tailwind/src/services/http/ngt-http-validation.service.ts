@@ -1,8 +1,12 @@
 
 export abstract class NgtHttpValidationService {
 
-    abstract unique(remoteResource: any, data: any);
+    abstract unique(validationResource: any, value): Promise<NgtHttpValidationResponse>;
 
-    abstract exists(remoteResource: any, data: any);
+    abstract exists(validationResource: any, value): Promise<NgtHttpValidationResponse>;
 
 }
+
+export interface NgtHttpValidationResponse {
+    valid: boolean;
+};
