@@ -65,6 +65,7 @@ export * from './components/ngt-portlet/ngt-portlet.component';
 export * from './components/ngt-portlet/ngt-portlet-header/ngt-portlet-header.component';
 export * from './components/ngt-portlet/ngt-portlet-body/ngt-portlet-body.component';
 export * from './components/ngt-portlet/ngt-portlet-footer/ngt-portlet-footer.component';
+export * from './enums/size.enum';
 
 //NgtSidenav
 export * from './components/ngt-sidenav/ngt-sidenav.module';
