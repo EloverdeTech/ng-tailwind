@@ -18,19 +18,19 @@ export class AppComponent implements AfterViewInit {
     {
       name: '',
       action: '/menus/incluir',
-      icon: 'fa fa-bars',
+      icon: 'assets/images/add-solid.svg',
       tooltip: 'Novo Menu'
     },
     {
       name: '',
       action: '/gerenciar-usuarios/incluir',
-      icon: 'fas fa-users',
+      icon: 'assets/images/add-solid.svg',
       tooltip: 'Novo Usuário'
     },
     {
       name: '',
       action: '/empresas/incluir',
-      icon: 'fas fa-briefcase',
+      icon: 'assets/images/test.svg',
       tooltip: 'Nova Empresa'
     }
   ];

@@ -49,8 +49,9 @@
                     <div left-header>
                         <p class="text-3xl">Left Header</p>
                         <form>
-                            <ngt-input [uniqueResource]='{}' class="block w-8/12" [allowClear]='true' innerRightIcon='assets/images/add-solid.svg'
-                                [(ngModel)]='uniqueTest' innerLeftIcon='assets/images/test.svg' [isRequired]='true' name='input_test1'
+                            <ngt-input [uniqueResource]='{}' class="block w-8/12" [allowClear]='true'
+                                innerRightIcon='assets/images/add-solid.svg' [(ngModel)]='uniqueTest'
+                                innerLeftIcon='assets/images/test.svg' [isRequired]='true' name='input_test1'
                                 label='Unique Validation test'>
                             </ngt-input>
                             {{ uniqueTest }}
@@ -75,7 +76,8 @@
                             <br>
 
                             {{ checkbox1 }}
-                            <ngt-checkbox name='checkbox' [(ngModel)]="checkbox1" label='Ngt Checkbox' color.bg='red-500' ngt-stylizable></ngt-checkbox>
+                            <ngt-checkbox name='checkbox' [(ngModel)]="checkbox1" label='Ngt Checkbox'
+                                color.bg='red-500' ngt-stylizable></ngt-checkbox>
 
                             <br><br>
 
@@ -93,9 +95,20 @@
                                 </ngt-tag>
                             </div>
 
-                            <div class="fixed bottom-0 right-0 mr-8 mb-6 z-50 w-12">
-                                <ngt-floating-button [withAnimation]='true' icon='fas fa-plus'
-                                    [menus]="floatingButtonMenus" ngt-stylizable></ngt-floating-button>
+                            <div class="fixed bottom-0 right-0 mr-8 mb-6 z-50 w-32">
+                                <ngt-floating-button label='teste label' [withAnimation]='true'
+                                    icon='assets/images/add-solid.svg' [menus]="floatingButtonMenus" ngt-stylizable
+                                    w='full'></ngt-floating-button>
+                            </div>
+
+                            <div class="fixed bottom-0 left-0 ml-64 mb-6 z-50 w-12">
+                                <ngt-floating-button [withAnimation]='true' icon='assets/images/add-solid.svg'
+                                    [menus]="floatingButtonMenus" ngt-stylizable w='full'></ngt-floating-button>
+                            </div>
+
+                            <div class="fixed bottom-0 right-0 mr-48 mb-6 z-50 w-32">
+                                <ngt-floating-button label='teste label' [withAnimation]='true'
+                                    [menus]="floatingButtonMenus" ngt-stylizable w='full'></ngt-floating-button>
                             </div>
 
                             {{ date_test1 }}
