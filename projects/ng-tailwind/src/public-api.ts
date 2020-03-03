@@ -5,6 +5,9 @@
 //NgtHttpService
 export * from './services/http/ngt-http.service';
 
+//NgtHttpValidationService
+export * from './services/http/ngt-http-validation.service';
+
 //NgtDatatable
 export * from './components/ngt-datatable/ngt-datatable.module';
 export * from './components/ngt-datatable/ngt-datatable.component';
