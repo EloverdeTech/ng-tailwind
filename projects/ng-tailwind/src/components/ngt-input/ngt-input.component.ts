@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { NgtHttpValidationService } from '../../services/http/ngt-http-validation.service';
+import { NgtHttpValidationService, NgtHttpValidationResponse } from '../../services/http/ngt-http-validation.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
@@ -41,6 +41,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
   @Input() label: string = "";
   @Input() placeholder: string = "";
   @Input() shining: boolean = false;
+  @Input() loading: boolean = false;
   @Input() helpTitle: string = 'Ajuda';
   @Input() helpText: boolean = false;
   @Input() outerIcon = null;
@@ -59,7 +60,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
 
   //Validations
   @Input() isRequired: boolean = false;
-  //@Input() unique: UniqueValidation;
+  @Input() uniqueResource: any;
   @Input() minValue: number;
   @Input() max: string;
   @Input() maxlength: number;
@@ -217,9 +218,9 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     setTimeout(() => {
       this.formControl.setValidators(syncValidators);
 
-      // if (this.unique) {
-      //   this.formControl.setAsyncValidators([this.uniqueValidator()]);
-      // }
+      if (this.uniqueResource) {
+        this.formControl.setAsyncValidators([this.uniqueValidator()]);
+      }
 
       this.formControl.updateValueAndValidity();
     });
@@ -387,37 +388,33 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
   }
 
   uniqueValidator(): AsyncValidatorFn {
+
+    if (!this.ngtValidationService) {
+      throw "In order to use uniqueValidation you must provide a implementation for NgtHttpValidationService class!";
+    }
+
     return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+
+      if (this.value) {
+        return new Promise((resolve) => {
+          this.loading = true;
+
+          this.ngtValidationService.unique(this.uniqueResource, this.value).then((response: NgtHttpValidationResponse) => {
+            this.loading = false;
+
+            if (!response.valid) {
+              return resolve({ 'unique': true });
+            }
+
+            resolve(null);
+          }).catch(() => {
+            this.loading = false;
+            resolve({ 'unique': true });
+          });
+        });
+      }
+
       return Promise.resolve(null);
-      // if (this.value) {
-      //   this.unique.value = this.value;
-
-      //   return new Promise((resolve) => {
-      //     this.innerLeftIcon = 'fas fa-spinner tail-rotate-center-infinity';
-
-      //     this.validationService.unique(this.unique).then((response) => {
-
-      //       if (this.value && !response || !response.axiosResponse || !response.axiosResponse.data || !response.axiosResponse.data.valid) {
-      //         this.innerLeftIcon = 'fas fa-times';
-      //         resolve({ 'unique': true });
-
-      //         return;
-      //       }
-
-      //       this.innerLeftIcon = 'fas fa-check';
-      //       resolve(null);
-
-      //     }).catch(() => {
-      //       this.innerLeftIcon = 'fas fa-times';
-      //       resolve({ 'unique': true });
-      //     });
-      //   });
-      // } else {
-      //   return new Promise((resolve) => {
-      //     resolve(null);
-      //   });
-      // }
-
     };
   }
 
