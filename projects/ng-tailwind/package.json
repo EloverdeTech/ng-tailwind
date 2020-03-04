@@ -1,19 +1,19 @@
 {
   "name": "ng-tailwind",
-  "version": "0.0.52",
+  "version": "0.0.56",
   "peerDependencies": {
     "@angular/common": ">6.0.0",
-    "@angular/core": ">6.0.0"
+    "@angular/core": ">6.0.0",
+    "flatpickr": "^4.6.3",
+    "ng2-flatpickr": "^9.0.0",
+    "@ng-select/ng-select": ">=2.20.5"
   },
   "devDependencies": {
     "@types/node": "^13.7.1"
   },
   "dependencies": {
-    "flatpickr": "^4.6.3",
     "moment": "^2.24.0",
-    "ng2-flatpickr": "^9.0.0",
     "angular-svg-icon": "^8.0.0",
-    "inputmask": "^4.0.9",
-    "@ng-select/ng-select": "^2.20.5"
+    "inputmask": "^4.0.9"
   }
 }
