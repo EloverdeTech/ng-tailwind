@@ -263,11 +263,14 @@
                                         <tr ngt-tr>
                                             <th class="text-transform: capitalize" searchable='true' sortable='true'
                                                 reference='name' searchLabel='Collumn 1' ngt-th>Collumn 1</th>
+                                            <th class="text-transform: capitalize" [searchable]='false' [sortable]='false'
+                                                reference='name2' searchLabel='Collumn 1' ngt-th>Collumn 2</th>
                                         </tr>
                                     </thead>
 
                                     <tbody ngt-tbody class="font-normal font-sans">
                                         <tr ngt-tr *ngFor="let data of ngtTable.data">
+                                            <td ngt-td>{{ data.name }}</td>
                                             <td ngt-td>{{ data.name }}</td>
                                         </tr>
                                     </tbody>
