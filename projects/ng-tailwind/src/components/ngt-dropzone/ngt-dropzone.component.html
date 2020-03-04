@@ -1,0 +1,45 @@
+<div [hidden]='shining' class="h-full w-full">
+    <ngx-dropzone
+        class="{{ itemsLimit && itemsLimit == 1 && resources.length ? 'singleAttachmentComponent' : '' }} min-h-full"
+        [multiple]='multipleSelection' [accept]='acceptedFiles' [maxFileSize]='maxFileSize' [disabled]='disabled'
+        [expandable]='verticalExpandable' [disableClick]='disableClick' (change)='onSelect($event)' #ngxDropzone>
+        <ngx-dropzone-label>{{ label }}</ngx-dropzone-label>
+
+        <ng-container *ngIf="previewType == 'DEFAULT'">
+            <ngx-dropzone-preview *ngFor="let resource of resources" [removable]="removable"
+                (removed)="onRemove(resource)">
+                <ngx-dropzone-label *ngIf="showFileName">
+                    {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}</ngx-dropzone-label>
+            </ngx-dropzone-preview>
+        </ng-container>
+
+        <ng-container *ngIf="previewType == 'IMAGE'">
+            <ngx-dropzone-image-preview *ngFor="let resource of resources" [file]="resource.file"
+                [removable]="removable" (removed)="onRemove(resource)"
+                class="{{ itemsLimit && itemsLimit == 1 && resources.length ? 'singleAttachmentPreview' : '' }} {{ loading ? 'opacity-50' : '' }}">
+                <ngx-dropzone-label *ngIf="showFileName">
+                    {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}</ngx-dropzone-label>
+            </ngx-dropzone-image-preview>
+        </ng-container>
+
+        <ng-container *ngIf="previewType == 'VIDEO'">
+            <ngx-dropzone-video-preview *ngFor="let resource of resources" [file]="resource.file"
+                [removable]="removable" (removed)="onRemove(resource)">
+                <ngx-dropzone-label *ngIf="showFileName">
+                    {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}</ngx-dropzone-label>
+            </ngx-dropzone-video-preview>
+        </ng-container>
+    </ngx-dropzone>
+</div>
+
+<!-- LOADING ANIMATION -->
+<ng-container *ngIf='shining'>
+    <div class="flex w-full">
+        <ngt-shining class="h-10 w-full"></ngt-shining>
+    </div>
+</ng-container>
+
+<input *ngIf='componentReady' type="hidden" [ngModel]="value" [name]="name" [value]="value">
+
+<ng-content></ng-content>
+<ngt-validation [control]="formControl" [container]="formContainer"></ngt-validation>
