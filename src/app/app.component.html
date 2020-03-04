@@ -90,7 +90,7 @@
                             <br><br>
 
                             <div class="w-32">
-                                <ngt-tag icon='fas fa-times' color.bg='red-500' color.text='black' ngt-stylizable>
+                                <ngt-tag color.bg='red-500' color.text='black' ngt-stylizable>
                                     Ngt Tag
                                 </ngt-tag>
                             </div>
@@ -156,19 +156,16 @@
                                         <div body
                                             class="flex flex-col w-full cursor-pointer font-semibold text-gray-700">
                                             <div class="flex relative items-center">
-                                                <i class="fas fa-pencil-alt absolute ml-5 text-xl text-blue-300"></i>
                                                 <span
                                                     class="w-full rounded-t-lg pl-12 px-4 py-2 hover:bg-blue-500 hover:text-white">Editar</span>
                                             </div>
 
                                             <div class="flex relative items-center">
-                                                <i class="fas fa-check absolute ml-5 text-xl text-blue-300"></i>
                                                 <span
                                                     class="w-full pl-12 px-4 py-2 hover:bg-blue-500 hover:text-white">Concluir</span>
                                             </div>
 
                                             <div class="flex relative items-center">
-                                                <i class="fas fa-times absolute ml-5 text-xl text-blue-300"></i>
                                                 <span
                                                     class="w-full rounded-b-lg pl-12 px-4 py-2 hover:bg-blue-500 hover:text-white">Cancelar</span>
                                             </div>
@@ -263,8 +260,9 @@
                                         <tr ngt-tr>
                                             <th class="text-transform: capitalize" searchable='true' sortable='true'
                                                 reference='name' searchLabel='Collumn 1' ngt-th>Collumn 1</th>
-                                            <th class="text-transform: capitalize" [searchable]='false' [sortable]='false'
-                                                reference='name2' searchLabel='Collumn 1' ngt-th>Collumn 2</th>
+                                            <th class="text-transform: capitalize" [searchable]='false'
+                                                [sortable]='false' reference='name2' searchLabel='Collumn 1' ngt-th>
+                                                Collumn 2</th>
                                         </tr>
                                     </thead>
 
@@ -279,6 +277,14 @@
                         </ngt-portlet-body>
                     </form>
                 </ngt-portlet>
+               
+                <form>
+                    {{ ngtDropzoneTest | json }}
+                    <div class="flex h-full w-4/12 justify-center">
+                        <ngt-dropzone name='ngtDropzone' [isRequired]='false' [(ngModel)]="ngtDropzoneTest" itemsLimit='1'
+                            [removable]='true' label='Selecione ou solte uma foto'></ngt-dropzone>
+                    </div>
+                </form>
             </ngt-content>
         </div>
     </ngt-sidenav>

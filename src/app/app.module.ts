@@ -3,29 +3,32 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import {
   NgtActionModule,
+  NgtAttachmentHttpService,
   NgtButtonModule,
   NgtCheckboxModule,
   NgtContentModule,
   NgtDatatableModule,
   NgtDateModule,
   NgtDropdownModule,
+  NgtDropzoneModule,
   NgtFloatingButtonModule,
   NgtHeaderNavModule,
+  NgtHttpService,
+  NgtHttpValidationService,
   NgtInputModule,
   NgtModalModule,
   NgtPortletModule,
   NgtSectionModule,
+  NgtSelectModule,
   NgtSidenavModule,
   NgtStylizableModule,
   NgtTagModule,
   NgtTextareaModule,
-  NgtHttpService,
-  NgtHttpValidationService,
-  NgtSelectModule
 } from 'ng-tailwind';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NgtAttachmentHttpServiceTest } from './services/ngt-attachment-http-test.service';
 import { NgtHttpTest } from './services/ngt-http-test.service';
 import { NgtHttpValidationTestService } from './services/ngt-http-validation-test';
 
@@ -55,9 +58,14 @@ import { NgtHttpValidationTestService } from './services/ngt-http-validation-tes
     NgtFloatingButtonModule,
     NgtDropdownModule,
     NgtDatatableModule,
-    NgtSelectModule
+    NgtSelectModule,
+    NgtDropzoneModule
   ],
   providers: [
+    {
+      provide: NgtAttachmentHttpService,
+      useClass: NgtAttachmentHttpServiceTest
+    },
     {
       provide: NgtHttpService,
       useClass: NgtHttpTest
