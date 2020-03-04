@@ -1,12 +1,14 @@
 {
   "name": "ng-tailwind",
-  "version": "0.0.56",
+  "version": "0.0.58",
   "peerDependencies": {
     "@angular/common": ">6.0.0",
     "@angular/core": ">6.0.0",
     "flatpickr": "^4.6.3",
     "ng2-flatpickr": "^9.0.0",
-    "@ng-select/ng-select": ">=2.20.5"
+    "@ng-select/ng-select": ">=2.20.5",
+    "ngx-dropzone": "^2.2.2",
+    "rxjs": "~6.4.0"
   },
   "devDependencies": {
     "@types/node": "^13.7.1"
