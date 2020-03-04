@@ -1,10 +1,17 @@
 <div class="md:flex md:items-center">
-    <div (click)='sort()' [class.cursor-pointer]='sortable'>
+    <div class="flex items-center justify-center" (click)='sort()' [class.cursor-pointer]='sortable'>
         <ng-content></ng-content>
         <ng-container *ngIf='sortable && isCurrentSort'>
             &nbsp;
-            <i
-                class="{{ sortDirection == 'desc' ? 'fas fa-sort-amount-down' : 'fas fa-sort-amount-up' }} text-gray-700 cursor-pointer"></i>
+            <svg *ngIf="sortDirection == 'asc'" class="fill-current self-center cursor-pointer"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
+
+            <svg *ngIf="sortDirection == 'desc'" class="fill-current self-center cursor-pointer"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z" />
+            </svg>
         </ng-container>
     </div>
 
