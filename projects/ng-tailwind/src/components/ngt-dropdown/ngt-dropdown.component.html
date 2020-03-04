@@ -11,9 +11,11 @@
             [class.hidden]='!isOpen' [@openClose]="isOpen ? 'open' : 'closed'" #container>
 
             <!-- Arrow -->
-            <div *ngIf="withArrow"
-                class="hidden sm:inline-block  absolute right-0 top-0 -mt-8 mr-16 text-4xl text-gray-700">
-                <i class='fas fa-caret-up'></i>
+            <div *ngIf="withArrow" class="hidden sm:inline-block  absolute right-0 -mt-6 mr-16 text-4xl text-gray-700">
+                <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 344 344">
+                    <path
+                        d="M167.5 107.1c-4.2 1.2-88.1 85.3-89.1 89.2-1 4.5.2 10.7 2.8 13.4 5.1 5.5 1 5.3 90.8 5.3 74.3 0 83.6-.2 86.6-1.6 4.8-2.3 7.4-7 7.4-13.5v-5.3l-42.7-42.9c-24.2-24.3-44.2-43.5-46-44.3-3.6-1.6-5.4-1.6-9.8-.3z" />
+                </svg>
             </div>
 
             <!-- Body -->
