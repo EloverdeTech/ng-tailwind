@@ -2,7 +2,10 @@
     <div style="transition: background-color .2s ease-out" class="{{ value ? ngtStyle.compile(['color.bg']) : 'bg-white' }}  
         shadow w-6 h-6 flex justify-center rounded border border-gray-400">
         <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' #element>
-        <i class="fa fa-check text-white mt-1 pointer-events-none"></i>
+        <svg class="fill-current self-center text-white pointer-events-none" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20">
+            <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+        </svg>
     </div>
 
     <span class="text-sm ml-2" *ngIf='label'>{{ label }}</span>
