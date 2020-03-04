@@ -112,3 +112,8 @@ export * from './components/ngt-form/ngt-form-validation-message/ngt-form-valida
 
 //NgtHttpFormService
 export * from './services/http/ngt-http-form.service';
+
+//NgtDropzone
+export * from './components/ngt-dropzone/ngt-dropzone.module';
+export * from './components/ngt-dropzone/ngt-dropzone.component';
+export * from './services/http/ngt-attachment-http.service';
