@@ -85,54 +85,54 @@ import { NgtHttpValidationTestService } from './services/ngt-http-validation-tes
     {
       provide: 'NgtInputStyle',
       useValue: {
-        h: '12',
+        h: 'h-12',
         color: {
           border: 'border-gray-400 focus:border-blue-500',
-          text: 'gray-700'
+          text: 'text-gray-700'
         }
       }
     },
     {
       provide: 'NgtPaginationNextPreviousButtonStyle',
       useValue: {
-        h: '8',
-        w: '8',
+        h: 'h-8',
+        w: 'w-8',
         color: {
-          text: 'white',
-          bg: 'blue-700'
+          text: 'text-white',
+          bg: 'bg-blue-700'
         }
       }
     },
     {
       provide: 'NgtPaginationFirstLastButtonStyle',
       useValue: {
-        h: '8',
-        w: '8',
+        h: 'h-8',
+        w: 'w-8',
         color: {
-          text: 'white',
-          bg: 'blue-900'
+          text: 'text-white',
+          bg: 'bg-blue-900'
         }
       }
     },
     {
       provide: 'NgtPaginationActivePageButtonStyle',
       useValue: {
-        h: '8',
-        w: '8',
+        h: 'h-8',
+        w: 'w-8',
         color: {
-          text: 'white',
-          bg: 'blue-500'
+          text: 'text-white',
+          bg: 'bg-blue-500'
         }
       }
     },
     {
       provide: 'NgtPaginationPageButtonStyle',
       useValue: {
-        h: '8',
-        w: '8',
+        h: 'h-8',
+        w: 'w-8',
         color: {
-          text: 'white',
-          bg: 'blue-300'
+          text: 'text-white',
+          bg: 'bg-blue-300'
         }
       }
     },
@@ -140,16 +140,16 @@ import { NgtHttpValidationTestService } from './services/ngt-http-validation-tes
       provide: 'NgtCheckboxStyle',
       useValue: {
         color: {
-          bg: 'green-500'
+          bg: 'bg-green-500'
         }
       }
     },
     {
       provide: 'NgtPortletStyle',
       useValue: {
-        mx: '12',
-        my: '12',
-        h: 'auto',
+        mx: 'mx-12',
+        my: 'my-12',
+        h: 'h-auto',
         color: {
           bg: 'bg-blue-200',
           text: 'text-gray-700'
@@ -183,10 +183,10 @@ import { NgtHttpValidationTestService } from './services/ngt-http-validation-tes
     {
       provide: 'NgtSectionStyle',
       useValue: {
-        h: '8',
-        w: '8',
-        my: '1',
-        pr: '1',
+        h: 'h-8',
+        w: 'w-8',
+        my: 'my-1',
+        pr: 'pr-1',
         color: {
           text: 'text-red-500'
         }

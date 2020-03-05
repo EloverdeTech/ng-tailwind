@@ -1,10 +1,10 @@
-<ngt-header-nav color.bg='gray-700' ngt-stylizable>
+<ngt-header-nav color.bg='bg-gray-700' ngt-stylizable>
     <div class="flex py-3 px-3 relative w-full justify-end">
         <ngt-dropdown>
             <!-- HEADER -->
             <div host class="flex align-items-center mr-6 cursor-pointer">
                 <span class="mr-2 self-center text-white">Usuário</span>
-                <ngt-action icon='assets/images/test.svg' h='8' w='8' ngt-stylizable></ngt-action>
+                <ngt-action icon='assets/images/test.svg' h='h-8' w='w-8' ngt-stylizable></ngt-action>
             </div>
 
             <!-- BODY -->
@@ -27,7 +27,7 @@
 </ngt-header-nav>
 
 <div class="min-h-screen">
-    <ngt-sidenav style="min-height: 89vh;" size='sm' color.bg='blue-500' ngt-stylizable>
+    <ngt-sidenav style="min-height: 89vh;" size='sm' color.bg='bg-blue-500' ngt-stylizable>
         <div body>
             <ul>
                 <li>
@@ -40,7 +40,7 @@
         </div>
 
         <div class="flex min-h-screen relative w-full">
-            <ngt-content class="w-full" color.bg='gray-200' ngt-stylizable>
+            <ngt-content class="w-full" color.bg='bg-gray-200' ngt-stylizable>
                 <ngt-portlet caption='Teste Portlet' [withFooter]='true'>
                     <div right-header>
                         <p class="text-xs">Right Header</p>
@@ -62,7 +62,7 @@
                         <p>Portlet Body</p>
 
                         <form #form='ngForm'>
-                            <ngt-section icon='assets/images/test.svg' color.text='blue-500' ngt-stylizable>
+                            <ngt-section icon='assets/images/test.svg' color.text='text-blue-500' ngt-stylizable>
                                 <ngt-input [loading]='true' class="block w-8/12" [allowClear]='true'
                                     innerRightIcon='assets/images/add-solid.svg' innerLeftIcon='assets/images/test.svg'
                                     [isRequired]='true' name='input_test1' label='Input test'>
@@ -77,20 +77,20 @@
 
                             {{ checkbox1 }}
                             <ngt-checkbox name='checkbox' [(ngModel)]="checkbox1" label='Ngt Checkbox'
-                                color.bg='red-500' ngt-stylizable></ngt-checkbox>
+                                color.bg='bg-red-500' ngt-stylizable></ngt-checkbox>
 
                             <br><br>
 
                             <div class="w-12 h-12">
-                                <ngt-action [isDisabled]='true' icon='assets/images/test.svg' color.bg='blue-700'
-                                    color.text='blue-200' ngt-stylizable (click)='clickAction()'>
+                                <ngt-action [isDisabled]='true' icon='assets/images/test.svg' color.bg='bg-blue-700'
+                                    color.text='text-blue-200' ngt-stylizable (click)='clickAction()'>
                                 </ngt-action>
                             </div>
 
                             <br><br>
 
                             <div class="w-32">
-                                <ngt-tag color.bg='red-500' color.text='black' ngt-stylizable>
+                                <ngt-tag color.bg='bg-red-500' color.text='text-black' ngt-stylizable>
                                     Ngt Tag
                                 </ngt-tag>
                             </div>
@@ -98,17 +98,17 @@
                             <div class="fixed bottom-0 right-0 mr-8 mb-6 z-50 w-32">
                                 <ngt-floating-button label='teste label' [withAnimation]='true'
                                     icon='assets/images/add-solid.svg' [menus]="floatingButtonMenus" ngt-stylizable
-                                    w='full'></ngt-floating-button>
+                                    w='w-full'></ngt-floating-button>
                             </div>
 
                             <div class="fixed bottom-0 left-0 ml-64 mb-6 z-50 w-12">
                                 <ngt-floating-button [withAnimation]='true' icon='assets/images/add-solid.svg'
-                                    [menus]="floatingButtonMenus" ngt-stylizable w='full'></ngt-floating-button>
+                                    [menus]="floatingButtonMenus" ngt-stylizable w='w-full'></ngt-floating-button>
                             </div>
 
                             <div class="fixed bottom-0 right-0 mr-48 mb-6 z-50 w-32">
                                 <ngt-floating-button label='teste label' [withAnimation]='true'
-                                    [menus]="floatingButtonMenus" ngt-stylizable w='full'></ngt-floating-button>
+                                    [menus]="floatingButtonMenus" ngt-stylizable w='w-full'></ngt-floating-button>
                             </div>
 
                             {{ date_test1 }}
@@ -128,7 +128,8 @@
 
                             <div class="flex flex-wrap">
                                 <div class="mt-3 mr-6 w-3/12">
-                                    <ngt-button type='success' (click)='openModal()' color.bg='red-900' ngt-stylizable>
+                                    <ngt-button type='success' (click)='openModal()' color.bg='bg-red-900'
+                                        ngt-stylizable>
                                         <span class="text-center w-full">
                                             NgtModal
                                         </span>
@@ -210,7 +211,7 @@
                     </div>
                 </ngt-portlet>
 
-                <ngt-portlet [customLayout]='true' [withFooter]='true' ngt-stylizable m='32' my='32'>
+                <ngt-portlet [customLayout]='true' [withFooter]='true' ngt-stylizable m='m-32' my='my-32'>
                     <ngt-portlet-header icon='assets/images/test.svg' caption='Custom Layout Portlet'>
                         <div right-header>
                             <p>Right Header</p>
@@ -243,7 +244,7 @@
                     </ngt-portlet-footer>
                 </ngt-portlet>
 
-                <ngt-portlet color.bg='gray-100' ngt-stylizable [customLayout]='true' [withFooter]='false'>
+                <ngt-portlet color.bg='bg-gray-100' ngt-stylizable [customLayout]='true' [withFooter]='false'>
                     <form #form='ngForm'>
                         <ngt-portlet-header caption='Custom Layout Portlet'>
                             <div right-header>
@@ -277,12 +278,12 @@
                         </ngt-portlet-body>
                     </form>
                 </ngt-portlet>
-               
+
                 <form>
                     {{ ngtDropzoneTest | json }}
                     <div class="flex h-full w-4/12 justify-center">
-                        <ngt-dropzone name='ngtDropzone' [isRequired]='false' [(ngModel)]="ngtDropzoneTest" itemsLimit='1'
-                            [removable]='true' label='Selecione ou solte uma foto'></ngt-dropzone>
+                        <ngt-dropzone name='ngtDropzone' [isRequired]='false' [(ngModel)]="ngtDropzoneTest"
+                            itemsLimit='1' [removable]='true' label='Selecione ou solte uma foto'></ngt-dropzone>
                     </div>
                 </form>
             </ngt-content>
