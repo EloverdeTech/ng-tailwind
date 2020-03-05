@@ -25,11 +25,11 @@ export class NgtActionComponent {
     }
 
     this.ngtStyle.load(this.injector, 'NgtAction', {
-      h: 'full',
-      w: 'full',
+      h: 'h-full',
+      w: 'w-full',
       color: {
-        bg: 'gray-500',
-        text: 'white'
+        bg: 'bg-gray-500',
+        text: 'text-white'
       }
     });
   }

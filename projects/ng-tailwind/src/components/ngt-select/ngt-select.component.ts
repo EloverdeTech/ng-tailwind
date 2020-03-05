@@ -134,9 +134,9 @@ export class NgtSelectComponent extends NgtBaseNgModel {
     }
 
     this.ngtStyle.load(this.injector, 'NgtSelect', {
-      h: '12',
+      h: 'h-12',
       color: {
-        bg: 'white'
+        bg: 'bg-white'
       }
     });
   }

@@ -17,7 +17,7 @@ export class NgtDatatableComponent implements OnInit {
   @Input() remoteResource: any;
   @Input() type: NgtDatatableType = NgtDatatableType.remote;
 
-  @Input() filterTagBgColor: string = 'blue-500';
+  @Input() filterTagBgColor: string = 'bg-blue-500';
   @Input() inputSearch: NgtInputComponent;
   @Input() defaultFilters: any = {};
   @Input() filtersDescription = {

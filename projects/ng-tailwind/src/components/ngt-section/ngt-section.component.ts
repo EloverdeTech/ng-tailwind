@@ -29,12 +29,12 @@ export class NgtSectionComponent {
     }
 
     this.ngtStyle.load(this.injector, 'NgtSection', {
-      h: '12',
-      w: '12',
-      my: '1',
-      pr: '1',
+      h: 'h-12',
+      w: 'w-12',
+      my: 'my-1',
+      pr: 'pr-1',
       color: {
-        text: 'gray-500'
+        text: 'text-gray-500'
       }
     });
   }

@@ -53,13 +53,13 @@ export class NgtFloatingButtonComponent {
 
     this.ngtStyle.load(this.injector, 'NgtFloatingButton', {
       color: {
-        bg: 'blue-500',
-        text: 'white',
+        bg: 'bg-blue-500',
+        text: 'text-white',
       },
-      px: '4',
-      py: '4',
-      h: '12',
-      w: '12'
+      px: 'px-4',
+      py: 'py-4',
+      h: 'h-12',
+      w: 'w-12'
     });
   }
 

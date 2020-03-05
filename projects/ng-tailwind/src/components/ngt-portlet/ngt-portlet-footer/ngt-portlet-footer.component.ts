@@ -23,8 +23,8 @@ export class NgtPortletFooterComponent {
 
     this.ngtStyle.load(this.injector, 'NgtPortletFooter', {
       color: {
-        bg: 'gray-200',
-        text: 'black'
+        bg: 'bg-gray-200',
+        text: 'text-black'
       }
     }, ['NgtPortletStyle']);
   }

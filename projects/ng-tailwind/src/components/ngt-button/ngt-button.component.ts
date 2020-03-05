@@ -67,25 +67,25 @@ export class NgtButtonComponent implements OnChanges {
       if (changes.type.currentValue == 'success') {
         this.ngtStyle.load(this.injector, 'NgtSuccessButton', {
           color: {
-            bg: 'green-500'
+            bg: 'bg-green-500'
           }
         });
       } else if (changes.type.currentValue == 'warning') {
         this.ngtStyle.load(this.injector, 'NgtWarningButton', {
           color: {
-            bg: 'orange-500'
+            bg: 'bg-orange-500'
           }
         });
       } else if (changes.type.currentValue == 'danger') {
         this.ngtStyle.load(this.injector, 'NgtDangerButton', {
           color: {
-            bg: 'red-500'
+            bg: 'bg-red-500'
           }
         });
       } else {
         this.ngtStyle.load(this.injector, 'NgtInfoButton', {
           color: {
-            bg: 'blue-500'
+            bg: 'bg-blue-500'
           }
         });
       }

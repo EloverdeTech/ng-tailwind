@@ -37,7 +37,7 @@ export class NgtPortletComponent {
     }
 
     this.ngtStyle.load(this.injector, 'NgtPortlet', {
-      h: 'auto',
+      h: 'h-auto',
       color: {}
     });
   }

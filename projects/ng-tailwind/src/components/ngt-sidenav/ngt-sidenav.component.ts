@@ -31,7 +31,7 @@ export class NgtSidenavComponent {
     }
 
     this.ngtStyle.load(this.injector, 'Sidenav', {
-      h: 'auto',
+      h: 'h-auto',
       color: {}
     });
   }

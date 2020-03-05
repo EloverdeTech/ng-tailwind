@@ -1,7 +1,7 @@
 <div class="w-full overflow-x-auto">
     <div class="flex flex-wrap w-full">
         <ngt-tag *ngIf="hasAppliedFilters()" (click)="removeFilter()" class="mr-0 sm:mr-4 mb-4 w-full sm:w-auto"
-            color.bg="red-500" ngt-stylizable>Limpar Filtros</ngt-tag>
+            color.bg="bg-red-500" ngt-stylizable>Limpar Filtros</ngt-tag>
 
         <ng-container *ngIf="hasAppliedFilters()">
             <ng-container *ngFor="let filter of filtersTranslated">

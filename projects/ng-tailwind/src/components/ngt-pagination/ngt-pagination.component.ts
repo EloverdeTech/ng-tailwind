@@ -39,38 +39,38 @@ export class NgtPaginationComponent {
     this.ngtPaginationPageButtonStyle = new NgtStylizableService();
 
     this.ngtPaginationNextPreviousButtonStyle.load(this.injector, 'NgtPaginationNextPreviousButton', {
-      h: '8',
-      w: '8',
+      h: 'h-8',
+      w: 'w-8',
       color: {
-        text: 'white',
-        bg: 'gray-700'
+        text: 'text-white',
+        bg: 'bg-gray-700'
       }
     });
 
     this.ngtPaginationFirstLastButtonStyle.load(this.injector, 'NgtPaginationFirstLastButton', {
-      h: '8',
-      w: '8',
+      h: 'h-8',
+      w: 'w-8',
       color: {
-        text: 'white',
-        bg: 'gray-900'
+        text: 'text-white',
+        bg: 'bg-gray-900'
       }
     });
 
     this.ngtPaginationActivePageButtonStyle.load(this.injector, 'NgtPaginationActivePageButton', {
-      h: '8',
-      w: '8',
+      h: 'h-8',
+      w: 'w-8',
       color: {
-        text: 'white',
-        bg: 'gray-500'
+        text: 'text-white',
+        bg: 'bg-gray-500'
       }
     });
 
     this.ngtPaginationPageButtonStyle.load(this.injector, 'NgtPaginationPageButton', {
-      h: '8',
-      w: '8',
+      h: 'h-8',
+      w: 'w-8',
       color: {
-        text: 'white',
-        bg: 'gray-300'
+        text: 'text-white',
+        bg: 'bg-gray-300'
       }
     });
   }

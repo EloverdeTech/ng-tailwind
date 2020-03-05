@@ -24,7 +24,7 @@ export class NgtHeaderNavComponent {
     }
 
     this.ngtStyle.load(this.injector, 'HeaderNav', {
-      h: 'auto',
+      h: 'h-auto',
       color: {}
     });
   }

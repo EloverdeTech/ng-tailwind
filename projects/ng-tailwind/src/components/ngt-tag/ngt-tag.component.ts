@@ -25,8 +25,8 @@ export class NgtTagComponent {
 
     this.ngtStyle.load(this.injector, 'Tag', {
       color: {
-        bg: 'gray-500',
-        text: 'white'
+        bg: 'bg-gray-500',
+        text: 'text-white'
       }
     });
   }
