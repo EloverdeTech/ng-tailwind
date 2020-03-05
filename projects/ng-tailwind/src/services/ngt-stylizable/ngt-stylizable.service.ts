@@ -258,11 +258,13 @@ export class NgtStylizableService {
         }
     }
 
-    private getQualifiedValue(except: string, value: string) {
-        if (value.includes(except)) {
-            return value;
-        }
+    private getQualifiedValue(requiredPrefix: string, value: string) {
+        value.split(' ').forEach((item) => {
+            if (!item.includes(requiredPrefix)) {
+                throw new Error('Invalid class [' + item + '], must have [' + requiredPrefix + ']');
+            }
+        });
 
-        return except.concat(value);
+        return value;
     }
 }
