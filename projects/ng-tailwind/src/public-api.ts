@@ -117,3 +117,6 @@ export * from './services/http/ngt-http-form.service';
 export * from './components/ngt-dropzone/ngt-dropzone.module';
 export * from './components/ngt-dropzone/ngt-dropzone.component';
 export * from './services/http/ngt-attachment-http.service';
+
+//NgtAnimations
+export * from './animations/ngt-angular-animations'
