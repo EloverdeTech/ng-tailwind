@@ -1,5 +1,6 @@
-import { Component, ElementRef, Injector, Input, Optional, Self, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Injector, Input, Optional, Self } from '@angular/core';
 
+import { fadeDownAnimation } from '../../animations/ngt-angular-animations';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { Size } from '../../enums/size.enum';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -7,18 +8,20 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 @Component({
   selector: 'ngt-sidenav',
   templateUrl: './ngt-sidenav.component.html',
-  styleUrls: ['./ngt-sidenav.component.css']
+  styleUrls: ['./ngt-sidenav.component.css'],
+  animations: [
+    fadeDownAnimation('fadeDownAnimation', 600)
+  ],
 })
-export class NgtSidenavComponent {
+
+export class NgtSidenavComponent implements AfterViewInit {
   @Input() public size: Size = Size.xs;
+  @Input() public initVisible: boolean = false;
 
-  public visible: boolean = true;
-  public open = false;
-  public ngtStyle: NgtStylizableService;
-  public environment: any;
+  public visible: boolean = false;
+  public open: boolean = false;
   public isMenuContracted: boolean = false;
-
-  @ViewChild('element', { static: true }) element: ElementRef;
+  public ngtStyle: NgtStylizableService;
 
   constructor(
     private injector: Injector,
@@ -31,17 +34,17 @@ export class NgtSidenavComponent {
     }
 
     this.ngtStyle.load(this.injector, 'Sidenav', {
-      h: 'h-auto',
+      h: 'md:h-auto h-screen',
       color: {}
     });
   }
 
-  closeMenu() {
-    this.element.nativeElement.classList.add('slide-left');
-
-    setTimeout(() => {
-      this.open = false;
-    }, 500);
+  ngAfterViewInit() {
+    if (this.initVisible) {
+      setTimeout(() => {
+        this.visible = true;
+      });
+    }
   }
 
   toggleMenu() {
@@ -50,6 +53,10 @@ export class NgtSidenavComponent {
     } else {
       this.openMenu();
     }
+  }
+
+  closeMenu() {
+    this.open = false;
   }
 
   openMenu() {
@@ -81,8 +88,6 @@ export class NgtSidenavComponent {
       case Size.full: return 'w-full';
     }
   }
-
-  ngOnChanges(changes) { }
 
   toggleMenuSize(size: Size) {
     if (this.isMenuContracted) {

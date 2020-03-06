@@ -1,14 +1,16 @@
 <div class="flex h-full w-full">
     <ng-container *ngIf="visible">
-        <div class="{{ getNavSize() }} {{ ngtStyle.compile(['color.bg']) }} md:h-auto h-screen top-auto md:static fixed md:block {{ open ? 'block' : 'hidden' }} z-20"
-            #element>
+        <div class="{{ getNavSize() }} {{ ngtStyle.compile(['color.bg', 'h']) }} {{ open ? 'block' : 'hidden' }} top-auto md:static fixed md:block z-50"
+            @fadeDownAnimation>
             <ng-content select='[body]'></ng-content>
         </div>
 
-        <!-- Botão auxiliar para fechar o menu ao clicar em qualquer lugar da tela -->
-        <button (click)='closeMenu()' *ngIf="open" tabindex="-1"
-            class="fixed z-10 inset-0 h-full w-full bg-black opacity-50 cursor-default">
-        </button>
+        <ng-container *ngIf="open">
+            <!-- Botão auxiliar para fechar o menu ao clicar em qualquer lugar da tela -->
+            <button (click)='closeMenu()' tabindex="-1"
+                class="fixed z-40 inset-0 h-full w-full bg-black opacity-50 cursor-default">
+            </button>
+        </ng-container>
     </ng-container>
 
     <div class="flex-wrap {{ getContainerSize() }}">
