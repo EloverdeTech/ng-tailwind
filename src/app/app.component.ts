@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { NgtSidenavComponent } from 'ng-tailwind/public-api';
 import { NgtDatatableComponent, NgtDatatableType, NgtModalComponent } from 'projects/ng-tailwind/src/public-api';
 
 @Component({
@@ -9,8 +10,7 @@ import { NgtDatatableComponent, NgtDatatableType, NgtModalComponent } from 'proj
 export class AppComponent implements AfterViewInit {
   @ViewChild('ngtModal', { static: true }) ngtModal: NgtModalComponent;
   @ViewChild('ngtTable', { static: true }) ngtTable: NgtDatatableComponent;
-
-  title = 'lib-test';
+  @ViewChild('ngtSidenav', { static: true }) ngtSidenav: NgtSidenavComponent;
 
   public ngtTableType = NgtDatatableType.remote;
 
@@ -37,6 +37,10 @@ export class AppComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.ngtTable.init();
+
+    setTimeout(() => {
+      this.ngtSidenav.visible = true;
+    }, 2000);
   }
 
   openModal() {
@@ -48,6 +52,6 @@ export class AppComponent implements AfterViewInit {
   }
 
   clickAction() {
-    console.log('Click Action');    
+    console.log('Click Action');
   }
 }

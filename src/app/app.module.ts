@@ -22,6 +22,7 @@ import {
   NgtSelectModule,
   NgtSidenavModule,
   NgtStylizableModule,
+  NgtSvgModule,
   NgtTagModule,
   NgtTextareaModule,
 } from 'ng-tailwind';
@@ -59,7 +60,8 @@ import { NgtHttpValidationTestService } from './services/ngt-http-validation-tes
     NgtDropdownModule,
     NgtDatatableModule,
     NgtSelectModule,
-    NgtDropzoneModule
+    NgtDropzoneModule,
+    NgtSvgModule
   ],
   providers: [
     {

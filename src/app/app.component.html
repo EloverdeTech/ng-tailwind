@@ -1,4 +1,10 @@
 <ngt-header-nav color.bg='bg-gray-700' ngt-stylizable>
+    <div *ngIf="ngtSidenav.visible" class="md:hidden block ml-2 my-2">
+        <a (click)='ngtSidenav.toggleMenu()'>
+            <ngt-svg class="text-2xl text-white" src='assets/images/test.svg'></ngt-svg>
+        </a>
+    </div>
+
     <div class="flex py-3 px-3 relative w-full justify-end">
         <ngt-dropdown>
             <!-- HEADER -->
@@ -27,7 +33,7 @@
 </ngt-header-nav>
 
 <div class="min-h-screen">
-    <ngt-sidenav style="min-height: 89vh;" size='sm' color.bg='bg-blue-500' ngt-stylizable>
+    <ngt-sidenav style="min-height: 89vh;" size='sm' color.bg='bg-blue-500' [initVisible]='false' ngt-stylizable #ngtSidenav>
         <div body>
             <ul>
                 <li>
