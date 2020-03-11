@@ -33,7 +33,8 @@
 </ngt-header-nav>
 
 <div class="min-h-screen">
-    <ngt-sidenav style="min-height: 89vh;" size='sm' color.bg='bg-blue-500' [initVisible]='false' ngt-stylizable #ngtSidenav>
+    <ngt-sidenav style="min-height: 89vh;" size='sm' color.bg='bg-blue-500' [initVisible]='false' ngt-stylizable
+        #ngtSidenav>
         <div body>
             <ul>
                 <li>
@@ -69,9 +70,18 @@
 
                         <form #form='ngForm'>
                             <ngt-section icon='assets/images/test.svg' color.text='text-blue-500' ngt-stylizable>
-                                <ngt-input [loading]='true' class="block w-8/12" [allowClear]='true'
-                                    innerRightIcon='assets/images/add-solid.svg' innerLeftIcon='assets/images/test.svg'
-                                    [isRequired]='true' name='input_test1' label='Input test'>
+                                {{ decimalInput }}
+                                <ngt-input class="block w-8/12" jit='true' [allowClear]='true'
+                                    innerRightIcon='assets/images/add-solid.svg' mask='decimal'
+                                    [(ngModel)]="decimalInput" innerLeftIcon='assets/images/test.svg'
+                                    [isRequired]='true' name='input_test1' label='Decimal Input Test'>
+                                </ngt-input>
+
+                                {{ cnpjInput }}
+                                <ngt-input class="block w-8/12" [allowClear]='true'
+                                    innerRightIcon='assets/images/add-solid.svg' mask='cnpj-cpf'
+                                    [(ngModel)]="cnpjInput" innerLeftIcon='assets/images/test.svg'
+                                    [isRequired]='true' name='1' label='Decimal Input Test'>
                                 </ngt-input>
                             </ngt-section>
 
