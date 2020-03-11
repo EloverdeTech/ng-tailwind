@@ -51,10 +51,10 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
 
   @Output() onFileSelected: EventEmitter<NgxDropzoneChangeEvent> = new EventEmitter();
   @Output() onFileSelectError: EventEmitter<NgtDropzoneErrorType> = new EventEmitter();
+  @Output() onFileUploadFail: EventEmitter<any> = new EventEmitter();
   @Output() onFileRemoved = new EventEmitter();
   @Output() onFileUploaded = new EventEmitter();
   @Output() onFilePreviewLoaded = new EventEmitter();
-  @Output() onFileUploadFail = new EventEmitter();
 
   public resources = [];
   public nativeValue = [];
@@ -155,7 +155,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
           this.loading = false;
         },
         (error) => {
-          this.onFileUploadFail.emit();
+          this.onFileUploadFail.emit(error);
           this.loading = false;
         });
     }
