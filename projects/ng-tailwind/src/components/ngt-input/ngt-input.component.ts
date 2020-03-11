@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { NgtHttpValidationService, NgtHttpValidationResponse } from '../../services/http/ngt-http-validation.service';
+import { NgtHttpValidationResponse, NgtHttpValidationService } from '../../services/http/ngt-http-validation.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
@@ -34,7 +34,6 @@ var Inputmask = require('inputmask');
   ]
 })
 export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
-
   @ViewChild("element", { static: true }) element: ElementRef;
 
   // Visual
@@ -164,10 +163,6 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
       console.warn("The element must contain a ngModel property", this.element.nativeElement);
     }
 
-    if (this.mask) {
-      this.setupMasks();
-    }
-
     this.setupProperties();
   }
 
@@ -231,7 +226,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
       'cpf': '999.999.999-99',
       'cnpj': '99.999.999/9999-99',
       'decimal': {
-        digits: '4',
+        digits: '2',
         groupSeparator: '.',
         radixPoint: ',',
         autoGroup: true,
@@ -251,7 +246,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
         keepStatic: true
       },
       'cep': '99999-999',
-      'numeric': {
+      'integer': {
         min: '0',
         max: this.max,
         rightAlign: false
@@ -261,8 +256,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
 
     if (this.mask == "decimal") {
       Inputmask('decimal', masks[this.mask]).mask(this.element.nativeElement);
-    } else if (this.mask == "numeric") {
-      Inputmask("numeric", masks[this.mask]).mask(this.element.nativeElement);
+    } else if (this.mask == "integer") {
+      Inputmask("integer", masks[this.mask]).mask(this.element.nativeElement);
     } else {
       Inputmask(masks[this.mask]).mask(this.element.nativeElement);
     }
@@ -426,27 +421,24 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     }
   }
 
-  change(value) {
-    let nativeValue = this.getNativeValue();
-    let ngModelValue = this.removeMasks(value);
+  change(value: any) {
+    if (!this.getNativeValue()) {
+      this.element.nativeElement.value = value;
+    }
 
-    if (ngModelValue && value && ngModelValue != value) {
+    let nativeValue = this.getNativeValue();
+    let ngModelValue = this.removeMasks(nativeValue);
+
+    if (nativeValue && ngModelValue != this.value) {
       this.value = ngModelValue;
     }
 
     if (this.componentReady) {
       this.onValueChangeEvent.emit(this.value);
     }
-
-    if (this.value != nativeValue) {
-      this.element.nativeElement.value = ngModelValue;
-    }
   }
 
   async ngOnInit() {
-
-    let originalValue = this.value;
-
     if (!this.formContainer) {
       console.warn("The element must be inside a <form #form='ngForm'> tag!", this.element.nativeElement);
     } if (!this.name) {
@@ -458,7 +450,6 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
 
       await setTimeout(() => {
         this.initComponent();
-        this.updateTooltips();
       });
     }
   }
@@ -520,10 +511,6 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     return this.element.nativeElement.value;
   }
 
-  private updateTooltips() {
-    //$('[data-toggle="m-popover"]').popover();
-  }
-
   private removeMasks(value: string) {
     if (this.mask == "decimal") {
       value = (value + "")
@@ -547,6 +534,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
   }
 
   clearInput() {
+    this.element.nativeElement.value = '';
     this.value = '';
   }
 
