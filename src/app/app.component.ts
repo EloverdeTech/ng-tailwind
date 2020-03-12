@@ -13,7 +13,7 @@ export class AppComponent implements AfterViewInit {
   @ViewChild('ngtSidenav', { static: true }) ngtSidenav: NgtSidenavComponent;
 
   public ngtTableType = NgtDatatableType.remote;
-  public decimalInput = 1000.55;
+  public decimalInput = 10000000.55;
   public cnpjInput = '11111111111111';
 
   public floatingButtonMenus = [
