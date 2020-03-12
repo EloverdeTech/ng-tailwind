@@ -134,7 +134,7 @@ export class NgtDatatableComponent implements OnInit {
     this.onClearFilter.emit(reference);
 
     if (this.inputSearch && (reference === 'term' || !reference)) {
-      this.inputSearch.value = '';
+      this.inputSearch.clearInput();
     }
 
     this.apply(this.ngtPagination.getCurrentPage()).then(() => {
