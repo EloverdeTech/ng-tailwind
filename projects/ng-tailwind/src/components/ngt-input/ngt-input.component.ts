@@ -426,6 +426,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
       this.element.nativeElement.value = value;
     }
 
+    if (!value) {
+      this.clearInput();
+    }
+
     let nativeValue = this.getNativeValue();
     let ngModelValue = this.removeMasks(nativeValue);
 
@@ -514,7 +518,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
   private removeMasks(value: string) {
     if (this.mask == "decimal") {
       value = (value + "")
-        .replace('.', '')
+        .replace(/\./g, '')
         .replace(',', '.');
     } else if (this.mask == "cnpj-cpf" || this.mask == "cpf" || this.mask == "cnpj") {
       value = (value + "")
