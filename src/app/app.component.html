@@ -79,9 +79,9 @@
 
                                 {{ cnpjInput }}
                                 <ngt-input class="block w-8/12" [allowClear]='true'
-                                    innerRightIcon='assets/images/add-solid.svg' mask='cnpj-cpf'
-                                    [(ngModel)]="cnpjInput" innerLeftIcon='assets/images/test.svg'
-                                    [isRequired]='true' name='1' label='Decimal Input Test'>
+                                    innerRightIcon='assets/images/add-solid.svg' mask='cnpj-cpf' [(ngModel)]="cnpjInput"
+                                    innerLeftIcon='assets/images/test.svg' [isRequired]='true' name='1'
+                                    label='Decimal Input Test'>
                                 </ngt-input>
                             </ngt-section>
 
@@ -89,6 +89,11 @@
                             <ngt-textarea name='textarea' label='Ngt Textarea' [(ngModel)]="textarea_test1">
                             </ngt-textarea>
 
+                            <ngt-input class="block w-8/12" [(ngModel)]="nameTest" name='inputTestA' label='Input A'>
+                            </ngt-input>
+
+                            <ngt-input class="block w-8/12" [(ngModel)]="nameTest" name='inputTestB' label='Input B'>
+                            </ngt-input>
                             <br>
 
                             {{ checkbox1 }}
