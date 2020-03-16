@@ -8,7 +8,12 @@ import {
   Input,
   Output,
   ViewChild,
+  Self,
+  Optional,
+  Injector,
 } from '@angular/core';
+import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
   selector: 'ngt-modal',
@@ -24,9 +29,11 @@ import {
   ]
 })
 export class NgtModalComponent implements AfterViewInit {
+
   @ViewChild('modalContainer', { static: true }) modalContainer: ElementRef
   @Input() customLayout: boolean = false;
   @Input() disableDefaultCloses: boolean = false;
+  @Input() ngtStyle: NgtStylizableService;
 
   @Output() onCloseModal: EventEmitter<any> = new EventEmitter();
   @Output() onOpenModal: EventEmitter<any> = new EventEmitter();
@@ -34,7 +41,22 @@ export class NgtModalComponent implements AfterViewInit {
   public closeButton = document.querySelectorAll('.modal-close');
   public isOpen: boolean = false;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private injector: Injector,
+    @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective,
+  ) {
+    if (this.tailStylizableDirective) {
+      this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
+    } else {
+      this.ngtStyle = new NgtStylizableService();
+    }
+
+    this.ngtStyle.load(this.injector, 'NgtModal', {
+      w: 'md:max-w-md',
+      color: {}
+    });
+  }
 
   close() {
     this.isOpen = false;
