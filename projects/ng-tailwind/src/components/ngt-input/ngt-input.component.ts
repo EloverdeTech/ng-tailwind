@@ -431,10 +431,23 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     }
 
     let nativeValue = this.getNativeValue();
-    let ngModelValue = this.removeMasks(nativeValue);
 
-    if (nativeValue && ngModelValue != this.value) {
-      this.value = ngModelValue;
+    if (this.mask) {
+      let ngModelValue = this.removeMasks(nativeValue);
+
+      if (nativeValue && ngModelValue != this.value) {
+        this.value = ngModelValue;
+      }
+    } else {
+      let ngModelValue = this.removeMasks(value);
+
+      if (value && ngModelValue != value) {
+        this.value = ngModelValue;
+      }
+
+      if (this.value != nativeValue) {
+        this.element.nativeElement.value = ngModelValue;
+      }
     }
 
     if (this.componentReady) {
