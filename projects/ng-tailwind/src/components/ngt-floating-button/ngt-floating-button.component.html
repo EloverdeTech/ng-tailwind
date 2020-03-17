@@ -4,10 +4,10 @@
 <div class="{{ ngtStyle.compile(['w']) }} rounded-full relative z-20" *ngIf="isOpen" @fadeY>
     <ng-container *ngFor="let menu of menus; let i = index">
         <div class="my-2 rounded-full shadow-xl">
-            <a [routerLink]="menu.externalLink ? '' : menu.action"
+            <a [routerLink]="menu.externalLink ? null : menu.action"
                 (click)='menu.externalLink ? openExternalLink(menu.action) : toggleMenu()' title="{{ menu.tooltip }}"
                 class="{{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text']) }} flex items-center justify-center rounded-full hover:opacity-75">
-                <span *ngIf="menu.name" class="text-sm font-semibold">{{ menu.name }}</span>
+                <span *ngIf="menu.name" class="text-sm font-semibold {{ menu.icon ? 'pr-2' : '' }}">{{ menu.name }}</span>
                 <ngt-svg *ngIf="menu.icon" [src]='menu.icon' class="fill-current"></ngt-svg>
             </a>
         </div>
