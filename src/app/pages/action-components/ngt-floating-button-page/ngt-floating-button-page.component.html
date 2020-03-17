@@ -1,0 +1,35 @@
+<ngt-portlet class="block w-full" icon="assets/images/icons/button.svg" caption='Ngt Button'>
+    <div body>
+        <p>Component used to display a series of options when clicking on a floating button. Currently is only usable
+            for navigation.</p>
+        <br>
+
+        <p class="pb-4">Examples:</p>
+
+        <div class="flex flex-col border rounded-lg py-2 relative">
+            <div class="absolute h-20 w-full top-0">
+                <div class="absolute right-0 bottom-0 m-4">
+                    <ngt-floating-button [withAnimation]='true' icon='assets/images/icons/add_solid.svg'
+                        [menus]="floatingButtonOptionsOne">
+                    </ngt-floating-button>
+                </div>
+
+                <div class="absolute bottom-0 left-0 m-4">
+                    <ngt-floating-button label='NgtFloatingButton' [withAnimation]='true'
+                        icon='assets/images/icons/add_solid.svg' [menus]="floatingButtonOptionsTwo" h='h-12' w='w-full'
+                        ngt-stylizable>
+                    </ngt-floating-button>
+                </div>
+            </div>
+
+            <div class="p-6 flex justify-center mt-16">
+                <code-preview>{{ codeExample }}</code-preview>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4">Inputs:</p>
+
+        <div class="flex flex-col text-gray-800"> </div>
+    </div>
+</ngt-portlet>
