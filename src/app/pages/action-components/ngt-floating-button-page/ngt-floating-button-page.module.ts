@@ -17,7 +17,6 @@ const routes: Routes = [
   declarations: [NgtFloatingButtonPageComponent],
   imports: [
     CommonModule,
-    CommonModule,
     RouterModule.forChild(routes),
     CodePreviewModule,
     NgtPortletModule,

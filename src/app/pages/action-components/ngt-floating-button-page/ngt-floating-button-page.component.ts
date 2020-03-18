@@ -24,14 +24,14 @@ export class NgtFloatingButtonPageComponent {
   public floatingButtonOptionsOne = [
     {
       name: '',
-      action: '/docs/installation',
+      url: '/docs/installation',
       icon: 'assets/images/icons/plugin.svg',
       iconStyle: 'py-4',
       tooltip: 'Installation'
     },
     {
       name: '',
-      action: 'https://www.google.com',
+      url: 'https://www.google.com',
       icon: 'assets/images/icons/search.svg',
       iconStyle: 'py-4',
       tooltip: 'Google',
@@ -42,14 +42,14 @@ export class NgtFloatingButtonPageComponent {
   public floatingButtonOptionsTwo = [
     {
       name: 'Installation',
-      action: '/docs/installation',
+      url: '/docs/installation',
       icon: 'assets/images/icons/plugin.svg',
       iconStyle: 'py-4',
       tooltip: 'Installation'
     },
     {
       name: 'Google',
-      action: 'https://www.google.com',
+      url: 'https://www.google.com',
       icon: 'assets/images/icons/search.svg',
       iconStyle: 'py-4',
       tooltip: 'Google',
