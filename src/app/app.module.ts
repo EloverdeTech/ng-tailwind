@@ -28,7 +28,7 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
       useValue: {
         color: {
           bg: 'bg-white',
-          text: 'text-gray-700'
+          text: 'text-gray-800'
         },
         mx: 'mx-3 md:mx-6',
         my: 'my-8',
@@ -40,7 +40,15 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
       useValue: {
         color: {
           bg: 'bg-gray-200',
-          text: 'text-gray-700'
+          text: 'text-gray-800'
+        }
+      }
+    },
+    {
+      provide: 'NgtPortletBodyStyle',
+      useValue: {
+        color: {
+          text: 'text-gray-800'
         }
       }
     },
@@ -49,7 +57,7 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
       useValue: {
         color: {
           bg: 'bg-none hover:bg-teal-600',
-          text: 'text-gray-700 hover:text-white text-2xl',
+          text: 'text-gray-800 hover:text-white text-2xl',
         },
         h: 'h-10',
         w: 'w-10'
