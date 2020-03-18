@@ -1,0 +1,62 @@
+<ngt-portlet class="block w-full" icon="assets/images/icons/checkmark_outline.svg" caption='Ngt Action'>
+    <div body>
+        <p>Component used to perform an action when clicking on an icon. Can be used too for navigation.</p>
+        <br>
+
+        <p class="pb-4 font-semibold">Examples:</p>
+
+        <div class="flex flex-col border rounded-lg py-2">
+            <div class="flex justify-around border-b pb-2">
+                <ngt-action title="Navigation" href='/docs/installation'
+                    icon="assets/images/icons/cheveron_outline_right.svg" ngt-stylizable
+                    color.bg='bg-none hover:bg-teal-600' color.text='text-gray-700 hover:text-white text-2xl' h='h-10'
+                    w='w-10'>
+                </ngt-action>
+
+                <ngt-action title="Error" icon="assets/images/icons/close_outline.svg" (click)='errorClick()'
+                    ngt-stylizable color.bg='bg-none hover:bg-red-500'
+                    color.text='text-gray-700 hover:text-white text-2xl' h='h-10' w='w-10'>
+                </ngt-action>
+
+                <ngt-action title="Success" icon="assets/images/icons/checkmark_outline.svg" (click)='successClick()'
+                    ngt-stylizable color.bg='bg-none hover:bg-green-500'
+                    color.text='text-gray-700 hover:text-white text-2xl' h='h-10' w='w-10'>
+                </ngt-action>
+
+                <ngt-action title="Information" icon="assets/images/icons/information_outline.svg"
+                    (click)='informationClick()' ngt-stylizable color.bg='bg-none hover:bg-blue-500'
+                    color.text='text-gray-700 hover:text-white text-2xl' h='h-10' w='w-10'>
+                </ngt-action>
+            </div>
+
+            <div class="p-6 flex justify-center">
+                <code-preview>{{ codeExample }}</code-preview>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">href</p>
+                <p class="w-10/12 py-2 px-4">Address that will be used in the router link.</p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">icon</p>
+                <p class="w-10/12 py-2 px-4">Rendered icon in center of component.</p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">isDisable</p>
+                <p class="w-10/12 py-2 px-4">Determines whether the component is enable.</p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">ngtStyle</p>
+                <p class="w-10/12 py-2 px-4">Provides styling via NgtStylizableService.</p>
+            </div>
+        </div>
+    </div>
+</ngt-portlet>

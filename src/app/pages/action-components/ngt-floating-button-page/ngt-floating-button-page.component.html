@@ -1,0 +1,131 @@
+<ngt-portlet class="block w-full" icon="assets/images/icons/button.svg" caption='Ngt Floating Button'>
+    <div body>
+        <p>Component used to display a series of options when clicking on a floating button. Currently is only usable
+            for navigation.</p>
+        <br>
+
+        <p class="pb-4 font-semibold">Examples:</p>
+
+        <div class="flex flex-col border rounded-lg py-2 relative">
+            <div class="absolute h-20 w-full top-0 border-b">
+                <div class="absolute right-0 bottom-0 m-4">
+                    <ngt-floating-button [withAnimation]='true' icon='assets/images/icons/add_solid.svg'
+                        [menus]="floatingButtonOptionsOne">
+                    </ngt-floating-button>
+                </div>
+
+                <div class="absolute bottom-0 left-0 m-4">
+                    <ngt-floating-button label='NgtFloatingButton' [withAnimation]='true'
+                        icon='assets/images/icons/add_solid.svg' [menus]="floatingButtonOptionsTwo" h='h-12' w='w-full'
+                        ngt-stylizable>
+                    </ngt-floating-button>
+                </div>
+            </div>
+
+            <div class="p-6 flex justify-center mt-16">
+                <code-preview>{{ codeExample }}</code-preview>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">menus</p>
+                <p class="w-10/12 py-2 px-4">
+                    Array of menus.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">icon</p>
+                <p class="w-10/12 py-2 px-4">
+                    Floating button icon.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">label</p>
+                <p class="w-10/12 py-2 px-4">
+                    Floating button label.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">withAnimation</p>
+                <p class="w-10/12 py-2 px-4">
+                    Determines whether the button has animation.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Public Attributes:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">isOpen</p>
+                <p class="w-10/12 py-2 px-4">
+                    When true the menu is opened, otherwise it is closed.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">ngtStyle</p>
+                <p class="w-10/12 py-2 px-4">
+                    Provides styling via NgtStylizableService.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Interfaces:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-700 text-white border-r py-2 px-4 font-semibold">
+                    NgtFloatingButtonMenu
+                </p>
+                <p class="w-8/12 py-2 px-4">
+                    The menus provided for the component must follow this interface.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">externalLink</p>
+                <p class="w-8/12 py-2 px-4">
+                    When true, the link provided will open in a new tab.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">url</p>
+                <p class="w-8/12 py-2 px-4">
+                    URL to be open when click.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">icon</p>
+                <p class="w-8/12 py-2 px-4">
+                    Menu icon.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">tooltip</p>
+                <p class="w-8/12 py-2 px-4">
+                    Menu tooltip.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">name</p>
+                <p class="w-8/12 py-2 px-4">
+                    Menu name.
+                </p>
+            </div>
+        </div>
+    </div>
+</ngt-portlet>

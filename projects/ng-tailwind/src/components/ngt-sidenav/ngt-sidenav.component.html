@@ -1,6 +1,6 @@
 <div class="flex h-full w-full">
     <ng-container *ngIf="visible">
-        <div class="{{ getNavSize() }} {{ ngtStyle.compile(['color.bg', 'h']) }} {{ open ? 'block' : 'hidden' }} top-auto md:static fixed md:block z-50"
+        <div class="{{ getNavSize() }} {{ ngtStyle.compile(['color.bg', 'h']) }} {{ open ? 'block' : 'hidden' }} top-auto md:static fixed md:block z-50 overflow-auto"
             @fadeDownAnimation>
             <ng-content select='[body]'></ng-content>
         </div>
@@ -13,7 +13,7 @@
         </ng-container>
     </ng-container>
 
-    <div class="flex-wrap {{ getContainerSize() }}">
+    <div class="flex-wrap {{ getContainerSize() }} overflow-auto">
         <ng-content></ng-content>
     </div>
 </div>

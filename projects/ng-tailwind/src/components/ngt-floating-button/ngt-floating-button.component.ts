@@ -75,7 +75,7 @@ export class NgtFloatingButtonComponent {
 
 export interface NgtFloatingButtonMenu {
   externalLink: boolean;
-  action: string;
+  url: string;
   icon: string;
   tooltip: string;
   name: string;

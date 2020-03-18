@@ -1,0 +1,50 @@
+<div class="flex h-screen w-full overflow-hidden">
+    <div class="flex flex-col max-h-full w-full">
+        <ngt-header-nav color.bg='bg-teal-600' ngt-stylizable>
+            <div class="flex w-full items-center px-4 py-3 relative">
+                <div class="flex justify-start h-full w-2/12">
+                    <a class="font-semibold text-xl text-gray-700 rounded-md bg-gray-100 px-4 py-1"
+                        routerLink="/docs/installation">
+                        Ng Tailwind
+                    </a>
+                </div>
+
+                <div class="flex w-10/12 justify-center items-center">
+                    <form #searchForm='ngForm' class="flex w-full justify-center">
+                        <ngt-input class="block w-full" name='searchInput' [(ngModel)]="searchValue"
+                            innerLeftIcon='assets/images/icons/search.svg' placeholder='Search the docs'></ngt-input>
+                    </form>
+                </div>
+            </div>
+        </ngt-header-nav>
+
+        <ngt-sidenav class="flex max-h-full" style="padding-bottom: 4.5rem;" [initVisible]='true' size='sm'
+            color.bg='bg-gray-200' ngt-stylizable>
+            <div body>
+                <ng-container *ngFor="let sidenavMenus of sidenavMenuMetadata">
+                    <ul class="list-reset w-full text-center md:text-left">
+                        <p class="text-white bg-teal-500 text-center py-2 px-2 text-sm">{{ sidenavMenus.section }}
+                        </p>
+
+                        <div class="flex flex-col py-2">
+                            <ng-container *ngFor="let menu of sidenavMenus.menus">
+                                <li class="flex px-2 py-1 w-full text-gray-700">
+                                    <a class="text-sm px-2 py-1 rounded-lg w-full hover:bg-gray-400 cursor-pointer"
+                                        [class.bg-gray-400]="activeUrl == menu.url" [routerLink]='menu.url'>
+                                        {{ menu.name }}
+                                    </a>
+                                </li>
+                            </ng-container>
+                        </div>
+                    </ul>
+                </ng-container>
+            </div>
+
+            <div class="flex max-h-screen min-h-full bg-gray-100 relative w-full">
+                <ngt-content class="w-full h-full">
+                    <router-outlet></router-outlet>
+                </ngt-content>
+            </div>
+        </ngt-sidenav>
+    </div>
+</div>
