@@ -6,6 +6,11 @@ import { HomeComponent } from './pages/home/home.component';
 
 const routes: Routes = [
   {
+    "path": "",
+    "redirectTo": "docs",
+    "pathMatch": "full"
+  },
+  {
     "path": "docs",
     "component": HomeComponent,
     "children": [
