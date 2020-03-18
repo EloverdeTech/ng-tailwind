@@ -11,6 +11,7 @@ import { sidenavMenuMetadata } from '../../resources/meta/sidenav-menu.meta';
 export class HomeComponent {
   public sidenavMenuMetadata = sidenavMenuMetadata;
   public activeUrl: string;
+  public searchValue: string;
 
   constructor(private router: Router) {
     router.events.subscribe(() => {

@@ -3,8 +3,8 @@
   "version": "0.0.9",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ngtw build -c ng-tailwind-config.js && ng serve",
+    "build": "ng build ng-tailwind && ngtw build -p -c ng-tailwind-config.js && ng build --prod --aot",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -25,10 +25,11 @@
     "inputmask": "^4.0.9",
     "moment": "^2.24.0",
     "ng2-flatpickr": "^9.0.0",
+    "ngx-dropzone": "^2.2.2",
     "rxjs": "~6.4.0",
+    "tailwindcss": "^1.2.0",
     "tslib": "^1.11.0",
-    "zone.js": "~0.9.1",
-    "ngx-dropzone": "^2.2.2"
+    "zone.js": "~0.9.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.803.23",
