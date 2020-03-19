@@ -1,29 +1,39 @@
 <ngt-portlet class="block w-full" icon="assets/images/icons/button.svg" caption='Ngt Floating Button'>
     <div body>
-        <p>Component used to display a series of options when clicking on a floating button. Currently is only usable
-            for navigation.</p>
+        <p>Component used to display a series of options when clicking on a floating button.
+            Can be used for navigation and for execute anything method when clicking an a option.</p>
         <br>
 
         <p class="pb-4 font-semibold">Examples:</p>
 
         <div class="flex flex-col border rounded-lg py-2 relative">
-            <div class="absolute h-20 w-full top-0 border-b">
+            <div class="absolute h-20 w-full top-0 border-b flex justify-around">
+                <div class="absolute bottom-0 left-0 m-4">
+                    <ngt-floating-button [withAnimation]='false' icon='assets/images/icons/button.svg'
+                        [menus]="floatingButtonOptionsThree" h='h-12' w='w-full' ngt-stylizable>
+                    </ngt-floating-button>
+                </div>
+
+                <div class="absolute bottom-0 m-4">
+                    <ngt-floating-button label='NgtFloatingButton' [withAnimation]='true'
+                        icon='assets/images/icons/information_outline.svg' [menus]="floatingButtonOptionsTwo" h='h-12'
+                        w='w-full' ngt-stylizable>
+                    </ngt-floating-button>
+                </div>
+
                 <div class="absolute right-0 bottom-0 m-4">
                     <ngt-floating-button [withAnimation]='true' icon='assets/images/icons/add_solid.svg'
                         [menus]="floatingButtonOptionsOne">
                     </ngt-floating-button>
                 </div>
-
-                <div class="absolute bottom-0 left-0 m-4">
-                    <ngt-floating-button label='NgtFloatingButton' [withAnimation]='true'
-                        icon='assets/images/icons/add_solid.svg' [menus]="floatingButtonOptionsTwo" h='h-12' w='w-full'
-                        ngt-stylizable>
-                    </ngt-floating-button>
-                </div>
             </div>
 
-            <div class="p-6 flex justify-center mt-16">
+            <div class="pt-6 self-center w-10/12 flex justify-center mt-16">
                 <code-preview>{{ codeExample }}</code-preview>
+            </div>
+
+            <div class="py-6 self-center flex justify-center w-10/12">
+                <code-preview lang='typescript'>{{ optionsCodeExample }}</code-preview>
             </div>
         </div>
 
@@ -80,6 +90,33 @@
         </div>
 
         <br>
+        <p class="pb-4 font-semibold">Enums:</p>
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-700 text-white border-r py-2 px-4 font-semibold">
+                    NgtFloatingButtonType
+                </p>
+                <p class="w-8/12 py-2 px-4">
+                    The type provided for the component must be one of this.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">NAVIGATION</p>
+                <p class="w-8/12 py-2 px-4">
+                    The menu will be used for navigation and need a "url" parameter.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">ACTION</p>
+                <p class="w-8/12 py-2 px-4">
+                    The menu will be used for perform a function and need a "action" parameter.
+                </p>
+            </div>
+        </div>
+
+        <br>
         <p class="pb-4 font-semibold">Interfaces:</p>
 
         <div class="flex flex-col text-gray-800">
@@ -93,37 +130,51 @@
             </div>
 
             <div class="flex w-full items-center border">
-                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">externalLink</p>
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold" title="Optional">name(?)</p>
                 <p class="w-8/12 py-2 px-4">
-                    When true, the link provided will open in a new tab.
+                    Menu name.
                 </p>
             </div>
 
             <div class="flex w-full items-center border">
-                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">url</p>
-                <p class="w-8/12 py-2 px-4">
-                    URL to be open when click.
-                </p>
-            </div>
-
-            <div class="flex w-full items-center border">
-                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">icon</p>
-                <p class="w-8/12 py-2 px-4">
-                    Menu icon.
-                </p>
-            </div>
-
-            <div class="flex w-full items-center border">
-                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">tooltip</p>
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold" title="Optional">tooltip(?)</p>
                 <p class="w-8/12 py-2 px-4">
                     Menu tooltip.
                 </p>
             </div>
 
             <div class="flex w-full items-center border">
-                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">name</p>
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold" title="Optional">icon(?)</p>
                 <p class="w-8/12 py-2 px-4">
-                    Menu name.
+                    Menu icon.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">type</p>
+                <p class="w-8/12 py-2 px-4">
+                    Determines whether the menu will be used for navigation or action when clicked.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold" title="Optional">action(?)</p>
+                <p class="w-8/12 py-2 px-4">
+                    Function that must be performed when clicking on the menu (must be type ACTION).
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold" title="Optional">externalLink(?)</p>
+                <p class="w-8/12 py-2 px-4">
+                    When true, the link provided will open in a new tab (must be type NAVIGATION).
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold" title="Optional">url(?)</p>
+                <p class="w-8/12 py-2 px-4">
+                    URL to be open when click (must be type NAVIGATION).
                 </p>
             </div>
         </div>

@@ -18,9 +18,9 @@
             </div>
         </ngt-header-nav>
 
-        <ngt-sidenav class="flex max-h-full" style="padding-bottom: 4.5rem;" [initVisible]='true' size='sm'
+        <ngt-sidenav class="flex h-screen" style="padding-bottom: 4.5rem;" [initVisible]='true' size='sm'
             color.bg='bg-gray-200' ngt-stylizable>
-            <div body>
+            <div sideMenu>
                 <ng-container *ngFor="let sidenavMenus of sidenavMenuMetadata">
                     <ul class="list-reset w-full text-center md:text-left">
                         <p class="text-white bg-teal-500 text-center py-2 px-2 text-sm">{{ sidenavMenus.section }}

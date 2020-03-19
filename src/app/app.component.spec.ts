@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'lib-test'`, () => {
+  it(`should have as title 'ng-tailwind-documentation'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('lib-test');
+    expect(app.title).toEqual('ng-tailwind-documentation');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('lib-test app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('ng-tailwind-documentation app is running!');
   });
 });

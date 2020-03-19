@@ -1,12 +1,11 @@
 <div class="flex h-full w-full">
     <ng-container *ngIf="visible">
-        <div class="{{ getNavSize() }} {{ ngtStyle.compile(['color.bg', 'h']) }} {{ open ? 'block' : 'hidden' }} top-auto md:static fixed md:block z-50 overflow-auto"
+        <div class="{{ getNavSize() }} {{ ngtStyle.compile(['color.bg', 'h']) }} {{ open ? 'block' : 'hidden' }} top-auto fixed {{ isMobileView() ? '' : 'md:static md:block' }} z-50 overflow-auto"
             @fadeDownAnimation>
-            <ng-content select='[body]'></ng-content>
+            <ng-content select='[sideMenu]'></ng-content>
         </div>
 
         <ng-container *ngIf="open">
-            <!-- Botão auxiliar para fechar o menu ao clicar em qualquer lugar da tela -->
             <button (click)='closeMenu()' tabindex="-1"
                 class="fixed z-40 inset-0 h-full w-full bg-black opacity-50 cursor-default">
             </button>

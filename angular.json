@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "lib-test": {
+    "ng-tailwind-documentation": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/lib-test",
+            "outputPath": "dist/ng-tailwind-documentation",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -63,18 +63,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "lib-test:build"
+            "browserTarget": "ng-tailwind-documentation:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "lib-test:build:production"
+              "browserTarget": "ng-tailwind-documentation:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "lib-test:build"
+            "browserTarget": "ng-tailwind-documentation:build"
           }
         },
         "test": {
@@ -111,11 +111,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "lib-test:serve"
+            "devServerTarget": "ng-tailwind-documentation:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "lib-test:serve:production"
+              "devServerTarget": "ng-tailwind-documentation:serve:production"
             }
           }
         }
@@ -190,6 +190,7 @@
           }
         }
       }
-    }},
-  "defaultProject": "lib-test"
+    }
+  },
+  "defaultProject": "ng-tailwind-documentation"
 }
