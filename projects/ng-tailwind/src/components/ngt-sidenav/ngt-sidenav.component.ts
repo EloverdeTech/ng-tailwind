@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Injector, Input, Optional, Self } from '@angular/core';
+import { AfterViewInit, Component, HostListener, Injector, Input, Optional, Self } from '@angular/core';
 
 import { fadeDownAnimation } from '../../animations/ngt-angular-animations';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -17,11 +17,15 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 export class NgtSidenavComponent implements AfterViewInit {
   @Input() public size: Size = Size.xs;
   @Input() public initVisible: boolean = false;
+  @Input() public closeMenuOnMobileView: boolean = true;
 
   public visible: boolean = false;
   public open: boolean = false;
   public isMenuContracted: boolean = false;
   public ngtStyle: NgtStylizableService;
+
+  private screenHeight: number;
+  private screenWidth: number;
 
   constructor(
     private injector: Injector,
@@ -37,6 +41,8 @@ export class NgtSidenavComponent implements AfterViewInit {
       h: 'md:h-auto h-screen',
       color: {}
     });
+
+    this.bindScreenSize();
   }
 
   ngAfterViewInit() {
@@ -79,6 +85,10 @@ export class NgtSidenavComponent implements AfterViewInit {
       return 'w-full';
     }
 
+    if (this.isMobileView()) {
+      return 'w-full';
+    }
+
     switch (this.size) {
       case Size.auto: return 'w-full'
       case Size.xs: return 'md:w-11/12 w-full';
@@ -97,5 +107,19 @@ export class NgtSidenavComponent implements AfterViewInit {
       this.size = Size.auto;
       this.isMenuContracted = true;
     }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  bindScreenSize(event?) {
+    this.screenHeight = window.innerHeight;
+    this.screenWidth = window.innerWidth;
+  }
+
+  isMobileView() {
+    if (!this.closeMenuOnMobileView) {
+      return false;
+    }
+
+    return this.screenWidth < 1024 || this.screenHeight < 620;
   }
 }
