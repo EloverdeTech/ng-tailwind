@@ -71,12 +71,38 @@ export class NgtFloatingButtonComponent {
     window.open(url, "_blank");
     this.toggleMenu();
   }
+
+  onClick(event: Event, menu: NgtFloatingButtonMenu) {
+    event.stopPropagation();
+    this.toggleMenu();
+    
+    if (typeof menu.action === 'function') {
+      return menu.action();
+    }
+
+    throw new Error('Action must be a function!');
+  }
+
+  isTypeAction(menu: NgtFloatingButtonMenu) {
+    return menu.type == NgtFloatingButtonType.ACTION;
+  }
+
+  isTypeNavigation(menu: NgtFloatingButtonMenu) {
+    return menu.type == NgtFloatingButtonType.NAVIGATION;
+  }
 }
 
 export interface NgtFloatingButtonMenu {
-  externalLink: boolean;
-  url: string;
-  icon: string;
-  tooltip: string;
-  name: string;
+  name?: string;
+  type: NgtFloatingButtonType
+  icon?: string;
+  tooltip?: string;
+  externalLink?: boolean;
+  url?: string;
+  action?: Function
+}
+
+export enum NgtFloatingButtonType {
+  NAVIGATION = 'NAVIGATION',
+  ACTION = 'ACTION'
 }
