@@ -20,6 +20,6 @@ module.exports = {
     ],
     extractors: [],
     content: [
-        './node_modules/ng-tailwind/**/*.js*'
+        './dist/ng-tailwind/**/*.js'
     ]
 }
