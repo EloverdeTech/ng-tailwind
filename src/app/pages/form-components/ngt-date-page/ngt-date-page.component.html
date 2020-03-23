@@ -1,0 +1,219 @@
+<ngt-portlet class="block w-full" icon="assets/images/icons/checkbox.svg" caption='Ngt Date'>
+    <div body>
+        <p>Component used to select a specific date and hour or a date range.</p>
+        <br>
+
+        <p class="pb-4 font-semibold">Examples:</p>
+
+        <div class="flex flex-col border rounded-lg py-2">
+            <form class="flex w-full pb-2 border-b">
+                <div class="flex flex-wrap w-full justify-center">
+                    <div class="flex flex-col w-full md:w-3/12 pr-0 md:pr-6 mx-4">
+                        <ngt-date label='NgtDate (Brazilian format)' [locale]='dateOneLocale' placeholder='Selecione...'
+                            name='dateOne' [(ngModel)]='dateOne'>
+                        </ngt-date>
+                        <span class="my-2 font-semibold text-sm">
+                            NgModel value: <span class="font-normal">{{ dateOne }}</span>
+                        </span>
+                    </div>
+
+                    <div class="flex flex-col w-full md:w-3/12 pr-0 md:pr-6 mx-4">
+                        <ngt-date label='Without time (Custom date format)' placeholder='Selecione...' name='dateTwo'
+                            [(ngModel)]='dateTwo' dateFormat='d M. Y' dateFormatNgModel='YYYY-MM-DD' [enableTime]=false>
+                        </ngt-date>
+                        <span class="my-2 font-semibold text-sm">
+                            NgModel value: <span class="font-normal">{{ dateTwo }}</span>
+                        </span>
+                    </div>
+
+                    <div class="flex flex-col w-full md:w-3/12 pr-0 md:pr-6 mx-4">
+                        <ngt-date label='NgtDate Range' placeholder='Selecione...' name='dateRange'
+                            [mode]='dateRangeType' [(ngModel)]='dateRange' dateFormat='Y/m/d'
+                            dateFormatNgModel='YYYY-MM-DD' [enableTime]='false'>
+                        </ngt-date>
+                        <span class="my-2 font-semibold text-sm">
+                            NgModel value: <span class="font-normal">{{ dateRange }}</span>
+                        </span>
+                    </div>
+                </div>
+            </form>
+
+            <div class="p-6 flex justify-center">
+                <code-preview>{{ codeExample }}</code-preview>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Visual Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">label</p>
+                <p class="w-10/12 py-2 px-4">Component label.</p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">placeholder</p>
+                <p class="w-10/12 py-2 px-4">Component placeholder.</p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">helpTitle</p>
+                <p class="w-10/12 py-2 px-4">Component help title.</p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">helpText</p>
+                <p class="w-10/12 py-2 px-4">Determines if help text is enable.</p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">shining</p>
+                <p class="w-10/12 py-2 px-4">When true, the component will display a loading mode.</p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">dateFormat</p>
+                <p class="w-10/12 py-2 px-4">Date format to show for the user</p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">dateFormatNgModel</p>
+                <p class="w-10/12 py-2 px-4">Date format to use in NgModel</p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Behavior Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">name</p>
+                <p class="w-10/12 py-2 px-4">
+                    Name used by NgModel. Must be unique.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">isDisabled</p>
+                <p class="w-10/12 py-2 px-4">
+                    When true, the component will be disabled.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">isReadonly</p>
+                <p class="w-10/12 py-2 px-4">
+                    When true, the component will be readonly.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">mode</p>
+                <p class="w-10/12 py-2 px-4">
+                    Determines the selection mode. Must be a NgtDateMode instance.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">time_24hr</p>
+                <p class="w-10/12 py-2 px-4">
+                    When true, the time will has 24 hours format.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">enableTime</p>
+                <p class="w-10/12 py-2 px-4">
+                    When true, the time selection will enable.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">minuteIncrement</p>
+                <p class="w-10/12 py-2 px-4">
+                    Determines the minute increment. Default is 1.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">allowInput</p>
+                <p class="w-10/12 py-2 px-4">
+                    When true, the user can set a value manually.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">locale</p>
+                <p class="w-10/12 py-2 px-4">
+                    Determines the date location. Must be a NgtDateLocale instance.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Validation Inputs:</p>
+
+        <div class="flex w-full items-center border">
+            <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">isRequired</p>
+            <p class="w-10/12 py-2 px-4">
+                Determines whether the field is required.
+            </p>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Enums:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-700 text-white border-r py-2 px-4 font-semibold">
+                    NgtDateLocale
+                </p>
+                <p class="w-8/12 py-2 px-4">
+                    The locale provided for the component must be one of this.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">BRAZIL</p>
+                <p class="w-8/12 py-2 px-4">
+                    The component will use the portuguese as default language.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">US</p>
+                <p class="w-8/12 py-2 px-4">
+                    The component will use the english as default language.
+                </p>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-700 text-white border-r py-2 px-4 font-semibold">
+                    NgtDateMode
+                </p>
+                <p class="w-8/12 py-2 px-4">
+                    The mode provided for the component must be one of this.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">SINGLE</p>
+                <p class="w-8/12 py-2 px-4">
+                    The component will be used to select only one date.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-4/12 bg-gray-200 border-r py-2 px-4 font-semibold">RANGE</p>
+                <p class="w-8/12 py-2 px-4">
+                    The component will be used to select a range of dates.
+                </p>
+            </div>
+        </div>
+    </div>
+</ngt-portlet>
