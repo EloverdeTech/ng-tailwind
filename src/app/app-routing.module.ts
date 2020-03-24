@@ -39,6 +39,14 @@ const routes: Routes = [
         "path": "ngt-floating-button",
         "loadChildren": () => import('src/app/pages/action-components/ngt-floating-button-page/ngt-floating-button-page.module').then(m => m.NgtFloatingButtonPageModule)
       },
+      {
+        "path": "ngt-checkbox",
+        "loadChildren": () => import('src/app/pages/form-components/ngt-checkbox-page/ngt-checkbox-page.module').then(m => m.NgtCheckboxPageModule)
+      },
+      {
+        "path": "ngt-date",
+        "loadChildren": () => import('src/app/pages/form-components/ngt-date-page/ngt-date-page.module').then(m => m.NgtDatePageModule)
+      },
     ]
   }
 ];

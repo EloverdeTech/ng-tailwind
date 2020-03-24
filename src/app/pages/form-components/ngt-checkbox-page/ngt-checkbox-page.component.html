@@ -1,0 +1,68 @@
+<ngt-portlet class="block w-full" icon="assets/images/icons/checkbox.svg" caption='Ngt Checkbox'>
+    <div body>
+        <p>Component used to toggle a boolean value when clicking.</p>
+        <br>
+
+        <p class="pb-4 font-semibold">Examples:</p>
+
+        <div class="flex flex-col border rounded-lg py-2">
+            <form class="flex w-full justify-around pb-2 border-b">
+                <div class="flex flex-col w-full md:w-3/12 pr-0 md:pr-6 mx-4">
+                    <ngt-checkbox name='ngtCheckboxOne' label='With Label' [(ngModel)]="ngModelOne">
+                    </ngt-checkbox>
+                    <span class="my-2 font-semibold text-sm">
+                        NgModel value: <span class="font-normal">{{ ngModelOne }}</span>
+                    </span>
+                </div>
+
+                <div class="flex flex-col w-full md:w-3/12 pr-0 md:pr-6 mx-4">
+                    <ngt-checkbox name='ngtCheckboxTwo' [(ngModel)]="ngModelTwo">
+                    </ngt-checkbox>
+                    <span class="my-2 font-semibold text-sm">
+                        NgModel value: <span class="font-normal">{{ ngModelTwo }}</span>
+                    </span>
+                </div>
+
+                <div class="flex flex-col w-full md:w-3/12 pr-0 md:pr-6 mx-4">
+                    <ngt-checkbox name='ngtCheckboxThree' label='With custom stylizable' [(ngModel)]="ngModelThree"
+                        color.bg='bg-red-500' ngt-stylizable>
+                    </ngt-checkbox>
+                    <span class="my-2 font-semibold text-sm">
+                        NgModel value: <span class="font-normal">{{ ngModelThree }}</span>
+                    </span>
+                </div>
+            </form>
+
+            <div class="p-6 flex justify-center">
+                <code-preview>{{ codeExample }}</code-preview>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">label</p>
+                <p class="w-10/12 py-2 px-4">Checkbox label.</p>
+            </div>
+
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">name</p>
+                <p class="w-10/12 py-2 px-4">Name used by NgModel. Must be unique.</p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Public Attributes:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border">
+                <p class="text-center w-2/12 bg-gray-200 border-r py-2 px-4 font-semibold">ngtStyle</p>
+                <p class="w-10/12 py-2 px-4">
+                    Provides styling via NgtStylizableService.
+                </p>
+            </div>
+        </div>
+    </div>
+</ngt-portlet>

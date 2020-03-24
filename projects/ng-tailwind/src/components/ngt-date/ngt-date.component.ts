@@ -7,6 +7,7 @@ import { uuid } from '../../helpers/uuid';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 const Brazil = require("flatpickr/dist/l10n/pt.js").default.pt;
+const US = require("flatpickr/dist/l10n/pt.js").default.us;
 var moment = require('moment');
 
 @Component({
@@ -24,26 +25,27 @@ var moment = require('moment');
 export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
   @ViewChild("ng2FlatpickrComponent", { static: true }) ng2FlatpickrComponent: Ng2FlatpickrComponent;
 
-  //Visual
+  // Visual
   @Input() label: string = "";
   @Input() placeholder: string = "";
-  @Input() helpTitle = 'Ajuda';
+  @Input() helpTitle = 'Help';
   @Input() helpText = false;
   @Input() shining = false;
   @Input() dateFormat: string = 'd/m/Y H:i';
   @Input() dateFormatNgModel = 'YYYY-MM-DD HH:mm:00';
 
-  //Comportamento
+  // Behavior
   @Input() name: string;
   @Input() isDisabled: boolean = false;
   @Input() isReadonly: boolean = false;
-  @Input() mode: string = 'single';
+  @Input() mode: NgtDateMode;
   @Input() time_24hr: boolean = true;
   @Input() enableTime: boolean = true;
   @Input() minuteIncrement: number = 1;
   @Input() allowInput: boolean = false;
+  @Input() locale: NgtDateLocale;
 
-  //Validações
+  // Validation
   @Input() isRequired: boolean = false;
 
   public dateConfig: FlatpickrOptions;
@@ -114,20 +116,20 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
   async ngOnInit() {
     this.dateConfig = {
       dateFormat: this.dateFormat,
-      mode: this.mode,
+      mode: this.getDateMode(),
       minuteIncrement: this.minuteIncrement,
       time_24hr: this.time_24hr,
       enableTime: this.enableTime,
       allowInput: this.allowInput,
-      locale: Brazil,
+      locale: this.getLocale(),
       onChange: (selectedDates, dateStr, instance) => this.onNativeChange(selectedDates, instance, true),
       onClose: (selectedDates, dateStr, instance) => this.onNativeChange(selectedDates, instance, false),
     };
 
     if (!this.formContainer) {
-      //console.warn("The element must be inside a <form #form='ngForm'> tag!", this.element.nativeElement);
+      console.error("The element must be inside a <form #form='ngForm'> tag!");
     } if (!this.name) {
-      //console.warn("The element must contain a name attribute!", this.element.nativeElement);
+      console.error("The element must contain a name attribute!");
     } else {
       // Render delay
       setTimeout(() => { }, 500);
@@ -148,7 +150,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
         instance.close();
       }
     } else {
-      if (this.mode == 'range') {
+      if (this.mode == NgtDateMode.RANGE) {
         this.nativeValue = [];
         value.forEach(element => {
           this.nativeValue.push(moment(element).format(this.dateFormatNgModel));
@@ -200,4 +202,34 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
       }
     }
   }
+
+  private getLocale() {
+    if (this.locale) {
+      if (this.locale == NgtDateLocale.BRAZIL) {
+        return Brazil;
+      }
+    }
+
+    return US;
+  }
+
+  private getDateMode() {
+    if (this.mode) {
+      if (this.mode == NgtDateMode.RANGE) {
+        return 'range'
+      }
+    }
+
+    return 'single';
+  }
+}
+
+export enum NgtDateLocale {
+  BRAZIL = 'BRAZIL',
+  US = 'US'
+}
+
+export enum NgtDateMode {
+  SINGLE = 'SINGLE',
+  RANGE = 'RANGE'
 }
