@@ -201,6 +201,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
   search(filters) {
     this.currentState.filters = { ...this.currentState.filters, ...filters };
 
+    if (!this.remoteResource) {
+      return;
+    }
+
     setTimeout(() => {
       this.loading = true;
       this.ngtHttp
@@ -292,6 +296,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     if (changes.isRequired) {
       this.updateValidations();
     }
+
+    if (changes.remoteResource || changes.items) {
+      this.initNgSelectItems();
+    }
   }
 
   setFocus() {
@@ -304,9 +312,4 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     this.currentState.filters = {};
   }
 
-  changes(changes: SimpleChanges) {
-    if (changes.remoteResource) {
-      this.initNgSelectItems();
-    }
-  }
 }
