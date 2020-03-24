@@ -9,3 +9,8 @@ export class NgtSelectOptionTmp {
 export class NgtSelectOptionSelectedTmp {
 	constructor(public template: TemplateRef<any>) { }
 }
+
+@Directive({ selector: '[ngt-select-header]' })
+export class NgtSelectHeaderTmp {
+	constructor(public template: TemplateRef<any>) { }
+}

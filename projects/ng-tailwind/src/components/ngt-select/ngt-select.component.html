@@ -19,6 +19,11 @@
             [groupValue]="groupValue" [loading]="loading" [loadingText]="loadingText"
             [maxSelectedItems]="maxSelectedItems" (clear)='onClearSelect()'>
 
+            <ng-template *ngIf='ngtSelectHeaderTemplate' ng-header-tmp>
+                <ng-template [ngTemplateOutlet]="ngtSelectHeaderTemplate">
+                </ng-template>
+            </ng-template>
+
             <ng-template ng-label-tmp let-item="item" let-index="index" let-search="searchTerm">
                 <ng-template *ngIf='ngtOptionSelectedTemplate' [ngTemplateOutlet]="ngtOptionSelectedTemplate"
                     [ngTemplateOutletContext]="{ item: item, index: index, searchTerm: search }">
