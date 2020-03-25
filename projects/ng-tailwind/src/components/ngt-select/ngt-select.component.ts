@@ -84,6 +84,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
   @Input() typeToSearchText: string = 'Digite para procurar...';
   @Input() virtualScroll: boolean = true;
   @Input() tabIndex: number;
+  @Input() dropdownPosition = 'auto';
 
   public ngtStyle: NgtStylizableService;
   public ngSelectItems: any = [];
