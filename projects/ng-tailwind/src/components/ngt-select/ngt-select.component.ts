@@ -77,7 +77,6 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
   @Input() hideSelected: boolean
   @Input() notFoundText: string
   @Input() searchable: boolean = true;
-  @Input() searchFn: Function;
   @Input() trackBy: (item: any) => any;
   @Input() clearSearchOnAdd: boolean = true;
   @Input() typeahead: Subject<any>;
