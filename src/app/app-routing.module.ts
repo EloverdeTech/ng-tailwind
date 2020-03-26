@@ -51,6 +51,10 @@ const routes: Routes = [
         "path": "ngt-dropzone",
         "loadChildren": () => import('src/app/pages/form-components/ngt-dropzone-page/ngt-dropzone-page.module').then(m => m.NgtDropzonePageModule)
       },
+      {
+        "path": "ngt-datatable",
+        "loadChildren": () => import('src/app/pages/table-components/ngt-datatable-page/ngt-datatable-page.module').then(m => m.NgtDatatablePageModule)
+      }
     ]
   }
 ];
