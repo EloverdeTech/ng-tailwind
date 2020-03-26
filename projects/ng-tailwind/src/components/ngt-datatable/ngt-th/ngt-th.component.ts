@@ -29,7 +29,11 @@ export class NgtThComponent implements OnChanges {
   @Input() searchable: boolean;
   @Input() hasCustomSearch: boolean = false;
   @Input() searchLabel: string;
-  @Input() sortableTooltip: NgtSortableTooltip;
+  @Input() sortableTooltip: NgtSortableTooltip = {
+    ascending: 'Ordenar de Z a A',
+    descending: 'Limpar ordenação',
+    unordered: 'Ordenar de A a Z'
+  };
 
   @Output() onEnableSearch = new EventEmitter();
 
