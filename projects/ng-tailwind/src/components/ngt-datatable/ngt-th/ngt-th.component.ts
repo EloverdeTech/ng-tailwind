@@ -1,4 +1,15 @@
-import { Component, EventEmitter, Input, Optional, Output, SkipSelf, TemplateRef, ViewChild, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Optional,
+  Output,
+  SimpleChanges,
+  SkipSelf,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 
 import { NgtInputComponent } from '../../ngt-input/ngt-input.component';
 import { NgtDatatableComponent } from '../ngt-datatable.component';
@@ -18,6 +29,7 @@ export class NgtThComponent implements OnChanges {
   @Input() searchable: boolean;
   @Input() hasCustomSearch: boolean = false;
   @Input() searchLabel: string;
+  @Input() sortableTooltip: NgtSortableTooltip;
 
   @Output() onEnableSearch = new EventEmitter();
 
@@ -92,6 +104,20 @@ export class NgtThComponent implements OnChanges {
     this.customSearchTerm = term;
   }
 
+  public getTooltip() {
+    if (this.sortable && this.sortableTooltip) {
+      if (this.sortDirection == 'asc') {
+        return this.sortableTooltip.ascending;
+      } else if (this.sortDirection == 'desc') {
+        return this.sortableTooltip.descending;
+      }
+
+      return this.sortableTooltip.unordered;
+    }
+
+    return '';
+  }
+
   private checkDataTable() {
     if (!this.ngtDataTable) {
       console.error('The [ngt-th] must be inside of a [ngt-datatable]');
@@ -117,5 +143,10 @@ export class NgtThComponent implements OnChanges {
       case '': return 'asc';
     }
   }
+}
 
+export interface NgtSortableTooltip {
+  ascending: string;
+  descending: string;
+  unordered: string;
 }

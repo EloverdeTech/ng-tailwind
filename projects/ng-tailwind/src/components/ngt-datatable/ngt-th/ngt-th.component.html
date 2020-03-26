@@ -1,5 +1,6 @@
 <div class="md:flex md:items-center">
-    <div class="flex items-center justify-center" (click)='sort()' [class.cursor-pointer]='sortable'>
+    <div class="flex items-center justify-center" [title]="getTooltip()" (click)='sort()'
+        [class.cursor-pointer]='sortable'>
         <ng-content></ng-content>
         <ng-container *ngIf='sortable && isCurrentSort'>
             <svg *ngIf="sortDirection == 'asc'" class="fill-current self-center cursor-pointer ml-1"
