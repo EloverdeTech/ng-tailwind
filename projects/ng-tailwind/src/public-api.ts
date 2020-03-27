@@ -19,6 +19,10 @@ export * from './components/ngt-datatable/ngt-th-check/ngt-th-check.component';
 export * from './components/ngt-datatable/ngt-thead/ngt-thead.component';
 export * from './components/ngt-datatable/ngt-tr/ngt-tr.component';
 
+//NgtPagination
+export * from './components/ngt-pagination/ngt-pagination.module';
+export * from './components/ngt-pagination/ngt-pagination.component';
+
 //NgtDropdown
 export * from './components/ngt-dropdown/ngt-dropdown.module';
 export * from './components/ngt-dropdown/ngt-dropdown.component';
