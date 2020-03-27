@@ -24,8 +24,8 @@
                 </ngt-button>
             </div>
 
-            <div class="p-6 flex justify-center">
-                <code-preview>{{ codeExample }}</code-preview>
+            <div class="p-6 flex justify-center w-full">
+                <code-preview class="w-full">{{ codeExample }}</code-preview>
             </div>
         </div>
 
@@ -69,5 +69,10 @@
                 </p>
             </div>
         </div>
+
+        <br>
+        <p class="pb-4 font-semibold">NgtStylizableService and NgtStylizableDirective:</p>
+
+        <ngt-stylizable-template tagName='ngt-button' styleName='NgtSuccessButtonStyle'></ngt-stylizable-template>
     </div>
 </ngt-portlet>

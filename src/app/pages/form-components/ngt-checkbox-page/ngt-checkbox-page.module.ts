@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { NgtCheckboxModule, NgtPortletModule, NgtStylizableModule } from 'projects/ng-tailwind/src/public-api';
 import { CodePreviewModule } from 'src/app/components/code-preview/code-preview.module';
+import { NgtStylizableTemplateModule } from 'src/app/components/ngt-stylizable-template/ngt-stylizable-template.module';
 
 import { NgtCheckboxPageComponent } from './ngt-checkbox-page.component';
 
@@ -23,7 +24,8 @@ const routes: Routes = [
     CodePreviewModule,
     NgtPortletModule,
     NgtCheckboxModule,
-    NgtStylizableModule
+    NgtStylizableModule,
+    NgtStylizableTemplateModule
   ]
 })
 export class NgtCheckboxPageModule { }

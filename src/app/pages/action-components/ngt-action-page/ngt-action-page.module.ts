@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NgtActionModule, NgtPortletModule, NgtStylizableModule } from 'projects/ng-tailwind/src/public-api';
 import { CodePreviewModule } from 'src/app/components/code-preview/code-preview.module';
+import { NgtStylizableTemplateModule } from 'src/app/components/ngt-stylizable-template/ngt-stylizable-template.module';
 
 import { NgtActionPageComponent } from './ngt-action-page.component';
 
@@ -22,6 +23,7 @@ const routes: Routes = [
     NgtPortletModule,
     NgtActionModule,
     NgtStylizableModule,
+    NgtStylizableTemplateModule
   ]
 })
 export class NgtActionPageModule { }

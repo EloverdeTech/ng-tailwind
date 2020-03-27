@@ -16,8 +16,8 @@ export class NgtFloatingButtonPageComponent {
 
   <div class="absolute bottom-0 m-4">
     <ngt-floating-button label='NgtFloatingButton' [withAnimation]='true'
-      icon='assets/images/icons/information_outline.svg' [menus]="floatingButtonOptionsTwo" 
-      h='h-12' w='w-full' ngt-stylizable>
+      icon='assets/images/icons/information_outline.svg' 
+      [menus]="floatingButtonOptionsTwo" h='h-12' w='w-full' ngt-stylizable>
     </ngt-floating-button>
   </div>
 

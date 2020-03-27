@@ -28,12 +28,12 @@
                 </div>
             </div>
 
-            <div class="pt-6 self-center w-10/12 flex justify-center mt-16">
-                <code-preview>{{ codeExample }}</code-preview>
+            <div class="pt-6 px-6 self-center w-full flex justify-center mt-16">
+                <code-preview class="max-w-full w-full">{{ codeExample }}</code-preview>
             </div>
 
-            <div class="py-6 self-center flex justify-center w-10/12">
-                <code-preview lang='typescript'>{{ optionsCodeExample }}</code-preview>
+            <div class="py-6 px-6 self-center flex justify-center w-full">
+                <code-preview class="max-w-full w-full" lang='typescript'>{{ optionsCodeExample }}</code-preview>
             </div>
         </div>
 
@@ -182,5 +182,11 @@
                 </p>
             </div>
         </div>
+
+        <br>
+        <p class="pb-4 font-semibold">NgtStylizableService and NgtStylizableDirective:</p>
+
+        <ngt-stylizable-template tagName='ngt-floating-button' styleName='NgtFloatingButtonStyle'>
+        </ngt-stylizable-template>
     </div>
 </ngt-portlet>

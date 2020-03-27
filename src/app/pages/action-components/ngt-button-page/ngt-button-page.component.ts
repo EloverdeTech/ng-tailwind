@@ -7,21 +7,21 @@ import { Component } from '@angular/core';
 })
 export class NgtButtonPageComponent {
   public codeExample = `
-    <ngt-button type='success' class="w-3/12 px-4" (click)="successButton()">
-      <span class="text-center w-full">Success</span>
-    </ngt-button>
+  <ngt-button type='success' class="w-3/12 px-4" (click)="successButton()">
+    <span class="text-center w-full">Success</span>
+  </ngt-button>
 
-    <ngt-button type='danger' class="w-3/12 px-4" (click)="dangerButton()">
-      <span class="text-center w-full">Danger</span>
-    </ngt-button>
+  <ngt-button type='danger' class="w-3/12 px-4" (click)="dangerButton()">
+    <span class="text-center w-full">Danger</span>
+  </ngt-button>
 
-    <ngt-button type='warning' class="w-3/12 px-4" (click)="warningButton()">
-      <span class="text-center w-full">Warning</span>
-    </ngt-button>
+  <ngt-button type='warning' class="w-3/12 px-4" (click)="warningButton()">
+    <span class="text-center w-full">Warning</span>
+  </ngt-button>
 
-    <ngt-button type='info' class="w-3/12 px-4" (click)="informationButton()">
-      <span class="text-center w-full">Information</span>
-    </ngt-button>
+  <ngt-button type='info' class="w-3/12 px-4" (click)="informationButton()">
+    <span class="text-center w-full">Information</span>
+  </ngt-button>
   `;
 
   constructor() { }

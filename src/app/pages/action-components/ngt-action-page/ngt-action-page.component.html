@@ -29,8 +29,8 @@
                 </ngt-action>
             </div>
 
-            <div class="p-6 flex justify-center">
-                <code-preview>{{ codeExample }}</code-preview>
+            <div class="p-6 flex justify-center w-full">
+                <code-preview class="w-full">{{ codeExample }}</code-preview>
             </div>
         </div>
 
@@ -52,11 +52,11 @@
                 <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">isDisable</p>
                 <p class="w-8/12 py-3 px-4 bg-white">Determines whether the component is enable.</p>
             </div>
-
-            <div class="flex w-full items-center border bg-gray-200">
-                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">ngtStyle</p>
-                <p class="w-8/12 py-3 px-4 bg-white">Provides styling via NgtStylizableService.</p>
-            </div>
         </div>
+
+        <br>
+        <p class="pb-4 font-semibold">NgtStylizableService and NgtStylizableDirective:</p>
+
+        <ngt-stylizable-template tagName='ngt-action' styleName='NgtActionStyle'></ngt-stylizable-template>
     </div>
 </ngt-portlet>
