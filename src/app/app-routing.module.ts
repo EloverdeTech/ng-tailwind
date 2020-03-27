@@ -59,10 +59,10 @@ const routes: Routes = [
       },
 
       /** Table Components */
-      {
-        "path": "ngt-datatable",
-        "loadChildren": () => import('src/app/pages/table-components/ngt-datatable-page/ngt-datatable-page.module').then(m => m.NgtDatatablePageModule)
-      }
+      // {
+      //   "path": "ngt-datatable",
+      //   "loadChildren": () => import('src/app/pages/table-components/ngt-datatable-page/ngt-datatable-page.module').then(m => m.NgtDatatablePageModule)
+      // }
     ]
   }
 ];
