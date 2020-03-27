@@ -17,8 +17,8 @@ export class NgtDatePageComponent implements OnInit {
   <form class="flex w-full pb-2 border-b">
     <div class="flex flex-wrap w-full justify-center">
       <div class="flex flex-col w-full md:w-3/12 pr-0 md:pr-6 mx-4">
-        <ngt-date label='NgtDate (Brazilian format)' [locale]='dateOneLocale' placeholder='Selecione...'
-          name='dateOne' [(ngModel)]='dateOne'>
+        <ngt-date label='NgtDate (Brazilian format)' [locale]='dateOneLocale'
+          placeholder='Selecione...' name='dateOne' [(ngModel)]='dateOne'>
         </ngt-date>
         <span class="my-2 font-semibold text-sm">
           NgModel value: <span class="font-normal">{{ dateOne }}</span>
@@ -26,8 +26,9 @@ export class NgtDatePageComponent implements OnInit {
       </div>
 
       <div class="flex flex-col w-full md:w-3/12 pr-0 md:pr-6 mx-4">
-        <ngt-date label='Without time (Custom date format)' placeholder='Selecione...' name='dateTwo'
-          [(ngModel)]='dateTwo' dateFormat='d M. Y' dateFormatNgModel='YYYY-MM-DD' [enableTime]=false>
+        <ngt-date label='Without time (Custom date format)' 
+          placeholder='Selecione...' name='dateTwo' [(ngModel)]='dateTwo' 
+          dateFormat='d M. Y' dateFormatNgModel='YYYY-MM-DD' [enableTime]=false>
         </ngt-date>
         <span class="my-2 font-semibold text-sm">
           NgModel value: <span class="font-normal">{{ dateTwo }}</span>
@@ -35,8 +36,9 @@ export class NgtDatePageComponent implements OnInit {
       </div>
 
       <div class="flex flex-col w-full md:w-3/12 pr-0 md:pr-6 mx-4">
-        <ngt-date label='NgtDate Range' placeholder='Selecione...' name='dateRange' mode='range'
-          [(ngModel)]='dateRange' dateFormat='Y/m/d' dateFormatNgModel='YYYY-MM-DD'
+        <ngt-date label='NgtDate Range' placeholder='Selecione...' 
+          name='dateRange' mode='range' [(ngModel)]='dateRange' 
+          dateFormat='Y/m/d' dateFormatNgModel='YYYY-MM-DD'
           [enableTime]='false'>
         </ngt-date>
         <span class="my-2 font-semibold text-sm">

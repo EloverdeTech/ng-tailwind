@@ -150,7 +150,13 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
       forkJoin(observables).subscribe(
         (response) => {
           this.resources.push(...temporaryFiles);
-          this.onNativeChange([...temporaryAttachments, ...this.nativeValue]);
+
+          if (this.itemsLimit == 1) {
+            this.onNativeChange([...temporaryAttachments]);
+          } else {
+            this.onNativeChange([...temporaryAttachments, ...this.nativeValue]);
+          }
+
           this.onFileUploaded.emit();
           this.loading = false;
         },

@@ -1,0 +1,262 @@
+<ngt-portlet class="block w-full" icon="assets/images/icons/checkbox.svg" caption='Ngt Dropzone'>
+    <div body>
+        <p>Component used to preview, upload and download attachments.</p>
+        <br>
+
+        <p class="pb-4 font-semibold">Examples:</p>
+
+        <div class="flex flex-col w-full h-full border rounded-lg py-2">
+            <form class="flex w-full pb-2 border-b">
+                <div class="flex flex-col w-full justify-center">
+                    <div
+                        class="flex flex-col w-full px-6 my-6 {{ !ngModelOne || !ngModelOne.length ? '' : 'items-center' }}">
+                        <ngt-dropzone name='ngtDropzoneOne' [(ngModel)]="ngModelOne" itemsLimit='1' [removable]='true'
+                            [previewType]='ngtDropzonePreviewTypeOne' [acceptedFiles]='ngtDropzoneAcceptedFiles'
+                            label='Select or drop a photo' (onFileSelectError)='onFileSelectError($event)'>
+                        </ngt-dropzone>
+                        <span class="my-2 font-semibold text-sm text-center">
+                            NgModel value: <span class="font-normal">{{ ngModelOne }}</span>
+                        </span>
+                    </div>
+
+                    <div class="flex flex-col w-full px-6 my-6">
+                        <ngt-dropzone name='ngtDropzoneTwo' [(ngModel)]="ngModelTwo" itemsLimit='3' [removable]='true'
+                            [previewType]='ngtDropzonePreviewTypeTwo' label='Select or drop a photo'
+                            [maxFileSize]='10000000' (onFileSelectError)='onFileSelectError($event)'>
+                        </ngt-dropzone>
+                        <span class="my-2 font-semibold text-sm text-center">
+                            NgModel value: <span class="font-normal">{{ ngModelTwo }}</span>
+                        </span>
+                    </div>
+                </div>
+            </form>
+
+            <div class="p-6 flex justify-center">
+                <code-preview>{{ codeExample }}</code-preview>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">multipleSelection</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Determines whether you can select more than one file at a time.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">itemsLimit</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Number of attachments allowed.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">showFileName</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Show or hide file name.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">disableClick</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Disable click and allows only drag and drop.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">disabled</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Enable or disable component.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">removable</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Determines if the attachments can be removed.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">verticalExpandable</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Enable or disable vertical expand.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">acceptedFiles</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Determines which files are accepted. Must be an array of mime
+                    types.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">maxFileSize</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Maximum size allowed for each attachment.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">previewType</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Determines the component preview type. Must be instance of <span
+                        class="font-semibold">NgtDropzonePreviewType</span>.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">isRequired</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Determines if the component data is required.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">label</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Component label.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">name</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Name used by NgModel. Must be unique.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">remoteResource</p>
+                <p class="w-8/12 py-3 px-4 bg-white">The resource used to make remote requests.</p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Outputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">onFileSelected</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Event emitted when a file is selected.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">onFileSelectError</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Event raised when an error occurred while selecting a file.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">onFileUploaded</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Event emitted when file upload has finished.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">onFileUploadFail</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Event raised when an error occurred while uploading a file.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">onFileRemoved</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Event emitted when a file is removed.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">onFilePreviewLoaded</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Event emitted when file preview loaded has finished.</p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Public attributes:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">loading</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Enable or disable loading mode.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">shining</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Enable or disable shining mode.</p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Enums:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-700">
+                <p class="text-center w-4/12 text-white border-r py-3 px-4 font-semibold">
+                    NgtDropzonePreviewType
+                </p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    The preview type provided for the component must be one of this.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold text-sm">DEFAULT</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Uses the standard viewing method.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold text-sm">IMAGE</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Uses the visualization method optimized for images.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold text-sm">VIDEO</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Uses the visualization method optimized for videos.
+                </p>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-700">
+                <p class="text-center w-4/12 text-white border-r py-3 px-4 font-semibold">
+                    NgtDropzoneErrorType
+                </p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    The errors reported in the output <span class="font-semibold">onFileSelectError </span>
+                    and <span class="font-semibold">onFileUploadFail</span> are instances of this enum.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold text-sm">DEFAULT</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Type used when the error is unknown.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold text-sm">SIZE</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Type used when the limit size has been exceeded.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold text-sm">NO_MULTIPLE</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Type used when the selection is not multiple and more than one file is selected at a time.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold text-sm">ITEMS_LIMIT</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Type used when the allowed items limit is exceeded.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold text-sm">TYPE</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Used when the file mime type is not allowed.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Methods:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">openFileSelector</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Method to open NgtDropzone file selector.</p>
+            </div>
+        </div>
+    </div>
+</ngt-portlet>
