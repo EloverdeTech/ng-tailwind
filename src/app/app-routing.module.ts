@@ -57,6 +57,10 @@ const routes: Routes = [
         "path": "ngt-dropzone",
         "loadChildren": () => import('src/app/pages/form-components/ngt-dropzone-page/ngt-dropzone-page.module').then(m => m.NgtDropzonePageModule)
       },
+      {
+        "path": "ngt-form",
+        "loadChildren": () => import('src/app/pages/form-components/ngt-form-page/ngt-form-page.module').then(m => m.NgtFormPageModule)
+      },
 
       /** Table Components */
       // {
