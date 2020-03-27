@@ -11,18 +11,19 @@ import {
   TemplateRef,
   ViewChild,
   ViewEncapsulation,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { Observable, Observer, Subject } from 'rxjs';
-
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { uuid } from '../../helpers/uuid';
 import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
-import { NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } from './ngt-select.directive';
+import { NgtSelectOptionSelectedTmp, NgtSelectOptionTmp, NgtSelectHeaderTmp } from './ngt-select.directive';
 
 @Component({
   selector: 'ngt-select',
@@ -36,10 +37,11 @@ import { NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } from './ngt-select.dir
   ],
   encapsulation: ViewEncapsulation.None
 })
-export class NgtSelectComponent extends NgtBaseNgModel {
+export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
 
   @ContentChild(NgtSelectOptionTmp, { static: false, read: TemplateRef }) ngtOptionTemplate: TemplateRef<any>;
   @ContentChild(NgtSelectOptionSelectedTmp, { static: false, read: TemplateRef }) ngtOptionSelectedTemplate: TemplateRef<any>;
+  @ContentChild(NgtSelectHeaderTmp, { static: false, read: TemplateRef }) ngtSelectHeaderTemplate: TemplateRef<any>;
   @ViewChild(NgSelectComponent, { static: true }) ngSelectComponent: NgSelectComponent;
 
   // component options
@@ -75,13 +77,13 @@ export class NgtSelectComponent extends NgtBaseNgModel {
   @Input() hideSelected: boolean
   @Input() notFoundText: string
   @Input() searchable: boolean = true;
-  @Input() searchFn: Function;
   @Input() trackBy: (item: any) => any;
   @Input() clearSearchOnAdd: boolean = true;
   @Input() typeahead: Subject<any>;
   @Input() typeToSearchText: string = 'Digite para procurar...';
   @Input() virtualScroll: boolean = true;
   @Input() tabIndex: number;
+  @Input() dropdownPosition = 'auto';
 
   public ngtStyle: NgtStylizableService;
   public ngSelectItems: any = [];
@@ -157,18 +159,25 @@ export class NgtSelectComponent extends NgtBaseNgModel {
     if (this.remoteResource) {
       this.ngSelectItems = Observable.create(observer => {
         this.ngSearchObserver = observer;
-        this.coloquentSearch({});
+        this.search({});
       });
 
       this.typeahead = new Subject();
       this.typeahead.subscribe((term) => {
-        this.coloquentSearch({ term: term });
+        this.search({ term: term });
       });
 
     } else if (this.items instanceof Observable) {
       this.ngSelectItems = this.items;
     } else {
-      this.ngSelectItems = Observable.create(observer => observer.next(this.items));
+      if (!this.items) {
+        this.items = [];
+      }
+
+      this.ngSelectItems = new Observable((observer) => {
+        this.ngSearchObserver = observer;
+        observer.next(this.items);
+      });
     }
   }
 
@@ -189,8 +198,12 @@ export class NgtSelectComponent extends NgtBaseNgModel {
     });
   }
 
-  coloquentSearch(filters) {
+  search(filters) {
     this.currentState.filters = { ...this.currentState.filters, ...filters };
+
+    if (!this.remoteResource) {
+      return;
+    }
 
     setTimeout(() => {
       this.loading = true;
@@ -237,7 +250,7 @@ export class NgtSelectComponent extends NgtBaseNgModel {
 
     if (end >= currentPerPage && end <= maxItensInBackend) {
       this.currentState.pagination.per_page = parseInt(this.currentState.pagination.per_page) + this.originalPerPage;
-      this.coloquentSearch({});
+      this.search({});
     }
   }
 
@@ -282,6 +295,10 @@ export class NgtSelectComponent extends NgtBaseNgModel {
   ngOnChanges(changes) {
     if (changes.isRequired) {
       this.updateValidations();
+    }
+
+    if (changes.remoteResource || changes.items) {
+      this.initNgSelectItems();
     }
   }
 

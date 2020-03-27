@@ -121,4 +121,16 @@ export class NgtPaginationComponent {
       this.pages.push(i);
     }
   }
+
+  public resetPagination() {
+    this.pagination = {
+      count: null,
+      page: 1,
+      pages: null,
+      total: null,
+      from: null,
+      to: null,
+      per_page: null
+    };
+  }
 }

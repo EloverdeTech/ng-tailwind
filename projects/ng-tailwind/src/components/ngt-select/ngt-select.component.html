@@ -13,11 +13,16 @@
             [notFoundText]="notFoundText" [searchable]="searchable" [disabled]='isDisabled'
             [clearable]="clearable && hasSelectedValue()" [closeOnSelect]="closeOnSelect" [trackByFn]="trackBy"
             [labelForId]="labelForId" [clearSearchOnAdd]="clearSearchOnAdd" [typeahead]="typeahead"
-            [typeToSearchText]="typeToSearchText" [placeholder]="placeholder" dropdownPosition="auto"
+            [typeToSearchText]="typeToSearchText" [placeholder]="placeholder" [dropdownPosition]="dropdownPosition"
             [groupBy]="groupBy" [clearAllText]="clearAllText" [virtualScroll]="virtualScroll" [tabIndex]="tabIndex"
             [items]="ngSelectItems | async" (scroll)="onScroll($event)" [bindValue]="bindValue"
             [groupValue]="groupValue" [loading]="loading" [loadingText]="loadingText"
             [maxSelectedItems]="maxSelectedItems" (clear)='onClearSelect()'>
+
+            <ng-template *ngIf='ngtSelectHeaderTemplate' ng-header-tmp>
+                <ng-template [ngTemplateOutlet]="ngtSelectHeaderTemplate">
+                </ng-template>
+            </ng-template>
 
             <ng-template ng-label-tmp let-item="item" let-index="index" let-search="searchTerm">
                 <ng-template *ngIf='ngtOptionSelectedTemplate' [ngTemplateOutlet]="ngtOptionSelectedTemplate"
