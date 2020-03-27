@@ -1,0 +1,23 @@
+<div class="flex flex-col w-full bg-gray-100 rounded-lg px-6 py-6">
+    <p>
+        * The styling service is used to provide custom styles to components by dependency injection.
+        <br><br>
+        * Can be provided directly in the component's tag using the ngt-stylizable directive or from your
+        aplication main module.
+        <br><br>
+        * When provided in the main module, styling will be adopted as a standard for all components related to it.        
+        You will need the style name to provide for the right component.
+    </p>
+
+    <br>
+    <p class="font-semibold">Providing via Directive:</p>
+    <div class="p-6 flex justify-start w-full">
+        <code-preview class="w-full">{{ getCodeDirectiveExample() }}</code-preview>
+    </div>
+
+    <br><br>
+    <p class="font-semibold">Providing via Module:</p>
+    <div class="p-6 flex justify-start w-full">
+        <code-preview class="w-full" lang="typescript">{{ getCodeModuleExample() }}</code-preview>
+    </div>
+</div>
