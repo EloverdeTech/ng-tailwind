@@ -7,7 +7,7 @@ import { uuid } from '../../helpers/uuid';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 const Brazil = require("flatpickr/dist/l10n/pt.js").default.pt;
-const US = require("flatpickr/dist/l10n/pt.js").default.us;
+const US = require("flatpickr/dist/l10n/default.js").default;
 var moment = require('moment');
 
 @Component({
