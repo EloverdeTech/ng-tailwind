@@ -1,0 +1,303 @@
+<ngt-portlet class="block w-full" icon="assets/images/icons/list.svg" caption='Ngt Select'>
+    <div body>
+        <p>Component used for select an option in forms.</p>
+        <br>
+
+        <p class="pb-4 font-semibold">Examples:</p>
+
+        <div class="flex flex-col border rounded-lg py-2">
+            <form class="flex flex-col w-full pb-2 border-b">
+                <div class="flex flex-col w-full px-8 mt-2">
+                    <ngt-select class='block w-full' [items]='exampleItems' bindLabel='text' label='Ngt Select'
+                        name='ngtSelect' [(ngModel)]="ngtSelect" [searchable]='false'>
+                        <ng-template let-item="item" let-index="index" ngt-select-option>
+                            {{  item ? item.fontendText : '' }}
+                        </ng-template>
+                    </ngt-select>
+
+                    <span class="my-2 font-semibold text-sm">
+                        NgModel value: <span class="font-normal">{{ ngtSelect | json }}</span>
+                    </span>
+                </div>
+
+                <div class="flex flex-col w-full px-8 mt-6">
+                    <ngt-select class='block w-full' [items]='exampleItems' bindLabel='text' label='Ngt Select Multiple'
+                        name='ngtSelectMultiple' [(ngModel)]="ngtSelectMultiple" [multiple]='true' [searchable]='false'>
+                        <ng-template let-item="item" let-index="index" ngt-select-option>
+                            {{  item ? item.fontendText : '' }}
+                        </ng-template>
+                    </ngt-select>
+
+                    <span class="my-2 font-semibold text-sm">
+                        NgModel value: <span class="font-normal">{{ ngtSelectMultiple | json }}</span>
+                    </span>
+                </div>
+            </form>
+
+            <div class="p-6 w-full flex justify-center">
+                <code-preview class="max-w-full w-full">{{ codeExample }}</code-preview>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Visual Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">label</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Component label.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">placeholder</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Component placeholder.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">helpTitle</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Component help title.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">helpText</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Determines if help text is enable.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">shining</p>
+                <p class="w-8/12 py-3 px-4 bg-white">When true, the component will display a shining mode.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">loading</p>
+                <p class="w-8/12 py-3 px-4 bg-white">When true, the component will display a loading mode.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">loadingText</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Text displayed during loading.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">notFoundText</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Text displayed when the result not founded.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">dropdownPosition</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Set the dropdown position on open. Can be:
+                    <span class="font-semibold"> auto, bottom and top</span>.
+                    <span class="font-semibold"> Default is auto</span>.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">typeToSearchText</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Placeholder text for search.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">clearAllTooltip</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Tooltip text for clear selected options.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">createText</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Set custom text when allow creating.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">labelForId</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Id to associate control with label.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Behavior Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">isDisabled</p>
+                <p class="w-8/12 py-3 px-4 bg-white">When true, the component will be disabled.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">name</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Name used by NgModel. Must be unique.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">remoteResource</p>
+                <p class="w-8/12 py-3 px-4 bg-white">The resource used to make remote requests.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">hideSelected</p>
+                <p class="w-8/12 py-3 px-4 bg-white">When true, hide the selected elements.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">allowCreate</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Allows to create custom options.
+                    <span class="font-semibold"> Default false</span>.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">bindLabel</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    When the component is used in a way that its items are static, that is, passed in
+                    <span class="font-semibold"> @Input() items</span>,
+                    bindLabel defines the object property that should be used in the provided object to obtain the text
+                    that should be displayed to the user for each item in the array.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">bindValue</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Object property to use for selected model. By default binds to whole object.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">items</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Array de itens utilizado para renderizar opções estáticas.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">closeOnSelect</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Whether to close the menu when a value is selected.
+                    <span class="font-semibold"> Default true</span>.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">clearable</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Allow to clear selected value.
+                    <span class="font-semibold"> Default true</span>.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">groupBy</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Allow to group items by key or function expression.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">groupValue</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Function expression to provide group value.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">maxSelectedItems</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    When multiple is true, allows to set a limit number of selection.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">multiple</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Allows to select multiple items.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">searchable</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Allow to search for value.
+                    <span class="font-semibold"> Default true</span>.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">clearSearchOnAdd</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Clears search input when item is selected.
+                    <span class="font-semibold"> Default true. Default false when closeOnSelect is false</span>.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">virtualScroll</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Enable virtual scroll for better performance when rendering a lot of data.
+                    <span class="font-semibold"> Default true</span>.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">trackBy</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Provide custom trackBy function.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">tabIndex</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Set tabindex on NgtSelect.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">typeahead</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Custom autocomplete or advanced filter.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Validation Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">isRequired</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Determines whether the field is required.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Methods:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">setFocus</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Focuses the NgtSelect.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">NgtStylizableService and NgtStylizableDirective:</p>
+
+        <ngt-stylizable-template tagName='ngt-select' styleName='NgtSelectStyle'></ngt-stylizable-template>
+    </div>
+</ngt-portlet>
