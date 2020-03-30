@@ -1,0 +1,258 @@
+<ngt-portlet class="block w-full" icon="assets/images/icons/keyboard.svg" caption='Ngt Input'>
+    <div body>
+        <p>Component used for text entry in forms.</p>
+        <br>
+
+        <p class="pb-4 font-semibold">Examples:</p>
+
+        <div class="flex flex-col border rounded-lg py-2">
+            <form class="flex flex-col w-full pb-2 border-b">
+                <div class="flex flex-col w-full px-8 mt-2">
+                    <ngt-input class="block" [jit]='true' name='allowClearInput' [(ngModel)]="allowClearInput"
+                        label='Allow Clear Input' [isRequired]='true' [allowClear]='true'>
+                    </ngt-input>
+                    <span class="my-2 font-semibold text-sm">
+                        NgModel value: <span class="font-normal">{{ allowClearInput }}</span>
+                    </span>
+                </div>
+
+                <div class="flex flex-col w-full px-8 mt-6">
+                    <ngt-input class="block" name='decimalInput' [(ngModel)]="decimalInput" label='Decimal Input'
+                        innerLeftIcon='assets/images/icons/keyboard.svg' mask='decimal'>
+                    </ngt-input>
+                    <span class="my-2 font-semibold text-sm">
+                        NgModel value: <span class="font-normal">{{ decimalInput }}</span>
+                    </span>
+                </div>
+
+                <div class="flex flex-col w-full px-8 mt-6">
+                    <ngt-input class="block" name='cpfCnpj' label='CPF/CNPJ' [(ngModel)]="cpfCnpj" mask='cnpj-cpf'
+                        innerRightIcon='assets/images/icons/clipboard.svg'>
+                    </ngt-input>
+                    <span class="my-2 font-semibold text-sm">
+                        NgModel value: <span class="font-normal">{{ cpfCnpj }}</span>
+                    </span>
+                </div>
+
+                <div class="flex w-full px-8 mt-6">
+                    <div class="flex flex-col w-6/12 pr-8">
+                        <ngt-input class="block" name='passwordInput' label='Password' type='password'
+                            [(ngModel)]="password">
+                        </ngt-input>
+
+                        <span class="my-2 font-semibold text-sm">
+                            NgModel value: <span class="font-normal">{{ password }}</span>
+                        </span>
+                    </div>
+
+                    <div class="flex flex-col w-6/12">
+                        <ngt-input class="block" name='passwordConfirm' label='Password Confirm' type='password'
+                            [(ngModel)]="passwordConfirm" [match]='password'>
+                        </ngt-input>
+
+                        <span class="my-2 font-semibold text-sm">
+                            NgModel value: <span class="font-normal">{{ passwordConfirm }}</span>
+                        </span>
+                    </div>
+                </div>
+            </form>
+
+            <div class="p-6 w-full flex justify-center">
+                <code-preview class="max-w-full w-full">{{ codeExample }}</code-preview>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Visual Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">label</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Input label.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">placeholder</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Input placeholder.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">shining</p>
+                <p class="w-8/12 py-3 px-4 bg-white">When true, the component will display a shining mode.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">loading</p>
+                <p class="w-8/12 py-3 px-4 bg-white">When true, the component will display a loading mode.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">helpTitle</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Component help title.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">helpText</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Determines if help text is enable.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">innerLeftIcon</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Internal icon displayed at start of the input.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">innerRightIcon</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Internal icon displayed at end of the input.</p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Behavior Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">isDisabled</p>
+                <p class="w-8/12 py-3 px-4 bg-white">When true, the component will be disabled.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">isReadonly</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    When true, the component will be readonly.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">type</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Determines the type of input expected by the component. Can be:
+                    <span class="font-semibold"> text, email and password</span>.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">name</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Name used by NgModel. Must be unique.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">mask</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Apply a mask to the component according to your need. Can be:
+                    <span class="font-semibold"> cnpj-cpf, time, cellphone, plate, cep, decimal and integer</span>.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">focus</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Focuses input automatically after view init.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">allowClear</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    When true, the input can be clear by clicking in the clear icon of the component.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">jit</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    When true, the ng model will be updated at typing time.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Validation Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">isRequired</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Determines whether the field is required.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">uniqueResource</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Used when you want to have only one record with a certain value.
+                    <br><br>
+                    The single record must be passed to this @Input() for validation to take place.
+                    <br><br>
+                    The validation will be done through the
+                    <span class="font-semibold"> NgtHttpValidationService</span>
+                    service that must be provided to the component.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">minValue</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Determines a minimum number value to be provided.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">max</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Determines the highest accepted value when using a integer mask.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">maxlength</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Defines the maximum number of characters accepted.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">match</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Used when the value of an entry must be identical to that of another input. For example, a password
+                    confirmation.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">multipleOf</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Only accepts values ​​that are multiples of the value provided for @Input().
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">multipleOf</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Only accepts values ​​that are multiples of the value provided for @Input().
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Methods:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">setFocus</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Focuses the input.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">clearInput</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Clears the input value.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">NgtStylizableService and NgtStylizableDirective:</p>
+
+        <ngt-stylizable-template tagName='ngt-input' styleName='NgtInputStyle'></ngt-stylizable-template>
+    </div>
+</ngt-portlet>
