@@ -41,9 +41,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
   @Input() placeholder: string = "";
   @Input() shining: boolean = false;
   @Input() loading: boolean = false;
-  @Input() helpTitle: string = 'Ajuda';
+  @Input() helpTitle: string = 'Help';
   @Input() helpText: boolean = false;
-  @Input() outerIcon = null;
   @Input() innerLeftIcon: string = null;
   @Input() innerRightIcon: string = null;
 
@@ -77,7 +76,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
 
   constructor(
     private injector: Injector,
-    @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective,
+    @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
     @Optional() @Host()
     public formContainer: ControlContainer,
     @Optional() @SkipSelf()
@@ -96,8 +95,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
       });
     }
 
-    if (this.tailStylizableDirective) {
-      this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
+    if (this.ngtStylizableDirective) {
+      this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
     } else {
       this.ngtStyle = new NgtStylizableService();
     }
@@ -107,7 +106,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
       color: {
         border: 'border-gray-400 focus:border-gray-700',
         bg: 'bg-bg-white focus:bg-white',
-        text: 'text-black'
+        text: 'text-gray-800'
       }
     });
   }
@@ -550,7 +549,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     return value;
   }
 
-  clearInput() {
+  public clearInput() {
     this.element.nativeElement.value = '';
     this.value = '';
   }
