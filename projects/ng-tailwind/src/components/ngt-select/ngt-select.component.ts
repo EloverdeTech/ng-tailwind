@@ -5,25 +5,25 @@ import {
   Host,
   Injector,
   Input,
+  OnChanges,
   Optional,
   Self,
   SkipSelf,
   TemplateRef,
   ViewChild,
   ViewEncapsulation,
-  OnChanges,
-  SimpleChanges,
 } from '@angular/core';
 import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { Observable, Observer, Subject } from 'rxjs';
+
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { uuid } from '../../helpers/uuid';
 import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
-import { NgtSelectOptionSelectedTmp, NgtSelectOptionTmp, NgtSelectHeaderTmp } from './ngt-select.directive';
+import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } from './ngt-select.directive';
 
 @Component({
   selector: 'ngt-select',
@@ -44,46 +44,45 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
   @ContentChild(NgtSelectHeaderTmp, { static: false, read: TemplateRef }) ngtSelectHeaderTemplate: TemplateRef<any>;
   @ViewChild(NgSelectComponent, { static: true }) ngSelectComponent: NgSelectComponent;
 
-  // component options
+  // Visual
   @Input() label: string = '';
-  @Input() create: boolean = false;
-  @Input() createText: string = 'Adicionar ';
-  @Input() isRequired: boolean = false;
-  @Input() isDisabled: boolean = false;
-  @Input() name: string;
   @Input() helpTitle: string;
   @Input() helpText: string;
-  @Input() remoteResource: any;
-  @Input() resourceFilters: Object = {};
   @Input() shining = false;
+  @Input() loading: boolean = false;
+  @Input() loadingText: string = "Carregando resultados...";
+  @Input() notFoundText: string;
+  @Input() dropdownPosition = 'auto';
+  @Input() typeToSearchText: string = 'Digite para procurar...';
+  @Input() clearAllTooltip: string = 'Limpar seleção';
+  @Input() placeholder: string = 'Selecione...';
+  @Input() createText: string = 'Adicionar ';
+  @Input() labelForId: string = '';
 
+  // Behavior
+  @Input() name: string;
+  @Input() allowCreate: boolean = false;
+  @Input() isDisabled: boolean = false;
+  @Input() remoteResource: any;
+  @Input() hideSelected: boolean;
   @Input() bindLabel: string = 'name';
   @Input() bindValue: string = undefined;
   @Input() items: Array<any> | Observable<any> = [];
-  @Input() asyncSearch: boolean = false;
   @Input() closeOnSelect: boolean = true;
   @Input() clearable: boolean = true;
-  @Input() clearAllText: string = 'Limpar seleção';
-  @Input() placeholder: string = 'Selecione...';
-  @Input() compareWith: boolean | (() => boolean) = false;
   @Input() groupBy: string | Function = null;
   @Input() groupValue: (groupKey: string, cildren: any[]) => Object;
-  @Input() loading: boolean = false;
-  @Input() loadingText: string = "Carregando resultados...";
-  @Input() labelForId: string = '';
-  @Input() markFirst: boolean = false;
   @Input() maxSelectedItems: number = undefined;
   @Input() multiple: boolean = false;
-  @Input() hideSelected: boolean
-  @Input() notFoundText: string
   @Input() searchable: boolean = true;
-  @Input() trackBy: (item: any) => any;
   @Input() clearSearchOnAdd: boolean = true;
-  @Input() typeahead: Subject<any>;
-  @Input() typeToSearchText: string = 'Digite para procurar...';
   @Input() virtualScroll: boolean = true;
+  @Input() trackBy: (item: any) => any;
   @Input() tabIndex: number;
-  @Input() dropdownPosition = 'auto';
+  @Input() typeahead: Subject<any>;
+
+  // Validation
+  @Input() isRequired: boolean = false;
 
   public ngtStyle: NgtStylizableService;
   public ngSelectItems: any = [];
@@ -198,7 +197,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     });
   }
 
-  search(filters) {
+  search(filters: any) {
     this.currentState.filters = { ...this.currentState.filters, ...filters };
 
     if (!this.remoteResource) {
@@ -254,10 +253,6 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     }
   }
 
-  addNewItem(name) {
-
-  }
-
   hasSelectedValue() {
     return this.value && JSON.stringify(this.value);
   }
@@ -302,7 +297,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     }
   }
 
-  setFocus() {
+  public setFocus() {
     setTimeout(() => {
       this.ngSelectComponent.focus();
     });
