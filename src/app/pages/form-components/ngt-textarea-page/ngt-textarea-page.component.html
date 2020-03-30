@@ -1,0 +1,139 @@
+<ngt-portlet class="block w-full" icon="assets/images/icons/keyboard.svg" caption='Ngt Textarea'>
+    <div body>
+        <p>Component used for text entry in forms.</p>
+        <br>
+
+        <p class="pb-4 font-semibold">Examples:</p>
+
+        <div class="flex flex-col border rounded-lg py-2">
+            <form class="flex flex-col w-full pb-2 border-b">
+                <div class="flex flex-col w-full px-8 mt-2">
+                    <ngt-textarea class="block" [jit]='true' name='ngtTextarea' [(ngModel)]="ngtTextarea"
+                        label='Ngt Textarea' placeholder='Type it...' rows='4' [isRequired]='true'>
+                    </ngt-textarea>
+                    <span class="my-2 font-semibold text-sm">
+                        NgModel value: <span class="font-normal">{{ ngtTextarea }}</span>
+                    </span>
+                </div>
+            </form>
+
+            <div class="p-6 w-full flex justify-center">
+                <code-preview class="max-w-full w-full">{{ codeExample }}</code-preview>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Visual Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">label</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Textarea label.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">placeholder</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Textarea placeholder.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">shining</p>
+                <p class="w-8/12 py-3 px-4 bg-white">When true, the component will display a shining mode.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">rows</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Defines the number of predefined lines to be displayed in the component.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">helpTitle</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Component help title.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">helpText</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Determines if help text is enable.</p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Behavior Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">isDisabled</p>
+                <p class="w-8/12 py-3 px-4 bg-white">When true, the component will be disabled.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">isReadonly</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    When true, the component will be readonly.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">name</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Name used by NgModel. Must be unique.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">focus</p>
+                <p class="w-8/12 py-3 px-4 bg-white">Focuses textarea automatically after view init.</p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">jit</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    When true, the ng model will be updated at typing time.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Validation Inputs:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">isRequired</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Determines whether the field is required.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">maxlength</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Defines the maximum number of characters accepted.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">Methods:</p>
+
+        <div class="flex flex-col text-gray-800">
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">setFocus</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Focuses the NgtTextarea.
+                </p>
+            </div>
+
+            <div class="flex w-full items-center border bg-gray-200">
+                <p class="text-center w-4/12 border-r py-3 px-4 font-semibold">clear</p>
+                <p class="w-8/12 py-3 px-4 bg-white">
+                    Clears the textarea value.
+                </p>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">NgtStylizableService and NgtStylizableDirective:</p>
+
+        <ngt-stylizable-template tagName='ngt-textarea' styleName='NgtTextareaStyle'></ngt-stylizable-template>
+    </div>
+</ngt-portlet>

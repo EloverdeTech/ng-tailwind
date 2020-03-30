@@ -61,6 +61,18 @@ const routes: Routes = [
         "path": "ngt-form",
         "loadChildren": () => import('src/app/pages/form-components/ngt-form-page/ngt-form-page.module').then(m => m.NgtFormPageModule)
       },
+      {
+        "path": "ngt-input",
+        "loadChildren": () => import('src/app/pages/form-components/ngt-input-page/ngt-input-page.module').then(m => m.NgtInputPageModule)
+      },
+      {
+        "path": "ngt-select",
+        "loadChildren": () => import('src/app/pages/form-components/ngt-select-page/ngt-select-page.module').then(m => m.NgtSelectPageModule)
+      },
+      {
+        "path": "ngt-textarea",
+        "loadChildren": () => import('src/app/pages/form-components/ngt-textarea-page/ngt-textarea-page.module').then(m => m.NgtTextareaPageModule)
+      },
 
       /** Table Components */
       // {

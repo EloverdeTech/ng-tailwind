@@ -1,7 +1,21 @@
-import { Component, ElementRef, Host, Input, OnInit, Optional, Renderer2, SkipSelf, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Host,
+  Injector,
+  Input,
+  OnInit,
+  Optional,
+  Renderer2,
+  Self,
+  SkipSelf,
+  ViewChild,
+} from '@angular/core';
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 @Component({
@@ -18,7 +32,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
   @ViewChild("element", { static: true }) element: ElementRef;
 
-  //Visual
+  // Visual
   @Input() label: string = "";
   @Input() placeholder: string = "";
   @Input() rows: string = "3";
@@ -26,20 +40,23 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
   @Input() helpText = false;
   @Input() shining = false;
 
-  //Comportamento
+  // Behavior
   @Input() name: string;
   @Input() isDisabled: boolean = false;
   @Input() isReadonly: boolean = false;
   @Input() jit: boolean = false;
   @Input() focus: boolean = false;
 
-  //Validações
+  // Validation
   @Input() isRequired: boolean = false;
-  @Input() maxlength: number;
+  @Input() maxlength: number = 300;
 
   public componentReady = false;
+  public ngtStyle: NgtStylizableService;
 
   constructor(
+    private injector: Injector,
+    @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
     @Optional() @Host()
     public formContainer: ControlContainer,
     @Optional() @SkipSelf()
@@ -53,6 +70,20 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
         this.shining = shining;
       });
     }
+
+    if (this.ngtStylizableDirective) {
+      this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+    } else {
+      this.ngtStyle = new NgtStylizableService();
+    }
+
+    this.ngtStyle.load(this.injector, 'NgtTextarea', {
+      color: {
+        border: 'border-gray-400 focus:border-gray-700',
+        bg: 'bg-bg-white focus:bg-white',
+        text: 'text-gray-800'
+      }
+    });
   }
 
   private initComponent() {
@@ -77,10 +108,13 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
         });
       });
 
-      this.renderer.listen(this.element.nativeElement, "keydown", () => {
+      this.renderer.listen(this.element.nativeElement, "keydown", (event) => {
         if (this.element.nativeElement && this.element.nativeElement.value && this.element.nativeElement.value.length == this.maxlength) {
-          event.preventDefault();
-          return false;
+          // Backspace and delete
+          if (event.keyCode != 8 && event.keyCode != 46) {
+            event.preventDefault();
+            return false;
+          }
         }
       });
 
@@ -90,7 +124,6 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
         this.formControl.markAsDirty();
       } else {
         this.formControl.markAsPristine();
-        this.value = '';
       }
     } else {
       console.warn("The element must contain a ngModel property", this.element.nativeElement);
@@ -122,6 +155,11 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
     setTimeout(() => {
       this.element.nativeElement.focus();
     }, 200);
+  }
+
+  public clear() {
+    this.element.nativeElement.value = '';
+    this.value = '';
   }
 
   ngOnChanges(changes) {
