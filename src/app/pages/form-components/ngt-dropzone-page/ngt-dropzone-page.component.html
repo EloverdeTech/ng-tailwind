@@ -21,7 +21,7 @@
                             label='Select or drop a photo' (onFileSelectError)='onFileSelectError($event)'>
                         </ngt-dropzone>
                         <span class="my-2 font-semibold text-sm text-center">
-                            NgModel value: <span class="font-normal">{{ ngModelOne }}</span>
+                            NgModel value: <span class="font-normal">{{ ngModelOne | json }}</span>
                         </span>
                     </div>
 
@@ -31,7 +31,7 @@
                             [maxFileSize]='10000000' (onFileSelectError)='onFileSelectError($event)'>
                         </ngt-dropzone>
                         <span class="my-2 font-semibold text-sm text-center">
-                            NgModel value: <span class="font-normal">{{ ngModelTwo }}</span>
+                            NgModel value: <span class="font-normal">{{ ngModelTwo | json }}</span>
                         </span>
                     </div>
                 </div>
