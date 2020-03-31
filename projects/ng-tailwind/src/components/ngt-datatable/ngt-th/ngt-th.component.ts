@@ -25,6 +25,7 @@ export class NgtThComponent implements OnChanges {
   @ViewChild('modal', { static: true }) modal: TemplateRef<any>;
 
   @Input() reference: string;
+  @Input() sortReference: string;
   @Input() sortable: boolean;
   @Input() searchable: boolean;
   @Input() hasCustomSearch: boolean = false;
@@ -49,7 +50,7 @@ export class NgtThComponent implements OnChanges {
   ) {
     if (this.checkDataTable()) {
       this.ngtDataTable.onDataChange.subscribe(() => {
-        this.isCurrentSort = this.ngtDataTable.getCurrentSort().field == this.reference;
+        this.isCurrentSort = this.ngtDataTable.getCurrentSort().field == this.getSortReference();
         if (this.isCurrentSort) {
           this.sortDirection = this.ngtDataTable.getCurrentSort().direction;
         }
@@ -73,8 +74,9 @@ export class NgtThComponent implements OnChanges {
   public async sort() {
     if (this.sortable && this.checkDataTable() && this.checkReference()) {
       let sortDirection = this.getNextSortDirection();
+
       if (sortDirection) {
-        await this.ngtDataTable.sort(this.reference, sortDirection);
+        await this.ngtDataTable.sort(this.getSortReference(), sortDirection);
       } else {
         this.ngtDataTable.sort('', '');
       }
@@ -97,6 +99,10 @@ export class NgtThComponent implements OnChanges {
   }
 
   public search(term: any) {
+    if (this.searchTerm === undefined && this.customSearchTerm === undefined && !term) {
+      return;
+    }
+
     if (this.searchable && this.reference) {
       let filter = {};
       filter[this.reference] = term;
@@ -122,6 +128,10 @@ export class NgtThComponent implements OnChanges {
     return '';
   }
 
+  private getSortReference() {
+    return this.sortReference ? this.sortReference : this.reference;
+  }
+
   private checkDataTable() {
     if (!this.ngtDataTable) {
       console.error('The [ngt-th] must be inside of a [ngt-datatable]');
@@ -132,8 +142,8 @@ export class NgtThComponent implements OnChanges {
   }
 
   private checkReference() {
-    if (!this.reference) {
-      console.error('The [ngt-th] must have a [reference] property to be able to sort');
+    if (!this.reference && !this.sortReference) {
+      console.error('The [ngt-th] must have a [reference] or a [sortReference] property to be able to sort');
       return false;
     }
 
