@@ -182,6 +182,24 @@ export class NgtStylizableDirective {
 
   @Input('ml')
   set ml(ml: string) {
-    this.ml = this.ngtStylizableService.ml;
+    this.ngtStylizableService.ml = ml;
+  }
+
+  get border(): string {
+    return this.ngtStylizableService.border;
+  }
+
+  @Input('border')
+  set border(border: string) {
+    this.ngtStylizableService.border = border;
+  }
+
+  get shadow(): string {
+    return this.ngtStylizableService.shadow;
+  }
+
+  @Input('shadow')
+  set shadow(shadow: string) {
+    this.ngtStylizableService.shadow = shadow;
   }
 }
