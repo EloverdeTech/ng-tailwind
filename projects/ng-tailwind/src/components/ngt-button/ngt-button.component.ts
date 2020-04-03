@@ -67,26 +67,38 @@ export class NgtButtonComponent implements OnChanges {
       if (changes.type.currentValue == 'success') {
         this.ngtStyle.load(this.injector, 'NgtSuccessButton', {
           color: {
-            bg: 'bg-green-500'
-          }
+            bg: 'bg-green-500',
+            text: 'text-white text-sm',
+          },
+          px: 'px-4',
+          py: 'py-2'
         });
       } else if (changes.type.currentValue == 'warning') {
         this.ngtStyle.load(this.injector, 'NgtWarningButton', {
           color: {
-            bg: 'bg-orange-500'
-          }
+            bg: 'bg-orange-500',
+            text: 'text-white text-sm',
+          },
+          px: 'px-4',
+          py: 'py-2'
         });
       } else if (changes.type.currentValue == 'danger') {
         this.ngtStyle.load(this.injector, 'NgtDangerButton', {
           color: {
-            bg: 'bg-red-500'
-          }
+            bg: 'bg-red-500',
+            text: 'text-white text-sm',
+          },
+          px: 'px-4',
+          py: 'py-2'
         });
       } else {
         this.ngtStyle.load(this.injector, 'NgtInfoButton', {
           color: {
-            bg: 'bg-blue-500'
-          }
+            bg: 'bg-blue-500',
+            text: 'text-white text-sm',
+          },
+          px: 'px-4',
+          py: 'py-2'
         });
       }
     }

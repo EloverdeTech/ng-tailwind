@@ -6,7 +6,7 @@
     <ng-container *ngIf='!link'>
         <button (click)='onClick($event)' [type]="(loading || isDisabled || noSubmit) ? 'button' : 'submit'"
             [disabled]="isDisabled"
-            class="{{ getClass() }} {{ ngtStyle.compile(['color.bg']) }} h-full w-full focus:outline-none flex align-items-center font-normal py-2 px-4 rounded text-sm text-white">
+            class="{{ getClass() }} {{ ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border']) }} h-full w-full focus:outline-none flex align-items-center font-normal rounded">
             <ng-container *ngTemplateOutlet="content"></ng-container>
             <span *ngIf="loading" class="ml-1">
                 <svg class="fill-current self-center flex ngt-rotate-center-infinity" xmlns="http://www.w3.org/2000/svg"
