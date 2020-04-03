@@ -1,5 +1,5 @@
 <a [class]="isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'" [routerLink]='href' (click)='onClick($event)'>
-    <div class="flex align-items-center justify-center rounded-full {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py']) }}">
+    <div class="flex align-items-center justify-center rounded-full {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py', 'shadow']) }}">
         <ngt-svg [src]="icon" class='self-center' *ngIf="icon"></ngt-svg>
         <div class="self-center">
             <ng-content></ng-content>
