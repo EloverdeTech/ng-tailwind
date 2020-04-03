@@ -19,6 +19,8 @@ export class NgtStylizableService {
     private _mr: string;
     private _mb: string;
     private _ml: string;
+    private _border: string;
+    private _shadow: string;
 
     get color() {
         return this._color;
@@ -183,6 +185,22 @@ export class NgtStylizableService {
         this._ml = this.getQualifiedValue('ml-', ml);
     }
 
+    get border(): string {
+        return this._border;
+    }
+
+    set border(border: string) {
+        this._border = this.getQualifiedValue('border', border);
+    }
+
+    get shadow(): string {
+        return this._shadow;
+    }
+
+    set shadow(shadow: string) {
+        this._shadow = this.getQualifiedValue('shadow', shadow);
+    }
+
     public load(injector: Injector, style: string, defaultValue = null, inheritanceStyles = []) {
         let ngtGlobalStyle = injector.get('NgtStyleGlobal', {});
         defaultValue = defaultValue ? defaultValue : {};
@@ -253,6 +271,8 @@ export class NgtStylizableService {
                     'mr',
                     'mb',
                     'ml',
+                    'border',
+                    'shadow',
                 ].includes(key);
             });
         }
