@@ -80,6 +80,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
   @Input() trackBy: (item: any) => any;
   @Input() tabIndex: number;
   @Input() typeahead: Subject<any>;
+  @Input() compareWith = (a, b) => a === b;
 
   // Validation
   @Input() isRequired: boolean = false;

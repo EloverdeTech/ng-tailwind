@@ -17,7 +17,8 @@
             [dropdownPosition]="dropdownPosition" [groupBy]="groupBy" [clearAllText]="clearAllTooltip"
             [virtualScroll]="virtualScroll" [tabIndex]="tabIndex" [items]="ngSelectItems | async"
             (scroll)="onScroll($event)" [bindValue]="bindValue" [groupValue]="groupValue" [loading]="loading"
-            [loadingText]="loadingText" [maxSelectedItems]="maxSelectedItems" (clear)='onClearSelect()'>
+            [loadingText]="loadingText" [maxSelectedItems]="maxSelectedItems" [compareWith]='compareWith'
+            (clear)='onClearSelect()'>
 
             <ng-template *ngIf='ngtSelectHeaderTemplate' ng-header-tmp>
                 <ng-template [ngTemplateOutlet]="ngtSelectHeaderTemplate">
