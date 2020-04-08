@@ -23,8 +23,7 @@ export class NgtSidenavComponent implements AfterViewInit {
   public open: boolean = false;
   public isMenuContracted: boolean = false;
   public ngtStyle: NgtStylizableService;
-
-  private screenHeight: number;
+  
   private screenWidth: number;
 
   constructor(
@@ -111,7 +110,6 @@ export class NgtSidenavComponent implements AfterViewInit {
 
   @HostListener('window:resize', ['$event'])
   bindScreenSize(event?) {
-    this.screenHeight = window.innerHeight;
     this.screenWidth = window.innerWidth;
   }
 
@@ -120,6 +118,6 @@ export class NgtSidenavComponent implements AfterViewInit {
       return false;
     }
 
-    return this.screenWidth < 1024 || this.screenHeight < 620;
+    return this.screenWidth < 1024;
   }
 }
