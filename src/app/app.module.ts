@@ -43,6 +43,7 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
         mx: 'mx-3 md:mx-6',
         my: 'my-8',
         h: 'h-auto',
+        shadow: 'shadow-lg'
       }
     },
     {
