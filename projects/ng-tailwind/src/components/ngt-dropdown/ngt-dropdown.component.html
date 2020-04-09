@@ -1,5 +1,5 @@
 <section class='flex max-w-xs'>
-    <div class="sm:relative">
+    <div class="sm:relative w-full">
         <!-- Label -->
         <div (mouseenter)="onHover(host, container)" (click)="onClick()" #host>
             <ng-content select='[host]'></ng-content>
@@ -7,7 +7,7 @@
 
         <!-- Dropdown -->
         <div (mouseenter)="onHover(host, container)"
-            class="{{ reversePosition ? 'mb-12 bottom-0' : 'mt-4 right-0' }} ngt-dropdown-container sm:mr-0 mr-3 shadow-lg max-w-xs absolute z-10 bg-white rounded-lg"
+            class="{{ reversePosition ? 'mb-12 bottom-0' : 'mt-4 right-0' }} ngt-dropdown-container sm:mr-0 mr-3 max-w-xs absolute z-10"
             [class.hidden]='!isOpen' [@openClose]="isOpen ? 'open' : 'closed'" #container>
 
             <!-- Arrow -->
