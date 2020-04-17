@@ -1,20 +1,83 @@
-.ngt-shining {
+.ngt-shining-xs {
     background: #f6f7f8;
     background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
     background-repeat: no-repeat;
-    background-size: 800px 104px;
+    background-size: 100%;
     -webkit-animation-duration: 1s;
     -webkit-animation-fill-mode: forwards;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: linear;
-    -webkit-animation-name: shimmer;
+    -webkit-animation-name: shimmer-xs;
 }
 
-@-webkit-keyframes shimmer {
+@-webkit-keyframes shimmer-xs {
     0% {
-        background-position: -468px 0;
+        background-position: -20vw;
     }
     100% {
-        background-position: 468px 0;
+        background-position: 20vw;
+    }
+}
+
+.ngt-shining-sm {
+    background: #f6f7f8;
+    background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-fill-mode: forwards;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-name: shimmer-sm;
+}
+
+@-webkit-keyframes shimmer-sm {
+    0% {
+        background-position: -40vw;
+    }
+    100% {
+        background-position: 40vw;
+    }
+}
+
+.ngt-shining-lg {
+    background: #f6f7f8;
+    background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-fill-mode: forwards;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-name: shimmer-lg;
+}
+
+@-webkit-keyframes shimmer-lg {
+    0% {
+        background-position: -60vw;
+    }
+    100% {
+        background-position: 60vw;
+    }
+}
+
+.ngt-shining-xl {
+    background: #f6f7f8;
+    background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-fill-mode: forwards;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-name: shimmer-xl;
+}
+
+@-webkit-keyframes shimmer-xl {
+    0% {
+        background-position: -80vw;
+    }
+    100% {
+        background-position: 80vw;
     }
 }
