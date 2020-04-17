@@ -202,4 +202,13 @@ export class NgtStylizableDirective {
   set shadow(shadow: string) {
     this.ngtStylizableService.shadow = shadow;
   }
+
+  get rounded(): string {
+    return this.ngtStylizableService.rounded;
+  }
+
+  @Input('rounded')
+  set rounded(rounded: string) {
+    this.ngtStylizableService.rounded = rounded;
+  }
 }

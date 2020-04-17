@@ -21,6 +21,7 @@ export class NgtStylizableService {
     private _ml: string;
     private _border: string;
     private _shadow: string;
+    private _rounded: string;
 
     get color() {
         return this._color;
@@ -201,6 +202,14 @@ export class NgtStylizableService {
         this._shadow = this.getQualifiedValue('shadow', shadow);
     }
 
+    get rounded(): string {
+        return this._rounded;
+    }
+
+    set rounded(rounded: string) {
+        this._rounded = this.getQualifiedValue('rounded', rounded);
+    }
+
     public load(injector: Injector, style: string, defaultValue = null, inheritanceStyles = []) {
         let ngtGlobalStyle = injector.get('NgtStyleGlobal', {});
         defaultValue = defaultValue ? defaultValue : {};
@@ -273,6 +282,7 @@ export class NgtStylizableService {
                     'ml',
                     'border',
                     'shadow',
+                    'rounded'
                 ].includes(key);
             });
         }
