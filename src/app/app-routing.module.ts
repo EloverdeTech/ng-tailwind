@@ -74,6 +74,12 @@ const routes: Routes = [
         "loadChildren": () => import('src/app/pages/form-components/ngt-textarea-page/ngt-textarea-page.module').then(m => m.NgtTextareaPageModule)
       },
 
+      /** Layout Components */
+      {
+        "path": "ngt-dropdown",
+        "loadChildren": () => import('src/app/pages/layout-components/ngt-dropdown-page/ngt-dropdown-page.module').then(m => m.NgtDropdownPageModule)
+      },
+
       /** Table Components */
       // {
       //   "path": "ngt-datatable",
