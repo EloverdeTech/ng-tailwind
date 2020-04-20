@@ -1,6 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, Optional, SkipSelf } from '@angular/core';
-
 import { uuid } from '../../helpers/uuid';
 import { NgtDropdownContainerComponent } from './ngt-dropdown-container/ngt-dropdown-container.component';
 
@@ -40,25 +39,25 @@ export class NgtDropdownComponent {
     private ngtDropdownContainer: NgtDropdownContainerComponent
   ) {
     if (this.ngtDropdownContainer) {
-      this.ngtDropdownContainer.activeMenu.subscribe((activeMenu) => {
-        this.isOpen = (activeMenu === this);
+      this.ngtDropdownContainer.onActiveDropdownChange.subscribe((activeDropdown: NgtDropdownComponent) => {
+        this.isOpen = (activeDropdown.name === this.name);
       });
     }
   }
 
-  open() {
+  public open() {
+    this.isOpen = true;
+
     if (this.ngtDropdownContainer) {
-      this.ngtDropdownContainer.activeMenu.emit(this);
-    } else {
-      this.isOpen = true;
+      this.ngtDropdownContainer.setActiveDropdown(this);
     }
   }
 
-  close() {
+  public close() {
     this.isOpen = false;
   }
 
-  toogle() {
+  public toogle() {
     setTimeout(() => {
       if (this.isOpen) {
         this.close();
@@ -68,20 +67,20 @@ export class NgtDropdownComponent {
     });
   }
 
-  onHover(host, container) {
+  public onHover(host, container) {
     if (this.openOnHover && host && container) {
       this.open();
       this.watchHover(host, container);
     }
   }
 
-  onClick() {
+  public onClick() {
     if (!this.openOnHover) {
       this.toogle();
     }
   }
 
-  watchHover(host, container) {
+  public watchHover(host, container) {
     let interval = setInterval(() => {
       if (!host || !container || !this.isInHover(host, container)) {
         this.isOpen = false;
@@ -90,8 +89,9 @@ export class NgtDropdownComponent {
     }, 1000);
   }
 
-  isInHover(host: any, container: any) {
+  public isInHover(host: any, container: any) {
     return host.parentElement.querySelector(':hover') == host ||
       container.parentElement.querySelector(':hover') == container;
   }
+
 }
