@@ -18,7 +18,7 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
   selector: '[ngt-th]',
   templateUrl: './ngt-th.component.html',
   styleUrls: ['./ngt-th.component.css'],
-  host: { class: 'py-4 px-6 font-bold uppercase text-sm border-b' },
+  host: { class: 'py-4 px-6 font-bold text-sm border-b' },
 })
 export class NgtThComponent implements OnChanges {
   @ViewChild('searchInput', { static: false }) searchInput: NgtInputComponent;
