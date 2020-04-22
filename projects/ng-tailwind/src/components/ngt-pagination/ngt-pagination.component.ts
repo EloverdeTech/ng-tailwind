@@ -9,14 +9,20 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
   styleUrls: ['./ngt-pagination.component.css']
 })
 export class NgtPaginationComponent {
-
   @Input() pagesInterval: number;
   @Output() onPageChange: EventEmitter<number> = new EventEmitter();
 
+  /** Styles */
   public ngtPaginationActivePageButtonStyle: NgtStylizableService;
   public ngtPaginationNextPreviousButtonStyle: NgtStylizableService;
+  public ngtPaginationNextPreviousSectionButtonStyle: NgtStylizableService;
   public ngtPaginationFirstLastButtonStyle: NgtStylizableService;
   public ngtPaginationPageButtonStyle: NgtStylizableService;
+
+  public sectionStartPage: number;
+  public sectionEndPage: number;
+  public displayNextSectionButton: boolean = false;
+  public displayPreviousSectionButton: boolean = false;
 
   public pagination: NgtHttpPagination = {
     count: null,
@@ -34,6 +40,7 @@ export class NgtPaginationComponent {
     private injector: Injector,
   ) {
     this.ngtPaginationNextPreviousButtonStyle = new NgtStylizableService();
+    this.ngtPaginationNextPreviousSectionButtonStyle = new NgtStylizableService();
     this.ngtPaginationFirstLastButtonStyle = new NgtStylizableService();
     this.ngtPaginationActivePageButtonStyle = new NgtStylizableService();
     this.ngtPaginationPageButtonStyle = new NgtStylizableService();
@@ -44,6 +51,15 @@ export class NgtPaginationComponent {
       color: {
         text: 'text-white',
         bg: 'bg-gray-700'
+      }
+    });
+
+    this.ngtPaginationNextPreviousSectionButtonStyle.load(this.injector, 'NgtPaginationNextPreviousButton', {
+      h: 'h-8',
+      w: 'w-8',
+      color: {
+        text: 'text-white',
+        bg: 'bg-gray-300'
       }
     });
 
@@ -91,6 +107,14 @@ export class NgtPaginationComponent {
     }
   }
 
+  public async goToPreviousSection() {
+    return this.goToPage(this.sectionStartPage - 1);
+  }
+
+  public async goToNextSection() {
+    return this.goToPage(this.sectionEndPage + 1);
+  }
+
   public async goToFirstPage() {
     if (this.pagination.page != 1) {
       return this.goToPage(1);
@@ -115,11 +139,15 @@ export class NgtPaginationComponent {
     this.pages = [];
     this.pagination = meta.pagination;
 
-    let min = Math.floor((this.pagination.page - 1) / this.pagesInterval) * this.pagesInterval + 1;
+    this.sectionStartPage = Math.floor((this.pagination.page - 1) / this.pagesInterval) * this.pagesInterval + 1;
+    this.sectionEndPage = this.sectionStartPage + (this.pagesInterval - 1);
+    const totalPages = this.pagination.pages;
 
-    for (let i = min; i <= min + (this.pagesInterval - 1) && i <= this.pagination.pages; i++) {
+    for (let i = this.sectionStartPage; i <= this.sectionEndPage && i <= totalPages; i++) {
       this.pages.push(i);
     }
+
+    this.bindDisplayedButtonSections(this.sectionStartPage, this.sectionEndPage, totalPages);
   }
 
   public resetPagination() {
@@ -132,5 +160,10 @@ export class NgtPaginationComponent {
       to: null,
       per_page: null
     };
+  }
+
+  private bindDisplayedButtonSections(sectionStartPage: number, sectionEndPage: number, totalPages: number) {
+    this.displayPreviousSectionButton = sectionStartPage > 1 ? true : false;
+    this.displayNextSectionButton = sectionEndPage < totalPages ? true : false;
   }
 }

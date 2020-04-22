@@ -24,6 +24,16 @@
             </ngt-action>
         </li>
 
+        <!-- PREVIOUS SECTION -->
+        <li *ngIf="displayPreviousSectionButton" (click)='goToPreviousSection()' class="mr-2">
+            <ngt-action [ngtStyle]='ngtPaginationNextPreviousSectionButtonStyle'>
+                <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path
+                        d="M4 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
+                </svg>
+            </ngt-action>
+        </li>
+
         <ng-container *ngFor='let page of pages'>
             <ng-container *ngIf='page == pagination.page'>
                 <li class="mr-2">
@@ -42,6 +52,16 @@
             </ng-container>
 
         </ng-container>
+
+        <!-- NEXT SECTION -->
+        <li *ngIf="displayNextSectionButton" (click)='goToNextSection()' class="mr-2">
+            <ngt-action [ngtStyle]='ngtPaginationNextPreviousSectionButtonStyle'>
+                <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path
+                        d="M4 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
+                </svg>
+            </ngt-action>
+        </li>
 
         <!-- NEXT -->
         <li (click)='goToNextPage()' class="mr-2">
