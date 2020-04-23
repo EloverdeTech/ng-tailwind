@@ -12,7 +12,7 @@ export class NgtHttpTest extends NgtHttpService {
                     },
                     {
                         name: 'Bar'
-                    }
+                    },
                 ],
                 meta: {
                     pagination: {
@@ -22,7 +22,7 @@ export class NgtHttpTest extends NgtHttpService {
                         total: 2,
                         from: 1,
                         to: 2,
-                        per_page: 15,
+                        per_page: pagination.per_page ? pagination.per_page : 15,
                     }
                 }
             });
