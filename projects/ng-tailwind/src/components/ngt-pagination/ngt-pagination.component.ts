@@ -11,6 +11,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 export class NgtPaginationComponent {
   @Input() pagesInterval: number;
   @Output() onPageChange: EventEmitter<number> = new EventEmitter();
+  @Output() onPerPageChange: EventEmitter<number> = new EventEmitter();
 
   /** Styles */
   public ngtPaginationActivePageButtonStyle: NgtStylizableService;
@@ -23,6 +24,11 @@ export class NgtPaginationComponent {
   public sectionEndPage: number;
   public displayNextSectionButton: boolean = false;
   public displayPreviousSectionButton: boolean = false;
+
+  public registersPerPageOptions = [
+    5, 10, 15, 30, 50, 100
+  ];
+  public isFirstPerPageChange: boolean = true;
 
   public pagination: NgtHttpPagination = {
     count: null,
@@ -89,6 +95,14 @@ export class NgtPaginationComponent {
         bg: 'bg-gray-300'
       }
     });
+  }
+
+  public onRegistersPerPageChange(value: any) {
+    if (this.isFirstPerPageChange) {
+      return this.isFirstPerPageChange = false;
+    }
+
+    this.onPerPageChange.emit(value);
   }
 
   public async goToPage(page: number) {

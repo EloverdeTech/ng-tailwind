@@ -1,4 +1,4 @@
-<div class="flex items-center w-full h-full">
+<div class="flex items-center w-full h-full relative">
     <ul class="flex justify-start">
         <!-- FIRST -->
         <li (click)='goToFirstPage()' class="mr-2">
@@ -88,12 +88,20 @@
         </li>
     </ul>
 
-    <!-- ITEMS PER PAGE -->
-    <div class="flex w-full justify-end">
-        <span>
+    <!-- REGISTERS PER PAGE -->
+    <div class="flex items-center w-auto absolute right-0">
+        <ngt-select class='block w-20 left-0' [searchable]='false' [clearable]='false' dropdownPosition='top'
+            [items]='registersPerPageOptions' name='registersPerPageSelect' [(ngModel)]="pagination.per_page" h='h-auto'
+            (ngModelChange)='onRegistersPerPageChange($event)' ngt-stylizable>
+            <ng-template let-item="item" let-index="index" ngt-select-option>
+                {{  item ? item : '' }}
+            </ng-template>
+        </ngt-select>
+
+        <P class="ml-2">
             Visualizando {{ pagination.from }} -
             {{ pagination.to }} de
             {{ pagination.total }} registros
-        </span>
+        </P>
     </div>
 </div>

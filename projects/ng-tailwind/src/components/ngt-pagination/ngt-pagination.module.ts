@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
-import { NgtPaginationComponent } from './ngt-pagination.component';
-import { NgtActionModule } from '../ngt-action/ngt-action.module';
 import { NgtStylizableModule } from '../../directives/ngt-stylizable/ngt-stylizable.module';
+import { NgtActionModule } from '../ngt-action/ngt-action.module';
+import { NgtSelectModule } from '../ngt-select/ngt-select.module';
+import { NgtPaginationComponent } from './ngt-pagination.component';
 
 
 @NgModule({
@@ -11,8 +13,10 @@ import { NgtStylizableModule } from '../../directives/ngt-stylizable/ngt-styliza
   exports: [NgtPaginationComponent],
   imports: [
     CommonModule,
+    FormsModule,
     NgtStylizableModule,
-    NgtActionModule
+    NgtActionModule,
+    NgtSelectModule,
   ]
 })
 export class NgtPaginationModule { }
