@@ -1,0 +1,7 @@
+.evenStripped:nth-child(even) {
+    background-color: #edf2f7 !important;
+}
+
+.oddStripped:nth-child(odd) {
+    background-color: #edf2f7 !important;
+}
