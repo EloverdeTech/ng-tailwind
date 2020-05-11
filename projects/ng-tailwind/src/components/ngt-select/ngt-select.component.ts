@@ -155,6 +155,13 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     }
   }
 
+  refresh() {
+    this.value = undefined;
+    this.nativeValue = undefined;
+    this.initNgSelectItems();
+    this.initComponent();
+  }
+
   initNgSelectItems() {
     if (this.remoteResource) {
       this.ngSelectItems = Observable.create(observer => {
