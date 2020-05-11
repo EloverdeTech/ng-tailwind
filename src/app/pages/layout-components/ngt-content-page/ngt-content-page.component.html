@@ -1,0 +1,26 @@
+<ngt-portlet class="block w-full" icon="assets/images/icons/window.svg" caption='Ngt Content'>
+    <div body>
+        <p>Component used as a container to group other components.</p>
+        <br>
+
+        <p class="pb-4 font-semibold">Examples:</p>
+
+        <div class="flex flex-col border rounded-lg py-2">
+            <ngt-content class="p-8 rounded-lg" color.bg='bg-gray-300' color.text='text-blue-500' color.border='border-blue-500'
+                ngt-stylizable>
+                <form class="w-full p-8">
+                    <ngt-input class="block w-full" label='Input Example' name='inputExample'></ngt-input>
+                </form>
+            </ngt-content>
+
+            <div class="p-6 w-full flex justify-center">
+                <code-preview class="max-w-full w-full">{{ codeExample }}</code-preview>
+            </div>
+        </div>
+
+        <br>
+        <p class="pb-4 font-semibold">NgtStylizableService and NgtStylizableDirective:</p>
+
+        <ngt-stylizable-template tagName='ngt-content' styleName='NgtContentStyle'></ngt-stylizable-template>
+    </div>
+</ngt-portlet>
