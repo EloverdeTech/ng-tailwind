@@ -34,6 +34,57 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
       useClass: NgtAttachmentHttpServiceTest
     },
     {
+      provide: 'NgtThStyle',
+      useValue: {
+        color: {
+          bg: 'bg-gray-200',
+        },
+        py: 'py-2',
+        px: 'px-4',
+        font: 'font-bold',
+        text: 'text-sm',
+        border: 'border-b',
+      }
+    },
+    {
+      provide: 'NgtThCheckStyle',
+      useValue: {
+        py: 'py-2',
+        px: 'px-4',
+        border: 'border-b',
+        text: 'text-center',
+        color: {
+          border: ''
+        }
+      }
+    },
+    {
+      provide: 'NgtTdCheckStyle',
+      useValue: {
+        py: 'py-2',
+        px: 'px-4',
+        border: 'border-b',
+        break: 'break-words',
+        color: {
+          border: ''
+        }
+      }
+    },
+    {
+      provide: 'NgtTdStyle',
+      useValue: {
+        py: 'py-2',
+        px: 'px-4',
+        border: 'border-b',
+        break: 'break-words',
+        color: {
+          text: '',
+          bg: '',
+          border: ''
+        }
+      }
+    },
+    {
       provide: 'NgtPortletStyle',
       useValue: {
         color: {
