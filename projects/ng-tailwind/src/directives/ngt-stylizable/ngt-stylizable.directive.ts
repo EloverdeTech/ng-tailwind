@@ -211,4 +211,31 @@ export class NgtStylizableDirective {
   set rounded(rounded: string) {
     this.ngtStylizableService.rounded = rounded;
   }
+
+  get font(): string {
+    return this.ngtStylizableService.font;
+  }
+
+  @Input('font')
+  set font(font: string) {
+    this.ngtStylizableService.font = font;
+  }
+
+  get text(): string {
+    return this.ngtStylizableService.text;
+  }
+
+  @Input('text')
+  set text(text: string) {
+    this.ngtStylizableService.text = text;
+  }
+
+  get breakWords(): string {
+    return this.ngtStylizableService.breakWords;
+  }
+
+  @Input('breakWords')
+  set breakWords(breakWords: string) {
+    this.ngtStylizableService.breakWords = breakWords;
+  }
 }

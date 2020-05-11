@@ -22,6 +22,9 @@ export class NgtStylizableService {
     private _border: string;
     private _shadow: string;
     private _rounded: string;
+    private _font: string;
+    private _text: string;
+    private _breakWords: string;
 
     get color() {
         return this._color;
@@ -210,6 +213,30 @@ export class NgtStylizableService {
         this._rounded = this.getQualifiedValue('rounded', rounded);
     }
 
+    get font(): string {
+        return this._font;
+    }
+
+    set font(font: string) {
+        this._font = this.getQualifiedValue('font', font);
+    }
+
+    get text(): string {
+        return this._text;
+    }
+
+    set text(text: string) {
+        this._text = this.getQualifiedValue('text', text);
+    }
+
+    get breakWords(): string {
+        return this._breakWords;
+    }
+
+    set breakWords(breakWords: string) {
+        this._breakWords = this.getQualifiedValue('break', breakWords);
+    }
+
     public load(injector: Injector, style: string, defaultValue = null, inheritanceStyles = []) {
         let ngtGlobalStyle = injector.get('NgtStyleGlobal', {});
         defaultValue = defaultValue ? defaultValue : {};
@@ -282,7 +309,10 @@ export class NgtStylizableService {
                     'ml',
                     'border',
                     'shadow',
-                    'rounded'
+                    'rounded',
+                    'font',
+                    'text',
+                    'breakWords'
                 ].includes(key);
             });
         }
