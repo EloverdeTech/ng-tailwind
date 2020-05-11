@@ -1,13 +1,14 @@
 <section class='flex max-w-xs'>
     <div class="sm:relative w-full">
         <!-- Label -->
-        <div (mouseenter)="onHover(host, container)" (click)="onClick()" #host>
+        <div (mouseenter)="onHover(host, container)" (click)="onClick($event)" (contextmenu)="onRightClick($event)"
+            #host>
             <ng-content select='[host]'></ng-content>
         </div>
 
         <!-- Dropdown -->
-        <div (mouseenter)="onHover(host, container)"
-            class="{{ reversePosition ? 'mb-12 bottom-0' : 'mt-4 right-0' }} ngt-dropdown-container sm:mr-0 mr-3 max-w-xs absolute z-10"
+        <div (mouseenter)="onHover(host, container)" (click)='toggle()'
+            class="{{ reversePosition ? 'mb-12 bottom-0' : 'mt-4 right-0' }} ngt-dropdown-container sm:mr-0 mr-3 max-w-xs absolute z-50"
             [class.hidden]='!isOpen' [@openClose]="isOpen ? 'open' : 'closed'" #container>
 
             <!-- Arrow -->
@@ -23,3 +24,6 @@
         </div>
     </div>
 </section>
+
+<button (click)="toggle()" *ngIf="isOpen && openMethod != 'HOVER'" tabindex="-1"
+    class="fixed z-40 inset-0 h-full w-full opacity-0 cursor-default"></button>

@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, Input, Optional, SkipSelf } from '@angular/core';
+
 import { uuid } from '../../helpers/uuid';
 import { NgtDropdownContainerComponent } from './ngt-dropdown-container/ngt-dropdown-container.component';
 
@@ -27,9 +28,9 @@ export class NgtDropdownComponent {
   @Input() withFooter: boolean = false;
   @Input() badge: any;
   @Input() withHeader: boolean = true;
-  @Input() withArrow: boolean = true;
+  @Input() withArrow: boolean = false;
   @Input() reversePosition: boolean = false;
-  @Input() openOnHover: boolean = true;
+  @Input() openMethod: NgtDropdownOpenMethod = NgtDropdownOpenMethod.HOVER;
 
   public name = uuid();
   public isOpen: boolean = false;
@@ -57,7 +58,7 @@ export class NgtDropdownComponent {
     this.isOpen = false;
   }
 
-  public toogle() {
+  public toggle() {
     setTimeout(() => {
       if (this.isOpen) {
         this.close();
@@ -68,15 +69,25 @@ export class NgtDropdownComponent {
   }
 
   public onHover(host, container) {
-    if (this.openOnHover && host && container) {
+    if (this.openMethod == NgtDropdownOpenMethod.HOVER && host && container) {
       this.open();
       this.watchHover(host, container);
     }
   }
 
-  public onClick() {
-    if (!this.openOnHover) {
-      this.toogle();
+  public onClick(event: any) {
+    if (this.openMethod == NgtDropdownOpenMethod.CLICK) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.toggle();
+    }
+  }
+
+  public onRightClick(event: any) {
+    if (this.openMethod == NgtDropdownOpenMethod.RIGHT_CLICK) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.toggle();
     }
   }
 
@@ -94,4 +105,10 @@ export class NgtDropdownComponent {
       container.parentElement.querySelector(':hover') == container;
   }
 
+}
+
+export enum NgtDropdownOpenMethod {
+  CLICK = 'CLICK',
+  RIGHT_CLICK = 'RIGHT_CLICK',
+  HOVER = 'HOVER'
 }
