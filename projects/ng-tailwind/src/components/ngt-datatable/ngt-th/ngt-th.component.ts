@@ -1,16 +1,21 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
+  Injector,
   Input,
   OnChanges,
   Optional,
   Output,
+  Self,
   SimpleChanges,
   SkipSelf,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
 
+import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtInputComponent } from '../../ngt-input/ngt-input.component';
 import { NgtDatatableComponent } from '../ngt-datatable.component';
 
@@ -18,7 +23,6 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
   selector: '[ngt-th]',
   templateUrl: './ngt-th.component.html',
   styleUrls: ['./ngt-th.component.css'],
-  host: { class: 'py-4 px-6 font-bold text-sm border-b' },
 })
 export class NgtThComponent implements OnChanges {
   @ViewChild('searchInput', { static: false }) searchInput: NgtInputComponent;
@@ -43,8 +47,12 @@ export class NgtThComponent implements OnChanges {
   public sortDirection = '';
   public searchTerm: any;
   public customSearchTerm: any;
+  public ngtStyle: NgtStylizableService;
 
   constructor(
+    private injector: Injector,
+    private hostElement: ElementRef,
+    @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
     @Optional() @SkipSelf()
     public ngtDataTable: NgtDatatableComponent
   ) {
@@ -63,6 +71,8 @@ export class NgtThComponent implements OnChanges {
         }
       });
     }
+
+    this.bindNgtStyle();
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -156,6 +166,47 @@ export class NgtThComponent implements OnChanges {
       case 'desc': return '';
       case '': return 'asc';
     }
+  }
+
+  private bindNgtStyle() {
+    if (this.ngtStylizableDirective) {
+      this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+    } else {
+      this.ngtStyle = new NgtStylizableService();
+    }
+
+    this.ngtStyle.load(this.injector, 'NgtTh', {
+      py: 'py-4',
+      px: 'px-6',
+      font: 'font-bold',
+      text: 'text-sm',
+      border: 'border-b',
+      color: {
+        bg: '',
+        text: '',
+        border: ''
+      }
+    });
+
+    this.hostElement.nativeElement.classList = this.ngtStyle.compile([
+      'h',
+      'px',
+      'py',
+      'pb',
+      'pl',
+      'pr',
+      'pt',
+      'mb',
+      'ml',
+      'mr',
+      'mt',
+      'border',
+      'color.bg',
+      'color.text',
+      'color.border',
+      'text',
+      'font',
+    ]);
   }
 }
 
