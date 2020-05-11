@@ -49,7 +49,7 @@ export class NgtTrComponent {
       }
     }, [this.getInheritanceStyles()]);
 
-    this.hostElement.nativeElement.classList = this.ngtStyle.compile([
+    this.hostElement.nativeElement.classList += this.ngtStyle.compile([
       'h',
       'px',
       'py',

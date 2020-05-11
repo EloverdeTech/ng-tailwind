@@ -38,7 +38,7 @@ export class NgtTdComponent {
       }
     });
 
-    this.hostElement.nativeElement.classList = this.ngtStyle.compile([
+    this.hostElement.nativeElement.classList += this.ngtStyle.compile([
       'h',
       'px',
       'py',

@@ -188,7 +188,7 @@ export class NgtThComponent implements OnChanges {
       }
     });
 
-    this.hostElement.nativeElement.classList = this.ngtStyle.compile([
+    this.hostElement.nativeElement.classList += this.ngtStyle.compile([
       'h',
       'px',
       'py',
