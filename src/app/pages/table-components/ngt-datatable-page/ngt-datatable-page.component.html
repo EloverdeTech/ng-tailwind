@@ -1,0 +1,47 @@
+<ngt-portlet class="block w-full" icon="assets/images/icons/checkbox.svg" caption='Ngt Datatable'>
+    <div class='flex flex-wrap' right-header>
+        {{ ngtDatatable.selectedElements.length }}
+
+        <ng-container *ngIf='ngtDatatable && ngtDatatable.selectedElements.length > 0'>
+            <div class='md:mr-4 md:my-0 md:w-auto w-full my-3'>
+                <ngt-button type='danger' (click)='delete()'>
+                    <span class="flex items-center justify-center text-white">                        
+                        &nbsp; Excluir ({{ ngtDatatable.selectedElements.length }})
+                    </span>
+                </ngt-button>
+            </div>
+        </ng-container>
+    </div>
+
+    <div body>
+        <form>
+            <ngt-datatable [remoteResource]='remoteResource' #ngtDatatable>
+                <thead ngt-thead>
+                    <tr ngt-tr>
+                        <th class="w-1" ngt-th-check></th>
+                        <th ngt-th>
+                            Coluna 1
+                        </th>
+                        <th ngt-th>
+                            Coluna 2
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody ngt-tbody>
+                    <ng-container *ngFor="let item of ngtDatatable.data">
+                        <tr [evenStripped]='true' ngt-tr>
+                            <td [reference]='item' ngt-td-check></td>
+                            <td ngt-td>
+                                {{ item.name }}
+                            </td>
+                            <td ngt-td>
+                                {{ item.name }}
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </ngt-datatable>
+        </form>
+    </div>
+</ngt-portlet>
