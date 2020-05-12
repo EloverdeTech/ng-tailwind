@@ -54,6 +54,8 @@ export class NgtModalComponent implements AfterViewInit {
 
     this.ngtStyle.load(this.injector, 'NgtModal', {
       w: 'md:max-w-md',
+      py: 'py-4',
+      px: 'px-6',
       color: {}
     });
   }
