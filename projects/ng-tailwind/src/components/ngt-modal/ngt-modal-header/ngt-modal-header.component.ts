@@ -1,5 +1,7 @@
-import { Component, Input, Optional, SkipSelf } from '@angular/core';
+import { Component, Injector, Input, Optional, Self, SkipSelf } from '@angular/core';
 
+import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtModalComponent } from '../ngt-modal.component';
 
 @Component({
@@ -10,12 +12,27 @@ import { NgtModalComponent } from '../ngt-modal.component';
 export class NgtModalHeaderComponent {
   @Input() ngtModal: NgtModalComponent;
 
+  public ngtStyle: NgtStylizableService;
+
   constructor(
     @Optional() @SkipSelf()
-    private ngtModalInstance: NgtModalComponent
+    private ngtModalInstance: NgtModalComponent,
+    private injector: Injector,
+    @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective,
   ) {
     if (ngtModalInstance) {
       this.ngtModal = ngtModalInstance;
     }
+
+    if (this.tailStylizableDirective) {
+      this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
+    } else {
+      this.ngtStyle = new NgtStylizableService();
+    }
+
+    this.ngtStyle.load(this.injector, 'NgtModalHeader', {
+      pb: 'pb-3',
+      color: {}
+    });
   }
 }
