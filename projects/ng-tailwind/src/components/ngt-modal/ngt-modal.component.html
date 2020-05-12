@@ -8,8 +8,8 @@
         </ng-container>
 
         <div
-            class="{{ ngtStyle.compile(['w']) }} modal-container border border-teal-500 shadow-lg bg-white w-full self-center rounded shadow-lg z-50">
-            <div class="modal-content py-4 text-left px-6">
+            class="{{ ngtStyle.compile(['w']) }} modal-container border border-teal-500 bg-white w-full self-center rounded shadow-lg z-50">
+            <div class="modal-content text-left {{ ngtStyle.compile(['py', 'px']) }}">
                 <!--Header-->
                 <div *ngIf="!customLayout">
                     <ngt-modal-header class="w-full">
