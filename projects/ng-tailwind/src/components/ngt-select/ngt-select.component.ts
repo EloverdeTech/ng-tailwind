@@ -155,14 +155,18 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     }
   }
 
-  refresh() {
-    this.value = undefined;
-    this.nativeValue = undefined;
+  public refresh() {
     this.initNgSelectItems();
     this.initComponent();
   }
 
-  initNgSelectItems() {
+  public reset() {
+    this.value = undefined;
+    this.nativeValue = undefined;
+    this.refresh();
+  }
+
+  public initNgSelectItems() {
     if (this.remoteResource) {
       this.ngSelectItems = Observable.create(observer => {
         this.ngSearchObserver = observer;
@@ -205,7 +209,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     });
   }
 
-  search(filters: any) {
+  public search(filters: any) {
     this.currentState.filters = { ...this.currentState.filters, ...filters };
 
     if (!this.remoteResource) {
@@ -231,13 +235,13 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     });
   }
 
-  onNativeChange(value) {
+  public onNativeChange(value) {
     if (this.hasChangesBetweenModels(this.value, value)) {
       this.value = value;
     }
   }
 
-  change(value) {
+  public change(value) {
     if (this.hasChangesBetweenModels(value, this.nativeValue)) {
       if (Array.isArray(value)) {
         value = value.map((val) => val);
@@ -247,11 +251,11 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     }
   }
 
-  hasChangesBetweenModels(value, nativeValue) {
+  private hasChangesBetweenModels(value, nativeValue) {
     return JSON.stringify(value) !== JSON.stringify(nativeValue);
   }
 
-  onScroll({ end }) {
+  public onScroll({ end }) {
     let currentPerPage = this.currentState.pagination.per_page;
     let maxItensInBackend = this.currentState.pagination.total;
 
@@ -261,11 +265,11 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     }
   }
 
-  hasSelectedValue() {
+  public hasSelectedValue() {
     return this.value && JSON.stringify(this.value);
   }
 
-  getSelectClass() {
+  public getSelectClass() {
     if (this.isDisabled) {
       return 'select-border-disabled';
     } else if (this.formControl && this.formControl.errors && (this.formControl.dirty || (this.formContainer && this.formContainer['submitted']))) {
@@ -311,8 +315,18 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     });
   }
 
-  onClearSelect() {
+  public onClearSelect() {
     this.currentState.filters = {};
+  }
+
+  public getFilterInputValue() {
+    if (
+      this.ngSelectComponent &&
+      this.ngSelectComponent.filterInput &&
+      this.ngSelectComponent.filterInput.nativeElement
+    ) {
+      return this.ngSelectComponent.filterInput.nativeElement.value;
+    }
   }
 
 }
