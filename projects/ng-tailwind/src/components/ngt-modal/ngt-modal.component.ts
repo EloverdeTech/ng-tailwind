@@ -3,15 +3,14 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-  Self,
-  Optional,
   Injector,
+  Input,
+  Optional,
+  Output,
+  Self,
 } from '@angular/core';
+
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
@@ -29,8 +28,6 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
   ]
 })
 export class NgtModalComponent implements AfterViewInit {
-
-  @ViewChild('modalContainer', { static: true }) modalContainer: ElementRef
   @Input() customLayout: boolean = false;
   @Input() disableDefaultCloses: boolean = false;
   @Input() ngtStyle: NgtStylizableService;
@@ -74,7 +71,7 @@ export class NgtModalComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     if (!this.disableDefaultCloses) {
-      this.modalContainer.nativeElement.onkeydown = (event: any) => {
+      document.getElementsByTagName('body').item(0).onkeydown = (event: any) => {
         if (event.keyCode == 27) {
           this.close();
         }
