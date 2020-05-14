@@ -7,7 +7,7 @@
         </div>
 
         <!-- Dropdown -->
-        <div (mouseenter)="onHover(host, container)" (click)='toggle()'
+        <div (mouseenter)="onHover(host, container)" (click)='closeOnSelectOption()'
             class="{{ reversePosition ? 'mb-12 bottom-0' : 'mt-4 right-0' }} ngt-dropdown-container sm:mr-0 mr-3 max-w-xs absolute z-50"
             [class.hidden]='!isOpen' [@openClose]="isOpen ? 'open' : 'closed'" #container>
 

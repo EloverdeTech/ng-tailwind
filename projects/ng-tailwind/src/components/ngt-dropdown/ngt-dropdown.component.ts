@@ -30,6 +30,7 @@ export class NgtDropdownComponent {
   @Input() withHeader: boolean = true;
   @Input() withArrow: boolean = false;
   @Input() reversePosition: boolean = false;
+  @Input() closeOnClick: boolean = false;
   @Input() openMethod: NgtDropdownOpenMethod = NgtDropdownOpenMethod.HOVER;
 
   public name = uuid();
@@ -51,6 +52,12 @@ export class NgtDropdownComponent {
 
     if (this.ngtDropdownContainer) {
       this.ngtDropdownContainer.setActiveDropdown(this);
+    }
+  }
+
+  public closeOnSelectOption() {
+    if (this.closeOnClick) {
+      this.close();
     }
   }
 
