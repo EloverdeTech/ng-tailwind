@@ -24,7 +24,7 @@ export abstract class NgtBaseNgModel implements ControlValueAccessor {
     get value(): any { return this._value != this.ignore ? this._value : null; };
 
     set value(v: any) {
-        if (v !== this._value) {
+        if (!this.valuesAreEquals(v, this._value)) {
 
             this._value = v;
             this.onChange(v);
@@ -38,7 +38,7 @@ export abstract class NgtBaseNgModel implements ControlValueAccessor {
     }
 
     writeValue(value: any) {
-        if (value == this.ignore || value == this._value) {
+        if (value == this.ignore || this.valuesAreEquals(value, this._value)) {
             return;
         }
 
@@ -83,6 +83,18 @@ export abstract class NgtBaseNgModel implements ControlValueAccessor {
         if (this.formContainer) {
             this.formContainer['submitted'] = submitted;
         }
+    }
+
+    private valuesAreEquals(value1, value2) {
+        if (Array.isArray(value1)) {
+            value1 = value1.toLocaleString();
+        }
+
+        if (Array.isArray(value2)) {
+            value2 = value2.toLocaleString();
+        }
+
+        return value1 === value2;
     }
 }
 
