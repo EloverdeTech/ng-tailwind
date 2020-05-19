@@ -1,9 +1,22 @@
-import { Component, Host, Input, OnInit, Optional, SkipSelf, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  Host,
+  Injector,
+  Input,
+  OnInit,
+  Optional,
+  Self,
+  SkipSelf,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
 import { FlatpickrOptions, Ng2FlatpickrComponent } from 'ng2-flatpickr';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { uuid } from '../../helpers/uuid';
+import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 const Brazil = require("flatpickr/dist/l10n/pt.js").default.pt;
@@ -48,6 +61,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
   // Validation
   @Input() isRequired: boolean = false;
 
+  public ngtStyle: NgtStylizableService;
   public dateConfig: FlatpickrOptions;
   public nativeValue: any;
   public componentReady = false;
@@ -58,6 +72,8 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
   } = {};
 
   constructor(
+    private injector: Injector,
+    @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
     @Optional() @Host()
     public formContainer: ControlContainer,
     @Optional() @SkipSelf()
@@ -70,6 +86,21 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
         this.shining = shining;
       });
     }
+
+    if (this.ngtStylizableDirective) {
+      this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+    } else {
+      this.ngtStyle = new NgtStylizableService();
+    }
+
+    this.ngtStyle.load(this.injector, 'NgtDate', {
+      h: 'h-12',
+      color: {
+        border: 'border-gray-400 focus:border-gray-700',
+        bg: 'bg-bg-white focus:bg-white',
+        text: 'text-gray-800'
+      }
+    });
   }
 
   private initComponent() {

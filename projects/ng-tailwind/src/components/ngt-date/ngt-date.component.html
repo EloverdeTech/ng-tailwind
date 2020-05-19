@@ -8,7 +8,8 @@
 
 <div [hidden]='shining || isDisabled'>
     <div class="{{ !(formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))) ? 'border-normal' : 'border-error' }}">
-        <ng2-flatpickr [config]='dateConfig' disabled='true' placeholder="{{ placeholder ? placeholder : '' }}"
+        <ng2-flatpickr class="block {{ ngtStyle.compile(['h', 'w', 'px', 'py', 'mx', 'my', 'color.border', 'color.bg', 'color.text']) }}"
+            [config]='dateConfig' disabled='true' placeholder="{{ placeholder ? placeholder : '' }}"
             #ng2FlatpickrComponent></ng2-flatpickr>
     </div>
 </div>
