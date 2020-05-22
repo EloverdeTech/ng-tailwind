@@ -58,6 +58,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
   @Input() placeholder: string = 'Selecione...';
   @Input() createText: string = 'Adicionar ';
   @Input() labelForId: string = '';
+  @Input() dropdownPanelMinHeight: NgtSelectDropdownPanelHeight = NgtSelectDropdownPanelHeight.AUTO;
 
   // Behavior
   @Input() name: string;
@@ -270,13 +271,17 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
   }
 
   public getSelectClass() {
+    let selectClass = this.dropdownPanelMinHeight ? 'ng-select-dropdown-panel-' + this.dropdownPanelMinHeight : 'ng-select-dropdown-panel-auto';
+
     if (this.isDisabled) {
-      return 'select-border-disabled';
+      selectClass += ' select-border-disabled';
     } else if (this.formControl && this.formControl.errors && (this.formControl.dirty || (this.formContainer && this.formContainer['submitted']))) {
-      return 'select-border-error';
+      selectClass += ' select-border-error';
     } else {
-      return 'select-border-normal';
+      selectClass += ' select-border-normal';
     }
+
+    return selectClass;
   }
 
   async ngAfterContentInit() {
@@ -320,7 +325,6 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
   }
 
   public getFilterInputValue() {
-
     let inputField = this.ngSelectComponent.filterInput ?
       this.ngSelectComponent.filterInput :
       this.ngSelectComponent['searchInput'];
@@ -332,5 +336,13 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
       return inputField.nativeElement.value;
     }
   }
+}
 
+export enum NgtSelectDropdownPanelHeight {
+  AUTO = 'auto',
+  XS = 'xs',
+  MD = 'md',
+  SM = 'sm',
+  LG = 'lg',
+  XL = 'xl'
 }

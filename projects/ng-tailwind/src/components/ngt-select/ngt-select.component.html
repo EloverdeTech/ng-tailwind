@@ -7,7 +7,7 @@
 </label>
 
 <div [hidden]='shining'>
-    <div class="{{getSelectClass()}} {{ ngtStyle.compile(['h', 'color.bg', 'color.text']) }}">
+    <div class="{{ getSelectClass() }} {{ ngtStyle.compile(['h', 'color.bg', 'color.text']) }}">
         <ng-select class="custom" [(ngModel)]='nativeValue' [name]='nativeName' (change)="onNativeChange($event)"
             [addTag]='allowCreate' [addTagText]="createText" bindLabel="selectedName" [multiple]="multiple"
             [hideSelected]="hideSelected" [notFoundText]="notFoundText" [searchable]="searchable"

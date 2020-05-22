@@ -35,3 +35,27 @@
 .ng-value{
     max-width: 100%;
 }
+
+.ng-select-dropdown-panel-auto .ng-dropdown-panel .ng-dropdown-panel-items {
+    min-height: unset;
+}
+
+.ng-select-dropdown-panel-xs .ng-dropdown-panel .ng-dropdown-panel-items {
+    min-height: 80px !important;
+}
+
+.ng-select-dropdown-panel-sm .ng-dropdown-panel .ng-dropdown-panel-items {
+    min-height: 100px !important;
+}
+
+.ng-select-dropdown-panel-md .ng-dropdown-panel .ng-dropdown-panel-items {
+    min-height: 120px !important;
+}
+
+.ng-select-dropdown-panel-lg .ng-dropdown-panel .ng-dropdown-panel-items {
+    min-height: 140px !important;
+}
+
+.ng-select-dropdown-panel-xl .ng-dropdown-panel .ng-dropdown-panel-items {
+    min-height: 160px !important;
+}
