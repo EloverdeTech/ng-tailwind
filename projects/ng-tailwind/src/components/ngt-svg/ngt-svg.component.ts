@@ -13,7 +13,7 @@ import { SvgIconComponent } from 'angular-svg-icon';
 export class NgtSvgComponent implements AfterViewChecked, OnChanges {
 
   @Input() src: string;
-  @Input() class: string = null;  
+  @Input() class: string = null;
 
   @ViewChild(SvgIconComponent, { static: true, read: ElementRef }) private svgIconElement: ElementRef;
 
@@ -41,7 +41,12 @@ export class NgtSvgComponent implements AfterViewChecked, OnChanges {
           svgElement.classList.add('fill-current');
           svgElement.classList.add('self-center');
 
-          this.class.split(' ').forEach(className => svgElement.classList.add(className));
+          new String(this.class).trim().split(' ').forEach(className => {
+            if (className) {
+              svgElement.classList.add(className);
+            }
+          });
+          
           this.appliedClass = this.class;
         }
       }
