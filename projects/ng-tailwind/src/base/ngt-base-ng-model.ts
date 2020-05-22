@@ -1,5 +1,5 @@
-import { forwardRef, Input, EventEmitter } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, AbstractControl, ControlContainer } from '@angular/forms';
+import { EventEmitter, forwardRef } from '@angular/core';
+import { AbstractControl, ControlContainer, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 /**
  * Based on https://stackoverflow.com/a/37786142/8055997
@@ -87,11 +87,11 @@ export abstract class NgtBaseNgModel implements ControlValueAccessor {
 
     private valuesAreEquals(value1, value2) {
         if (Array.isArray(value1)) {
-            value1 = value1.toLocaleString();
+            value1 = JSON.stringify(value1);
         }
 
         if (Array.isArray(value2)) {
-            value2 = value2.toLocaleString();
+            value2 = JSON.stringify(value2);
         }
 
         return value1 === value2;
