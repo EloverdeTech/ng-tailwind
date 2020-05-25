@@ -1,13 +1,41 @@
 <div class="flex flex-wrap mb-6">
-  <ngt-svg *ngIf="icon" [src]='icon' class="hidden md:block {{ ngtStyle.compile(['color.text', 'h', 'w', 'my', 'pr']) }}"></ngt-svg>
-  <div class="{{ icon ? 'pb-4 border-b-4 w-full border-dashed md:pb-0 md:border-solid md:border-b-0 md:border-l md:w-11/12' : 'pb-4 border-b-4 w-full border-dashed md:pb-0 md:border-b-0' }}">
-    <div class="px-5">
-      <span *ngIf='!accordion'>{{ caption }}</span>
-      <a (click)='toogleSectionVisibility()' *ngIf='accordion'>{{caption}}</a>
-      <p class="text-xs">{{ subtitle }}</p>
-    </div>
+  <ngt-svg *ngIf="icon" [src]='icon'
+    class="hidden md:block {{ ngtSectionStyle.compile(['color.text', 'h', 'w', 'my', 'pr']) }}"></ngt-svg>
+  <div
+    class="{{ icon ? 'pb-4 border-b-4 w-full border-dashed md:pb-0 md:border-solid md:border-b-0 md:border-l md:w-11/12' : 'pb-4 border-b-4 w-full border-dashed md:pb-0 md:border-b-0' }}">
+    <span *ngIf='!accordion'
+      class="px-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">{{ caption }}</span>
 
-    <div class="md:px-5 py-0" *ngIf='showSection'>
+    <ng-container *ngIf="accordion">
+      <div
+        class="flex flex-wrap items-center px-5 cursor-pointer hover:opacity-75 {{ ngtCaptionStyle.compile(['pb']) }}"
+        (click)='toogleSectionVisibility()' style="max-width: fit-content;">
+        <div *ngIf="!showSection"
+          class="flex align-items-center text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
+          <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M2.82 4.59l9.18 9.16 9.18 -9.16 2.82 2.82 -12 12 -12 -12 2.82 -2.82z" />
+          </svg>
+        </div>
+
+        <div *ngIf="showSection"
+          class="flex align-items-center text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
+          <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M2.82 19.41l9.18 -9.16 9.18 9.16 2.82 -2.82 -12 -12 -12 12 2.82 2.82z" />
+          </svg>
+        </div>
+
+        <span [class]="ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml'])">
+          {{ caption }}
+        </span>
+
+        <span *ngIf="subtitle"
+          [class]="ngtSubtitleStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml'])">
+          {{ subtitle }}
+        </span>
+      </div>
+    </ng-container>
+
+    <div class="md:px-5 py-0" *ngIf='showSection' [@enterAnimation]='!showSection'>
       <ng-content></ng-content>
     </div>
   </div>
