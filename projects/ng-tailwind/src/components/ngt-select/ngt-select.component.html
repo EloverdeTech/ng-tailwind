@@ -9,7 +9,7 @@
 <div [hidden]='shining'>
     <div class="{{ getSelectClass() }} {{ ngtStyle.compile(['h', 'color.bg', 'color.text']) }}">
         <ng-select class="custom" [(ngModel)]='nativeValue' [name]='nativeName' (change)="onNativeChange($event)"
-            [addTag]='allowCreate' [addTagText]="createText" bindLabel="selectedName" [multiple]="multiple"
+            [addTag]='allowCreate' [addTagText]="createText" [bindLabel]="bindLabel" [multiple]="multiple"
             [hideSelected]="hideSelected" [notFoundText]="notFoundText" [searchable]="searchable"
             [disabled]='isDisabled' [clearable]="clearable && hasSelectedValue()" [closeOnSelect]="closeOnSelect"
             [trackByFn]="trackBy" [labelForId]="labelForId" [clearSearchOnAdd]="clearSearchOnAdd"
@@ -39,7 +39,6 @@
                     [ngTemplateOutletContext]="{ item: item, index: index, searchTerm: search }">
                 </ng-template>
             </ng-template>
-
         </ng-select>
     </div>
 </div>

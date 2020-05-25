@@ -62,18 +62,18 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
 
   // Behavior
   @Input() name: string;
-  @Input() allowCreate: boolean = false;
+  @Input() allowCreate: boolean | Promise<any> | Function = false;
   @Input() isDisabled: boolean = false;
   @Input() remoteResource: any;
   @Input() hideSelected: boolean;
   @Input() bindLabel: string = 'name';
-  @Input() bindValue: string = undefined;
+  @Input() bindValue: string;
   @Input() items: Array<any> | Observable<any> = [];
   @Input() closeOnSelect: boolean = true;
   @Input() clearable: boolean = true;
   @Input() groupBy: string | Function = null;
   @Input() groupValue: (groupKey: string, cildren: any[]) => Object;
-  @Input() maxSelectedItems: number = undefined;
+  @Input() maxSelectedItems: number;
   @Input() multiple: boolean = false;
   @Input() searchable: boolean = true;
   @Input() clearSearchOnAdd: boolean = true;
