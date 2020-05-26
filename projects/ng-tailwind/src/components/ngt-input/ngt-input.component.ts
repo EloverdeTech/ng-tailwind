@@ -61,7 +61,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
   @Input() uniqueResource: any;
   @Input() minValue: number;
   @Input() max: string;
-  @Input() maxlength: number;
+  @Input() maxLength: number;
   @Input() match: string = "";
   @Input() multipleOf: number;
   @Input() externalServerDependency: boolean = false;
@@ -135,7 +135,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
       });
 
       this.renderer.listen(this.element.nativeElement, "keydown", (event) => {
-        if (this.element.nativeElement && this.element.nativeElement.value && this.element.nativeElement.value.length == this.maxlength) {
+        if (this.element.nativeElement && this.element.nativeElement.value && this.element.nativeElement.value.length >= this.maxLength) {
           // Backspace and delete
           if (event.keyCode != 8 && event.keyCode != 46) {
             event.preventDefault();
@@ -181,8 +181,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
       syncValidators.push(Validators.required);
     }
 
-    if (this.maxlength) {
-      syncValidators.push(Validators.maxLength(this.maxlength));
+    if (this.maxLength) {
+      syncValidators.push(Validators.maxLength(this.maxLength));
     }
 
     if (this.mask == 'cnpj-cpf') {
@@ -297,7 +297,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
 
     if (this.type in props) {
       this.inputProperties = props[this.type];
-      this.maxlength = this.inputProperties.length;
+      this.maxLength = this.inputProperties.length;
 
     } else {
       console.warn("Type [" + this.type + "] is not a valid tail-form-input type!", this.element.nativeElement);
