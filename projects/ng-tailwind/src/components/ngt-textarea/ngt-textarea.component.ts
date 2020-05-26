@@ -36,9 +36,10 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
   @Input() label: string = "";
   @Input() placeholder: string = "";
   @Input() rows: string = "3";
-  @Input() helpTitle = 'Ajuda';
-  @Input() helpText = false;
-  @Input() shining = false;
+  @Input() helpTitle: string = 'Ajuda';
+  @Input() showCharactersLength: boolean = false;
+  @Input() helpText: boolean = false;
+  @Input() shining: boolean = false;
 
   // Behavior
   @Input() name: string;
@@ -49,7 +50,7 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
 
   // Validation
   @Input() isRequired: boolean = false;
-  @Input() maxlength: number = 300;
+  @Input() maxLength: number = 300;
 
   public componentReady = false;
   public ngtStyle: NgtStylizableService;
@@ -109,7 +110,7 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
       });
 
       this.renderer.listen(this.element.nativeElement, "keydown", (event) => {
-        if (this.element.nativeElement && this.element.nativeElement.value && this.element.nativeElement.value.length == this.maxlength) {
+        if (this.element.nativeElement && this.element.nativeElement.value && this.element.nativeElement.value.length >= this.maxLength) {
           // Backspace and delete
           if (event.keyCode != 8 && event.keyCode != 46) {
             event.preventDefault();
@@ -141,8 +142,8 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
       syncValidators.push(Validators.required);
     }
 
-    if (this.maxlength) {
-      syncValidators.push(Validators.maxLength(this.maxlength));
+    if (this.maxLength) {
+      syncValidators.push(Validators.maxLength(this.maxLength));
     }
 
     setTimeout(() => {
@@ -195,6 +196,18 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
         this.initComponent();
       });
     }
+  }
+
+  public getRemainingCharacters() {
+    if (this.element.nativeElement && this.element.nativeElement.value && this.element.nativeElement.value.length) {
+      if ((this.maxLength - this.element.nativeElement.value.length) > 0) {
+        return this.maxLength - this.element.nativeElement.value.length;
+      } else {
+        return 0;
+      }
+    }
+
+    return this.maxLength;
   }
 
   private getNativeValue() {

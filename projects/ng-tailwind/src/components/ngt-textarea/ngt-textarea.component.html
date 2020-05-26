@@ -6,12 +6,22 @@
     </a>
 </label>
 
-<div class="{{ shining ? '' : 'flex'}}" [hidden]='shining'>
-    <textarea [rows]='rows' autocomplete="new-password"
-        class="appearance-none block border focus:outline-none leading-tight px-4 py-3 rounded w-full h-full {{ ngtStyle.compile(['h', 'color.border', 'color.bg', 'color.text']) }}"
-        [disabled]="isDisabled" [readonly]="isReadonly" placeholder="{{placeholder ? placeholder : ''}}"
-        [ngClass]="{'textarea-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
-        #element></textarea>
+<div class="flex flex-col">
+    <div class="{{ shining ? '' : 'flex'}}" [hidden]='shining'>
+        <textarea [rows]='rows' autocomplete="new-password" attr.type="text"
+            class="appearance-none block border focus:outline-none leading-tight px-4 py-3 rounded w-full h-full {{ ngtStyle.compile(['h', 'color.border', 'color.bg', 'color.text']) }}"
+            [disabled]="isDisabled" [readonly]="isReadonly" placeholder="{{ placeholder ? placeholder : ''}}"
+            [ngClass]="{'textarea-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
+            #element></textarea>
+    </div>
+
+    <ng-container *ngIf="showCharactersLength && !shining">
+        <p class="text-xs mt-1">
+            Caracteres restantes: <span class="font-semibold">
+                {{ getRemainingCharacters() }}
+            </span>
+        </p>
+    </ng-container>
 </div>
 
 <ng-container *ngIf='shining'>
