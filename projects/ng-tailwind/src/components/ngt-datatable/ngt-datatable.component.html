@@ -15,7 +15,7 @@
 
     <!-- <img *ngIf="emptyStateVisible" class="self-center mx-auto" src="../../assets/images/no-results.png"> -->
 
-    <table style="display: table;" class="text-left w-full border-collapse table-responsive">
+    <table style="display: table;" class="text-left w-full border-collapse table-responsive" #table>
         <ng-content></ng-content>
     </table>
 
@@ -23,18 +23,32 @@
         Nenhum registro encontrado
     </p>
 
-    <!-- LOADING ANIMATION -->
     <div *ngIf="loading">
         <div *ngFor="let i of [1, 2, 3, 4]" class="flex w-full mt-3">
-            <ngt-shining class="h-10 w-full"></ngt-shining>
-            <ngt-shining class="h-10 w-full mr-10 ml-10"></ngt-shining>
-            <ngt-shining class="h-10 w-full"></ngt-shining>
+            <ng-container *ngIf="columnCount.length >= 2">
+                <ng-container *ngFor="let j of columnCount; let last = last">
+                    <ng-container *ngIf="last">
+                        <ngt-shining class="h-10 w-full"></ngt-shining>
+                    </ng-container>
+
+                    <ng-container *ngIf="!last">
+                        <ngt-shining class="h-10 w-full mr-10"></ngt-shining>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="columnCount.length < 2">
+                <ngt-shining class="h-10 w-full"></ngt-shining>
+                <ngt-shining class="h-10 w-full mr-10 ml-10"></ngt-shining>
+                <ngt-shining class="h-10 w-full"></ngt-shining>
+            </ng-container>
         </div>
     </div>
 </div>
 
 <div class="clearfix mt-2 md:mt-8" [hidden]='!data || data.length == 0'>
-    <ngt-pagination [pagesInterval]='4' (onPageChange)='apply($event)' (onPerPageChange)='apply()' #ngtPagination></ngt-pagination>
+    <ngt-pagination [pagesInterval]='4' (onPageChange)='apply($event)' (onPerPageChange)='apply()' #ngtPagination>
+    </ngt-pagination>
 </div>
 
 <ngt-modal #searchModal [customLayout]='true'>

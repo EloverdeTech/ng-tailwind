@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 
 import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
 import { NgtInputComponent } from '../ngt-input/ngt-input.component';
@@ -11,6 +11,7 @@ import { NgtPaginationComponent } from '../ngt-pagination/ngt-pagination.compone
   styleUrls: ['./ngt-datatable.component.css']
 })
 export class NgtDatatableComponent implements OnInit {
+  @ViewChild('table', { static: true }) table: ElementRef;
   @ViewChild('searchModal', { static: true }) searchModal: NgtModalComponent;
   @ViewChild('ngtPagination', { static: true }) ngtPagination: NgtPaginationComponent;
 
@@ -36,6 +37,7 @@ export class NgtDatatableComponent implements OnInit {
   public componentReady = false;
   public filtersTranslated = [];
   public emptyStateVisible: boolean;
+  public columnCount = [];
 
   public selectedElements = [];
   private searchTimeout: any;
@@ -58,6 +60,11 @@ export class NgtDatatableComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.table && this.table.nativeElement && this.table.nativeElement.rows
+      && this.table.nativeElement.rows[0] && this.table.nativeElement.rows[0].cells) {
+      this.columnCount = this.table.nativeElement.rows[0].cells;
+    }
+
     if (this.inputSearch) {
       this.initSearchWithInput();
     }
