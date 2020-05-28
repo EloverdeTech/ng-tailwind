@@ -110,6 +110,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
       per_page: null
     }
   };
+  private searchTimeout: any;
 
   constructor(
     @Optional() @Self()
@@ -217,8 +218,12 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
       return;
     }
 
-    setTimeout(() => {
-      this.loading = true;
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+
+    this.loading = true;
+    this.searchTimeout = setTimeout(() => {
       this.ngtHttp
         .get(this.remoteResource, this.currentState.filters, this.currentState.pagination)
         .subscribe(
@@ -233,7 +238,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
             this.ngSearchObserver.next([]);
           }
         );
-    });
+    }, 500);
   }
 
   public onNativeChange(value) {
