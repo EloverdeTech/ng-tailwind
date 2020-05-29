@@ -13,7 +13,7 @@ import { SvgIconComponent } from 'angular-svg-icon';
 export class NgtSvgComponent implements AfterViewChecked, OnChanges {
 
   @Input() src: string;
-  @Input() class: string = null;
+  @Input() class: string = '';
 
   @ViewChild(SvgIconComponent, { static: true, read: ElementRef }) private svgIconElement: ElementRef;
 
