@@ -1,4 +1,14 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 
 import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
 import { NgtInputComponent } from '../ngt-input/ngt-input.component';
@@ -49,7 +59,7 @@ export class NgtDatatableComponent implements OnInit {
     }
   };
 
-  constructor(private ngtHttpService: NgtHttpService) { }
+  constructor(private ngtHttpService: NgtHttpService, private changeDetector: ChangeDetectorRef) { }
 
   public setSearchModalTemplate(template: TemplateRef<any>) {
     this.searchModalTemplate = template;
@@ -233,6 +243,8 @@ export class NgtDatatableComponent implements OnInit {
   }
 
   private bindVisibilityAttributes() {
+    this.changeDetector.detectChanges();
+
     if (this.type == NgtDatatableType.remote && !this.data.length && !this.loading) {
       this.emptyStateVisible = true;
     } else if (this.type == NgtDatatableType.fixed) {
@@ -240,6 +252,8 @@ export class NgtDatatableComponent implements OnInit {
     } else {
       this.emptyStateVisible = false;
     }
+
+    this.changeDetector.detectChanges();
   }
 
   private proccessRemoteResponse(response: any) {
