@@ -223,6 +223,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     }
 
     this.loading = true;
+    this.changeDetector.detectChanges();
+
     this.searchTimeout = setTimeout(() => {
       this.ngtHttp
         .get(this.remoteResource, this.currentState.filters, this.currentState.pagination)
@@ -231,9 +233,11 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
             this.loading = false;
             this.ngSearchObserver.next(response.data);
             this.currentState.pagination = response.meta.pagination;
+            this.changeDetector.detectChanges();
           },
           (error) => {
             this.loading = false;
+            this.changeDetector.detectChanges();
             console.error(error);
             this.ngSearchObserver.next([]);
           }
