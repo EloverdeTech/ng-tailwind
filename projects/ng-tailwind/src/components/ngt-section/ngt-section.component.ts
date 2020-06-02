@@ -1,6 +1,6 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, Injector, Input, Optional, Output, Self } from '@angular/core';
 
-import { fadeDownAnimation } from '../../animations/ngt-angular-animations';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
@@ -9,7 +9,12 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
   templateUrl: './ngt-section.component.html',
   styleUrls: ['./ngt-section.component.css'],
   animations: [
-    fadeDownAnimation('enterAnimation', 400),
+    trigger('enterAnimation', [
+      state('void', style({ transform: 'translateY(-20px)', opacity: 0 })),
+      transition(':enter', [
+        animate(400)
+      ])
+    ]),
   ]
 })
 export class NgtSectionComponent {

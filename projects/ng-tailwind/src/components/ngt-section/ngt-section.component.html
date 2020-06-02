@@ -2,13 +2,13 @@
   <ngt-svg *ngIf="icon" [src]='icon'
     class="hidden md:block {{ ngtSectionStyle.compile(['color.text', 'h', 'w', 'my', 'pr']) }}"></ngt-svg>
   <div
-    class="{{ icon ? 'pb-4 border-b-4 w-full border-dashed md:pb-0 md:border-solid md:border-b-0 md:border-l md:w-11/12' : 'pb-4 border-b-4 w-full border-dashed md:pb-0 md:border-b-0' }}">
+    class="pb-4 border-b-4 w-full border-dashed md:pb-0 {{ icon ? 'md:border-solid md:border-b-0 md:border-l md:w-11/12' : 'md:border-b-0' }} {{ accordion && !showSection ? 'flex' : '' }}">
     <span *ngIf='!accordion'
       class="px-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">{{ caption }}</span>
 
     <ng-container *ngIf="accordion">
       <div
-        class="flex flex-wrap items-center px-5 cursor-pointer hover:opacity-75 {{ ngtCaptionStyle.compile(['pb']) }}"
+        class="flex flex-wrap items-center px-5 cursor-pointer hover:opacity-75 {{ accordion && showSection ? ngtCaptionStyle.compile(['pb']) : '' }}"
         (click)='toogleSectionVisibility()' style="max-width: fit-content;">
         <div *ngIf="!showSection"
           class="flex align-items-center text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
