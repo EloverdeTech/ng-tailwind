@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
   AfterViewInit,
   Component,
@@ -25,12 +26,28 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
   ],
   viewProviders: [
     { provide: ControlContainer, useExisting: NgForm }
+  ],
+  animations: [
+    trigger('slideLeftToRight', [
+      state('void', style({ transform: 'translateX(-4px) rotate(45deg)', opacity: 0 })),
+      transition(':enter', [
+        animate(200)
+      ])
+    ]),
+
+    trigger('slideRightToLeft', [
+      state('void', style({ transform: 'translateX(4px) rotate(45deg)', opacity: 0 })),
+      transition(':enter', [
+        animate(200)
+      ])
+    ]),
   ]
 })
 export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewInit {
   @ViewChild('element', { static: true }) element: ElementRef;
   @Input() label: string;
   @Input() name: string;
+  @Input() mode: NgtCheckboxMode = NgtCheckboxMode.DEFAULT;
 
   public ngtStyle: NgtStylizableService;
 
@@ -77,4 +94,17 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
       this.onNativeChange(this.element.nativeElement.checked);
     });
   }
+
+  isToggleMode() {
+    return this.mode == NgtCheckboxMode.TOGGLE;
+  }
+
+  isDefaultMode() {
+    return this.mode == NgtCheckboxMode.DEFAULT;
+  }
+}
+
+export enum NgtCheckboxMode {
+  DEFAULT = 'DEFAULT',
+  TOGGLE = 'TOGGLE'
 }
