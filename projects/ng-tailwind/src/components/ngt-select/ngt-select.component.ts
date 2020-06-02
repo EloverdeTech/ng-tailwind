@@ -50,6 +50,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
   @Input() label: string = '';
   @Input() helpTitle: string;
   @Input() helpText: string;
+  @Input() helpTextColor: string = 'text-green-500';
   @Input() shining = false;
   @Input() loading: boolean = false;
   @Input() loadingText: string = "Carregando resultados...";
