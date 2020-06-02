@@ -43,8 +43,9 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
   // Visual
   @Input() label: string = "";
   @Input() placeholder: string = "";
-  @Input() helpTitle = 'Help';
+  @Input() helpTitle: string;
   @Input() helpText = false;
+  @Input() helpTextColor: string = 'text-green-500';
   @Input() shining = false;
   @Input() dateFormat: string = 'd/m/Y H:i';
   @Input() dateFormatNgModel = 'YYYY-MM-DD HH:mm:00';

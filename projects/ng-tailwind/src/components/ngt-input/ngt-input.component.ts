@@ -41,7 +41,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
   @Input() placeholder: string = "";
   @Input() shining: boolean = false;
   @Input() loading: boolean = false;
-  @Input() helpTitle: string = 'Help';
+  @Input() helpTitle: string;
+  @Input() helpTextColor: string = 'text-green-500';
   @Input() helpText: boolean = false;
   @Input() innerLeftIcon: string = null;
   @Input() innerRightIcon: string = null;
