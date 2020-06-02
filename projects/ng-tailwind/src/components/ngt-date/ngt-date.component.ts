@@ -6,6 +6,7 @@ import {
   OnInit,
   Optional,
   Self,
+  SimpleChanges,
   SkipSelf,
   ViewChild,
   ViewEncapsulation,
@@ -15,6 +16,7 @@ import { FlatpickrOptions, Ng2FlatpickrComponent } from 'ng2-flatpickr';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { getEnumFromString } from '../../helpers/enum/enum';
 import { uuid } from '../../helpers/uuid';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
@@ -141,6 +143,16 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
 
     if (value && value != this.nativeValue) {
       this.ng2FlatpickrComponent.setDateFromInput(moment(value).format('DD/MM/YYYY HH:mm:00'));
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.mode) {
+      this.mode = getEnumFromString(changes.mode.currentValue, NgtDateMode);
+    }
+
+    if (changes.locale) {
+      this.locale = getEnumFromString(changes.locale.currentValue, NgtDateLocale);
     }
   }
 

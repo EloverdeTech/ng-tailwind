@@ -9,12 +9,14 @@ import {
   Optional,
   Renderer2,
   Self,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
@@ -101,6 +103,12 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
 
   isDefaultMode() {
     return this.mode == NgtCheckboxMode.DEFAULT;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.mode) {
+      this.mode = getEnumFromString(changes.mode.currentValue, NgtCheckboxMode);
+    }
   }
 }
 

@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 
+import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
 import { NgtInputComponent } from '../ngt-input/ngt-input.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
@@ -26,7 +27,7 @@ export class NgtDatatableComponent implements OnInit {
   @ViewChild('ngtPagination', { static: true }) ngtPagination: NgtPaginationComponent;
 
   @Input() remoteResource: any;
-  @Input() type: NgtDatatableType = NgtDatatableType.remote;
+  @Input() type: NgtDatatableType = NgtDatatableType.REMOTE;
 
   @Input() filterTagBgColor: string = 'bg-blue-500';
   @Input() inputSearch: NgtInputComponent;
@@ -173,6 +174,10 @@ export class NgtDatatableComponent implements OnInit {
     if (changes.inputSearch) {
       this.initSearchWithInput();
     }
+
+    if (changes.type) {
+      this.type = getEnumFromString(changes.type.currentValue, NgtDatatableType);
+    }
   }
 
   public async apply(page = 1) {
@@ -187,7 +192,7 @@ export class NgtDatatableComponent implements OnInit {
     this.data = [];
     this.selectedElements = [];
 
-    if (this.type === NgtDatatableType.remote) {
+    if (this.type === NgtDatatableType.REMOTE) {
       if (this.remoteResource) {
         this.loading = true;
         this.bindVisibilityAttributes();
@@ -214,7 +219,7 @@ export class NgtDatatableComponent implements OnInit {
       } else {
         console.error('The property [remoteResource] needs to be present to be able to make remote search');
       }
-    } else if (this.type == NgtDatatableType.fixed) {
+    } else if (this.type == NgtDatatableType.FIXED) {
       this.bindVisibilityAttributes();
     }
   }
@@ -245,9 +250,9 @@ export class NgtDatatableComponent implements OnInit {
   private bindVisibilityAttributes() {
     this.changeDetector.detectChanges();
 
-    if (this.type == NgtDatatableType.remote && !this.data.length && !this.loading) {
+    if (this.type == NgtDatatableType.REMOTE && !this.data.length && !this.loading) {
       this.emptyStateVisible = true;
-    } else if (this.type == NgtDatatableType.fixed) {
+    } else if (this.type == NgtDatatableType.FIXED) {
       this.emptyStateVisible = false;
     } else {
       this.emptyStateVisible = false;
@@ -278,8 +283,8 @@ export class NgtDatatableComponent implements OnInit {
 }
 
 export enum NgtDatatableType {
-  remote = 'remote',
-  fixed = 'fixed'
+  REMOTE = 'REMOTE',
+  FIXED = 'FIXED'
 }
 
 export class NgtCheckedElement {

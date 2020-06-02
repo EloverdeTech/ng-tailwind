@@ -1,8 +1,8 @@
 export enum Size {
-    auto = 'auto',
-    xs = 'xs',
-    sm = 'sm',
-    md = 'md',
-    xl = 'xl',
-    full = 'full'
+    AUTO = 'AUTO',
+    XS = 'XS',
+    SM = 'SM',
+    MD = 'MD',
+    XL = 'XL',
+    FULL = 'FULL'
 };

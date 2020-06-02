@@ -6,6 +6,7 @@ import {
   OnInit,
   Optional,
   Output,
+  SimpleChanges,
   SkipSelf,
   ViewChild,
   ViewEncapsulation,
@@ -16,6 +17,7 @@ import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-http.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
@@ -75,6 +77,12 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
       this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
         this.shining = shining;
       });
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.previewType) {
+      this.previewType = getEnumFromString(changes.previewType.currentValue, NgtDropzonePreviewType);
     }
   }
 

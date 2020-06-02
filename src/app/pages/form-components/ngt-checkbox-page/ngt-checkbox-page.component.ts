@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class NgtCheckboxPageComponent {
   public ngModelOne: boolean = false;
   public ngModelTwo: boolean = false;
-  public ngModelThree: boolean = true;
+  public ngModelThree: boolean = true;z
 
   public codeExample = `
   <form class="flex w-full justify-around pb-2 border-b">

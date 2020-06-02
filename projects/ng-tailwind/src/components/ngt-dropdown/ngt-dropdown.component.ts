@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input, Optional, SkipSelf } from '@angular/core';
+import { Component, Input, Optional, SimpleChanges, SkipSelf } from '@angular/core';
 
+import { getEnumFromString } from '../../helpers/enum/enum';
 import { uuid } from '../../helpers/uuid';
 import { NgtDropdownContainerComponent } from './ngt-dropdown-container/ngt-dropdown-container.component';
 
@@ -112,6 +113,11 @@ export class NgtDropdownComponent {
       container.parentElement.querySelector(':hover') == container;
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.openMethod) {
+      this.openMethod = getEnumFromString(changes.openMethod.currentValue, NgtDropdownOpenMethod);
+    }
+  }
 }
 
 export enum NgtDropdownOpenMethod {

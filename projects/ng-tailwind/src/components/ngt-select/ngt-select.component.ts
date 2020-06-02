@@ -8,6 +8,7 @@ import {
   OnChanges,
   Optional,
   Self,
+  SimpleChanges,
   SkipSelf,
   TemplateRef,
   ViewChild,
@@ -19,6 +20,7 @@ import { Observable, Observer, Subject } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { getEnumFromString } from '../../helpers/enum/enum';
 import { uuid } from '../../helpers/uuid';
 import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -313,13 +315,17 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     };
   }
 
-  ngOnChanges(changes) {
+  ngOnChanges(changes: SimpleChanges) {
     if (changes.isRequired) {
       this.updateValidations();
     }
 
     if (changes.remoteResource || changes.items) {
       this.initNgSelectItems();
+    }
+
+    if (changes.dropdownPanelMinHeight) {
+      this.dropdownPanelMinHeight = getEnumFromString(changes.dropdownPanelMinHeight.currentValue, NgtSelectDropdownPanelHeight);
     }
   }
 

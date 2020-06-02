@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, HostListener, Injector, Input, Optional, Self } from '@angular/core';
+import { AfterViewInit, Component, HostListener, Injector, Input, Optional, Self, SimpleChanges } from '@angular/core';
 
 import { fadeDownAnimation } from '../../animations/ngt-angular-animations';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { Size } from '../../enums/size.enum';
+import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
@@ -15,7 +16,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 })
 
 export class NgtSidenavComponent implements AfterViewInit {
-  @Input() public size: Size = Size.xs;
+  @Input() public size: Size = Size.XS;
   @Input() public initVisible: boolean = false;
   @Input() public closeMenuOnMobileView: boolean = true;
 
@@ -23,7 +24,7 @@ export class NgtSidenavComponent implements AfterViewInit {
   public open: boolean = false;
   public isMenuContracted: boolean = false;
   public ngtStyle: NgtStylizableService;
-  
+
   private screenWidth: number;
 
   constructor(
@@ -52,6 +53,12 @@ export class NgtSidenavComponent implements AfterViewInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.size) {
+      this.size = getEnumFromString(changes.size.currentValue, Size);
+    }
+  }
+
   toggleMenu() {
     if (this.open) {
       this.closeMenu();
@@ -70,12 +77,12 @@ export class NgtSidenavComponent implements AfterViewInit {
 
   getNavSize() {
     switch (this.size) {
-      case Size.auto: return 'md:w-auto w-4/12';
-      case Size.xs: return 'md:w-1/12 w-4/12';
-      case Size.sm: return 'md:w-2/12 w-5/12';
-      case Size.md: return 'md:w-4/12 w-6/12';
-      case Size.xl: return 'md:w-6/12 w-full';
-      case Size.full: return 'w-full';
+      case Size.AUTO: return 'md:w-auto w-4/12';
+      case Size.XS: return 'md:w-1/12 w-4/12';
+      case Size.SM: return 'md:w-2/12 w-5/12';
+      case Size.MD: return 'md:w-4/12 w-6/12';
+      case Size.XL: return 'md:w-6/12 w-full';
+      case Size.FULL: return 'w-full';
     }
   }
 
@@ -89,12 +96,12 @@ export class NgtSidenavComponent implements AfterViewInit {
     }
 
     switch (this.size) {
-      case Size.auto: return 'w-full'
-      case Size.xs: return 'md:w-11/12 w-full';
-      case Size.sm: return 'md:w-10/12 w-full';
-      case Size.md: return 'md:w-8/12 w-full';
-      case Size.xl: return 'md:w-6/12 w-full';
-      case Size.full: return 'w-full';
+      case Size.AUTO: return 'w-full'
+      case Size.XS: return 'md:w-11/12 w-full';
+      case Size.SM: return 'md:w-10/12 w-full';
+      case Size.MD: return 'md:w-8/12 w-full';
+      case Size.XL: return 'md:w-6/12 w-full';
+      case Size.FULL: return 'w-full';
     }
   }
 
@@ -103,7 +110,7 @@ export class NgtSidenavComponent implements AfterViewInit {
       this.size = size;
       this.isMenuContracted = false;
     } else {
-      this.size = Size.auto;
+      this.size = Size.AUTO;
       this.isMenuContracted = true;
     }
   }

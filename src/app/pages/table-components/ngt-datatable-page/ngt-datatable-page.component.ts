@@ -9,7 +9,7 @@ import { NgtDatatableComponent, NgtDatatableType } from 'projects/ng-tailwind/sr
 export class NgtDatatablePageComponent implements OnInit, AfterViewInit {
   @ViewChild('ngtDatatable', { static: false }) ngtDatatable: NgtDatatableComponent;
 
-  public ngtDatatableType = NgtDatatableType.fixed;
+  public ngtDatatableType = NgtDatatableType.FIXED;
   public remoteResource = {};
 
   constructor() { }
