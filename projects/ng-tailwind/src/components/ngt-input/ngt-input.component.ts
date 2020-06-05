@@ -457,9 +457,9 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
 
   async ngOnInit() {
     if (!this.formContainer) {
-      console.warn("The element must be inside a <form #form='ngForm'> tag!", this.element.nativeElement);
+      console.error("The element must be inside a <form #form='ngForm'> tag!", this.element.nativeElement);
     } if (!this.name) {
-      console.warn("The element must contain a name attribute!", this.element.nativeElement);
+      console.error("The element must contain a name attribute!", this.element.nativeElement);
     } else {
       //Delay de renderização
       await setTimeout(() => { }, 500);
