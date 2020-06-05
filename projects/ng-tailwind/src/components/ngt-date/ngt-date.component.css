@@ -40,6 +40,5 @@
 }
 
 .disabledDiv {
-    background-color: rgb(235, 235, 235);
-    min-height: 46px;
+    background-color: #fafafa;
 }

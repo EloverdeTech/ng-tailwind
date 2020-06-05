@@ -13,7 +13,7 @@
 
 .select-border-disabled .ng-select-container {
     border: solid #cbd5e0 1px !important;
-    background-color: rgb(235, 235, 228) !important;
+    background-color: #fafafa !important;
     border-radius: 0.25rem;
     padding: 1px;
 }
