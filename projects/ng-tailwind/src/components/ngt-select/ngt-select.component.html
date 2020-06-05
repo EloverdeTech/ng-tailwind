@@ -24,7 +24,7 @@
             [virtualScroll]="virtualScroll" [tabIndex]="tabIndex" [items]="ngSelectItems | async"
             (scroll)="onScroll($event)" [bindValue]="bindValue" [groupValue]="groupValue" [loading]="loading"
             [loadingText]="loadingText" [maxSelectedItems]="maxSelectedItems" [compareWith]='compareWith'
-            (clear)='onClearSelect()'>
+            (clear)='onClearSelect()' #element>
 
             <ng-template *ngIf='ngtSelectHeaderTemplate' ng-header-tmp>
                 <ng-template [ngTemplateOutlet]="ngtSelectHeaderTemplate">
@@ -56,3 +56,5 @@
 </ng-container>
 
 <ngt-validation [control]="formControl" [container]="formContainer"></ngt-validation>
+
+<input *ngIf='componentReady' type='hidden' [ngModel]="value" [name]="name" [value]="value">

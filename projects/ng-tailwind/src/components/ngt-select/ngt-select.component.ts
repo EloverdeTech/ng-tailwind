@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   ContentChild,
+  ElementRef,
   Host,
   Injector,
   Input,
@@ -45,6 +46,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
   @ContentChild(NgtSelectOptionSelectedTmp, { static: false, read: TemplateRef }) ngtOptionSelectedTemplate: TemplateRef<any>;
   @ContentChild(NgtSelectHeaderTmp, { static: false, read: TemplateRef }) ngtSelectHeaderTemplate: TemplateRef<any>;
   @ViewChild(NgSelectComponent, { static: true }) ngSelectComponent: NgSelectComponent;
+  @ViewChild('element', { static: true }) nativeElement: ElementRef;
 
   // Visual
   @Input() label: string = '';
@@ -93,6 +95,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
   public ngSelectItems: any = [];
   public nativeValue: any;
   public nativeName = uuid();
+  public componentReady: boolean = false;
 
   private ngSearchObserver: Observer<any>;
   private originalPerPage = 15;
@@ -296,10 +299,18 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     return selectClass;
   }
 
-  async ngAfterContentInit() {
-    await setTimeout(() => {
-      this.initComponent();
-    });
+  ngAfterContentInit() {
+    if (!this.formContainer) {
+      console.error("The element must be inside a <form #form='ngForm'> tag!", this.nativeElement.nativeElement);
+    } if (!this.name) {
+      console.error("The element must contain a name attribute!", this.nativeElement.nativeElement);
+    } else {
+      this.componentReady = true;
+
+      setTimeout(() => {
+        this.initComponent();
+      });
+    }
   }
 
   private isRequiredValidator() {
