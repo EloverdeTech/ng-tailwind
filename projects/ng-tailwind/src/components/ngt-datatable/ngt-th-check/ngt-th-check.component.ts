@@ -28,6 +28,10 @@ export class NgtThCheckComponent implements AfterContentInit {
       this.ngtDataTable.onDataChange.subscribe(() => {
         this.checked = false;
       });
+
+      this.ngtDataTable.onClearSelectedElements.subscribe(() => {
+        this.checked = false;
+      });
     }
   }
 

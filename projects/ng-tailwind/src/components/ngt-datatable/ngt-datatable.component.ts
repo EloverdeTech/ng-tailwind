@@ -36,9 +36,10 @@ export class NgtDatatableComponent implements OnInit {
     reference: name
   };
 
-  @Output() onDataChange = new EventEmitter();
-  @Output() onClearFilter = new EventEmitter();
-  @Output() onToogleAllCheckboxes = new EventEmitter();
+  @Output() onDataChange: EventEmitter<any> = new EventEmitter();
+  @Output() onClearFilter: EventEmitter<any> = new EventEmitter();
+  @Output() onClearSelectedElements: EventEmitter<any> = new EventEmitter();
+  @Output() onToogleAllCheckboxes: EventEmitter<any> = new EventEmitter();
   @Output() onToogleCheckbox: EventEmitter<NgtCheckedElement> = new EventEmitter();
 
   public searchModalTemplate: TemplateRef<any>;
@@ -60,17 +61,12 @@ export class NgtDatatableComponent implements OnInit {
     }
   };
 
-  constructor(private ngtHttpService: NgtHttpService, private changeDetector: ChangeDetectorRef) { }
+  constructor(
+    private ngtHttpService: NgtHttpService,
+    private changeDetector: ChangeDetectorRef
+  ) { }
 
-  public setSearchModalTemplate(template: TemplateRef<any>) {
-    this.searchModalTemplate = template;
-  }
-
-  public openSearchModal() {
-    this.searchModal.open();
-  }
-
-  ngOnInit() {
+  public ngOnInit() {
     if (this.table && this.table.nativeElement && this.table.nativeElement.rows
       && this.table.nativeElement.rows[0] && this.table.nativeElement.rows[0].cells) {
       this.columnCount = this.table.nativeElement.rows[0].cells;
@@ -81,6 +77,19 @@ export class NgtDatatableComponent implements OnInit {
     }
 
     this.initCheckboxEvent();
+  }
+
+  public setSearchModalTemplate(template: TemplateRef<any>) {
+    this.searchModalTemplate = template;
+  }
+
+  public openSearchModal() {
+    this.searchModal.open();
+  }
+
+  public clearSelectedElements() {
+    this.selectedElements = [];
+    this.onClearSelectedElements.emit();
   }
 
   public getCurrentState() {

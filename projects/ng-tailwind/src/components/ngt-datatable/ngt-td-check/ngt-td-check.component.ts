@@ -34,6 +34,10 @@ export class NgtTdCheckComponent {
       this.ngtDataTable.onToogleAllCheckboxes.subscribe((checked: boolean) => {
         this.checked = checked;
       });
+
+      this.ngtDataTable.onClearSelectedElements.subscribe(() => {
+        this.checked = false;
+      });
     }
   }
 
