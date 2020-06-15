@@ -54,4 +54,5 @@
 <input *ngIf='componentReady' type="hidden" [ngModel]="value" [name]="name" [value]="value">
 
 <ng-content></ng-content>
-<ngt-validation [control]="formControl" [container]="formContainer"></ngt-validation>
+<ngt-validation [control]="formControl" [container]="formContainer" [minValue]='minValue'>
+</ngt-validation>

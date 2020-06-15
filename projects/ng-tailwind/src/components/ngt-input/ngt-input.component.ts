@@ -61,7 +61,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
   @Input() isRequired: boolean = false;
   @Input() uniqueResource: any;
   @Input() minValue: number;
-  @Input() max: string;
+  @Input() maxValue: number;
   @Input() maxLength: number;
   @Input() match: string = "";
   @Input() multipleOf: number;
@@ -231,7 +231,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
         radixPoint: ',',
         autoGroup: true,
         repeat: 16,
-        rightAlign: false
+        rightAlign: false,
+        max: this.maxValue,
       },
       'cnpj-cpf': {
         mask: ['999.999.999-99', '99.999.999/9999-99'],
@@ -248,7 +249,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
       'cep': '99999-999',
       'integer': {
         min: '0',
-        max: this.max,
+        max: this.maxValue,
         rightAlign: false
       },
       'time': '99:99',
@@ -315,7 +316,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
   minValueValidator() {
     return (control: AbstractControl) => {
       if (control.value) {
-        return (control.value > this.minValue) ? { 'minValue': true } : null;
+        return (parseFloat(control.value) <= this.minValue) ? { 'minValue': true } : null;
       }
     };
   }
