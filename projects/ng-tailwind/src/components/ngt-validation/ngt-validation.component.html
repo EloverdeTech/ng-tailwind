@@ -52,4 +52,9 @@
         *ngIf="control?.errors?.externalServerDependency && (control?.dirty || (container && container['submitted']))">
         Servidor externo indisponível.
     </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.minValue && (control?.dirty || (container && container['submitted']))">
+        O valor informado deve ser maior que {{ minValue }}
+    </span>
 </div>

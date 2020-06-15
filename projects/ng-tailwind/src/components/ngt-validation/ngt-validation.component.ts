@@ -9,6 +9,7 @@ import { ControlContainer, FormControl } from '@angular/forms';
 export class NgtValidationComponent {
   @Input() control: FormControl;
   @Input() container: ControlContainer;
+  @Input() minValue: number;
 
   constructor() {
   }
