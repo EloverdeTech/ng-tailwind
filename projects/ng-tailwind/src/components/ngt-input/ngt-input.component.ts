@@ -1,4 +1,5 @@
 import {
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Host,
@@ -19,7 +20,6 @@ import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-styl
 import { NgtHttpValidationResponse, NgtHttpValidationService } from '../../services/http/ngt-http-validation.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
-import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 
 var Inputmask = require('inputmask');
 @Component({
@@ -81,12 +81,11 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     @Optional() @Host()
     public formContainer: ControlContainer,
     @Optional() @SkipSelf()
-    private ngtSectionComponent: NgtSectionComponent,
-    @Optional() @SkipSelf()
     private ngtFormComponent: NgtFormComponent,
     private renderer: Renderer2,
     @Optional() @SkipSelf()
-    private ngtValidationService: NgtHttpValidationService
+    private ngtValidationService: NgtHttpValidationService,
+    private changeDetector: ChangeDetectorRef
   ) {
     super();
 
@@ -456,19 +455,17 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     }
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     if (!this.formContainer) {
       console.error("The element must be inside a <form #form='ngForm'> tag!", this.element.nativeElement);
     } if (!this.name) {
       console.error("The element must contain a name attribute!", this.element.nativeElement);
     } else {
-      //Delay de renderização
-      await setTimeout(() => { }, 500);
-      this.componentReady = true;
-
-      await setTimeout(() => {
+      setTimeout(() => {
+        this.componentReady = true;
         this.initComponent();
-      });
+        this.changeDetector.detectChanges();
+      }, 500);
     }
   }
 

@@ -305,11 +305,11 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
     } if (!this.name) {
       console.error("The element must contain a name attribute!", this.nativeElement.nativeElement);
     } else {
-      this.componentReady = true;
-
       setTimeout(() => {
+        this.componentReady = true;
         this.initComponent();
-      });
+        this.changeDetector.detectChanges();
+      }, 500);
     }
   }
 
