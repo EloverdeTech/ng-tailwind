@@ -1,22 +1,19 @@
-<div class="md:flex md:items-center">
-    <div class="flex items-center justify-center" [title]="getTooltip()" (click)='sort()'
-        [class.cursor-pointer]='sortable'>
-        <ng-content></ng-content>
-        <ng-container *ngIf='sortable && isCurrentSort'>
-            <svg *ngIf="sortDirection == 'asc'" class="fill-current self-center cursor-pointer ml-1"
-                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-            </svg>
+<div class="flex items-center w-full" [title]="getTooltip()" (click)='sort()' [class.cursor-pointer]='sortable'>
+    <ng-content></ng-content>
+    <ng-container *ngIf='sortable && isCurrentSort'>
+        <svg *ngIf="sortDirection == 'asc'" class="fill-current self-center cursor-pointer ml-1"
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+        </svg>
 
-            <svg *ngIf="sortDirection == 'desc'" class="fill-current self-center cursor-pointer ml-1"
-                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z" />
-            </svg>
-        </ng-container>
-    </div>
+        <svg *ngIf="sortDirection == 'desc'" class="fill-current self-center cursor-pointer ml-1"
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <path d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z" />
+        </svg>
+    </ng-container>
 
     <ng-container *ngIf='searchable'>
-        <div (click)='enableSearch()' class="float-right ml-2" title="Filtrar">
+        <div (click)='enableSearch($event)' class="float-right ml-2" title="Filtrar">
             <ngt-action class="text-lg" h='h-6' w='w-6' ngt-stylizable>
                 <svg class="fill-current self-center" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
                     <path

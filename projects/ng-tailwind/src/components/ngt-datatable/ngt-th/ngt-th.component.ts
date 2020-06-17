@@ -95,7 +95,9 @@ export class NgtThComponent implements OnChanges {
     }
   }
 
-  public enableSearch() {
+  public enableSearch(event: any) {
+    event.stopPropagation();
+
     this.ngtDataTable.setSearchModalTemplate(this.modal);
     this.ngtDataTable.openSearchModal();
 
