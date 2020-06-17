@@ -1,5 +1,4 @@
 import {
-  ChangeDetectorRef,
   Component,
   ElementRef,
   Host,
@@ -85,7 +84,6 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     private renderer: Renderer2,
     @Optional() @SkipSelf()
     private ngtValidationService: NgtHttpValidationService,
-    private changeDetector: ChangeDetectorRef
   ) {
     super();
 
@@ -463,8 +461,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     } else {
       setTimeout(() => {
         this.componentReady = true;
-        this.initComponent();
-        this.changeDetector.detectChanges();
+        setTimeout(() => { this.initComponent(); });
       }, 500);
     }
   }
