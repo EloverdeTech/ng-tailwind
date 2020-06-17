@@ -2,6 +2,7 @@ import {
   Component,
   EventEmitter,
   Host,
+  Injector,
   Input,
   OnInit,
   Optional,
@@ -19,6 +20,7 @@ import { map } from 'rxjs/operators';
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-http.service';
+import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 @Component({
@@ -36,6 +38,14 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
   @ViewChild('ngxDropzone', { static: true }) ngxDropzone: NgxDropzoneComponent;
 
+  // Visual
+  @Input() label: string;
+  @Input() placeholder: string;
+  @Input() helpTitle: string;
+  @Input() helpTextColor: string = 'text-green-500';
+  @Input() helpText: boolean = false;
+
+  // Behavior
   @Input() multipleSelection: boolean = false;
   @Input() itemsLimit: number;
   @Input() showFileName: boolean = false;
@@ -46,8 +56,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
   @Input() acceptedFiles: string = '*' /** Mime type */;
   @Input() maxFileSize: number; /** Bytes */
   @Input() previewType: NgtDropzonePreviewType = NgtDropzonePreviewType.DEFAULT;
-  @Input() isRequired: boolean = false;
-  @Input() label: string;
+  @Input() isRequired: boolean = false;  
   @Input() name: string;
   @Input() remoteResource: any;
 
@@ -63,6 +72,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
   public shining: boolean;
   public componentReady = false;
   public loading: boolean = false;
+  public ngtDropzoneLoaderStyle: NgtStylizableService;
 
   constructor(
     @Optional() @Host()
@@ -70,6 +80,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
     @Optional() @SkipSelf()
     private ngtFormComponent: NgtFormComponent,
     private ngtAttachmentHttpService: NgtAttachmentHttpService,
+    private injector: Injector,
   ) {
     super();
 
@@ -78,6 +89,14 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
         this.shining = shining;
       });
     }
+
+    this.ngtDropzoneLoaderStyle = new NgtStylizableService();
+    this.ngtDropzoneLoaderStyle.load(this.injector, 'NgtDropzoneLoader', {
+      h: 'h-8',
+      color: {
+        text: 'text-gray-600'
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -179,10 +198,10 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
     if (attachments && attachments.length && attachments[0]) {
       let temporaryResource = [];
       let observables = [];
-      this.loading = true;
 
       attachments.forEach(attachment => {
         if (!(attachment instanceof File) && !attachment.loaded) {
+          this.loading = true;
           attachment['loaded'] = true;
           observables.push(this.ngtAttachmentHttpService.preview(attachment).pipe(
             map((response: any) => {

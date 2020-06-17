@@ -1,38 +1,69 @@
-<div [hidden]='shining' class="h-full w-full">
+<label class="{{ shining ? '' : 'block' }} mb-2 text-sm flex" *ngIf="label" [hidden]='shining'>
+    {{ label }}:
+
+    <span class="text-red-500 font-bold text-md ml-1" *ngIf="isRequired">*</span>
+
+    <div *ngIf='helpText' class="flex {{ helpTextColor }}" [title]="helpTitle" [attr.data-content]="helpText">
+        &nbsp;
+        <svg class="fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <path
+                d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm2-13c0 .28-.21.8-.42 1L10 9.58c-.57.58-1 1.6-1 2.42v1h2v-1c0-.29.21-.8.42-1L13 9.42c.57-.58 1-1.6 1-2.42a4 4 0 1 0-8 0h2a2 2 0 1 1 4 0zm-3 8v2h2v-2H9z" />
+        </svg>
+    </div>
+</label>
+
+<div [hidden]='shining' class="h-full w-full relative">
+    <ng-container *ngIf="loading">
+        <div class="flex absolute justify-center w-full h-full cursor-wait z-10">
+            <svg class="rotate-center-infinity self-center fill-current {{ ngtDropzoneLoaderStyle.compile(['h', 'color.text']) }}"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path
+                    d="M10 3v2a5 5 0 00-3.54 8.54l-1.41 1.41A7 7 0 0110 3zm4.95 2.05A7 7 0 0110 17v-2a5 5 0 003.54-8.54l1.41-1.41zM10 20l-4-4 4-4v8zm0-12V0l4 4-4 4z" />
+            </svg>
+        </div>
+    </ng-container>
+
     <ngx-dropzone
         class="{{ itemsLimit && itemsLimit == 1 && resources.length ? 'singleAttachmentComponent' : '' }} min-h-full"
-        [multiple]='multipleSelection' [accept]='acceptedFiles' [maxFileSize]='maxFileSize' [disabled]='disabled'
-        [expandable]='verticalExpandable' [disableClick]='disableClick' (change)='onSelect($event)' #ngxDropzone>
-        <ngx-dropzone-label>{{ label }}</ngx-dropzone-label>
+        [multiple]='multipleSelection' [accept]='acceptedFiles' [maxFileSize]='maxFileSize'
+        [disabled]='disabled || loading' [expandable]='verticalExpandable' [disableClick]='disableClick'
+        (change)='onSelect($event)' #ngxDropzone>
+        <ng-container *ngIf="!loading">
+            <ngx-dropzone-label *ngIf="!resources || resources && !resources.length">
+                {{ placeholder }}
+            </ngx-dropzone-label>
 
-        <ng-container *ngIf="previewType == 'DEFAULT'">
-            <ngx-dropzone-preview *ngFor="let resource of resources" [removable]="removable"
-                (removed)="onRemove(resource)">
-                <ngx-dropzone-label *ngIf="showFileName">
-                    {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}</ngx-dropzone-label>
-            </ngx-dropzone-preview>
-        </ng-container>
+            <ng-container *ngIf="previewType == 'DEFAULT'">
+                <ngx-dropzone-preview *ngFor="let resource of resources" [removable]="removable"
+                    (removed)="onRemove(resource)">
+                    <ngx-dropzone-label *ngIf="showFileName">
+                        {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}
+                    </ngx-dropzone-label>
+                </ngx-dropzone-preview>
+            </ng-container>
 
-        <ng-container *ngIf="previewType == 'IMAGE'">
-            <ngx-dropzone-image-preview *ngFor="let resource of resources" [file]="resource.file"
-                [removable]="removable" (removed)="onRemove(resource)"
-                class="{{ itemsLimit && itemsLimit == 1 && resources.length ? 'singleAttachmentPreview' : '' }} {{ loading ? 'opacity-50' : '' }}">
-                <ngx-dropzone-label *ngIf="showFileName">
-                    {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}</ngx-dropzone-label>
-            </ngx-dropzone-image-preview>
-        </ng-container>
+            <ng-container *ngIf="previewType == 'IMAGE'">
+                <ngx-dropzone-image-preview *ngFor="let resource of resources" [file]="resource.file"
+                    [removable]="removable" (removed)="onRemove(resource)"
+                    class="{{ itemsLimit && itemsLimit == 1 && resources.length ? 'singleAttachmentPreview' : '' }}">
+                    <ngx-dropzone-label *ngIf="showFileName">
+                        {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}
+                    </ngx-dropzone-label>
+                </ngx-dropzone-image-preview>
+            </ng-container>
 
-        <ng-container *ngIf="previewType == 'VIDEO'">
-            <ngx-dropzone-video-preview *ngFor="let resource of resources" [file]="resource.file"
-                [removable]="removable" (removed)="onRemove(resource)">
-                <ngx-dropzone-label *ngIf="showFileName">
-                    {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}</ngx-dropzone-label>
-            </ngx-dropzone-video-preview>
+            <ng-container *ngIf="previewType == 'VIDEO'">
+                <ngx-dropzone-video-preview *ngFor="let resource of resources" [file]="resource.file"
+                    [removable]="removable" (removed)="onRemove(resource)">
+                    <ngx-dropzone-label *ngIf="showFileName">
+                        {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}
+                    </ngx-dropzone-label>
+                </ngx-dropzone-video-preview>
+            </ng-container>
         </ng-container>
     </ngx-dropzone>
 </div>
 
-<!-- LOADING ANIMATION -->
 <ng-container *ngIf='shining'>
     <div class="flex w-full">
         <ngt-shining class="h-10 w-full"></ngt-shining>
