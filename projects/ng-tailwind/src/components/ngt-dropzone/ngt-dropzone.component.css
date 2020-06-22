@@ -17,6 +17,10 @@
     animation: rotate-center 0.9s linear infinite none;
 }
 
+ngx-dropzone-label {
+    word-break: break-all !important;
+}
+
 @-webkit-keyframes rotate-center {
     0% {
         -webkit-transform: rotate(0);
