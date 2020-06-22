@@ -56,7 +56,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
   @Input() acceptedFiles: string = '*' /** Mime type */;
   @Input() maxFileSize: number; /** Bytes */
   @Input() previewType: NgtDropzonePreviewType = NgtDropzonePreviewType.DEFAULT;
-  @Input() isRequired: boolean = false;  
+  @Input() isRequired: boolean = false;
   @Input() name: string;
   @Input() remoteResource: any;
 
@@ -99,13 +99,13 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  public ngOnChanges(changes: SimpleChanges) {
     if (changes.previewType) {
       this.previewType = getEnumFromString(changes.previewType.currentValue, NgtDropzonePreviewType);
     }
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     setTimeout(() => { }, 500);
     this.componentReady = true;
 
@@ -114,7 +114,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
     });
   }
 
-  async onSelect(event: NgxDropzoneChangeEvent) {
+  public async onSelect(event: NgxDropzoneChangeEvent) {
     if (event.rejectedFiles.length) {
       for (const rejectedFile of <any>event.rejectedFiles) {
         if (rejectedFile.reason == 'size') {
@@ -152,7 +152,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
     }
   }
 
-  async uploadFiles(files: Array<File>) {
+  public async uploadFiles(files: Array<File>) {
     if (files && files.length) {
       let temporaryFiles = [];
       let temporaryAttachments = [];
@@ -194,7 +194,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
     }
   }
 
-  async loadFilePreview(attachments: any) {
+  public async loadFilePreview(attachments: any) {
     if (attachments && attachments.length && attachments[0]) {
       let temporaryResource = [];
       let observables = [];
@@ -228,18 +228,16 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
     }
   }
 
-  downloadFile(attachment: any) {
-    this.ngtAttachmentHttpService.download(attachment).subscribe(() => { });
-  }
 
-  onRemove(resource: any) {
+
+  public onRemove(resource: any) {
     this.resources.splice(this.resources.indexOf(resource), 1);
     this.nativeValue = this.nativeValue.filter(element => element.id != resource.id);
     this.onNativeChange(this.nativeValue);
     this.onFileRemoved.emit(resource);
   }
 
-  onNativeChange(value: any) {
+  public onNativeChange(value: any) {
     if (value === undefined) {
       this.value = [];
       this.nativeValue = [];
@@ -249,6 +247,30 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
       if (JSON.stringify(this.value) != JSON.stringify(this.nativeValue)) {
         this.value = this.nativeValue;
       }
+    }
+  }
+
+  public change(value: any) {
+    if (value) {
+      this.onNativeChange(Array.isArray(value) ? value : [value]);
+      this.loadFilePreview(Array.isArray(value) ? value : [value]);
+    }
+  }
+
+  public downloadFile(attachment: any) {
+    this.ngtAttachmentHttpService.download(attachment).subscribe(() => { });
+  }
+
+  public reset() {
+    this.resources = [];
+    this.value = [];
+    this.nativeValue = [];
+    this.initComponent();
+  }
+
+  public openFileSelector() {
+    if (this.ngxDropzone) {
+      this.ngxDropzone.showFileSelector();
     }
   }
 
@@ -282,19 +304,6 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
       this.formControl.setValidators(syncValidators);
       this.formControl.updateValueAndValidity();
     });
-  }
-
-  change(value: any) {
-    if (value) {
-      this.onNativeChange(Array.isArray(value) ? value : [value]);
-      this.loadFilePreview(Array.isArray(value) ? value : [value]);
-    }
-  }
-
-  public openFileSelector() {
-    if (this.ngxDropzone) {
-      this.ngxDropzone.showFileSelector();
-    }
   }
 }
 
