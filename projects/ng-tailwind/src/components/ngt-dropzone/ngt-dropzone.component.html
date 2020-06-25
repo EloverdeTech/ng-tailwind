@@ -29,7 +29,7 @@
         [disabled]='disabled || loading' [expandable]='verticalExpandable' [disableClick]='disableClick'
         (change)='onSelect($event)' #ngxDropzone>
         <ng-container *ngIf="!loading">
-            <ngx-dropzone-label *ngIf="!resources || resources && !resources.length">
+            <ngx-dropzone-label class="px-2" *ngIf="!resources || resources && !resources.length">
                 {{ placeholder }}
             </ngx-dropzone-label>
 
