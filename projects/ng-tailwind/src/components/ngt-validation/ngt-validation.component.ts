@@ -10,6 +10,7 @@ export class NgtValidationComponent {
   @Input() control: FormControl;
   @Input() container: ControlContainer;
   @Input() minValue: number;
+  @Input() minLength: number;
 
   constructor() {
   }

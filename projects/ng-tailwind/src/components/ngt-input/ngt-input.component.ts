@@ -62,6 +62,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
   @Input() minValue: number;
   @Input() maxValue: number;
   @Input() maxLength: number;
+  @Input() minLength: number;
   @Input() match: string = "";
   @Input() multipleOf: number;
   @Input() externalServerDependency: boolean = false;
@@ -181,6 +182,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
 
     if (this.maxLength) {
       syncValidators.push(Validators.maxLength(this.maxLength));
+    }
+
+    if (this.minLength) {
+      syncValidators.push(Validators.minLength(this.minLength));
     }
 
     if (this.mask == 'cnpj-cpf') {
