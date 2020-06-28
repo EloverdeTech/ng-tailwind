@@ -10,12 +10,12 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
   styleUrls: ['./ngt-button.component.css'],
 })
 export class NgtButtonComponent implements OnChanges {
-  @Input() link: boolean = false;
-  @Input() href: string;
-  @Input() type: string = 'success';
-  @Input() loading: boolean = false;
-  @Input() isDisabled: boolean = false;
-  @Input() noSubmit: boolean = false;
+  @Input() public link: boolean = false;
+  @Input() public href: string;
+  @Input() public type: string = 'success';
+  @Input() public loading: boolean = false;
+  @Input() public isDisabled: boolean = false;
+  @Input() public noSubmit: boolean = false;
 
   public ngtStyle: NgtStylizableService;
 
@@ -38,31 +38,14 @@ export class NgtButtonComponent implements OnChanges {
     }
   }
 
-  getClass() {
+  public onClick(event: Event) {
     if (this.isDisabled || this.loading) {
-      return 'opacity-50 ' + this.getCursorClass();
-    } else {
-      return this.getCursorClass();
-    }
-  }
-
-  getCursorClass() {
-    if (this.loading) {
-      return "cursor-wait";
-    } else if (this.isDisabled) {
-      return "cursor-not-allowed";
-    } else {
-      return "cursor-pointer";
-    }
-  }
-
-  onClick(event: Event) {
-    if (this.isDisabled || this.loading) {
+      event.preventDefault();
       event.stopPropagation();
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  public ngOnChanges(changes: SimpleChanges) {
     if (changes.type) {
       if (changes.type.currentValue == 'success') {
         this.ngtStyle.load(this.injector, 'NgtSuccessButton', {
