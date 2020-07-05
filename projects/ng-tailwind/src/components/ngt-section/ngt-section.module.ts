@@ -6,12 +6,12 @@ import { NgtSvgModule } from '../ngt-svg/ngt-svg.module';
 import { NgtSectionComponent } from './ngt-section.component';
 
 @NgModule({
-  declarations: [NgtSectionComponent],
-  exports: [NgtSectionComponent],
-  imports: [
-    CommonModule,
-    NgtStylizableModule,
-    NgtSvgModule
-  ]
+    declarations: [NgtSectionComponent],
+    exports: [NgtSectionComponent],
+    imports: [
+        CommonModule,
+        NgtStylizableModule,
+        NgtSvgModule
+    ]
 })
 export class NgtSectionModule { }

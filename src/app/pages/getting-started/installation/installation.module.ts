@@ -6,18 +6,18 @@ import { NgtPortletModule } from 'projects/ng-tailwind/src/public-api';
 import { InstallationComponent } from './installation.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": InstallationComponent
-  }
+    {
+        "path": '',
+        "component": InstallationComponent
+    }
 ];
 
 @NgModule({
-  declarations: [InstallationComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    NgtPortletModule
-  ]
+    declarations: [InstallationComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        NgtPortletModule
+    ]
 })
 export class InstallationModule { }

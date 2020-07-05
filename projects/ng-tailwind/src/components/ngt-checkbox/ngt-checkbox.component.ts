@@ -1,16 +1,16 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Host,
-  Injector,
-  Input,
-  Optional,
-  Renderer2,
-  Self,
-  SimpleChanges,
-  ViewChild,
+    AfterViewInit,
+    Component,
+    ElementRef,
+    Host,
+    Injector,
+    Input,
+    Optional,
+    Renderer2,
+    Self,
+    SimpleChanges,
+    ViewChild,
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 
@@ -20,99 +20,100 @@ import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
-  selector: 'ngt-checkbox',
-  templateUrl: './ngt-checkbox.component.html',
-  styleUrls: ['./ngt-checkbox.component.css'],
-  providers: [
-    NgtMakeProvider(NgtCheckboxComponent),
-  ],
-  viewProviders: [
-    { provide: ControlContainer, useExisting: NgForm }
-  ],
-  animations: [
-    trigger('slideLeftToRight', [
-      state('void', style({ transform: 'translateX(-4px) rotate(45deg)', opacity: 0 })),
-      transition(':enter', [
-        animate(200)
-      ])
-    ]),
+    selector: 'ngt-checkbox',
+    templateUrl: './ngt-checkbox.component.html',
+    styleUrls: ['./ngt-checkbox.component.css'],
+    providers: [
+        NgtMakeProvider(NgtCheckboxComponent),
+    ],
+    viewProviders: [
+        { provide: ControlContainer, useExisting: NgForm }
+    ],
+    animations: [
+        trigger('slideLeftToRight', [
+            state('void', style({ transform: 'translateX(-4px) rotate(45deg)', opacity: 0 })),
+            transition(':enter', [
+                animate(200)
+            ])
+        ]),
 
-    trigger('slideRightToLeft', [
-      state('void', style({ transform: 'translateX(4px) rotate(45deg)', opacity: 0 })),
-      transition(':enter', [
-        animate(200)
-      ])
-    ]),
-  ]
+        trigger('slideRightToLeft', [
+            state('void', style({ transform: 'translateX(4px) rotate(45deg)', opacity: 0 })),
+            transition(':enter', [
+                animate(200)
+            ])
+        ]),
+    ]
 })
 export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewInit {
-  @ViewChild('element', { static: true }) element: ElementRef;
-  @Input() label: string;
-  @Input() name: string;
-  @Input() mode: NgtCheckboxMode = NgtCheckboxMode.DEFAULT;
+    @ViewChild('element', { static: true }) public element: ElementRef;
 
-  public ngtStyle: NgtStylizableService;
+    @Input() public label: string;
+    @Input() public name: string;
+    @Input() public mode: NgtCheckboxMode = NgtCheckboxMode.DEFAULT;
 
-  constructor(
-    private injector: Injector,
-    @Optional() @Host()
-    public formContainer: ControlContainer,
-    private renderer: Renderer2,
-    @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective
-  ) {
-    super();
+    public ngtStyle: NgtStylizableService;
 
-    if (this.ngtStylizableDirective) {
-      this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-    } else {
-      this.ngtStyle = new NgtStylizableService();
+    public constructor(
+        private injector: Injector,
+        @Optional() @Host()
+        public formContainer: ControlContainer,
+        private renderer: Renderer2,
+        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective
+    ) {
+        super();
+
+        if (this.ngtStylizableDirective) {
+            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+        } else {
+            this.ngtStyle = new NgtStylizableService();
+        }
+
+        this.ngtStyle.load(this.injector, 'NgtCheckbox', {
+            color: {
+                bg: 'bg-gray-500'
+            }
+        });
     }
 
-    this.ngtStyle.load(this.injector, 'NgtCheckbox', {
-      color: {
-        bg: 'bg-gray-500'
-      }
-    });
-  }
-
-  change(value) {
-    if (this.hasChangesBetweenModels()) {
-      this.element.nativeElement.checked = value;
+    public change(value) {
+        if (this.hasChangesBetweenModels()) {
+            this.element.nativeElement.checked = value;
+        }
     }
-  }
 
-  onNativeChange(value) {
-    if (this.hasChangesBetweenModels()) {
-      this.value = value;
+    public onNativeChange(value) {
+        if (this.hasChangesBetweenModels()) {
+            this.value = value;
+        }
     }
-  }
 
-  hasChangesBetweenModels() {
-    return this.element.nativeElement.checked !== this.value;
-  }
-
-  ngAfterViewInit() {
-    this.renderer.listen(this.element.nativeElement, 'change', (value) => {
-      this.onNativeChange(this.element.nativeElement.checked);
-    });
-  }
-
-  isToggleMode() {
-    return this.mode == NgtCheckboxMode.TOGGLE;
-  }
-
-  isDefaultMode() {
-    return this.mode == NgtCheckboxMode.DEFAULT;
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.mode) {
-      this.mode = getEnumFromString(changes.mode.currentValue, NgtCheckboxMode);
+    public hasChangesBetweenModels() {
+        return this.element.nativeElement.checked !== this.value;
     }
-  }
+
+    public ngAfterViewInit() {
+        this.renderer.listen(this.element.nativeElement, 'change', (value) => {
+            this.onNativeChange(this.element.nativeElement.checked);
+        });
+    }
+
+    public isToggleMode() {
+        return this.mode == NgtCheckboxMode.TOGGLE;
+    }
+
+    public isDefaultMode() {
+        return this.mode == NgtCheckboxMode.DEFAULT;
+    }
+
+    public ngOnChanges(changes: SimpleChanges) {
+        if (changes.mode) {
+            this.mode = getEnumFromString(changes.mode.currentValue, NgtCheckboxMode);
+        }
+    }
 }
 
 export enum NgtCheckboxMode {
-  DEFAULT = 'DEFAULT',
-  TOGGLE = 'TOGGLE'
+    DEFAULT = 'DEFAULT',
+    TOGGLE = 'TOGGLE'
 }

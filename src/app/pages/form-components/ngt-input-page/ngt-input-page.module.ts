@@ -9,22 +9,22 @@ import { NgtStylizableTemplateModule } from 'src/app/components/ngt-stylizable-t
 import { NgtInputPageComponent } from './ngt-input-page.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": NgtInputPageComponent
-  }
+    {
+        "path": '',
+        "component": NgtInputPageComponent
+    }
 ];
 
 @NgModule({
-  declarations: [NgtInputPageComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    CodePreviewModule,
-    NgtPortletModule,
-    NgtStylizableTemplateModule,
-    NgtInputModule
-  ]
+    declarations: [NgtInputPageComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        CodePreviewModule,
+        NgtPortletModule,
+        NgtStylizableTemplateModule,
+        NgtInputModule
+    ]
 })
 export class NgtInputPageModule { }

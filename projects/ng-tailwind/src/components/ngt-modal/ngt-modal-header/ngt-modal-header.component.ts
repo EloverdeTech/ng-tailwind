@@ -5,34 +5,34 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 import { NgtModalComponent } from '../ngt-modal.component';
 
 @Component({
-  selector: 'ngt-modal-header',
-  templateUrl: './ngt-modal-header.component.html',
-  styleUrls: ['./ngt-modal-header.component.css']
+    selector: 'ngt-modal-header',
+    templateUrl: './ngt-modal-header.component.html',
+    styleUrls: ['./ngt-modal-header.component.css']
 })
 export class NgtModalHeaderComponent {
-  @Input() ngtModal: NgtModalComponent;
+    @Input() public ngtModal: NgtModalComponent;
 
-  public ngtStyle: NgtStylizableService;
+    public ngtStyle: NgtStylizableService;
 
-  constructor(
-    @Optional() @SkipSelf()
-    private ngtModalInstance: NgtModalComponent,
-    private injector: Injector,
-    @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective,
-  ) {
-    if (ngtModalInstance) {
-      this.ngtModal = ngtModalInstance;
+    public constructor(
+        @Optional() @SkipSelf()
+        private ngtModalInstance: NgtModalComponent,
+        private injector: Injector,
+        @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective,
+    ) {
+        if (ngtModalInstance) {
+            this.ngtModal = ngtModalInstance;
+        }
+
+        if (this.tailStylizableDirective) {
+            this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
+        } else {
+            this.ngtStyle = new NgtStylizableService();
+        }
+
+        this.ngtStyle.load(this.injector, 'NgtModalHeader', {
+            pb: 'pb-3',
+            color: {}
+        });
     }
-
-    if (this.tailStylizableDirective) {
-      this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
-    } else {
-      this.ngtStyle = new NgtStylizableService();
-    }
-
-    this.ngtStyle.load(this.injector, 'NgtModalHeader', {
-      pb: 'pb-3',
-      color: {}
-    });
-  }
 }

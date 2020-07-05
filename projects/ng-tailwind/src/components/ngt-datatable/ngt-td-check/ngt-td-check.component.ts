@@ -7,81 +7,81 @@ import { NgtCheckboxComponent } from '../../ngt-checkbox/ngt-checkbox.component'
 import { NgtDatatableComponent } from '../ngt-datatable.component';
 
 @Component({
-  selector: '[ngt-td-check]',
-  templateUrl: './ngt-td-check.component.html',
-  styleUrls: ['./ngt-td-check.component.css'],
+    selector: '[ngt-td-check]',
+    templateUrl: './ngt-td-check.component.html',
+    styleUrls: ['./ngt-td-check.component.css'],
 })
 export class NgtTdCheckComponent {
-  @ViewChild(NgtCheckboxComponent, { static: true }) checkbox: NgtCheckboxComponent;
-  @Input() reference: any;
+    @ViewChild(NgtCheckboxComponent, { static: true }) public checkbox: NgtCheckboxComponent;
+    @Input() public reference: any;
 
-  private id = uuid();
-  public checked = false;
-  public ngtStyle: NgtStylizableService;
+    public checked = false;
+    public ngtStyle: NgtStylizableService;
+    private id = uuid();
 
-  constructor(
-    private injector: Injector,
-    private hostElement: ElementRef,
-    @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
-    @Optional() @SkipSelf()
-    private ngtDataTable: NgtDatatableComponent
-  ) {
-    this.bindNgtStyle();
-  }
-
-  ngAfterContentInit() {
-    if (this.ngtDataTable) {
-      this.ngtDataTable.onToogleAllCheckboxes.subscribe((checked: boolean) => {
-        this.checked = checked;
-      });
-
-      this.ngtDataTable.onClearSelectedElements.subscribe(() => {
-        this.checked = false;
-      });
-    }
-  }
-
-  public onCheckboxChange(checked: boolean) {
-    if (this.ngtDataTable) {
-      this.ngtDataTable.onToogleCheckbox.emit({
-        id: this.id,
-        checked: checked,
-        reference: this.reference
-      });
-    }
-  }
-
-  private bindNgtStyle() {
-    if (this.ngtStylizableDirective) {
-      this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-    } else {
-      this.ngtStyle = new NgtStylizableService();
+    public constructor(
+        private injector: Injector,
+        private hostElement: ElementRef,
+        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
+        @Optional() @SkipSelf()
+        private ngtDataTable: NgtDatatableComponent
+    ) {
+        this.bindNgtStyle();
     }
 
-    this.ngtStyle.load(this.injector, 'NgtTdCheck', {
-      py: 'py-4',
-      px: 'px-6',
-      text: 'text-center',
-      border: 'border-b',
-      color: {
-        border: ''
-      }
-    });
+    public ngAfterContentInit() {
+        if (this.ngtDataTable) {
+            this.ngtDataTable.onToogleAllCheckboxes.subscribe((checked: boolean) => {
+                this.checked = checked;
+            });
 
-    this.hostElement.nativeElement.classList += this.ngtStyle.compile([
-      'h',
-      'px',
-      'py',
-      'pb',
-      'pl',
-      'pr',
-      'pt',
-      'mb',
-      'ml',
-      'mr',
-      'mt',
-      'border',
-      'color.border',
-    ]);
-  }
+            this.ngtDataTable.onClearSelectedElements.subscribe(() => {
+                this.checked = false;
+            });
+        }
+    }
+
+    public onCheckboxChange(checked: boolean) {
+        if (this.ngtDataTable) {
+            this.ngtDataTable.onToogleCheckbox.emit({
+                id: this.id,
+                checked: checked,
+                reference: this.reference
+            });
+        }
+    }
+
+    private bindNgtStyle() {
+        if (this.ngtStylizableDirective) {
+            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+        } else {
+            this.ngtStyle = new NgtStylizableService();
+        }
+
+        this.ngtStyle.load(this.injector, 'NgtTdCheck', {
+            py: 'py-4',
+            px: 'px-6',
+            text: 'text-center',
+            border: 'border-b',
+            color: {
+                border: ''
+            }
+        });
+
+        this.hostElement.nativeElement.classList += this.ngtStyle.compile([
+            'h',
+            'px',
+            'py',
+            'pb',
+            'pl',
+            'pr',
+            'pt',
+            'mb',
+            'ml',
+            'mr',
+            'mt',
+            'border',
+            'color.border',
+        ]);
+    }
 }

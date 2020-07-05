@@ -10,22 +10,23 @@ export abstract class NgtBaseNgModel implements ControlValueAccessor {
 
     public onValueChangeEvent = new EventEmitter;
 
-    private ignore = '{{{{INITIAL_VALUE_IGNORE}}}}'
-    _value: any = this.ignore;
+    private ignore = '{{{{INITIAL_VALUE_IGNORE}}}}';
+    private _value: any = this.ignore;
 
-    constructor() {
+    public constructor() {
         this.registerOnTouched(this.onTouched);
     }
 
-    onValueChange() {
+    public onValueChange() {
         return this.onValueChangeEvent;
     }
 
-    get value(): any { return this._value != this.ignore ? this._value : null; };
+    public get value(): any {
+        return this._value != this.ignore ? this._value : null;
+    };
 
-    set value(v: any) {
+    public set value(v: any) {
         if (!this.valuesAreEquals(v, this._value)) {
-
             this._value = v;
             this.onChange(v);
 
@@ -37,7 +38,7 @@ export abstract class NgtBaseNgModel implements ControlValueAccessor {
         }
     }
 
-    writeValue(value: any) {
+    public writeValue(value: any) {
         if (value == this.ignore || this.valuesAreEquals(value, this._value)) {
             return;
         }
@@ -47,22 +48,28 @@ export abstract class NgtBaseNgModel implements ControlValueAccessor {
         this.change(value);
     }
 
-    onChange = (_) => { };
+    public onChange = (_) => { };
 
-    change(v) { };
+    public change(v) { };
 
-    onTouched = () => {
+    public onTouched = () => {
         if (this.formControl) {
             this.formControl.markAsTouched();
         }
     };
 
-    registerOnChange(fn: (_: any) => void): void { this.onChange = fn; }
-    registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+    public registerOnChange(fn: (_: any) => void): void {
+        this.onChange = fn;
+    }
+
+    public registerOnTouched(fn: () => void): void {
+        this.onTouched = fn;
+    }
 
     public isValid(): boolean {
         if (this.formControl) {
             this.formControl.markAsDirty();
+
             return this.formControl.valid;
         }
     }

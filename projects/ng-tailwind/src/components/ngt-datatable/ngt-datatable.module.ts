@@ -20,37 +20,37 @@ import { NgtTrComponent } from './ngt-tr/ngt-tr.component';
 import { NgtActionModule } from '../ngt-action/ngt-action.module';
 
 @NgModule({
-  declarations: [
-    NgtDatatableComponent,
-    NgtTbodyComponent,
-    NgtTdComponent,
-    NgtTdCheckComponent,
-    NgtThComponent,
-    NgtThCheckComponent,
-    NgtTheadComponent,
-    NgtTrComponent
-  ],
-  exports: [
-    NgtDatatableComponent,
-    NgtTbodyComponent,
-    NgtTdComponent,
-    NgtTdCheckComponent,
-    NgtThComponent,
-    NgtThCheckComponent,
-    NgtTheadComponent,
-    NgtTrComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    NgtShiningModule,
-    NgtPaginationModule,
-    NgtCheckboxModule,
-    NgtInputModule,
-    NgtModalModule,
-    NgtTagModule,
-    NgtActionModule,
-    NgtStylizableModule
-  ]
+    declarations: [
+        NgtDatatableComponent,
+        NgtTbodyComponent,
+        NgtTdComponent,
+        NgtTdCheckComponent,
+        NgtThComponent,
+        NgtThCheckComponent,
+        NgtTheadComponent,
+        NgtTrComponent
+    ],
+    exports: [
+        NgtDatatableComponent,
+        NgtTbodyComponent,
+        NgtTdComponent,
+        NgtTdCheckComponent,
+        NgtThComponent,
+        NgtThCheckComponent,
+        NgtTheadComponent,
+        NgtTrComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgtShiningModule,
+        NgtPaginationModule,
+        NgtCheckboxModule,
+        NgtInputModule,
+        NgtModalModule,
+        NgtTagModule,
+        NgtActionModule,
+        NgtStylizableModule
+    ]
 })
 export class NgtDatatableModule { }

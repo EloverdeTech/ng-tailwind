@@ -8,22 +8,22 @@ import { NgtStylizableTemplateModule } from 'src/app/components/ngt-stylizable-t
 import { NgtActionPageComponent } from './ngt-action-page.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": NgtActionPageComponent
-  }
+    {
+        "path": '',
+        "component": NgtActionPageComponent
+    }
 ];
 
 @NgModule({
-  declarations: [NgtActionPageComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    CodePreviewModule,
-    NgtPortletModule,
-    NgtActionModule,
-    NgtStylizableModule,
-    NgtStylizableTemplateModule
-  ]
+    declarations: [NgtActionPageComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        CodePreviewModule,
+        NgtPortletModule,
+        NgtActionModule,
+        NgtStylizableModule,
+        NgtStylizableTemplateModule
+    ]
 })
 export class NgtActionPageModule { }

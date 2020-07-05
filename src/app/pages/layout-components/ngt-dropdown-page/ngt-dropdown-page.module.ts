@@ -8,24 +8,24 @@ import { NgtStylizableTemplateModule } from 'src/app/components/ngt-stylizable-t
 import { NgtDropdownPageComponent } from './ngt-dropdown-page.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": NgtDropdownPageComponent
-  }
+    {
+        "path": '',
+        "component": NgtDropdownPageComponent
+    }
 ];
 
 @NgModule({
-  declarations: [NgtDropdownPageComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    CodePreviewModule,
-    NgtPortletModule,
-    NgtCheckboxModule,
-    NgtStylizableModule,
-    NgtStylizableTemplateModule,
-    NgtDropdownModule
-  ]
+    declarations: [NgtDropdownPageComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        CodePreviewModule,
+        NgtPortletModule,
+        NgtCheckboxModule,
+        NgtStylizableModule,
+        NgtStylizableTemplateModule,
+        NgtDropdownModule
+    ]
 })
 export class NgtDropdownPageModule { }

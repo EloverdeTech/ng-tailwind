@@ -7,23 +7,21 @@ import { NgtModalFooterComponent } from './ngt-modal-footer/ngt-modal-footer.com
 import { NgtModalHeaderComponent } from './ngt-modal-header/ngt-modal-header.component';
 import { NgtModalComponent } from './ngt-modal.component';
 
-
-
 @NgModule({
-  declarations: [
-    NgtModalComponent,
-    NgtModalHeaderComponent,
-    NgtModalBodyComponent,
-    NgtModalFooterComponent
-  ],
-  exports: [
-    NgtModalComponent,
-    NgtModalHeaderComponent,
-    NgtModalBodyComponent,
-    NgtModalFooterComponent
-  ],
-  imports: [
-    CommonModule
-  ]
+    declarations: [
+        NgtModalComponent,
+        NgtModalHeaderComponent,
+        NgtModalBodyComponent,
+        NgtModalFooterComponent
+    ],
+    exports: [
+        NgtModalComponent,
+        NgtModalHeaderComponent,
+        NgtModalBodyComponent,
+        NgtModalFooterComponent
+    ],
+    imports: [
+        CommonModule
+    ]
 })
 export class NgtModalModule { }

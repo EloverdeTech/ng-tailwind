@@ -9,22 +9,22 @@ import { NgtStylizableTemplateModule } from 'src/app/components/ngt-stylizable-t
 import { NgtTextareaPageComponent } from './ngt-textarea-page.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": NgtTextareaPageComponent
-  }
+    {
+        "path": '',
+        "component": NgtTextareaPageComponent
+    }
 ];
 
 @NgModule({
-  declarations: [NgtTextareaPageComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    CodePreviewModule,
-    NgtPortletModule,
-    NgtTextareaModule,
-    NgtStylizableTemplateModule
-  ]
+    declarations: [NgtTextareaPageComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        CodePreviewModule,
+        NgtPortletModule,
+        NgtTextareaModule,
+        NgtStylizableTemplateModule
+    ]
 })
 export class NgtTextareaPageModule { }

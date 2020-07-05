@@ -2,14 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgtFormComponent, NgtFormState } from 'projects/ng-tailwind/src/public-api';
 
 @Component({
-  selector: 'app-ngt-form-page',
-  templateUrl: './ngt-form-page.component.html',
-  styleUrls: ['./ngt-form-page.component.css']
+    selector: 'app-ngt-form-page',
+    templateUrl: './ngt-form-page.component.html',
+    styleUrls: ['./ngt-form-page.component.css']
 })
 export class NgtFormPageComponent implements OnInit {
-  @ViewChild(NgtFormComponent, { static: true }) ngtFormComponent: NgtFormComponent;
+    @ViewChild(NgtFormComponent, { static: true }) private ngtFormComponent: NgtFormComponent;
 
-  public codeExample = `
+    public codeExample = `
   <form>
     <ngt-form [customLayout]='true' message='Complete all the fields correctly' #ngtForm>
       <ngt-form-validation-message class="block mx-5 mt-5"></ngt-form-validation-message>
@@ -41,20 +41,19 @@ export class NgtFormPageComponent implements OnInit {
   </form>
   `;
 
-  constructor() { }
+    public constructor() { }
 
-  ngOnInit() {
-  }
+    public ngOnInit() { }
 
-  toggleFormState() {
-    if (this.ngtFormComponent.getFormState() == NgtFormState.CREATING) {
-      return this.ngtFormComponent.setFormState(NgtFormState.EDITING);
+    public toggleFormState() {
+        if (this.ngtFormComponent.getFormState() == NgtFormState.CREATING) {
+            return this.ngtFormComponent.setFormState(NgtFormState.EDITING);
+        }
+
+        return this.ngtFormComponent.setFormState(NgtFormState.CREATING);
     }
 
-    return this.ngtFormComponent.setFormState(NgtFormState.CREATING);
-  }
-
-  save() {
-    this.ngtFormComponent.saveResource().subscribe(() => { });
-  }
+    public save() {
+        this.ngtFormComponent.saveResource().subscribe(() => { });
+    }
 }

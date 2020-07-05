@@ -8,21 +8,21 @@ import { NgtPortletComponent } from './ngt-portlet.component';
 import { NgtSvgModule } from '../ngt-svg/ngt-svg.module';
 
 @NgModule({
-  declarations: [
-    NgtPortletComponent,
-    NgtPortletHeaderComponent,
-    NgtPortletBodyComponent,
-    NgtPortletFooterComponent
-  ],
-  exports: [
-    NgtPortletComponent,
-    NgtPortletHeaderComponent,
-    NgtPortletBodyComponent,
-    NgtPortletFooterComponent
-  ],
-  imports: [
-    CommonModule,
-    NgtSvgModule
-  ]
+    declarations: [
+        NgtPortletComponent,
+        NgtPortletHeaderComponent,
+        NgtPortletBodyComponent,
+        NgtPortletFooterComponent
+    ],
+    exports: [
+        NgtPortletComponent,
+        NgtPortletHeaderComponent,
+        NgtPortletBodyComponent,
+        NgtPortletFooterComponent
+    ],
+    imports: [
+        CommonModule,
+        NgtSvgModule
+    ]
 })
 export class NgtPortletModule { }

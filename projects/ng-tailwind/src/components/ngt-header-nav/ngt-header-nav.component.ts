@@ -1,36 +1,35 @@
-import { Component, ViewChild, ElementRef, Input, Injector, Optional, Self } from '@angular/core';
-import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { Component, ElementRef, Injector, Input, Optional, Self, ViewChild } from '@angular/core';
+
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
-  selector: 'ngt-header-nav',
-  templateUrl: './ngt-header-nav.component.html',
-  styleUrls: ['./ngt-header-nav.component.css']
+    selector: 'ngt-header-nav',
+    templateUrl: './ngt-header-nav.component.html',
+    styleUrls: ['./ngt-header-nav.component.css']
 })
 export class NgtHeaderNavComponent {
+    @ViewChild('element', { static: true }) public element: ElementRef;
 
-  @ViewChild('element', { static: true }) element: ElementRef;
+    @Input() public ngtStyle: NgtStylizableService;
 
-  @Input() ngtStyle: NgtStylizableService;
+    public constructor(
+        private injector: Injector,
+        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective
+    ) {
+        if (this.ngtStylizableDirective) {
+            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+        } else {
+            this.ngtStyle = new NgtStylizableService();
+        }
 
-  constructor(
-    private injector: Injector,
-    @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective
-  ) {
-    if (this.ngtStylizableDirective) {
-      this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-    } else {
-      this.ngtStyle = new NgtStylizableService();
+        this.ngtStyle.load(this.injector, 'HeaderNav', {
+            h: 'h-auto',
+            color: {}
+        });
     }
 
-    this.ngtStyle.load(this.injector, 'HeaderNav', {
-      h: 'h-auto',
-      color: {}
-    });
-  }
-
-  ngAfterViewInit() {
-    this.element.nativeElement.classList.add('tail-animate-fade-up');
-  }
-
+    public ngAfterViewInit() {
+        this.element.nativeElement.classList.add('tail-animate-fade-up');
+    }
 }

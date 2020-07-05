@@ -3,13 +3,11 @@ import { NgModule } from '@angular/core';
 
 import { NgtFormValidationMessageComponent } from './ngt-form-validation-message.component';
 
-
-
 @NgModule({
-  declarations: [NgtFormValidationMessageComponent],
-  exports: [NgtFormValidationMessageComponent],
-  imports: [
-    CommonModule
-  ]
+    declarations: [NgtFormValidationMessageComponent],
+    exports: [NgtFormValidationMessageComponent],
+    imports: [
+        CommonModule
+    ]
 })
 export class NgtFormValidationMessageModule { }

@@ -9,22 +9,22 @@ import { NgtStylizableTemplateModule } from 'src/app/components/ngt-stylizable-t
 import { NgtSelectPageComponent } from './ngt-select-page.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": NgtSelectPageComponent
-  }
+    {
+        "path": '',
+        "component": NgtSelectPageComponent
+    }
 ];
 
 @NgModule({
-  declarations: [NgtSelectPageComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    CodePreviewModule,
-    NgtPortletModule,
-    NgtStylizableTemplateModule,
-    NgtSelectModule
-  ]
+    declarations: [NgtSelectPageComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        CodePreviewModule,
+        NgtPortletModule,
+        NgtStylizableTemplateModule,
+        NgtSelectModule
+    ]
 })
 export class NgtSelectPageModule { }

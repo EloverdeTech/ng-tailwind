@@ -4,30 +4,30 @@ import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-styl
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
-  selector: 'ngt-tag',
-  templateUrl: './ngt-tag.component.html',
-  styleUrls: ['./ngt-tag.component.css']
+    selector: 'ngt-tag',
+    templateUrl: './ngt-tag.component.html',
+    styleUrls: ['./ngt-tag.component.css']
 })
 export class NgtTagComponent {
-  @Input() icon: string;
+    @Input() public icon: string;
 
-  public ngtStyle: NgtStylizableService;
+    public ngtStyle: NgtStylizableService;
 
-  constructor(
-    private injector: Injector,
-    @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
-  ) {
-    if (this.ngtStylizableDirective) {
-      this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-    } else {
-      this.ngtStyle = new NgtStylizableService();
+    public constructor(
+        private injector: Injector,
+        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
+    ) {
+        if (this.ngtStylizableDirective) {
+            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+        } else {
+            this.ngtStyle = new NgtStylizableService();
+        }
+
+        this.ngtStyle.load(this.injector, 'Tag', {
+            color: {
+                bg: 'bg-gray-500',
+                text: 'text-white'
+            }
+        });
     }
-
-    this.ngtStyle.load(this.injector, 'Tag', {
-      color: {
-        bg: 'bg-gray-500',
-        text: 'text-white'
-      }
-    });
-  }
 }

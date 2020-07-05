@@ -8,167 +8,167 @@ import { getIdFromUri } from '../../helpers/routing/route';
 import { NgtHttpFormService } from '../../services/http/ngt-http-form.service';
 
 @Component({
-  selector: 'ngt-form',
-  templateUrl: './ngt-form.component.html',
-  styleUrls: ['./ngt-form.component.css']
+    selector: 'ngt-form',
+    templateUrl: './ngt-form.component.html',
+    styleUrls: ['./ngt-form.component.css']
 })
 export class NgtFormComponent implements OnInit {
-  @Input() guessFormState: boolean = true;
-  @Input() message: string = 'Preencha corretamente todos os campos';
-  @Input() routeIdentifier: string = 'id';
-  @Input() resource: any;
-  @Input() customLayout: boolean = false;
+    @Input() public guessFormState: boolean = true;
+    @Input() public message: string = 'Preencha corretamente todos os campos';
+    @Input() public routeIdentifier: string = 'id';
+    @Input() public resource: any;
+    @Input() public customLayout: boolean = false;
 
-  @Output() onCreating: EventEmitter<any> = new EventEmitter;
-  @Output() onEditing: EventEmitter<any> = new EventEmitter;
-  @Output() onLoadingChange: EventEmitter<boolean> = new EventEmitter;
-  @Output() onShiningChange: EventEmitter<boolean> = new EventEmitter;
-  @Output() setupComponent: EventEmitter<any> = new EventEmitter;
+    @Output() public onCreating: EventEmitter<any> = new EventEmitter;
+    @Output() public onEditing: EventEmitter<any> = new EventEmitter;
+    @Output() public onLoadingChange: EventEmitter<boolean> = new EventEmitter;
+    @Output() public onShiningChange: EventEmitter<boolean> = new EventEmitter;
+    @Output() public setupComponent: EventEmitter<any> = new EventEmitter;
 
-  public formState: NgtFormState;
-  public uriId: any;
+    public formState: NgtFormState;
+    public uriId: any;
 
-  private loading: boolean = false;
-  private shining: boolean = false;
+    private loading: boolean = false;
+    private shining: boolean = false;
 
-  constructor(
-    @Optional() @Host()
-    public formContainer: ControlContainer,
-    @Optional() @Host()
-    public ngForm: NgForm,
-    public router: Router,
-    public route: ActivatedRoute,
-    private ngtHttpFormService: NgtHttpFormService
-  ) { }
+    public constructor(
+        @Optional() @Host()
+        public formContainer: ControlContainer,
+        @Optional() @Host()
+        public ngForm: NgForm,
+        public router: Router,
+        public route: ActivatedRoute,
+        private ngtHttpFormService: NgtHttpFormService
+    ) { }
 
-  ngOnInit() {
-    if (this.guessFormState) {
-      this.determineFormState().subscribe(() => {
-        this.setupComponent.emit();
-      });
+    public ngOnInit() {
+        if (this.guessFormState) {
+            this.determineFormState().subscribe(() => {
+                this.setupComponent.emit();
+            });
 
-      return;
-    }
-
-    this.setupComponent.emit();
-  }
-
-  determineFormState() {
-    return Observable.create((observer) => {
-      getIdFromUri(this.route, this.routeIdentifier).subscribe((id) => {
-        this.uriId = id;
-
-        if (this.uriId) {
-          this.setFormState(NgtFormState.EDITING);
-        } else {
-          this.setFormState(NgtFormState.CREATING);
+            return;
         }
 
-        observer.next();
-      });
-    });
-  }
-
-  isCreating() {
-    return this.formState === NgtFormState.CREATING;
-  }
-
-  isEditing() {
-    return this.formState === NgtFormState.EDITING;
-  }
-
-  isLoading() {
-    return this.loading;
-  }
-
-  isShining() {
-    return this.shining;
-  }
-
-  canShowValidationMessage() {
-    return this.formContainer &&
-      this.formContainer['submitted'] &&
-      this.formContainer.status != 'VALID' &&
-      this.formContainer.status != 'DISABLED';
-  }
-
-  setShining(shining: boolean) {
-    this.shining = shining;
-    this.onShiningChange.emit(this.shining);
-  }
-
-  setLoading(loading: boolean) {
-    this.loading = loading;
-    this.onLoadingChange.emit(this.loading);
-  }
-
-  setFormState(state: NgtFormState, triggerChange: boolean = true) {
-    this.formState = state;
-
-    if (triggerChange) {
-      this.triggerFormStateChange();
-    }
-  }
-
-  getFormState() {
-    return this.formState;
-  }
-
-  triggerFormStateChange() {
-    if (this.isEditing()) {
-      this.triggerFormEditing();
-    } else if (this.isCreating()) {
-      this.triggerFormCreating();
-    }
-  }
-
-  saveResource() {    
-    return Observable.create((observer) => {
-      if (isValidNgForm(this.ngForm)) {
-        this.setLoading(true);
-        this.ngtHttpFormService.saveResource(this.resource)
-          .subscribe((response: any) => {
-            this.setLoading(false);
-            observer.next(response);
-            observer.complete();
-          });
-      } else {
-        observer.error();
-      }
-    });
-  }
-
-  protected triggerFormCreating() {
-    this.onCreating.emit();
-  }
-
-  protected triggerFormEditing() {
-    if (this.uriId && this.resource) {
-      this.setLoading(true);
-      this.setShining(true);
-
-      this.ngtHttpFormService.loadResourceById(this.resource, this.uriId)
-        .subscribe(
-          (resource: any) => {
-            this.setLoading(false);
-            this.setShining(false);
-            this.onEditing.emit(resource);
-          },
-          (error) => {
-            this.setLoading(false);
-            this.setShining(false);
-            console.error(error);
-          }
-        );
-
-      return;
+        this.setupComponent.emit();
     }
 
-    this.onEditing.emit(null);
-  }
+    public isCreating() {
+        return this.formState === NgtFormState.CREATING;
+    }
+
+    public isEditing() {
+        return this.formState === NgtFormState.EDITING;
+    }
+
+    public isLoading() {
+        return this.loading;
+    }
+
+    public isShining() {
+        return this.shining;
+    }
+
+    public canShowValidationMessage() {
+        return this.formContainer &&
+            this.formContainer['submitted'] &&
+            this.formContainer.status != 'VALID' &&
+            this.formContainer.status != 'DISABLED';
+    }
+
+    public setShining(shining: boolean) {
+        this.shining = shining;
+        this.onShiningChange.emit(this.shining);
+    }
+
+    public setLoading(loading: boolean) {
+        this.loading = loading;
+        this.onLoadingChange.emit(this.loading);
+    }
+
+    public setFormState(state: NgtFormState, triggerChange: boolean = true) {
+        this.formState = state;
+
+        if (triggerChange) {
+            this.triggerFormStateChange();
+        }
+    }
+
+    public getFormState() {
+        return this.formState;
+    }
+
+    public triggerFormStateChange() {
+        if (this.isEditing()) {
+            this.triggerFormEditing();
+        } else if (this.isCreating()) {
+            this.triggerFormCreating();
+        }
+    }
+
+    public saveResource() {
+        return Observable.create((observer) => {
+            if (isValidNgForm(this.ngForm)) {
+                this.setLoading(true);
+                this.ngtHttpFormService.saveResource(this.resource)
+                    .subscribe((response: any) => {
+                        this.setLoading(false);
+                        observer.next(response);
+                        observer.complete();
+                    });
+            } else {
+                observer.error();
+            }
+        });
+    }
+
+    protected triggerFormCreating() {
+        this.onCreating.emit();
+    }
+
+    protected triggerFormEditing() {
+        if (this.uriId && this.resource) {
+            this.setLoading(true);
+            this.setShining(true);
+
+            this.ngtHttpFormService.loadResourceById(this.resource, this.uriId)
+                .subscribe(
+                    (resource: any) => {
+                        this.setLoading(false);
+                        this.setShining(false);
+                        this.onEditing.emit(resource);
+                    },
+                    (error) => {
+                        this.setLoading(false);
+                        this.setShining(false);
+                        console.error(error);
+                    }
+                );
+
+            return;
+        }
+
+        this.onEditing.emit(null);
+    }
+
+    private determineFormState() {
+        return Observable.create((observer) => {
+            getIdFromUri(this.route, this.routeIdentifier).subscribe((id) => {
+                this.uriId = id;
+
+                if (this.uriId) {
+                    this.setFormState(NgtFormState.EDITING);
+                } else {
+                    this.setFormState(NgtFormState.CREATING);
+                }
+
+                observer.next();
+            });
+        });
+    }
 }
 
 export enum NgtFormState {
-  CREATING = 'CREATING',
-  EDITING = 'EDITING'
+    CREATING = 'CREATING',
+    EDITING = 'EDITING'
 };

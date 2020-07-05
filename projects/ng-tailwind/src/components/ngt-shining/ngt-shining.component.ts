@@ -4,34 +4,34 @@ import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-styl
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
-  selector: 'ngt-shining',
-  templateUrl: './ngt-shining.component.html',
-  styleUrls: ['./ngt-shining.component.css']
+    selector: 'ngt-shining',
+    templateUrl: './ngt-shining.component.html',
+    styleUrls: ['./ngt-shining.component.css']
 })
 export class NgtShiningComponent {
-  @Input() shiningWidth: NgtShiningWidth = NgtShiningWidth.xs;
+    @Input() public shiningWidth: NgtShiningWidth = NgtShiningWidth.xs;
 
-  public ngtStyle: NgtStylizableService;
+    public ngtStyle: NgtStylizableService;
 
-  constructor(
-    private injector: Injector,
-    @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
-  ) {
-    if (this.ngtStylizableDirective) {
-      this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-    } else {
-      this.ngtStyle = new NgtStylizableService();
+    public constructor(
+        private injector: Injector,
+        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
+    ) {
+        if (this.ngtStylizableDirective) {
+            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+        } else {
+            this.ngtStyle = new NgtStylizableService();
+        }
+
+        this.ngtStyle.load(this.injector, 'NgtShining', {
+            rounded: 'rounded-none',
+        });
     }
-
-    this.ngtStyle.load(this.injector, 'NgtShining', {
-      rounded: 'rounded-none',
-    });
-  }
 }
 
 export enum NgtShiningWidth {
-  xs = 'xs',
-  sm = 'sm',
-  lg = 'lg',
-  xl = 'xl',
+    xs = 'xs',
+    sm = 'sm',
+    lg = 'lg',
+    xl = 'xl',
 }

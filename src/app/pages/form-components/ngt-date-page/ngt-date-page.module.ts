@@ -8,21 +8,21 @@ import { CodePreviewModule } from 'src/app/components/code-preview/code-preview.
 import { NgtDatePageComponent } from './ngt-date-page.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": NgtDatePageComponent
-  }
+    {
+        "path": '',
+        "component": NgtDatePageComponent
+    }
 ];
 
 @NgModule({
-  declarations: [NgtDatePageComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    CodePreviewModule,
-    NgtPortletModule,
-    NgtDateModule
-  ]
+    declarations: [NgtDatePageComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        CodePreviewModule,
+        NgtPortletModule,
+        NgtDateModule
+    ]
 })
 export class NgtDatePageModule { }

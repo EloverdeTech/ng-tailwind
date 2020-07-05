@@ -5,12 +5,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 
 @NgModule({
-  declarations: [NgtSvgComponent],
-  exports: [NgtSvgComponent],
-  imports: [
-    CommonModule,
-    HttpClientModule,
-    AngularSvgIconModule
-  ]
+    declarations: [NgtSvgComponent],
+    exports: [NgtSvgComponent],
+    imports: [
+        CommonModule,
+        HttpClientModule,
+        AngularSvgIconModule
+    ]
 })
 export class NgtSvgModule { }

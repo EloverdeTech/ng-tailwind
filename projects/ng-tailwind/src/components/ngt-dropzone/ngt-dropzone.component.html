@@ -23,8 +23,7 @@
         </div>
     </ng-container>
 
-    <ngx-dropzone
-        class="{{ itemsLimit && itemsLimit == 1 && resources.length ? 'singleAttachmentComponent' : '' }} min-h-full max-h-full"
+    <ngx-dropzone class="{{ itemsLimit && itemsLimit == 1 && resources.length ? 'singleAttachmentComponent' : '' }}"
         [multiple]='multipleSelection' [accept]='acceptedFiles' [maxFileSize]='maxFileSize'
         [disabled]='disabled || loading' [expandable]='verticalExpandable' [disableClick]='disableClick'
         (change)='onSelect($event)' #ngxDropzone>

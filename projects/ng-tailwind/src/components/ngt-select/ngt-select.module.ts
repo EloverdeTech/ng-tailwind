@@ -10,25 +10,25 @@ import { NgtSelectComponent } from './ngt-select.component';
 import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } from './ngt-select.directive';
 
 @NgModule({
-  declarations: [
-    NgtSelectComponent,
-    NgtSelectOptionTmp,
-    NgtSelectOptionSelectedTmp,
-    NgtSelectHeaderTmp
-  ],
-  exports: [
-    NgtSelectComponent,
-    NgtSelectOptionTmp,
-    NgtSelectOptionSelectedTmp,
-    NgtSelectHeaderTmp
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    NgSelectModule,
-    NgtValidationModule,
-    NgtFormModule,
-    NgtShiningModule
-  ]
+    declarations: [
+        NgtSelectComponent,
+        NgtSelectOptionTmp,
+        NgtSelectOptionSelectedTmp,
+        NgtSelectHeaderTmp
+    ],
+    exports: [
+        NgtSelectComponent,
+        NgtSelectOptionTmp,
+        NgtSelectOptionSelectedTmp,
+        NgtSelectHeaderTmp
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgSelectModule,
+        NgtValidationModule,
+        NgtFormModule,
+        NgtShiningModule
+    ]
 })
 export class NgtSelectModule { }

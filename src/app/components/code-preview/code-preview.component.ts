@@ -1,23 +1,22 @@
 import { AfterViewInit, Component, Input } from '@angular/core';
 
-declare var hljs: any;
+declare let hljs: any;
 
 @Component({
-  selector: 'code-preview',
-  templateUrl: './code-preview.component.html',
-  styleUrls: ['./code-preview.component.css']
+    selector: 'code-preview',
+    templateUrl: './code-preview.component.html',
+    styleUrls: ['./code-preview.component.css']
 })
 export class CodePreviewComponent implements AfterViewInit {
+    @Input() public lang = 'html';
 
-  @Input() public lang = 'html';
+    public constructor() { }
 
-  constructor() { }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      document.querySelectorAll('pre code').forEach((block) => {
-        hljs.highlightBlock(block);
-      });
-    });
-  }
+    public ngAfterViewInit() {
+        setTimeout(() => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightBlock(block);
+            });
+        });
+    }
 }

@@ -1,21 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'ngt-stylizable-template',
-  templateUrl: './ngt-stylizable-template.component.html',
-  styleUrls: ['./ngt-stylizable-template.component.css']
+    selector: 'ngt-stylizable-template',
+    templateUrl: './ngt-stylizable-template.component.html',
+    styleUrls: ['./ngt-stylizable-template.component.css']
 })
-export class NgtStylizableTemplateComponent implements OnInit {
-  @Input() tagName: string;
-  @Input() styleName: string;
+export class NgtStylizableTemplateComponent {
+    @Input() public tagName: string;
+    @Input() public styleName: string;
 
-  constructor() { }
+    public constructor() { }
 
-  ngOnInit() {
-  }
-
-  getCodeModuleExample() {
-    return `
+    public getCodeModuleExample() {
+        return `
  {
   provide: '${this.styleName}',
   useValue: {
@@ -29,14 +26,14 @@ export class NgtStylizableTemplateComponent implements OnInit {
   }
  }
     `;
-  }
+    }
 
-  getCodeDirectiveExample() {
-    return `
+    public getCodeDirectiveExample() {
+        return `
  <${this.tagName} pr='pr-0' my='my-1' h='h-10' w='w-12' 
   color.bg='bg-gray-700' color.text='text-gray-700'
   color.border='border-gray-700' ngt-stylizable>
  </${this.tagName}>
     `;
-  }
+    }
 }

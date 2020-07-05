@@ -1,10 +1,9 @@
 import { Injector } from '@angular/core';
 
 export class NgtStylizableService {
-
-    private _color;
-    private _h;
-    private _w;
+    private _color: any;
+    private _h: string;
+    private _w: string;
     private _p: string;
     private _px: string;
     private _py: string;
@@ -26,11 +25,11 @@ export class NgtStylizableService {
     private _text: string;
     private _breakWords: string;
 
-    get color() {
+    public get color() {
         return this._color;
     }
 
-    set color(color) {
+    public set color(color) {
         if (color.bg) {
             color.bg = this.getQualifiedValue('bg-', color.bg);
         }
@@ -46,199 +45,200 @@ export class NgtStylizableService {
         this._color = color;
     }
 
-    set textColor(textColor) {
+    public set textColor(textColor) {
         this._color = this._color ? this._color : {};
         this._color.text = this.getQualifiedValue('text-', textColor);
     }
 
-    set bgColor(bgColor) {
+    public set bgColor(bgColor) {
         this._color = this._color ? this._color : {};
         this._color.bg = this.getQualifiedValue('bg-', bgColor);
     }
 
-    set borderColor(borderColor) {
+    public set borderColor(borderColor) {
         this._color = this._color ? this._color : {};
         this._color.border = this.getQualifiedValue('border-', borderColor);
     }
 
-    get h(): string {
+    public get h(): string {
         return this._h;
     }
 
-    set h(h: string) {
+    public set h(h: string) {
         this._h = this.getQualifiedValue('h-', h);
     }
 
-    get w(): string {
+    public get w(): string {
         return this._w;
     }
 
-    set w(w: string) {
+    public set w(w: string) {
         this._w = this.getQualifiedValue('w-', w);
     }
 
-    get p(): string {
+    public get p(): string {
         return this._p;
     }
 
-    set p(p: string) {
+    public set p(p: string) {
         this._p = this.getQualifiedValue('p-', p);
     }
 
-    get px(): string {
+    public get px(): string {
         return this._px;
     }
 
-    set px(px: string) {
+    public set px(px: string) {
         this._px = this.getQualifiedValue('px-', px);
     }
 
-    get py(): string {
+    public get py(): string {
         return this._py;
     }
 
-    set py(py: string) {
+    public set py(py: string) {
         this._py = this.getQualifiedValue('py-', py);
     }
 
-    get pt(): string {
+    public get pt(): string {
         return this._pt;
     }
 
-    set pt(pt: string) {
+    public set pt(pt: string) {
         this._pt = this.getQualifiedValue('pt-', pt);
     }
 
-    get pr(): string {
+    public get pr(): string {
         return this._pr;
     }
 
-    set pr(pr: string) {
+    public set pr(pr: string) {
         this._pr = this.getQualifiedValue('pr-', pr);
     }
 
-    get pb(): string {
+    public get pb(): string {
         return this._pb;
     }
 
-    set pb(pb: string) {
+    public set pb(pb: string) {
         this._pb = this.getQualifiedValue('pb-', pb);
     }
 
-    get pl(): string {
+    public get pl(): string {
         return this._pl;
     }
 
-    set pl(pl: string) {
+    public set pl(pl: string) {
         this._pl = this.getQualifiedValue('pl-', pl);
     }
 
-    get m(): string {
+    public get m(): string {
         return this._m;
     }
 
-    set m(m: string) {
+    public set m(m: string) {
         this._m = this.getQualifiedValue('m-', m);
     }
 
-    get mx(): string {
+    public get mx(): string {
         return this._mx;
     }
 
-    set mx(mx: string) {
+    public set mx(mx: string) {
         this._mx = this.getQualifiedValue('mx-', mx);
     }
 
-    get my(): string {
+    public get my(): string {
         return this._my;
     }
 
-    set my(my: string) {
+    public set my(my: string) {
         this._my = this.getQualifiedValue('my-', my);
     }
 
-    get mt(): string {
+    public get mt(): string {
         return this._mt;
     }
 
-    set mt(mt: string) {
+    public set mt(mt: string) {
         this._mt = this.getQualifiedValue('mt-', mt);
     }
 
-    get mr(): string {
+    public get mr(): string {
         return this._mr;
     }
 
-    set mr(mr: string) {
+    public set mr(mr: string) {
         this._mr = this.getQualifiedValue('mr-', mr);
     }
 
-    get mb(): string {
+    public get mb(): string {
         return this._mb;
     }
 
-    set mb(mb: string) {
+    public set mb(mb: string) {
         this._mb = this.getQualifiedValue('mb-', mb);
     }
 
-    get ml(): string {
+    public get ml(): string {
         return this._ml;
     }
 
-    set ml(ml: string) {
+    public set ml(ml: string) {
         this._ml = this.getQualifiedValue('ml-', ml);
     }
 
-    get border(): string {
+    public get border(): string {
         return this._border;
     }
 
-    set border(border: string) {
+    public set border(border: string) {
         this._border = this.getQualifiedValue('border', border);
     }
 
-    get shadow(): string {
+    public get shadow(): string {
         return this._shadow;
     }
 
-    set shadow(shadow: string) {
+    public set shadow(shadow: string) {
         this._shadow = this.getQualifiedValue('shadow', shadow);
     }
 
-    get rounded(): string {
+    public get rounded(): string {
         return this._rounded;
     }
 
-    set rounded(rounded: string) {
+    public set rounded(rounded: string) {
         this._rounded = this.getQualifiedValue('rounded', rounded);
     }
 
-    get font(): string {
+    public get font(): string {
         return this._font;
     }
 
-    set font(font: string) {
+    public set font(font: string) {
         this._font = this.getQualifiedValue('font', font);
     }
 
-    get text(): string {
+    public get text(): string {
         return this._text;
     }
 
-    set text(text: string) {
+    public set text(text: string) {
         this._text = this.getQualifiedValue('text', text);
     }
 
-    get breakWords(): string {
+    public get breakWords(): string {
         return this._breakWords;
     }
 
-    set breakWords(breakWords: string) {
+    public set breakWords(breakWords: string) {
         this._breakWords = this.getQualifiedValue('break', breakWords);
     }
 
     public load(injector: Injector, style: string, defaultValue = null, inheritanceStyles = []) {
         let ngtGlobalStyle = injector.get('NgtStyleGlobal', {});
+
         defaultValue = defaultValue ? defaultValue : {};
 
         let requestedStyle = <NgtStylizableService>injector.get(style + 'Style', defaultValue);
@@ -247,10 +247,17 @@ export class NgtStylizableService {
 
         inheritanceStyles.forEach(style => {
             let requestedStyle = <NgtStylizableService>injector.get(style, {});
+
             this.loadObjectProperties(this, requestedStyle, this.getAllowedKeys(requestedStyle));
         });
 
         this.loadObjectProperties(this, requestedStyle, this.getAllowedKeys(requestedStyle));
+    }
+
+    public compile(styles: Array<string>) {
+        return styles
+            .map((style: string) => this.getQualifiedStyle(style))
+            .join(' ');
     }
 
     private loadObjectProperties(targetObject, object, properties: Array<string>) {
@@ -264,12 +271,6 @@ export class NgtStylizableService {
         });
 
         return targetObject;
-    }
-
-    public compile(styles: Array<string>) {
-        return styles
-            .map((style: string) => this.getQualifiedStyle(style))
-            .join(' ');
     }
 
     private getQualifiedStyle(style: string) {
@@ -288,33 +289,31 @@ export class NgtStylizableService {
         let keys = Object.keys(style);
 
         if (Array.isArray(keys)) {
-            return keys.filter(key => {
-                return [
-                    'color',
-                    'h',
-                    'w',
-                    'p',
-                    'px',
-                    'py',
-                    'pt',
-                    'pr',
-                    'pb',
-                    'pl',
-                    'm',
-                    'mx',
-                    'my',
-                    'mt',
-                    'mr',
-                    'mb',
-                    'ml',
-                    'border',
-                    'shadow',
-                    'rounded',
-                    'font',
-                    'text',
-                    'breakWords'
-                ].includes(key);
-            });
+            return keys.filter(key => [
+                'color',
+                'h',
+                'w',
+                'p',
+                'px',
+                'py',
+                'pt',
+                'pr',
+                'pb',
+                'pl',
+                'm',
+                'mx',
+                'my',
+                'mt',
+                'mr',
+                'mb',
+                'ml',
+                'border',
+                'shadow',
+                'rounded',
+                'font',
+                'text',
+                'breakWords'
+            ].includes(key));
         }
     }
 

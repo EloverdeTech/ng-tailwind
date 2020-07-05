@@ -24,7 +24,7 @@ export function fadeDownAnimation(name: string, duration: any, customStyle?: Ani
         transition(':enter, :leave', [
             animate(duration)
         ])
-    ])
+    ]);
 }
 
 export function fadeUpAnimation(name: string, duration: any, customStyle?: AnimationStyleMetadata) {
@@ -33,5 +33,5 @@ export function fadeUpAnimation(name: string, duration: any, customStyle?: Anima
         transition(':enter, :leave', [
             animate(duration)
         ])
-    ])
+    ]);
 }

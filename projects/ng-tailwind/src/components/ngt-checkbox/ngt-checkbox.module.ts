@@ -3,13 +3,11 @@ import { NgModule } from '@angular/core';
 
 import { NgtCheckboxComponent } from './ngt-checkbox.component';
 
-
-
 @NgModule({
-  declarations: [NgtCheckboxComponent],
-  exports: [NgtCheckboxComponent],
-  imports: [
-    CommonModule
-  ]
+    declarations: [NgtCheckboxComponent],
+    exports: [NgtCheckboxComponent],
+    imports: [
+        CommonModule
+    ]
 })
 export class NgtCheckboxModule { }
