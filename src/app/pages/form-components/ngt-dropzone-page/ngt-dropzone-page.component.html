@@ -16,9 +16,10 @@
                 <div class="flex flex-col w-full justify-center">
                     <div
                         class="flex flex-col w-full px-6 my-6 {{ !ngModelOne || !ngModelOne.length ? '' : 'items-center' }}">
-                        <ngt-dropzone name='ngtDropzoneOne' [(ngModel)]="ngModelOne" itemsLimit='1' [removable]='true'
-                            [previewType]='ngtDropzonePreviewTypeOne' [acceptedFiles]='ngtDropzoneAcceptedFiles'
-                            label='Select or drop a photo' (onFileSelectError)='onFileSelectError($event)'>
+                        <ngt-dropzone class="block" name='ngtDropzoneOne' [(ngModel)]="ngModelOne" itemsLimit='1'
+                            [removable]='true' [previewType]='ngtDropzonePreviewTypeOne'
+                            [acceptedFiles]='ngtDropzoneAcceptedFiles' label='Select or drop a photo'
+                            (onFileSelectError)='onFileSelectError($event)'>
                         </ngt-dropzone>
                         <span class="my-2 font-semibold text-sm text-center">
                             NgModel value: <span class="font-normal">{{ ngModelOne | json }}</span>
@@ -26,8 +27,8 @@
                     </div>
 
                     <div class="flex flex-col w-full px-6 my-6">
-                        <ngt-dropzone name='ngtDropzoneTwo' [(ngModel)]="ngModelTwo" itemsLimit='3' [removable]='true'
-                            [previewType]='ngtDropzonePreviewTypeTwo' label='Select or drop a photo'
+                        <ngt-dropzone class="block" name='ngtDropzoneTwo' [(ngModel)]="ngModelTwo" itemsLimit='3'
+                            [removable]='true' [previewType]='ngtDropzonePreviewTypeTwo' label='Select or drop a photo'
                             [maxFileSize]='10000000' (onFileSelectError)='onFileSelectError($event)'>
                         </ngt-dropzone>
                         <span class="my-2 font-semibold text-sm text-center">

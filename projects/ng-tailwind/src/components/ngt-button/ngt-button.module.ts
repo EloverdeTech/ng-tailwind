@@ -5,15 +5,13 @@ import { RouterModule } from '@angular/router';
 import { NgtFormModule } from '../ngt-form/ngt-form.module';
 import { NgtButtonComponent } from './ngt-button.component';
 
-
-
 @NgModule({
-  declarations: [NgtButtonComponent],
-  exports: [NgtButtonComponent],
-  imports: [
-    CommonModule,
-    RouterModule,
-    NgtFormModule
-  ]
+    declarations: [NgtButtonComponent],
+    exports: [NgtButtonComponent],
+    imports: [
+        CommonModule,
+        RouterModule,
+        NgtFormModule
+    ]
 })
 export class NgtButtonModule { }

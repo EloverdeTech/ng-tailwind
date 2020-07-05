@@ -8,22 +8,22 @@ import { NgtStylizableTemplateModule } from 'src/app/components/ngt-stylizable-t
 import { NgtFloatingButtonPageComponent } from './ngt-floating-button-page.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": NgtFloatingButtonPageComponent
-  }
+    {
+        "path": '',
+        "component": NgtFloatingButtonPageComponent
+    }
 ];
 
 @NgModule({
-  declarations: [NgtFloatingButtonPageComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    CodePreviewModule,
-    NgtPortletModule,
-    NgtFloatingButtonModule,
-    NgtStylizableModule,
-    NgtStylizableTemplateModule
-  ]
+    declarations: [NgtFloatingButtonPageComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        CodePreviewModule,
+        NgtPortletModule,
+        NgtFloatingButtonModule,
+        NgtStylizableModule,
+        NgtStylizableTemplateModule
+    ]
 })
 export class NgtFloatingButtonPageModule { }

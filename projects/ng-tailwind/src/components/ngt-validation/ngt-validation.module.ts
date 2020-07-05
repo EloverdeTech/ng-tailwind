@@ -3,13 +3,11 @@ import { NgModule } from '@angular/core';
 
 import { NgtValidationComponent } from './ngt-validation.component';
 
-
-
 @NgModule({
-  declarations: [NgtValidationComponent],
-  exports: [NgtValidationComponent],
-  imports: [
-    CommonModule
-  ]
+    declarations: [NgtValidationComponent],
+    exports: [NgtValidationComponent],
+    imports: [
+        CommonModule
+    ]
 })
 export class NgtValidationModule { }

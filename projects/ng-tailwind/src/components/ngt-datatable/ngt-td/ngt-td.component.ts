@@ -4,59 +4,59 @@ import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-s
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
-  selector: '[ngt-td]',
-  templateUrl: './ngt-td.component.html',
-  styleUrls: ['./ngt-td.component.css'],
+    selector: '[ngt-td]',
+    templateUrl: './ngt-td.component.html',
+    styleUrls: ['./ngt-td.component.css'],
 })
 export class NgtTdComponent {
-  public ngtStyle: NgtStylizableService;
+    public ngtStyle: NgtStylizableService;
 
-  constructor(
-    private injector: Injector,
-    private hostElement: ElementRef,
-    @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
-  ) {
-    this.bindNgtStyle();
-  }
-
-  private bindNgtStyle() {
-    if (this.ngtStylizableDirective) {
-      this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-    } else {
-      this.ngtStyle = new NgtStylizableService();
+    public constructor(
+        private injector: Injector,
+        private hostElement: ElementRef,
+        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
+    ) {
+        this.bindNgtStyle();
     }
 
-    this.ngtStyle.load(this.injector, 'NgtTd', {
-      py: 'py-4',
-      px: 'px-6',
-      border: 'border-b',
-      break: 'break-words',
-      color: {
-        bg: '',
-        text: '',
-        border: ''
-      }
-    });
+    private bindNgtStyle() {
+        if (this.ngtStylizableDirective) {
+            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+        } else {
+            this.ngtStyle = new NgtStylizableService();
+        }
 
-    this.hostElement.nativeElement.classList += this.ngtStyle.compile([
-      'h',
-      'px',
-      'py',
-      'pb',
-      'pl',
-      'pr',
-      'pt',
-      'mb',
-      'ml',
-      'mr',
-      'mt',
-      'border',
-      'color.bg',
-      'color.text',
-      'color.border',
-      'text',
-      'font',
-      'break'
-    ]);
-  }
+        this.ngtStyle.load(this.injector, 'NgtTd', {
+            py: 'py-4',
+            px: 'px-6',
+            border: 'border-b',
+            break: 'break-words',
+            color: {
+                bg: '',
+                text: '',
+                border: ''
+            }
+        });
+
+        this.hostElement.nativeElement.classList += this.ngtStyle.compile([
+            'h',
+            'px',
+            'py',
+            'pb',
+            'pl',
+            'pr',
+            'pt',
+            'mb',
+            'ml',
+            'mr',
+            'mt',
+            'border',
+            'color.bg',
+            'color.text',
+            'color.border',
+            'text',
+            'font',
+            'break'
+        ]);
+    }
 }

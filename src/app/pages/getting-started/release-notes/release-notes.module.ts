@@ -6,19 +6,19 @@ import { NgtPortletModule, NgtSvgModule } from 'projects/ng-tailwind/src/public-
 import { ReleaseNotesComponent } from './release-notes.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": ReleaseNotesComponent
-  }
+    {
+        "path": '',
+        "component": ReleaseNotesComponent
+    }
 ];
 
 @NgModule({
-  declarations: [ReleaseNotesComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    NgtPortletModule,
-    NgtSvgModule
-  ]
+    declarations: [ReleaseNotesComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        NgtPortletModule,
+        NgtSvgModule
+    ]
 })
 export class ReleaseNotesModule { }

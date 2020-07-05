@@ -8,22 +8,22 @@ import { CodePreviewModule } from 'src/app/components/code-preview/code-preview.
 import { NgtDatatablePageComponent } from './ngt-datatable-page.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": NgtDatatablePageComponent
-  }
+    {
+        "path": '',
+        "component": NgtDatatablePageComponent
+    }
 ];
 
 @NgModule({
-  declarations: [NgtDatatablePageComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    CodePreviewModule,
-    NgtPortletModule,
-    NgtDatatableModule,
-    NgtButtonModule
-  ]
+    declarations: [NgtDatatablePageComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        CodePreviewModule,
+        NgtPortletModule,
+        NgtDatatableModule,
+        NgtButtonModule
+    ]
 })
 export class NgtDatatablePageModule { }

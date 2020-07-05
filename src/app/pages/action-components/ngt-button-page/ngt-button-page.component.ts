@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-ngt-button-page',
-  templateUrl: './ngt-button-page.component.html',
-  styleUrls: ['./ngt-button-page.component.css']
+    selector: 'app-ngt-button-page',
+    templateUrl: './ngt-button-page.component.html',
+    styleUrls: ['./ngt-button-page.component.css']
 })
 export class NgtButtonPageComponent {
-  public codeExample = `
+    public codeExample = `
   <ngt-button type='success' class="w-3/12 px-4" (click)="successButton()">
     <span class="text-center w-full">Success</span>
   </ngt-button>
@@ -24,21 +24,21 @@ export class NgtButtonPageComponent {
   </ngt-button>
   `;
 
-  constructor() { }
+    public constructor() { }
 
-  successButton() {
-    alert('Success Button!');
-  }
+    public successButton() {
+        alert('Success Button!');
+    }
 
-  dangerButton() {
-    alert('Danger Button!');
-  }
+    public dangerButton() {
+        alert('Danger Button!');
+    }
 
-  warningButton() {
-    alert('Warning Button!');
-  }
+    public warningButton() {
+        alert('Warning Button!');
+    }
 
-  informationButton() {
-    alert('Information Button!');
-  }
+    public informationButton() {
+        alert('Information Button!');
+    }
 }

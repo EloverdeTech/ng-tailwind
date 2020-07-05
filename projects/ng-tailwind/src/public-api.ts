@@ -123,4 +123,4 @@ export * from './components/ngt-dropzone/ngt-dropzone.component';
 export * from './services/http/ngt-attachment-http.service';
 
 //NgtAnimations
-export * from './animations/ngt-angular-animations'
+export * from './animations/ngt-angular-animations';

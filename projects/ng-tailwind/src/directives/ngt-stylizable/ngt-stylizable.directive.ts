@@ -3,239 +3,238 @@ import { Directive, Input } from '@angular/core';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Directive({
-  selector: '[ngt-stylizable]'
+    selector: '[ngt-stylizable]'
 })
 export class NgtStylizableDirective {
+    private ngtStylizableService: NgtStylizableService;
 
-  private ngtStylizableService: NgtStylizableService;
+    public constructor() {
+        this.ngtStylizableService = new NgtStylizableService();
+    }
 
-  constructor() {
-    this.ngtStylizableService = new NgtStylizableService();
-  }
+    public getNgtStylizableService() {
+        return this.ngtStylizableService;
+    }
 
-  public getNgtStylizableService() {
-    return this.ngtStylizableService;
-  }
+    public get color() {
+        return this.ngtStylizableService.color;
+    }
 
-  get color() {
-    return this.ngtStylizableService.color;
-  }
+    @Input('color')
+    public set color(color) {
+        this.ngtStylizableService.color = color;
+    }
 
-  @Input('color')
-  set color(color) {
-    this.ngtStylizableService.color = color;
-  }
+    @Input('color.text')
+    public set textColor(textColor: string) {
+        this.ngtStylizableService.textColor = textColor;
+    }
 
-  @Input('color.text')
-  set textColor(textColor: string) {
-    this.ngtStylizableService.textColor = textColor;
-  }
+    @Input('color.bg')
+    public set bgColor(bgColor: string) {
+        this.ngtStylizableService.bgColor = bgColor;
+    }
 
-  @Input('color.bg')
-  set bgColor(bgColor: string) {
-    this.ngtStylizableService.bgColor = bgColor;
-  }
+    @Input('color.border')
+    public set borderColor(borderColor) {
+        this.ngtStylizableService.borderColor = borderColor;
+    }
 
-  @Input('color.border')
-  set borderColor(borderColor) {
-    this.ngtStylizableService.borderColor = borderColor;
-  }
+    public get h(): string {
+        return this.ngtStylizableService.h;
+    }
 
-  get h(): string {
-    return this.ngtStylizableService.h;
-  }
+    @Input('h')
+    public set h(h: string) {
+        this.ngtStylizableService.h = h;
+    }
 
-  @Input('h')
-  set h(h: string) {
-    this.ngtStylizableService.h = h;
-  }
+    public get w(): string {
+        return this.ngtStylizableService.w;
+    }
 
-  get w(): string {
-    return this.ngtStylizableService.w;
-  }
+    @Input('w')
+    public set w(w: string) {
+        this.ngtStylizableService.w = w;
+    }
 
-  @Input('w')
-  set w(w: string) {
-    this.ngtStylizableService.w = w;
-  }
+    public get p(): string {
+        return this.ngtStylizableService.p;
+    }
 
-  get p(): string {
-    return this.ngtStylizableService.p;
-  }
+    @Input('p')
+    public set p(p: string) {
+        this.ngtStylizableService.p = p;
+    }
 
-  @Input('p')
-  set p(p: string) {
-    this.ngtStylizableService.p = p;
-  }
+    public get px(): string {
+        return this.ngtStylizableService.px;
+    }
 
-  get px(): string {
-    return this.ngtStylizableService.px;
-  }
+    @Input('px')
+    public set px(px: string) {
+        this.ngtStylizableService.px = px;
+    }
 
-  @Input('px')
-  set px(px: string) {
-    this.ngtStylizableService.px = px;
-  }
+    public get py(): string {
+        return this.ngtStylizableService.py;
+    }
 
-  get py(): string {
-    return this.ngtStylizableService.py;
-  }
+    @Input('py')
+    public set py(py: string) {
+        this.ngtStylizableService.py = py;
+    }
 
-  @Input('py')
-  set py(py: string) {
-    this.ngtStylizableService.py = py;
-  }
+    public get pt(): string {
+        return this.ngtStylizableService.pt;
+    }
 
-  get pt(): string {
-    return this.ngtStylizableService.pt;
-  }
+    @Input('pt')
+    public set pt(pt: string) {
+        this.ngtStylizableService.pt = pt;
+    }
 
-  @Input('pt')
-  set pt(pt: string) {
-    this.ngtStylizableService.pt = pt;
-  }
+    public get pr(): string {
+        return this.ngtStylizableService.pr;
+    }
 
-  get pr(): string {
-    return this.ngtStylizableService.pr;
-  }
+    @Input('pr')
+    public set pr(pr: string) {
+        this.ngtStylizableService.pr = pr;
+    }
 
-  @Input('pr')
-  set pr(pr: string) {
-    this.ngtStylizableService.pr = pr;
-  }
+    public get pb(): string {
+        return this.ngtStylizableService.pb;
+    }
 
-  get pb(): string {
-    return this.ngtStylizableService.pb;
-  }
+    @Input('pb')
+    public set pb(pb: string) {
+        this.ngtStylizableService.pb = pb;
+    }
 
-  @Input('pb')
-  set pb(pb: string) {
-    this.ngtStylizableService.pb = pb;
-  }
+    public get pl(): string {
+        return this.ngtStylizableService.pl;
+    }
 
-  get pl(): string {
-    return this.ngtStylizableService.pl;
-  }
+    @Input('pl')
+    public set pl(pl: string) {
+        this.pl = this.ngtStylizableService.pl;
+    }
 
-  @Input('pl')
-  set pl(pl: string) {
-    this.pl = this.ngtStylizableService.pl;
-  }
+    public get m(): string {
+        return this.ngtStylizableService.m;
+    }
 
-  get m(): string {
-    return this.ngtStylizableService.m;
-  }
+    @Input('m')
+    public set m(m: string) {
+        this.ngtStylizableService.m = m;
+    }
 
-  @Input('m')
-  set m(m: string) {
-    this.ngtStylizableService.m = m;
-  }
+    public get mx(): string {
+        return this.ngtStylizableService.mx;
+    }
 
-  get mx(): string {
-    return this.ngtStylizableService.mx;
-  }
+    @Input('mx')
+    public set mx(mx: string) {
+        this.ngtStylizableService.mx = mx;
+    }
 
-  @Input('mx')
-  set mx(mx: string) {
-    this.ngtStylizableService.mx = mx;
-  }
+    public get my(): string {
+        return this.ngtStylizableService.my;
+    }
 
-  get my(): string {
-    return this.ngtStylizableService.my;
-  }
+    @Input('my')
+    public set my(my: string) {
+        this.ngtStylizableService.my = my;
+    }
 
-  @Input('my')
-  set my(my: string) {
-    this.ngtStylizableService.my = my;
-  }
+    public get mt(): string {
+        return this.ngtStylizableService.mt;
+    }
 
-  get mt(): string {
-    return this.ngtStylizableService.mt;
-  }
+    @Input('mt')
+    public set mt(mt: string) {
+        this.ngtStylizableService.mt = mt;
+    }
 
-  @Input('mt')
-  set mt(mt: string) {
-    this.ngtStylizableService.mt = mt;
-  }
+    public get mr(): string {
+        return this.ngtStylizableService.mr;
+    }
 
-  get mr(): string {
-    return this.ngtStylizableService.mr;
-  }
+    @Input('mr')
+    public set mr(mr: string) {
+        this.ngtStylizableService.mr = mr;
+    }
 
-  @Input('mr')
-  set mr(mr: string) {
-    this.ngtStylizableService.mr = mr;
-  }
+    public get mb(): string {
+        return this.ngtStylizableService.mb;
+    }
 
-  get mb(): string {
-    return this.ngtStylizableService.mb;
-  }
+    @Input('mb')
+    public set mb(mb: string) {
+        this.ngtStylizableService.mb = mb;
+    }
 
-  @Input('mb')
-  set mb(mb: string) {
-    this.ngtStylizableService.mb = mb;
-  }
+    public get ml(): string {
+        return this.ngtStylizableService.ml;
+    }
 
-  get ml(): string {
-    return this.ngtStylizableService.ml;
-  }
+    @Input('ml')
+    public set ml(ml: string) {
+        this.ngtStylizableService.ml = ml;
+    }
 
-  @Input('ml')
-  set ml(ml: string) {
-    this.ngtStylizableService.ml = ml;
-  }
+    public get border(): string {
+        return this.ngtStylizableService.border;
+    }
 
-  get border(): string {
-    return this.ngtStylizableService.border;
-  }
+    @Input('border')
+    public set border(border: string) {
+        this.ngtStylizableService.border = border;
+    }
 
-  @Input('border')
-  set border(border: string) {
-    this.ngtStylizableService.border = border;
-  }
+    public get shadow(): string {
+        return this.ngtStylizableService.shadow;
+    }
 
-  get shadow(): string {
-    return this.ngtStylizableService.shadow;
-  }
+    @Input('shadow')
+    public set shadow(shadow: string) {
+        this.ngtStylizableService.shadow = shadow;
+    }
 
-  @Input('shadow')
-  set shadow(shadow: string) {
-    this.ngtStylizableService.shadow = shadow;
-  }
+    public get rounded(): string {
+        return this.ngtStylizableService.rounded;
+    }
 
-  get rounded(): string {
-    return this.ngtStylizableService.rounded;
-  }
+    @Input('rounded')
+    public set rounded(rounded: string) {
+        this.ngtStylizableService.rounded = rounded;
+    }
 
-  @Input('rounded')
-  set rounded(rounded: string) {
-    this.ngtStylizableService.rounded = rounded;
-  }
+    public get font(): string {
+        return this.ngtStylizableService.font;
+    }
 
-  get font(): string {
-    return this.ngtStylizableService.font;
-  }
+    @Input('font')
+    public set font(font: string) {
+        this.ngtStylizableService.font = font;
+    }
 
-  @Input('font')
-  set font(font: string) {
-    this.ngtStylizableService.font = font;
-  }
+    public get text(): string {
+        return this.ngtStylizableService.text;
+    }
 
-  get text(): string {
-    return this.ngtStylizableService.text;
-  }
+    @Input('text')
+    public set text(text: string) {
+        this.ngtStylizableService.text = text;
+    }
 
-  @Input('text')
-  set text(text: string) {
-    this.ngtStylizableService.text = text;
-  }
+    public get breakWords(): string {
+        return this.ngtStylizableService.breakWords;
+    }
 
-  get breakWords(): string {
-    return this.ngtStylizableService.breakWords;
-  }
-
-  @Input('breakWords')
-  set breakWords(breakWords: string) {
-    this.ngtStylizableService.breakWords = breakWords;
-  }
+    @Input('breakWords')
+    public set breakWords(breakWords: string) {
+        this.ngtStylizableService.breakWords = breakWords;
+    }
 }

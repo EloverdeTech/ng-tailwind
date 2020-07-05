@@ -9,16 +9,16 @@ import { NgtValidationModule } from '../ngt-validation/ngt-validation.module';
 import { NgtInputComponent } from './ngt-input.component';
 
 @NgModule({
-  declarations: [NgtInputComponent],
-  exports: [NgtInputComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgtValidationModule,
-    NgtShiningModule,
-    NgtSvgModule,
-    NgtFormModule
-  ]
+    declarations: [NgtInputComponent],
+    exports: [NgtInputComponent],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgtValidationModule,
+        NgtShiningModule,
+        NgtSvgModule,
+        NgtFormModule
+    ]
 })
 export class NgtInputModule { }

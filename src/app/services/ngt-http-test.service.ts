@@ -3,7 +3,7 @@ import { NgtHttpService } from 'projects/ng-tailwind/src/services/http/ngt-http.
 import { Observable, Observer } from 'rxjs';
 
 export class NgtHttpTest extends NgtHttpService {
-    get(connector: any, filters: any, pagination: NgtHttpPagination): Observable<NgtHttpResponse> {
+    public get(connector: any, filters: any, pagination: NgtHttpPagination): Observable<NgtHttpResponse> {
         return Observable.create((observer: Observer<NgtHttpResponse>) => {
             observer.next({
                 data: [
@@ -29,15 +29,15 @@ export class NgtHttpTest extends NgtHttpService {
         });
     }
 
-    post(data: any): Observable<any> {
+    public post(data: any): Observable<any> {
         throw new Error("Method not implemented.");
     }
 
-    put(data: any): Observable<any> {
+    public put(data: any): Observable<any> {
         throw new Error("Method not implemented.");
     }
 
-    delete(data: any): Observable<any> {
+    public delete(data: any): Observable<any> {
         throw new Error("Method not implemented.");
     }
 }

@@ -4,28 +4,28 @@ import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-s
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
-  selector: 'ngt-portlet-footer',
-  templateUrl: './ngt-portlet-footer.component.html',
-  styleUrls: ['./ngt-portlet-footer.component.css']
+    selector: 'ngt-portlet-footer',
+    templateUrl: './ngt-portlet-footer.component.html',
+    styleUrls: ['./ngt-portlet-footer.component.css']
 })
 export class NgtPortletFooterComponent {
-  public ngtStyle: NgtStylizableService;
+    public ngtStyle: NgtStylizableService;
 
-  constructor(
-    private injector: Injector,
-    @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
-  ) {
-    if (this.ngtStylizableDirective) {
-      this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-    } else {
-      this.ngtStyle = new NgtStylizableService();
+    public constructor(
+        private injector: Injector,
+        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
+    ) {
+        if (this.ngtStylizableDirective) {
+            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+        } else {
+            this.ngtStyle = new NgtStylizableService();
+        }
+
+        this.ngtStyle.load(this.injector, 'NgtPortletFooter', {
+            color: {
+                bg: 'bg-gray-200',
+                text: 'text-black'
+            }
+        }, ['NgtPortletStyle']);
     }
-
-    this.ngtStyle.load(this.injector, 'NgtPortletFooter', {
-      color: {
-        bg: 'bg-gray-200',
-        text: 'text-black'
-      }
-    }, ['NgtPortletStyle']);
-  }
 }

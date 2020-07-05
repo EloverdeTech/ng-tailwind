@@ -9,23 +9,23 @@ import { NgtStylizableTemplateModule } from 'src/app/components/ngt-stylizable-t
 import { NgtCheckboxPageComponent } from './ngt-checkbox-page.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": NgtCheckboxPageComponent
-  }
+    {
+        "path": '',
+        "component": NgtCheckboxPageComponent
+    }
 ];
 
 @NgModule({
-  declarations: [NgtCheckboxPageComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    CodePreviewModule,
-    NgtPortletModule,
-    NgtCheckboxModule,
-    NgtStylizableModule,
-    NgtStylizableTemplateModule
-  ]
+    declarations: [NgtCheckboxPageComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        CodePreviewModule,
+        NgtPortletModule,
+        NgtCheckboxModule,
+        NgtStylizableModule,
+        NgtStylizableTemplateModule
+    ]
 })
 export class NgtCheckboxPageModule { }

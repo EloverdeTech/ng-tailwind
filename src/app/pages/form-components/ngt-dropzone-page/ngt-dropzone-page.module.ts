@@ -8,21 +8,21 @@ import { CodePreviewModule } from 'src/app/components/code-preview/code-preview.
 import { NgtDropzonePageComponent } from './ngt-dropzone-page.component';
 
 const routes: Routes = [
-  {
-    "path": '',
-    "component": NgtDropzonePageComponent
-  }
+    {
+        "path": '',
+        "component": NgtDropzonePageComponent
+    }
 ];
 
 @NgModule({
-  declarations: [NgtDropzonePageComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    FormsModule,
-    CodePreviewModule,
-    NgtPortletModule,
-    NgtDropzoneModule,
-  ]
+    declarations: [NgtDropzonePageComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(routes),
+        FormsModule,
+        CodePreviewModule,
+        NgtPortletModule,
+        NgtDropzoneModule,
+    ]
 })
 export class NgtDropzonePageModule { }

@@ -13,5 +13,6 @@ export function triggerNgFormSubmit(ngForm: NgForm) {
 
 export function isValidNgForm(ngForm: NgForm) {
     triggerNgFormSubmit(ngForm);
+
     return ngForm.valid;
 }

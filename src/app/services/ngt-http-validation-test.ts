@@ -1,8 +1,7 @@
-import { NgtHttpValidationService, NgtHttpValidationResponse } from 'ng-tailwind';
+import { NgtHttpValidationResponse, NgtHttpValidationService } from 'ng-tailwind';
 
 export class NgtHttpValidationTestService extends NgtHttpValidationService {
-
-    unique(validationResource: any, value: any): Promise<NgtHttpValidationResponse> {
+    public unique(validationResource: any, value: any): Promise<NgtHttpValidationResponse> {
         return new Promise((resolve) => {
             setTimeout(() => {
                 if (value == 'not unique') {
@@ -14,8 +13,7 @@ export class NgtHttpValidationTestService extends NgtHttpValidationService {
         });
     }
 
-    exists(validationResource: any, value: any): Promise<NgtHttpValidationResponse> {
+    public exists(validationResource: any, value: any): Promise<NgtHttpValidationResponse> {
         throw new Error("Method not implemented.");
     }
-
 }

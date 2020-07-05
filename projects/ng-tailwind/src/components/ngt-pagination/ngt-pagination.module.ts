@@ -7,16 +7,15 @@ import { NgtActionModule } from '../ngt-action/ngt-action.module';
 import { NgtSelectModule } from '../ngt-select/ngt-select.module';
 import { NgtPaginationComponent } from './ngt-pagination.component';
 
-
 @NgModule({
-  declarations: [NgtPaginationComponent],
-  exports: [NgtPaginationComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    NgtStylizableModule,
-    NgtActionModule,
-    NgtSelectModule,
-  ]
+    declarations: [NgtPaginationComponent],
+    exports: [NgtPaginationComponent],
+    imports: [
+        CommonModule,
+        FormsModule,
+        NgtStylizableModule,
+        NgtActionModule,
+        NgtSelectModule,
+    ]
 })
 export class NgtPaginationModule { }

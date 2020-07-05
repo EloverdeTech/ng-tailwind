@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngt-checkbox-page',
-  templateUrl: './ngt-checkbox-page.component.html',
-  styleUrls: ['./ngt-checkbox-page.component.css']
+    selector: 'ngt-checkbox-page',
+    templateUrl: './ngt-checkbox-page.component.html',
+    styleUrls: ['./ngt-checkbox-page.component.css']
 })
 export class NgtCheckboxPageComponent {
-  public ngModelOne: boolean = false;
-  public ngModelTwo: boolean = false;
-  public ngModelThree: boolean = true;z
+    public ngModelOne: boolean = false;
+    public ngModelTwo: boolean = false;
+    public ngModelThree: boolean = true;
 
-  public codeExample = `
+    public codeExample = `
   <form class="flex w-full justify-around pb-2 border-b">
     <div class="flex items-center">
       <span class="mx-2 font-semibold text-sm">{{ ngModelOne }}</span>
@@ -33,5 +33,5 @@ export class NgtCheckboxPageComponent {
   </form>
   `;
 
-  constructor() { }
+    public constructor() { }
 }
