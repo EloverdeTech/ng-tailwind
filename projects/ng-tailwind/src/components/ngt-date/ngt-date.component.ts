@@ -106,16 +106,6 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
         });
     }
 
-    public change(value: any) {
-        if (this.componentReady) {
-            this.onValueChangeEvent.emit(this.value);
-        }
-
-        if (value && value != this.nativeValue) {
-            this.ng2FlatpickrComponent.setDateFromInput(moment(value).format('DD/MM/YYYY HH:mm:00'));
-        }
-    }
-
     public ngOnChanges(changes: SimpleChanges) {
         if (changes.mode) {
             this.mode = getEnumFromString(changes.mode.currentValue, NgtDateMode);
@@ -126,7 +116,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
         }
     }
 
-    public async ngOnInit() {
+    public ngOnInit() {
         this.dateConfig = {
             dateFormat: this.dateFormat,
             mode: this.getDateMode(),
@@ -146,37 +136,70 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
         if (!this.name) {
             console.error("The element must contain a name attribute!");
         } else {
-            // Render delay
-            setTimeout(() => { }, 500);
-            this.componentReady = true;
-
             setTimeout(() => {
-                this.initComponent();
-            });
+                this.componentReady = true;
+                setTimeout(() => {
+                    this.initComponent();
+                });
+            }, 500);
+        }
+    }
+
+    public clearInput() {
+        this.value = '';
+        this.nativeValue = '';
+    }
+
+    public change(value: any) {
+        if (this.componentReady) {
+            this.onValueChangeEvent.emit(this.value);
+        }
+
+        if (!value || (value instanceof Object && !Object.keys(value).length)) {
+            return this.clearInput();
+        }
+
+        if (value && value != this.nativeValue) {
+            value = moment(value);
+
+            if (value.isValid()) {
+                this.ng2FlatpickrComponent.setDateFromInput(value.format('DD/MM/YYYY HH:mm:00'));
+            } else {
+                this.ng2FlatpickrComponent.setDateFromInput('');
+                this.clearInput();
+            }
         }
     }
 
     public onNativeChange(value: any, instance: any, triggerClose: boolean) {
-        if (value === undefined) {
-            this.value = '';
-            this.nativeValue = '';
-
+        if (!value || (value instanceof Object && !Object.keys(value).length)) {
             if (triggerClose) {
                 instance.close();
             }
-        } else {
-            if (this.mode == NgtDateMode.RANGE) {
-                this.nativeValue = [];
-                value.forEach(element => {
-                    this.nativeValue.push(moment(element).format(this.dateFormatNgModel));
-                });
-            } else {
-                this.nativeValue = moment(value[0]).format(this.dateFormatNgModel);
-            }
 
-            if (this.value != this.nativeValue) {
-                this.value = this.nativeValue;
+            return this.clearInput();
+        }
+
+        if (this.mode == NgtDateMode.RANGE) {
+            this.nativeValue = [];
+
+            value.forEach(element => {
+                element = moment(element);
+
+                if (element && element.isValid()) {
+                    this.nativeValue.push(element.format(this.dateFormatNgModel));
+                }
+            });
+        } else if (value[0]) {
+            value = moment(value[0]);
+
+            if (value && value.isValid()) {
+                this.nativeValue = value.format(this.dateFormatNgModel);
             }
+        }
+
+        if (this.value != this.nativeValue) {
+            this.value = this.nativeValue;
         }
     }
 
