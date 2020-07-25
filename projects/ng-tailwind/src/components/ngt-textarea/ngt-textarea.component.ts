@@ -94,7 +94,7 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
         }
     }
 
-    public async ngOnInit() {
+    public ngOnInit() {
         if (!this.formContainer) {
             console.warn("The element must be inside a <form #form='ngForm'> tag!", this.element.nativeElement);
         }
@@ -102,13 +102,13 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
         if (!this.name) {
             console.warn("The element must contain a name attribute!", this.element.nativeElement);
         } else {
-            //Render delay
-            setTimeout(() => { }, 500);
-            this.componentReady = true;
-
             setTimeout(() => {
-                this.initComponent();
-            });
+                this.componentReady = true;
+
+                setTimeout(() => {
+                    this.initComponent();
+                });
+            }, 500);
         }
     }
 
@@ -125,7 +125,7 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
 
     public change(value) {
         let nativeValue = this.getNativeValue();
-        let ngModelValue = value;
+        let ngModelValue = value ? value : '';
 
         if (this.componentReady) {
             this.onValueChangeEvent.emit(this.value);
