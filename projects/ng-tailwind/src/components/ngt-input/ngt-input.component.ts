@@ -131,6 +131,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     }
 
     public change(value: any) {
+        if (value && typeof value === 'string' && this.mask == 'decimal') {
+            value = parseFloat(value);
+        }
+
         if (!this.getNativeValue()) {
             this.element.nativeElement.value = value;
         }
