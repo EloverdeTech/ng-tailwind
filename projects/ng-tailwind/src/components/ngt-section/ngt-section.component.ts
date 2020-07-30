@@ -48,6 +48,7 @@ export class NgtSectionComponent {
             w: 'w-12',
             my: 'my-1',
             pr: 'pr-1',
+            px: 'md:px-5',
             color: {
                 text: 'text-gray-800'
             }
