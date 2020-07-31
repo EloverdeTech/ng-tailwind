@@ -106,12 +106,13 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
     }
 
     public ngOnInit() {
-        setTimeout(() => { }, 500);
-        this.componentReady = true;
-
         setTimeout(() => {
-            this.initComponent();
-        });
+            this.componentReady = true;
+
+            setTimeout(() => {
+                this.initComponent();
+            });
+        }, 500);
     }
 
     public async onSelect(event: NgxDropzoneChangeEvent) {
@@ -252,7 +253,10 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
     public change(value: any) {
         if (value) {
             this.onNativeChange(Array.isArray(value) ? value : [value]);
-            this.loadFilePreview(Array.isArray(value) ? value : [value]);
+
+            if (this.componentReady) {
+                this.loadFilePreview(Array.isArray(value) ? value : [value]);
+            }
         }
     }
 
@@ -276,6 +280,8 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
     private initComponent() {
         if (this.formContainer && this.formContainer.control
             && (this.formControl = this.formContainer.control.get(this.name))) {
+            this.resetFilesLoad();
+            this.loadFilePreview(Array.isArray(this.value) ? this.value : [this.value]);
             this.updateValidations();
 
             if (this.value) {
@@ -283,6 +289,14 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
             } else {
                 this.formControl.markAsPristine();
             }
+        }
+    }
+
+    private resetFilesLoad() {
+        if (Array.isArray(this.value)) {
+            this.value.forEach(element => {
+                element['loaded'] = false;
+            });
         }
     }
 
