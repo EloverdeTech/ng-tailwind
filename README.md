@@ -1,27 +1,23 @@
-# LibTest
+# Publicação
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.23.
+Passos para publicação de nova versão do NgTailwind:
 
-## Development server
+* Criar uma conta no NPM;
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+* Solicitar acesso ao pacote como contribuidor;
 
-## Code scaffolding
+* Após a realização destes passos, com o projeto aberto digite o seguinte comando no terminal:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+  ``` npm login ```
 
-## Build
+* Com esse comando você deverá realizar o login na sua conta do NPM;
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+* O próximo passo é subir a versão do pacote. Para isso, vá até o diretório /project/ng-tailwind e acesse o arquivo package.json. Na chave "version" suba a versão;
 
-## Running unit tests
+* Execute o seguinte comando para realizar o build da nova versão:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+  ``` ng build ng-tailwind ```
 
-## Running end-to-end tests
+* Por fim, navegue até o diretório /dist/ng-tailwind e rode o seguinte comando para finalizar a publicação:
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+  ``` npm publish ```
