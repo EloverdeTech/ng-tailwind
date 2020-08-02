@@ -21,3 +21,9 @@ Passos para publicação de nova versão do NgTailwind:
 * Por fim, navegue até o diretório /dist/ng-tailwind e rode o seguinte comando para finalizar a publicação:
 
   ``` npm publish ```
+
+# Documentação
+
+A documentação encontra-se atualmente em desenvolvimento e pode ser acessada através do link:
+
+``` https://ng-tailwind.tecnoelo.com.br/docs/installation ```
