@@ -53,7 +53,10 @@ export class NgtDatatableComponent implements OnInit {
     public selectedElements = [];
     private searchTimeout: any;
     private currentState = {
-        filters: {},
+        filters: {
+            defaultFilters: {},
+            silentFilters: {},
+        },
         sort: {
             field: '',
             direction: ''
@@ -99,8 +102,13 @@ export class NgtDatatableComponent implements OnInit {
         this.componentReady = true;
     }
 
-    public async search(filters?: any) {
-        this.currentState.filters = { ...this.currentState.filters, ...filters };
+    public async search(filters?: any, searchType: NgtDatatableSearchType = NgtDatatableSearchType.DEFAULT) {
+        if (searchType == NgtDatatableSearchType.DEFAULT) {
+            this.currentState.filters.defaultFilters = { ...this.currentState.filters.defaultFilters, ...filters };
+        } else {
+            this.currentState.filters.silentFilters = { ...this.currentState.filters.silentFilters, ...filters };
+        }
+
         this.applyFiltersDescription();
 
         return this.apply(1);
@@ -131,11 +139,11 @@ export class NgtDatatableComponent implements OnInit {
         if (!this.cleaningFilter) {
             this.filtersTranslated = [];
 
-            for (let reference in this.currentState.filters) {
-                if (this.filtersDescription[reference] && this.currentState.filters[reference]) {
+            for (let reference in this.currentState.filters.defaultFilters) {
+                if (this.filtersDescription[reference] && this.currentState.filters.defaultFilters[reference]) {
                     this.filtersTranslated.push({
                         reference: reference,
-                        value: this.currentState.filters[reference],
+                        value: this.currentState.filters.defaultFilters[reference],
                         translation: this.filtersDescription[reference]
                     });
                 }
@@ -151,10 +159,10 @@ export class NgtDatatableComponent implements OnInit {
         this.cleaningFilter = true;
 
         if (!reference) {
-            this.currentState.filters = {};
+            this.currentState.filters.defaultFilters = {};
             this.filtersTranslated = [];
         } else {
-            delete this.currentState.filters[reference];
+            delete this.currentState.filters.defaultFilters[reference];
             this.filtersTranslated = this.filtersTranslated.filter(element => element && element.reference !== reference);
         }
 
@@ -169,10 +177,22 @@ export class NgtDatatableComponent implements OnInit {
         });
     }
 
-    public hasAppliedFilters() {
-        for (let reference in this.currentState.filters) {
-            if (this.currentState.filters[reference]) {
-                return true;
+    public hasAppliedFilters(searchType: NgtDatatableSearchType = NgtDatatableSearchType.DEFAULT) {
+        let appliedFilters = {};
+
+        if (searchType == NgtDatatableSearchType.DEFAULT) {
+            appliedFilters = this.currentState.filters.defaultFilters;
+        } else if (searchType == NgtDatatableSearchType.SILENT) {
+            appliedFilters = this.currentState.filters.silentFilters;
+        } else {
+            appliedFilters = { ...this.currentState.filters.defaultFilters, ...this.currentState.filters.silentFilters };
+        }
+
+        if (appliedFilters) {
+            for (let reference in appliedFilters) {
+                if (appliedFilters[reference]) {
+                    return true;
+                }
             }
         }
 
@@ -234,11 +254,12 @@ export class NgtDatatableComponent implements OnInit {
     }
 
     private getQualifiedFilters() {
-        let qualifiedFilter = {};
+        const qualifiedFilters = {};
+        const requestedFilters = { ...this.currentState.filters.defaultFilters, ...this.currentState.filters.silentFilters };
 
-        if (this.currentState.filters) {
-            for (let reference in this.currentState.filters) {
-                let filter = this.currentState.filters[reference];
+        if (requestedFilters) {
+            for (let reference in requestedFilters) {
+                let filter = requestedFilters[reference];
 
                 if (filter instanceof NgtCustomFilter) {
                     if (filter.tagLabel) {
@@ -246,14 +267,14 @@ export class NgtDatatableComponent implements OnInit {
                         this.applyFiltersDescription();
                     }
 
-                    qualifiedFilter[reference] = filter.term;
+                    qualifiedFilters[reference] = filter.term;
                 } else {
-                    qualifiedFilter[reference] = filter;
+                    qualifiedFilters[reference] = filter;
                 }
             }
         }
 
-        return qualifiedFilter;
+        return qualifiedFilters;
     }
 
     private bindVisibilityAttributes() {
@@ -294,6 +315,11 @@ export class NgtDatatableComponent implements OnInit {
 export enum NgtDatatableType {
     REMOTE = 'REMOTE',
     FIXED = 'FIXED'
+}
+
+export enum NgtDatatableSearchType {
+    DEFAULT = 'DEFAULT',
+    SILENT = 'SILENT',
 }
 
 export class NgtCheckedElement {
