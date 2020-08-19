@@ -38,6 +38,7 @@ export class NgtDatatableComponent implements OnInit {
     @Output() public onDataChange: EventEmitter<any> = new EventEmitter();
     @Output() public onClearFilter: EventEmitter<any> = new EventEmitter();
     @Output() public onClearSelectedElements: EventEmitter<any> = new EventEmitter();
+    @Output() public onSelectedElementsChange: EventEmitter<Array<NgtCheckedElement>> = new EventEmitter();
     @Output() public onToogleAllCheckboxes: EventEmitter<any> = new EventEmitter();
     @Output() public onToogleCheckbox: EventEmitter<NgtCheckedElement> = new EventEmitter();
 
@@ -50,7 +51,7 @@ export class NgtDatatableComponent implements OnInit {
     public emptyStateVisible: boolean;
     public columnCount = [];
 
-    public selectedElements = [];
+    public selectedElements: Array<NgtCheckedElement> = [];
     private searchTimeout: any;
     private currentState = {
         filters: {
@@ -308,6 +309,8 @@ export class NgtDatatableComponent implements OnInit {
             if (checkedElement.checked) {
                 this.selectedElements.push(checkedElement);
             }
+
+            this.onSelectedElementsChange.emit(this.selectedElements);
         });
     }
 }
