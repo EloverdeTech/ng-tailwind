@@ -60,6 +60,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
     @Input() public minuteIncrement: number = 1;
     @Input() public allowInput: boolean = false;
     @Input() public locale: NgtDateLocale;
+    @Input() public allowClear: boolean = true;
 
     // Validation
     @Input() public isRequired: boolean = false;
@@ -145,9 +146,13 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
         }
     }
 
-    public clearInput() {
+    public clearInput(clearInstance = false) {
         this.value = '';
         this.nativeValue = '';
+
+        if (this.ng2FlatpickrComponent && clearInstance) {
+            this.ng2FlatpickrComponent.setDateFromInput('');
+        }
     }
 
     public change(value: any) {

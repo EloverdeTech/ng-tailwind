@@ -12,13 +12,22 @@
     </div>
 </label>
 
-<div [hidden]='shining || isDisabled'>
+<div class="relative" [hidden]='shining || isDisabled'>
     <div
         class="{{ !(formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))) ? 'border-normal' : 'border-error' }}">
         <ng2-flatpickr
             class="block {{ ngtStyle.compile(['h', 'w', 'px', 'py', 'mx', 'my', 'color.border', 'color.bg', 'color.text']) }}"
             [config]='dateConfig' disabled='true' placeholder="{{ placeholder ? placeholder : '' }}"
-            #ng2FlatpickrComponent></ng2-flatpickr>
+            #ng2FlatpickrComponent>
+        </ng2-flatpickr>
+
+        <div *ngIf="allowClear && value" class="flex absolute right-0 top-0 w-auto cursor-pointer mt-4 mr-2"
+            (click)='clearInput(true)'>
+            <svg class="fill-current self-center text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                    d="M19.1 17.2l-5.3-5.3 5.3-5.3-1.8-1.8-5.3 5.4-5.3-5.3-1.8 1.7 5.3 5.3-5.3 5.3L6.7 19l5.3-5.3 5.3 5.3 1.8-1.8z" />
+            </svg>
+        </div>
     </div>
 </div>
 
