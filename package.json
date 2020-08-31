@@ -2,6 +2,7 @@
   "name": "ng-tailwind-documentation",
   "version": "0.0.9",
   "scripts": {
+    "ng-high-memory": "node --max_old_space_size=8000 ./node_modules/@angular/cli/bin/ng",
     "ng": "ng",
     "start": "eslint . --ext .ts && ngtw build -c ng-tailwind-config.js && ng serve",
     "build": "eslint . --ext .ts && ng build ng-tailwind && ngtw build -p -c ng-tailwind-config.js && ng build --prod --aot",
