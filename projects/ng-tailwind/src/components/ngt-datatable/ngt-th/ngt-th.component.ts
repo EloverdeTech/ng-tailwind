@@ -100,7 +100,7 @@ export class NgtThComponent implements OnChanges {
         event.stopPropagation();
 
         this.ngtDataTable.setSearchModalTemplate(this.modal);
-        this.ngtDataTable.openSearchModal();
+        this.ngtDataTable.openSearchModal(this.reference);
 
         if (!this.hasCustomSearch) {
             setTimeout(() => {
