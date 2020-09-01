@@ -41,6 +41,7 @@ export class NgtDatatableComponent implements OnInit {
     @Output() public onSelectedElementsChange: EventEmitter<Array<NgtCheckedElement>> = new EventEmitter();
     @Output() public onToogleAllCheckboxes: EventEmitter<any> = new EventEmitter();
     @Output() public onToogleCheckbox: EventEmitter<NgtCheckedElement> = new EventEmitter();
+    @Output() public onOpenSearchModal: EventEmitter<string> = new EventEmitter();
 
     public searchModalTemplate: TemplateRef<any>;
     public data = [];
@@ -86,8 +87,9 @@ export class NgtDatatableComponent implements OnInit {
         this.searchModalTemplate = template;
     }
 
-    public openSearchModal() {
+    public openSearchModal(reference?: string) {
         this.searchModal.open();
+        this.onOpenSearchModal.emit(reference);
     }
 
     public clearSelectedElements() {
