@@ -1,7 +1,7 @@
 <div class="flex h-full w-full">
     <ng-container *ngIf="visible">
         <div class="{{ getNavSize() }} {{ ngtStyle.compile(['color.bg', 'h']) }} {{ open ? 'block' : 'hidden' }} top-auto fixed {{ isMobileView() ? '' : 'md:static md:block' }} z-40"
-            @fadeDownAnimation>
+            @fadeDownAnimation #sideMenu>
             <ng-content select='[sideMenu]'></ng-content>
         </div>
 
@@ -12,7 +12,7 @@
         </ng-container>
     </ng-container>
 
-    <div class="flex-wrap {{ getContainerSize() }} overflow-auto">
+    <div class="flex-wrap {{ getContainerSize() }} overflow-auto" #container>
         <ng-content></ng-content>
     </div>
 </div>

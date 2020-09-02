@@ -1,4 +1,15 @@
-import { AfterViewInit, Component, HostListener, Injector, Input, Optional, Self, SimpleChanges } from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    HostListener,
+    Injector,
+    Input,
+    Optional,
+    Self,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
 
 import { fadeDownAnimation } from '../../animations/ngt-angular-animations';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -16,6 +27,9 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 })
 
 export class NgtSidenavComponent implements AfterViewInit {
+    @ViewChild('sideMenu', { static: true }) public sideMenuRef: ElementRef;
+    @ViewChild('container', { static: true }) public containerRef: ElementRef;
+
     @Input() public size: Size = Size.XS;
     @Input() public initVisible: boolean = false;
     @Input() public closeMenuOnMobileView: boolean = true;
