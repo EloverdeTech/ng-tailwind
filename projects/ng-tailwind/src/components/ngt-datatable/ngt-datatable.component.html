@@ -1,4 +1,4 @@
-<div class="w-full overflow-x-auto">
+<div class="w-full">
     <div class="flex flex-wrap w-full">
         <ngt-tag *ngIf="hasAppliedFilters()" (click)="removeFilter()" class="mr-0 sm:mr-4 mb-4 w-full sm:w-auto"
             color.bg="bg-red-500" ngt-stylizable>Limpar Filtros</ngt-tag>
@@ -12,8 +12,6 @@
             </ng-container>
         </ng-container>
     </div>
-
-    <!-- <img *ngIf="emptyStateVisible" class="self-center mx-auto" src="../../assets/images/no-results.png"> -->
 
     <table style="display: table;" class="text-left w-full border-collapse table-responsive" #table>
         <ng-content></ng-content>
