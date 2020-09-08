@@ -168,6 +168,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
             setTimeout(() => {
                 this.componentReady = true;
                 this.initComponent();
+                this.replaceShowAddTag();
                 this.changeDetector.detectChanges();
             }, 500);
         }
@@ -365,6 +366,64 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
 
             return { 'required': true };
         };
+    }
+
+    private replaceShowAddTag() {
+        Object.defineProperty(this.ngSelectComponent, 'showAddTag', {
+            get: () => {
+                if (!this.ngSelectComponent['searchTerm']) {
+                    return false;
+                }
+
+                const term = this.ngSelectComponent['searchTerm'].toLocaleLowerCase();
+
+                return this.ngSelectComponent.addTag && !this.ngSelectComponent.loading
+                    && (!this.hasTermInFilteredItems(term) && (!this.hasTermInSelectedItems(term)
+                        || !this.ngSelectComponent.hideSelected && this.ngSelectComponent.isOpen));
+            }
+        });
+    }
+
+    private hasTermInFilteredItems(term: string) {
+        const filteredItems = this.ngSelectComponent.itemsList.filteredItems;
+
+        if (this.isColoquentResource()) {
+            return filteredItems.some((element: any) => {
+                const elementValue = (<any>element.value).getAttribute(this.bindLabel);
+
+                return elementValue && elementValue.toLocaleLowerCase() === term;
+            });
+        }
+
+        return filteredItems.some((element: any) => {
+            const elementValue = (<any>element.value)[this.bindLabel];
+
+            return elementValue && elementValue.toLocaleLowerCase() === term;
+        });
+    }
+
+    private hasTermInSelectedItems(term: string) {
+        const selectedItems = this.ngSelectComponent.selectedItems;
+
+        if (this.isColoquentResource()) {
+            return selectedItems.some((element: any) => {
+                const elementValue = (<any>element.value).getAttribute(this.bindLabel);
+
+                return elementValue && elementValue.toLocaleLowerCase() === term;
+            });
+        }
+
+        return selectedItems.some((element: any) => {
+            const elementValue = (<any>element.value)[this.bindLabel];
+
+            return elementValue && elementValue.toLocaleLowerCase() === term;
+        });
+    }
+
+    private isColoquentResource() {
+        const filteredItems = this.ngSelectComponent.itemsList.filteredItems;
+
+        return filteredItems && filteredItems.length && typeof filteredItems[0].value['getAttribute'] === 'function';
     }
 }
 
