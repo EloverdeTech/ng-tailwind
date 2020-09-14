@@ -10,6 +10,7 @@ import {
     Renderer2,
     Self,
     SimpleChanges,
+    SkipSelf,
     ViewChild,
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
@@ -18,6 +19,7 @@ import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 @Component({
     selector: 'ngt-checkbox',
@@ -49,6 +51,7 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
     @ViewChild('element', { static: true }) public element: ElementRef;
 
     @Input() public label: string;
+    @Input() public shining: boolean = false;
     @Input() public name: string;
     @Input() public mode: NgtCheckboxMode = NgtCheckboxMode.DEFAULT;
 
@@ -59,9 +62,18 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         @Optional() @Host()
         public formContainer: ControlContainer,
         private renderer: Renderer2,
-        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective
+        @Self() @Optional()
+        private ngtStylizableDirective: NgtStylizableDirective,
+        @Optional() @SkipSelf()
+        private ngtFormComponent: NgtFormComponent,
     ) {
         super();
+
+        if (this.ngtFormComponent) {
+            this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+                this.shining = shining;
+            });
+        }
 
         if (this.ngtStylizableDirective) {
             this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();

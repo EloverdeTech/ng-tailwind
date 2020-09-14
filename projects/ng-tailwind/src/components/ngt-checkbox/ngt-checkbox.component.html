@@ -1,4 +1,5 @@
-<label class="{{ isToggleMode() ? 'flex-col' : '' }} inline-flex items-center cursor-pointer">
+<label class="{{ isToggleMode() && !shining ? 'flex-col' : '' }} inline-flex items-center cursor-pointer"
+    [hidden]='shining'>
     <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' #element>
 
     <ng-container *ngIf="isDefaultMode()">
@@ -35,3 +36,9 @@
         </div>
     </ng-container>
 </label>
+
+<ng-container *ngIf='shining'>
+    <div class="flex">
+        <ngt-shining class="w-16 h-12"></ngt-shining>
+    </div>
+</ng-container>
