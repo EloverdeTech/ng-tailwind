@@ -31,13 +31,27 @@
                 </ng-template>
             </ng-template>
 
-            <ng-template ng-label-tmp let-item="item" let-index="index" let-search="searchTerm">
-                <ng-template *ngIf='ngtOptionSelectedTemplate' [ngTemplateOutlet]="ngtOptionSelectedTemplate"
-                    [ngTemplateOutletContext]="{ item: item, index: index, searchTerm: search }">
-                </ng-template>
-                <ng-template *ngIf='!ngtOptionSelectedTemplate' [ngTemplateOutlet]="ngtOptionTemplate"
-                    [ngTemplateOutletContext]="{ item: item, index: index, searchTerm: search }">
-                </ng-template>
+            <ng-template ng-label-tmp let-item="item">
+                <div class="flex w-full items-center pr-1">
+                    <ng-container *ngIf="multiple">
+                        <div class="ng-value-icon px-1 h-full border-r mr-2 text-sm text-gray-700 cursor-pointer"
+                            (click)='removeItem($event, item)'>
+                            <svg class="ng-value-icon fill-current self-center" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M19.1 17.2l-5.3-5.3 5.3-5.3-1.8-1.8-5.3 5.4-5.3-5.3-1.8 1.7 5.3 5.3-5.3 5.3L6.7 19l5.3-5.3 5.3 5.3 1.8-1.8z" />
+                            </svg>
+                        </div>
+                    </ng-container>
+
+                    <ng-template *ngIf='ngtOptionSelectedTemplate' [ngTemplateOutlet]="ngtOptionSelectedTemplate"
+                        [ngTemplateOutletContext]="{ item: item }">
+                    </ng-template>
+
+                    <ng-template *ngIf='!ngtOptionSelectedTemplate' [ngTemplateOutlet]="ngtOptionTemplate"
+                        [ngTemplateOutletContext]="{ item: item }">
+                    </ng-template>
+                </div>
             </ng-template>
 
             <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">

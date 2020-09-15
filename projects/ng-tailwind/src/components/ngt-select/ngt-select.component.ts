@@ -174,6 +174,13 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
         }
     }
 
+    public removeItem(event: Event, item: any) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        return this.ngSelectComponent.clearItem(item);
+    }
+
     public refresh() {
         this.initNgSelectItems();
         this.initComponent();
