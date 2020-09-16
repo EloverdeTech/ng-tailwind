@@ -165,14 +165,31 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
         }
 
         if (value && value != this.nativeValue) {
-            value = moment(value);
+            let firstValue = moment(value);
 
-            if (value.isValid()) {
-                this.ng2FlatpickrComponent.setDateFromInput(value.format('DD/MM/YYYY HH:mm:00'));
-            } else {
-                this.ng2FlatpickrComponent.setDateFromInput('');
-                this.clearInput();
+            if ((value instanceof Object && Object.keys(value).length) || (value instanceof Array && value.length)) {
+                firstValue = moment(value[0]);
+
+                if (value.length == 2) {
+                    firstValue = firstValue;
+
+                    let secondValue = moment(value[1]);
+
+                    if (firstValue.isValid() && secondValue.isValid()) {
+                        return (<any>this.ng2FlatpickrComponent.flatpickr).setDate([
+                            firstValue.format(this.getMomentDateFormat()),
+                            secondValue.format(this.getMomentDateFormat())
+                        ], true, this.dateFormat);
+                    }
+                }
             }
+
+            if (firstValue.isValid()) {
+                return (<any>this.ng2FlatpickrComponent.flatpickr).setDate(firstValue.format(this.getMomentDateFormat()), true, this.dateFormat);
+            }
+
+            this.ng2FlatpickrComponent.setDateFromInput('');
+            this.clearInput();
         }
     }
 
@@ -295,6 +312,51 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
         }
 
         return 'single';
+    }
+
+    private getMomentDateFormat() {
+        let dateFormat = '';
+
+        for (let i = 0; i < this.dateFormat.length; i++) {
+            switch (this.dateFormat.charAt(i)) {
+                case 'd':
+                    dateFormat += 'DD';
+                    break;
+                case 'm':
+                    dateFormat += 'MM';
+                    break;
+                case 'M':
+                    dateFormat += 'MMM';
+                    break;
+                case 'Y':
+                    dateFormat += 'YYYY';
+                    break;
+                case '/':
+                    dateFormat += '/';
+                    break;
+                case '-':
+                    dateFormat += '-';
+                    break;
+                case ':':
+                    dateFormat += ':';
+                    break;
+                case 'H':
+                    dateFormat += 'HH';
+                    break;
+                case 'i':
+                    dateFormat += 'mm';
+                    break;
+                case 's':
+                    dateFormat += 'ss';
+                    break;
+                default:
+                    if (this.dateFormat.charAt(i) != '.') {
+                        dateFormat += this.dateFormat.charAt(i);
+                    }
+            }
+        }
+
+        return dateFormat ? dateFormat : 'DD/MM/YYYY HH:mm:00';
     }
 }
 
