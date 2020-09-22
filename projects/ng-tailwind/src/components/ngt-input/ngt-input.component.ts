@@ -1,4 +1,5 @@
 import {
+    ChangeDetectorRef,
     Component,
     ElementRef,
     Host,
@@ -86,6 +87,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
         private renderer: Renderer2,
         @Optional() @SkipSelf()
         private ngtValidationService: NgtHttpValidationService,
+        private changeDetector: ChangeDetectorRef
     ) {
         super();
 
@@ -194,19 +196,25 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
             paddingClass += 'px-4 ';
         }
 
-        if (this.innerRightIcon && this.allowClear && this.value) {
-            paddingClass += 'pr-16 ';
-        }
-
-        if (this.innerRightIcon && this.allowClear && !this.value) {
-            paddingClass += 'pr-6 ';
-        }
-
-        if (this.innerRightIcon && !this.allowClear || !this.innerRightIcon && this.allowClear) {
-            paddingClass += 'pr-6 ';
+        if (this.innerRightIcon || this.allowClear || this.type == 'password') {
+            if (this.allowClear && this.value && (this.innerRightIcon || this.type == 'password')) {
+                paddingClass += 'pr-16 ';
+            } else {
+                paddingClass += 'pr-8 ';
+            }
         }
 
         return paddingClass;
+    }
+
+    public showPassword() {
+        this.element.nativeElement.type = 'text';
+        this.changeDetector.detectChanges();
+    }
+
+    public hidePassword() {
+        this.element.nativeElement.type = 'password';
+        this.changeDetector.detectChanges();
     }
 
     private initComponent() {
