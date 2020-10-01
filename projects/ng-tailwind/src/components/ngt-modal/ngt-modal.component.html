@@ -1,7 +1,7 @@
 <div class="flex min-w-full relative justify-center text-gray-700">
     <div *ngIf="isOpen"
         class="ngt-modal fixed self-center container min-w-full h-100 inset-0 overflow-auto px-6 py-6 md:py-0 md:px-0 justify-center items-center flex"
-        style="background: rgba(0,0,0,.7); z-index: 999999 !important;" @fade>
+        style="background: rgba(0,0,0,.7); z-index: 1100 !important;" @fade>
         <ng-container *ngIf="!disableDefaultCloses">
             <button (click)='close()' tabindex="-1" type="button"
                 class="fixed inset-0 h-full w-full bg-black opacity-0 cursor-default"></button>
