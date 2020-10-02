@@ -24,6 +24,7 @@ export class NgtStylizableService {
     private _font: string;
     private _text: string;
     private _breakWords: string;
+    private _overflow: string;
 
     public get color() {
         return this._color;
@@ -236,6 +237,14 @@ export class NgtStylizableService {
         this._breakWords = this.getQualifiedValue('break', breakWords);
     }
 
+    public get overflow(): string {
+        return this._overflow;
+    }
+
+    public set overflow(overflow: string) {
+        this._overflow = this.getQualifiedValue('overflow', overflow);
+    }
+
     public load(injector: Injector, style: string, defaultValue = null, inheritanceStyles = []) {
         let ngtGlobalStyle = injector.get('NgtStyleGlobal', {});
 
@@ -312,7 +321,8 @@ export class NgtStylizableService {
                 'rounded',
                 'font',
                 'text',
-                'breakWords'
+                'breakWords',
+                'overflow',
             ].includes(key));
         }
     }

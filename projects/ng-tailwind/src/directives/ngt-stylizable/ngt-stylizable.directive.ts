@@ -237,4 +237,13 @@ export class NgtStylizableDirective {
     public set breakWords(breakWords: string) {
         this.ngtStylizableService.breakWords = breakWords;
     }
+
+    public get overflow(): string {
+        return this.ngtStylizableService.overflow;
+    }
+
+    @Input('overflow')
+    public set overflow(overflow: string) {
+        this.ngtStylizableService.overflow = overflow;
+    }
 }
