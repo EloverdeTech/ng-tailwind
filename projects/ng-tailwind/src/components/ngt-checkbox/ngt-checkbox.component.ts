@@ -83,7 +83,9 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
 
         this.ngtStyle.load(this.injector, 'NgtCheckbox', {
             color: {
-                bg: 'bg-gray-500'
+                bg: 'bg-gray-500',
+                text: 'text-gray-500',
+                border: 'border-gray-500',
             }
         });
     }
@@ -111,11 +113,15 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
     }
 
     public isToggleMode() {
-        return this.mode == NgtCheckboxMode.TOGGLE;
+        return this.mode === NgtCheckboxMode.TOGGLE;
     }
 
     public isDefaultMode() {
-        return this.mode == NgtCheckboxMode.DEFAULT;
+        return this.mode === NgtCheckboxMode.DEFAULT;
+    }
+
+    public isRadioMode() {
+        return this.mode === NgtCheckboxMode.RADIO;
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -127,5 +133,6 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
 
 export enum NgtCheckboxMode {
     DEFAULT = 'DEFAULT',
-    TOGGLE = 'TOGGLE'
+    TOGGLE = 'TOGGLE',
+    RADIO = 'RADIO',
 }

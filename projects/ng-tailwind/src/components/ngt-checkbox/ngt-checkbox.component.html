@@ -14,6 +14,19 @@
         <span class="text-sm ml-2" *ngIf='label'>{{ label }}</span>
     </ng-container>
 
+    <ng-container *ngIf="isRadioMode()">
+        <div style="transition: background-color .2s ease-out" class="{{ value ? ngtStyle.compile(['color.border', 'color.text']) : 'border-gray-500' }}  
+                shadow w-6 h-6 flex justify-center rounded-full border-2 border-gray-400">
+            <svg *ngIf="value" class="fill-current self-center h-3" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 29.107 29.107">
+                <path
+                    d="M14.554 0C6.561 0 0 6.562 0 14.552c0 7.996 6.561 14.555 14.554 14.555 7.996 0 14.553-6.559 14.553-14.555C29.106 6.562 22.55 0 14.554 0z" />
+            </svg>
+        </div>
+
+        <span class="text-sm ml-2" *ngIf='label'>{{ label }}</span>
+    </ng-container>
+
     <ng-container *ngIf="isToggleMode()">
         <span class="text-sm mb-2" *ngIf='label'>{{ label }}</span>
 
