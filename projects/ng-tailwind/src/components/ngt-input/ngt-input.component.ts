@@ -47,6 +47,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
     @Input() public helpText: boolean = false;
     @Input() public innerLeftIcon: string = null;
     @Input() public innerRightIcon: string = null;
+    @Input() public decimalMaskPrecision: number = 2;
 
     //Behavior
     @Input() public isDisabled: boolean = false;
@@ -333,7 +334,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
             'cpf': '999.999.999-99',
             'cnpj': '99.999.999/9999-99',
             'decimal': {
-                digits: '2',
+                digits: this.decimalMaskPrecision,
                 groupSeparator: '.',
                 radixPoint: ',',
                 autoGroup: true,
