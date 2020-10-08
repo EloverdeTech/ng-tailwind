@@ -1,4 +1,5 @@
-import { Component, ElementRef, Injector, Input, Optional, Self, SkipSelf, ViewChild } from '@angular/core';
+import { Component, ElementRef, Injector, Input, OnDestroy, Optional, Self, SkipSelf, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { uuid } from '../../../helpers/uuid';
@@ -11,13 +12,15 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
     templateUrl: './ngt-td-check.component.html',
     styleUrls: ['./ngt-td-check.component.css'],
 })
-export class NgtTdCheckComponent {
+export class NgtTdCheckComponent implements OnDestroy {
     @ViewChild(NgtCheckboxComponent, { static: true }) public checkbox: NgtCheckboxComponent;
     @Input() public reference: any;
 
     public checked = false;
     public ngtStyle: NgtStylizableService;
+
     private id = uuid();
+    private subscriptions: Array<Subscription> = [];
 
     public constructor(
         private injector: Injector,
@@ -31,14 +34,22 @@ export class NgtTdCheckComponent {
 
     public ngAfterContentInit() {
         if (this.ngtDataTable) {
-            this.ngtDataTable.onToogleAllCheckboxes.subscribe((checked: boolean) => {
-                this.checked = checked;
-            });
+            this.subscriptions.push(
+                this.ngtDataTable.onToogleAllCheckboxes.subscribe((checked: boolean) => {
+                    this.checked = checked;
+                })
+            );
 
-            this.ngtDataTable.onClearSelectedElements.subscribe(() => {
-                this.checked = false;
-            });
+            this.subscriptions.push(
+                this.ngtDataTable.onClearSelectedElements.subscribe(() => {
+                    this.checked = false;
+                })
+            );
         }
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public onCheckboxChange(checked: boolean) {
@@ -83,5 +94,10 @@ export class NgtTdCheckComponent {
             'border',
             'color.border',
         ]);
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }

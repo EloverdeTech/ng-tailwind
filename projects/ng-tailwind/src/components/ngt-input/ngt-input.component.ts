@@ -5,6 +5,7 @@ import {
     Host,
     Injector,
     Input,
+    OnDestroy,
     OnInit,
     Optional,
     Renderer2,
@@ -13,7 +14,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, ValidationErrors, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -34,7 +35,7 @@ let Inputmask = require('inputmask');
         { provide: ControlContainer, useExisting: NgForm }
     ]
 })
-export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
+export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
     @ViewChild("element", { static: true }) public element: ElementRef;
 
     // Visual
@@ -78,6 +79,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
 
     public ngtStyle: NgtStylizableService;
 
+    private subscriptions: Array<Subscription> = [];
+
     public constructor(
         private injector: Injector,
         @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
@@ -93,9 +96,11 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
         super();
 
         if (this.ngtFormComponent) {
-            this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                this.shining = shining;
-            });
+            this.subscriptions.push(
+                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+                    this.shining = shining;
+                })
+            );
         }
 
         if (this.ngtStylizableDirective) {
@@ -131,6 +136,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
         if (changes.match || changes.isRequired || changes.type) {
             this.updateValidations();
         }
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public change(value: any) {
@@ -616,5 +625,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit {
         }
 
         return value;
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }

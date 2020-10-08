@@ -4,6 +4,7 @@ import {
     Host,
     Injector,
     Input,
+    OnDestroy,
     OnInit,
     Optional,
     Renderer2,
@@ -12,6 +13,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -29,7 +31,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
         { provide: ControlContainer, useExisting: NgForm }
     ]
 })
-export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
+export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
     @ViewChild("element", { static: true }) public element: ElementRef;
 
     // Visual
@@ -56,6 +58,8 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
     public componentReady = false;
     public ngtStyle: NgtStylizableService;
 
+    private subscriptions: Array<Subscription> = [];
+
     public constructor(
         private injector: Injector,
         @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
@@ -68,9 +72,11 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
         super();
 
         if (this.ngtFormComponent) {
-            this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                this.shining = shining;
-            });
+            this.subscriptions.push(
+                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+                    this.shining = shining;
+                })
+            );
         }
 
         if (this.ngtStylizableDirective) {
@@ -110,6 +116,10 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
                 });
             }, 500);
         }
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public setFocus() {
@@ -216,5 +226,10 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit {
 
     private getNativeValue() {
         return this.element.nativeElement.value;
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }

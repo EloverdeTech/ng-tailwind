@@ -3,6 +3,7 @@ import {
     Host,
     Injector,
     Input,
+    OnDestroy,
     OnInit,
     Optional,
     Self,
@@ -13,6 +14,7 @@ import {
 } from '@angular/core';
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
 import { FlatpickrOptions, Ng2FlatpickrComponent } from 'ng2-flatpickr';
+import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -37,7 +39,7 @@ let moment = require('moment');
         { provide: ControlContainer, useExisting: NgForm }
     ]
 })
-export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
+export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
     @ViewChild("ng2FlatpickrComponent", { static: true }) public ng2FlatpickrComponent: Ng2FlatpickrComponent;
 
     // Visual
@@ -75,6 +77,8 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
         length?: number;
     } = {};
 
+    private subscriptions: Array<Subscription> = [];
+
     public constructor(
         private injector: Injector,
         @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
@@ -86,9 +90,11 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
         super();
 
         if (this.ngtFormComponent) {
-            this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                this.shining = shining;
-            });
+            this.subscriptions.push(
+                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+                    this.shining = shining;
+                })
+            );
         }
 
         if (this.ngtStylizableDirective) {
@@ -144,6 +150,10 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
                 });
             }, 500);
         }
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public clearInput(clearInstance = false) {
@@ -357,6 +367,11 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit {
         }
 
         return dateFormat ? dateFormat : 'DD/MM/YYYY HH:mm:00';
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }
 

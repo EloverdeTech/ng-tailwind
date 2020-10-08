@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Host, Input, OnInit, Optional, Output } from '@angular/core';
+import { Component, EventEmitter, Host, Input, OnDestroy, OnInit, Optional, Output } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { isValidNgForm } from '../../helpers/form/form';
 import { getIdFromUri } from '../../helpers/routing/route';
@@ -12,7 +12,7 @@ import { NgtHttpFormService } from '../../services/http/ngt-http-form.service';
     templateUrl: './ngt-form.component.html',
     styleUrls: ['./ngt-form.component.css']
 })
-export class NgtFormComponent implements OnInit {
+export class NgtFormComponent implements OnInit, OnDestroy {
     @Input() public guessFormState: boolean = true;
     @Input() public message: string = 'Preencha corretamente todos os campos';
     @Input() public routeIdentifier: string = 'id';
@@ -30,6 +30,7 @@ export class NgtFormComponent implements OnInit {
 
     private loading: boolean = false;
     private shining: boolean = false;
+    private subscriptions: Array<Subscription> = [];
 
     public constructor(
         @Optional() @Host()
@@ -43,14 +44,20 @@ export class NgtFormComponent implements OnInit {
 
     public ngOnInit() {
         if (this.guessFormState) {
-            this.determineFormState().subscribe(() => {
-                this.setupComponent.emit();
-            });
+            this.subscriptions.push(
+                this.determineFormState().subscribe(() => {
+                    this.setupComponent.emit();
+                })
+            );
 
             return;
         }
 
         this.setupComponent.emit();
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public isCreating() {
@@ -110,12 +117,15 @@ export class NgtFormComponent implements OnInit {
         return Observable.create((observer) => {
             if (isValidNgForm(this.ngForm)) {
                 this.setLoading(true);
-                this.ngtHttpFormService.saveResource(this.resource)
-                    .subscribe((response: any) => {
-                        this.setLoading(false);
-                        observer.next(response);
-                        observer.complete();
-                    });
+
+                this.subscriptions.push(
+                    this.ngtHttpFormService.saveResource(this.resource)
+                        .subscribe((response: any) => {
+                            this.setLoading(false);
+                            observer.next(response);
+                            observer.complete();
+                        })
+                );
             } else {
                 observer.error();
             }
@@ -131,19 +141,21 @@ export class NgtFormComponent implements OnInit {
             this.setLoading(true);
             this.setShining(true);
 
-            this.ngtHttpFormService.loadResourceById(this.resource, this.uriId)
-                .subscribe(
-                    (resource: any) => {
-                        this.setLoading(false);
-                        this.setShining(false);
-                        this.onEditing.emit(resource);
-                    },
-                    (error) => {
-                        this.setLoading(false);
-                        this.setShining(false);
-                        console.error(error);
-                    }
-                );
+            this.subscriptions.push(
+                this.ngtHttpFormService.loadResourceById(this.resource, this.uriId)
+                    .subscribe(
+                        (resource: any) => {
+                            this.setLoading(false);
+                            this.setShining(false);
+                            this.onEditing.emit(resource);
+                        },
+                        (error) => {
+                            this.setLoading(false);
+                            this.setShining(false);
+                            console.error(error);
+                        }
+                    )
+            );
 
             return;
         }
@@ -153,18 +165,25 @@ export class NgtFormComponent implements OnInit {
 
     private determineFormState() {
         return Observable.create((observer) => {
-            getIdFromUri(this.route, this.routeIdentifier).subscribe((id) => {
-                this.uriId = id;
+            this.subscriptions.push(
+                getIdFromUri(this.route, this.routeIdentifier).subscribe((id) => {
+                    this.uriId = id;
 
-                if (this.uriId) {
-                    this.setFormState(NgtFormState.EDITING);
-                } else {
-                    this.setFormState(NgtFormState.CREATING);
-                }
+                    if (this.uriId) {
+                        this.setFormState(NgtFormState.EDITING);
+                    } else {
+                        this.setFormState(NgtFormState.CREATING);
+                    }
 
-                observer.next();
-            });
+                    observer.next();
+                })
+            );
         });
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }
 

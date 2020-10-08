@@ -6,6 +6,7 @@ import {
     Host,
     Injector,
     Input,
+    OnDestroy,
     Optional,
     Renderer2,
     Self,
@@ -14,6 +15,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -47,7 +49,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
         ]),
     ]
 })
-export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewInit {
+export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewInit, OnDestroy {
     @ViewChild('element', { static: true }) public element: ElementRef;
 
     @Input() public label: string;
@@ -56,6 +58,8 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
     @Input() public mode: NgtCheckboxMode = NgtCheckboxMode.DEFAULT;
 
     public ngtStyle: NgtStylizableService;
+
+    private subscriptions: Array<Subscription> = [];
 
     public constructor(
         private injector: Injector,
@@ -70,9 +74,11 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         super();
 
         if (this.ngtFormComponent) {
-            this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                this.shining = shining;
-            });
+            this.subscriptions.push(
+                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+                    this.shining = shining;
+                })
+            );
         }
 
         if (this.ngtStylizableDirective) {
@@ -88,6 +94,16 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
                 border: 'border-gray-500',
             }
         });
+    }
+
+    public ngAfterViewInit() {
+        this.renderer.listen(this.element.nativeElement, 'change', (value) => {
+            this.onNativeChange(this.element.nativeElement.checked);
+        });
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public change(value) {
@@ -106,12 +122,6 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         return this.element.nativeElement.checked !== this.value;
     }
 
-    public ngAfterViewInit() {
-        this.renderer.listen(this.element.nativeElement, 'change', (value) => {
-            this.onNativeChange(this.element.nativeElement.checked);
-        });
-    }
-
     public isToggleMode() {
         return this.mode === NgtCheckboxMode.TOGGLE;
     }
@@ -128,6 +138,11 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         if (changes.mode) {
             this.mode = getEnumFromString(changes.mode.currentValue, NgtCheckboxMode);
         }
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }
 

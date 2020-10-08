@@ -5,6 +5,7 @@ import {
     Injector,
     Input,
     OnChanges,
+    OnDestroy,
     Optional,
     Output,
     Self,
@@ -13,6 +14,7 @@ import {
     TemplateRef,
     ViewChild,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
@@ -24,7 +26,7 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
     templateUrl: './ngt-th.component.html',
     styleUrls: ['./ngt-th.component.css'],
 })
-export class NgtThComponent implements OnChanges {
+export class NgtThComponent implements OnChanges, OnDestroy {
     @ViewChild('searchInput', { static: false }) public searchInput: NgtInputComponent;
     @ViewChild('modal', { static: true }) public modal: TemplateRef<any>;
 
@@ -49,6 +51,8 @@ export class NgtThComponent implements OnChanges {
     public customSearchTerm: any;
     public ngtStyle: NgtStylizableService;
 
+    private subscriptions: Array<Subscription> = [];
+
     public constructor(
         private injector: Injector,
         private hostElement: ElementRef,
@@ -57,20 +61,24 @@ export class NgtThComponent implements OnChanges {
         public ngtDataTable: NgtDatatableComponent
     ) {
         if (this.checkDataTable()) {
-            this.ngtDataTable.onDataChange.subscribe(() => {
-                this.isCurrentSort = this.ngtDataTable.getCurrentSort().field == this.getSortReference();
+            this.subscriptions.push(
+                this.ngtDataTable.onDataChange.subscribe(() => {
+                    this.isCurrentSort = this.ngtDataTable.getCurrentSort().field == this.getSortReference();
 
-                if (this.isCurrentSort) {
-                    this.sortDirection = this.ngtDataTable.getCurrentSort().direction;
-                }
-            });
+                    if (this.isCurrentSort) {
+                        this.sortDirection = this.ngtDataTable.getCurrentSort().direction;
+                    }
+                })
+            );
 
-            this.ngtDataTable.onClearFilter.subscribe((reference) => {
-                if (reference == this.reference || !reference) {
-                    this.searchTerm = '';
-                    this.customSearchTerm = '';
-                }
-            });
+            this.subscriptions.push(
+                this.ngtDataTable.onClearFilter.subscribe((reference) => {
+                    if (reference == this.reference || !reference) {
+                        this.searchTerm = '';
+                        this.customSearchTerm = '';
+                    }
+                })
+            );
         }
 
         this.bindNgtStyle();
@@ -80,6 +88,10 @@ export class NgtThComponent implements OnChanges {
         if (changes.searchLabel && this.checkDataTable) {
             this.ngtDataTable.setFilterDescription(this.reference, this.searchLabel);
         }
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public async sort() {
@@ -213,6 +225,11 @@ export class NgtThComponent implements OnChanges {
             'text',
             'font',
         ]);
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }
 

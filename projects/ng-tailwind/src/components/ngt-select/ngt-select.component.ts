@@ -7,6 +7,7 @@ import {
     Injector,
     Input,
     OnChanges,
+    OnDestroy,
     Optional,
     Self,
     SimpleChanges,
@@ -17,7 +18,7 @@ import {
 } from '@angular/core';
 import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { Observable, Observer, Subject } from 'rxjs';
+import { Observable, Observer, Subject, Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -40,7 +41,7 @@ import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } fr
     ],
     encapsulation: ViewEncapsulation.None
 })
-export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
+export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnDestroy {
     @ViewChild(NgSelectComponent, { static: true }) public ngSelectComponent: NgSelectComponent;
     @ViewChild('element', { static: true }) public nativeElement: ElementRef;
     @ContentChild(NgtSelectOptionTmp, { static: false, read: TemplateRef }) public ngtOptionTemplate: TemplateRef<any>;
@@ -97,6 +98,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
 
     private ngSearchObserver: Observer<any>;
     private originalPerPage = 15;
+    private subscriptions: Array<Subscription> = [];
 
     private currentState = {
         filters: {},
@@ -131,9 +133,11 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
         super();
 
         if (this.ngtFormComponent) {
-            this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                this.shining = shining;
-            });
+            this.subscriptions.push(
+                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+                    this.shining = shining;
+                })
+            );
         }
 
         if (this.ngtStylizableDirective) {
@@ -155,6 +159,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
 
     public ngOnInit() {
         this.initNgSelectItems();
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public ngAfterContentInit() {
@@ -200,9 +208,12 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
             });
 
             this.typeahead = new Subject();
-            this.typeahead.subscribe((term) => {
-                this.search({ term: term });
-            });
+
+            this.subscriptions.push(
+                this.typeahead.subscribe((term) => {
+                    this.search({ term: term });
+                })
+            );
         } else if (this.items instanceof Observable) {
             this.ngSelectItems = this.items;
         } else {
@@ -269,22 +280,24 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
         this.changeDetector.detectChanges();
 
         this.searchTimeout = setTimeout(() => {
-            this.ngtHttp
-                .get(this.remoteResource, this.currentState.filters, this.currentState.pagination)
-                .subscribe(
-                    (response: NgtHttpResponse) => {
-                        this.loading = false;
-                        this.ngSearchObserver.next(response.data);
-                        this.currentState.pagination = response.meta.pagination;
-                        this.changeDetector.detectChanges();
-                    },
-                    (error) => {
-                        this.loading = false;
-                        this.changeDetector.detectChanges();
-                        console.error(error);
-                        this.ngSearchObserver.next([]);
-                    }
-                );
+            this.subscriptions.push(
+                this.ngtHttp
+                    .get(this.remoteResource, this.currentState.filters, this.currentState.pagination)
+                    .subscribe(
+                        (response: NgtHttpResponse) => {
+                            this.loading = false;
+                            this.ngSearchObserver.next(response.data);
+                            this.currentState.pagination = response.meta.pagination;
+                            this.changeDetector.detectChanges();
+                        },
+                        (error) => {
+                            this.loading = false;
+                            this.changeDetector.detectChanges();
+                            console.error(error);
+                            this.ngSearchObserver.next([]);
+                        }
+                    )
+            );
         }, 500);
     }
 
@@ -431,6 +444,11 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges {
         const filteredItems = this.ngSelectComponent.itemsList.filteredItems;
 
         return filteredItems && filteredItems.length && typeof filteredItems[0].value['getAttribute'] === 'function';
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }
 

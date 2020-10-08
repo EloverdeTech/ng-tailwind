@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input, Optional, SimpleChanges, SkipSelf } from '@angular/core';
+import { Component, Input, OnDestroy, Optional, SimpleChanges, SkipSelf } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { uuid } from '../../helpers/uuid';
@@ -19,7 +20,7 @@ import { NgtDropdownContainerComponent } from './ngt-dropdown-container/ngt-drop
         ]),
     ]
 })
-export class NgtDropdownComponent {
+export class NgtDropdownComponent implements OnDestroy {
     @Input() public icon: string;
     @Input() public iconClass: string = 'text-xl self-center mr-3 text-white';
     @Input() public imageIcon: string;
@@ -37,15 +38,23 @@ export class NgtDropdownComponent {
     public name = uuid();
     public isOpen: boolean = false;
 
+    private subscriptions: Array<Subscription> = [];
+
     public constructor(
         @Optional() @SkipSelf()
         private ngtDropdownContainer: NgtDropdownContainerComponent
     ) {
         if (this.ngtDropdownContainer) {
-            this.ngtDropdownContainer.onActiveDropdownChange.subscribe((activeDropdown: NgtDropdownComponent) => {
-                this.isOpen = (activeDropdown.name === this.name);
-            });
+            this.subscriptions.push(
+                this.ngtDropdownContainer.onActiveDropdownChange.subscribe((activeDropdown: NgtDropdownComponent) => {
+                    this.isOpen = (activeDropdown.name === this.name);
+                })
+            );
         }
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public open() {
@@ -117,6 +126,11 @@ export class NgtDropdownComponent {
         if (changes.openMethod) {
             this.openMethod = getEnumFromString(changes.openMethod.currentValue, NgtDropdownOpenMethod);
         }
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }
 

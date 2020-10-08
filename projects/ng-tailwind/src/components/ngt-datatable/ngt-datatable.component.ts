@@ -4,11 +4,13 @@ import {
     ElementRef,
     EventEmitter,
     Input,
+    OnDestroy,
     OnInit,
     Output,
     TemplateRef,
     ViewChild,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
@@ -21,7 +23,7 @@ import { NgtPaginationComponent } from '../ngt-pagination/ngt-pagination.compone
     templateUrl: './ngt-datatable.component.html',
     styleUrls: ['./ngt-datatable.component.css']
 })
-export class NgtDatatableComponent implements OnInit {
+export class NgtDatatableComponent implements OnInit, OnDestroy {
     @ViewChild('table', { static: true }) public table: ElementRef;
     @ViewChild('ngtPagination', { static: true }) public ngtPagination: NgtPaginationComponent;
     @ViewChild('searchModal', { static: true }) public searchModal: NgtModalComponent;
@@ -54,6 +56,7 @@ export class NgtDatatableComponent implements OnInit {
 
     public selectedElements: Array<NgtCheckedElement> = [];
     private searchTimeout: any;
+    private subscriptions: Array<Subscription> = [];
     private currentState = {
         filters: {
             defaultFilters: {},
@@ -81,6 +84,10 @@ export class NgtDatatableComponent implements OnInit {
         }
 
         this.initCheckboxEvent();
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public setSearchModalTemplate(template: TemplateRef<any>) {
@@ -232,20 +239,22 @@ export class NgtDatatableComponent implements OnInit {
                 this.searchTimeout = setTimeout(() => {
                     let pagination = { ...this.ngtPagination.getPagination(), ...{ page: page } };
 
-                    this.ngtHttpService.get(
-                        this.remoteResource, this.getQualifiedFilters(), pagination, this.currentState.sort
-                    ).subscribe(
-                        (response: NgtHttpResponse) => {
-                            this.proccessRemoteResponse(response.data);
-                            this.ngtPagination.proccessPagination(response.meta);
-                            this.onDataChange.emit(this.data);
-                            this.loading = false;
-                            this.bindVisibilityAttributes();
-                        },
-                        (error) => {
-                            console.error(error);
-                            this.loading = false;
-                        }
+                    this.subscriptions.push(
+                        this.ngtHttpService.get(
+                            this.remoteResource, this.getQualifiedFilters(), pagination, this.currentState.sort
+                        ).subscribe(
+                            (response: NgtHttpResponse) => {
+                                this.proccessRemoteResponse(response.data);
+                                this.ngtPagination.proccessPagination(response.meta);
+                                this.onDataChange.emit(this.data);
+                                this.loading = false;
+                                this.bindVisibilityAttributes();
+                            },
+                            (error) => {
+                                console.error(error);
+                                this.loading = false;
+                            }
+                        )
                     );
                 }, 500);
             } else {
@@ -299,21 +308,30 @@ export class NgtDatatableComponent implements OnInit {
     }
 
     private initSearchWithInput() {
-        this.inputSearch.onValueChange().subscribe((value) => {
-            this.search({ term: value });
-        });
+        this.subscriptions.push(
+            this.inputSearch.onValueChange().subscribe((value) => {
+                this.search({ term: value });
+            })
+        );
     }
 
     private initCheckboxEvent() {
-        this.onToogleCheckbox.subscribe((checkedElement: NgtCheckedElement) => {
-            this.selectedElements = this.selectedElements.filter(item => item.id !== checkedElement.id);
+        this.subscriptions.push(
+            this.onToogleCheckbox.subscribe((checkedElement: NgtCheckedElement) => {
+                this.selectedElements = this.selectedElements.filter(item => item.id !== checkedElement.id);
 
-            if (checkedElement.checked) {
-                this.selectedElements.push(checkedElement);
-            }
+                if (checkedElement.checked) {
+                    this.selectedElements.push(checkedElement);
+                }
 
-            this.onSelectedElementsChange.emit(this.selectedElements);
-        });
+                this.onSelectedElementsChange.emit(this.selectedElements);
+            })
+        );
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }
 

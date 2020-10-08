@@ -1,4 +1,5 @@
-import { Component, Injector, Input, OnChanges, Optional, Self, SimpleChanges, SkipSelf } from '@angular/core';
+import { Component, Injector, Input, OnChanges, OnDestroy, Optional, Self, SimpleChanges, SkipSelf } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -9,7 +10,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
     templateUrl: './ngt-button.component.html',
     styleUrls: ['./ngt-button.component.css'],
 })
-export class NgtButtonComponent implements OnChanges {
+export class NgtButtonComponent implements OnChanges, OnDestroy {
     @Input() public link: boolean = false;
     @Input() public href: string;
     @Input() public type: string = 'success';
@@ -18,6 +19,8 @@ export class NgtButtonComponent implements OnChanges {
     @Input() public noSubmit: boolean = false;
 
     public ngtStyle: NgtStylizableService;
+
+    private subscriptions: Array<Subscription> = [];
 
     public constructor(
         @Optional() @SkipSelf()
@@ -32,9 +35,11 @@ export class NgtButtonComponent implements OnChanges {
         }
 
         if (this.ngtFormComponent) {
-            this.ngtFormComponent.onLoadingChange.subscribe((loading: boolean) => {
-                this.loading = loading;
-            });
+            this.subscriptions.push(
+                this.ngtFormComponent.onLoadingChange.subscribe((loading: boolean) => {
+                    this.loading = loading;
+                })
+            );
         }
     }
 
@@ -85,5 +90,14 @@ export class NgtButtonComponent implements OnChanges {
                 });
             }
         }
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }

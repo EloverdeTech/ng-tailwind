@@ -4,6 +4,7 @@ import {
     Host,
     Injector,
     Input,
+    OnDestroy,
     OnInit,
     Optional,
     Output,
@@ -14,7 +15,7 @@ import {
 } from '@angular/core';
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
 import { NgxDropzoneChangeEvent, NgxDropzoneComponent } from 'ngx-dropzone';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
@@ -35,7 +36,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
         { provide: ControlContainer, useExisting: NgForm }
     ]
 })
-export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
+export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
     @ViewChild('ngxDropzone', { static: true }) public ngxDropzone: NgxDropzoneComponent;
 
     // Visual
@@ -74,6 +75,8 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
     public loading: boolean = false;
     public ngtDropzoneLoaderStyle: NgtStylizableService;
 
+    private subscriptions: Array<Subscription> = [];
+
     public constructor(
         @Optional() @Host()
         public formContainer: ControlContainer,
@@ -85,9 +88,11 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
         super();
 
         if (this.ngtFormComponent) {
-            this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                this.shining = shining;
-            });
+            this.subscriptions.push(
+                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+                    this.shining = shining;
+                })
+            );
         }
 
         this.ngtDropzoneLoaderStyle = new NgtStylizableService();
@@ -113,6 +118,10 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
                 this.initComponent();
             });
         }, 500);
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public async onSelect(event: NgxDropzoneChangeEvent) {
@@ -176,23 +185,25 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
                 ));
             });
 
-            forkJoin(observables).subscribe(
-                (response) => {
-                    this.resources.push(...temporaryFiles);
+            this.subscriptions.push(
+                forkJoin(observables).subscribe(
+                    (response) => {
+                        this.resources.push(...temporaryFiles);
 
-                    if (this.itemsLimit == 1) {
-                        this.onNativeChange([...temporaryAttachments]);
-                    } else {
-                        this.onNativeChange([...temporaryAttachments, ...this.nativeValue]);
-                    }
+                        if (this.itemsLimit == 1) {
+                            this.onNativeChange([...temporaryAttachments]);
+                        } else {
+                            this.onNativeChange([...temporaryAttachments, ...this.nativeValue]);
+                        }
 
-                    this.onFileUploaded.emit();
-                    this.loading = false;
-                },
-                (error) => {
-                    this.onFileUploadFail.emit(error);
-                    this.loading = false;
-                });
+                        this.onFileUploaded.emit();
+                        this.loading = false;
+                    },
+                    (error) => {
+                        this.onFileUploadFail.emit(error);
+                        this.loading = false;
+                    })
+            );
         }
     }
 
@@ -217,16 +228,18 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
                 }
             });
 
-            forkJoin(observables).subscribe(
-                (response) => {
-                    this.resources.push(...temporaryResource);
-                    this.onNativeChange(attachments);
-                    this.onFilePreviewLoaded.emit();
-                    this.loading = false;
-                },
-                (error) => {
-                    this.loading = false;
-                });
+            this.subscriptions.push(
+                forkJoin(observables).subscribe(
+                    (response) => {
+                        this.resources.push(...temporaryResource);
+                        this.onNativeChange(attachments);
+                        this.onFilePreviewLoaded.emit();
+                        this.loading = false;
+                    },
+                    (error) => {
+                        this.loading = false;
+                    })
+            );
         }
     }
 
@@ -317,6 +330,11 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit {
             this.formControl.setValidators(syncValidators);
             this.formControl.updateValueAndValidity();
         });
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }
 

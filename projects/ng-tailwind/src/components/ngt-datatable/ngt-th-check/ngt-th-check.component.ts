@@ -1,4 +1,5 @@
-import { AfterContentInit, Component, ElementRef, Injector, Optional, Self, SkipSelf } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, Injector, OnDestroy, Optional, Self, SkipSelf } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
@@ -9,9 +10,11 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
     templateUrl: './ngt-th-check.component.html',
     styleUrls: ['./ngt-th-check.component.css'],
 })
-export class NgtThCheckComponent implements AfterContentInit {
+export class NgtThCheckComponent implements AfterContentInit, OnDestroy {
     public checked = false;
     public ngtStyle: NgtStylizableService;
+
+    private subscriptions: Array<Subscription> = [];
 
     public constructor(
         private injector: Injector,
@@ -25,14 +28,22 @@ export class NgtThCheckComponent implements AfterContentInit {
 
     public ngAfterContentInit() {
         if (this.ngtDataTable) {
-            this.ngtDataTable.onDataChange.subscribe(() => {
-                this.checked = false;
-            });
+            this.subscriptions.push(
+                this.ngtDataTable.onDataChange.subscribe(() => {
+                    this.checked = false;
+                })
+            );
 
-            this.ngtDataTable.onClearSelectedElements.subscribe(() => {
-                this.checked = false;
-            });
+            this.subscriptions.push(
+                this.ngtDataTable.onClearSelectedElements.subscribe(() => {
+                    this.checked = false;
+                })
+            );
         }
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public onCheckboxChange(checked: boolean) {
@@ -73,5 +84,10 @@ export class NgtThCheckComponent implements AfterContentInit {
             'border',
             'color.border',
         ]);
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }
