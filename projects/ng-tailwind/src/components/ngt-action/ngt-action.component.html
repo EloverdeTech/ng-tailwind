@@ -1,7 +1,7 @@
 <a [class]="isDisabled ? 'block rounded-full cursor-not-allowed text-gray-600 bg-gray-400 hover:bg-gray-400 opacity-50' : 'cursor-pointer'"
     [routerLink]="getHref()" (click)='onClick($event)'>
     <div
-        class="flex align-items-center justify-center rounded-full {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py', 'shadow']) }}">
+        class="flex align-items-center justify-center rounded-full {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py', 'shadow', 'text']) }}">
         <ngt-svg [src]="icon" class='self-center' *ngIf="icon"></ngt-svg>
         <div class="self-center">
             <ng-content></ng-content>

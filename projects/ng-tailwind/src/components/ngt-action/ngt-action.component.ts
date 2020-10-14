@@ -31,8 +31,7 @@ export class NgtActionComponent {
                 bg: 'bg-gray-500',
                 text: 'text-white'
             },
-            px: 'px-0',
-            py: 'py-0'
+            text: 'text-xl'
         });
     }
 
