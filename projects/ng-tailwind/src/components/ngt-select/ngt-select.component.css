@@ -59,3 +59,7 @@
 .ng-select-dropdown-panel-xl .ng-dropdown-panel .ng-dropdown-panel-items {
     min-height: 160px !important;
 }
+
+.ng-dropdown-panel .ng-dropdown-header {
+    padding: 0 !important;
+}
