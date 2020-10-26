@@ -177,6 +177,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
                 this.componentReady = true;
                 this.initComponent();
                 this.replaceShowAddTag();
+                this.ngSelectComponent.itemsList.mapSelectedItems();
                 this.changeDetector.detectChanges();
             }, 500);
         }
