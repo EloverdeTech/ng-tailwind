@@ -494,7 +494,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }
 
         return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
-            if (this.value) {
+            if (this.value && this.uniqueResource) {
                 return new Promise((resolve) => {
                     this.loading = true;
 
