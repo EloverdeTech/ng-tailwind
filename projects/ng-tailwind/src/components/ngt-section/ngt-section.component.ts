@@ -78,7 +78,17 @@ export class NgtSectionComponent {
         });
     }
 
-    public toogleSectionVisibility() {
+    public open() {
+        this.showSection = true;
+        this.onToggleSection.emit(this.showSection);
+    }
+
+    public close() {
+        this.showSection = false;
+        this.onToggleSection.emit(this.showSection);
+    }
+
+    public toggle() {
         this.showSection = !this.showSection;
         this.onToggleSection.emit(this.showSection);
     }

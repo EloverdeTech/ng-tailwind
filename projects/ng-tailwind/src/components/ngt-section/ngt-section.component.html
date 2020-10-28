@@ -13,7 +13,7 @@
     <ng-container *ngIf="accordion">
       <div
         class="flex flex-wrap items-center px-5 cursor-pointer hover:opacity-75 {{ accordion && showSection ? ngtCaptionStyle.compile(['pb']) : '' }}"
-        (click)='toogleSectionVisibility()' style="max-width: fit-content;">
+        (click)='toggle()' style="max-width: fit-content;">
         <div *ngIf="!showSection"
           class="flex align-items-center text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
           <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
