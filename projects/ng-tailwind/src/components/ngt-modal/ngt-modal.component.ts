@@ -35,7 +35,6 @@ export class NgtModalComponent implements AfterViewInit {
     @Output() public onCloseModal: EventEmitter<any> = new EventEmitter();
     @Output() public onOpenModal: EventEmitter<any> = new EventEmitter();
 
-    public closeButton = document.querySelectorAll('.modal-close');
     public isOpen: boolean = false;
 
     public constructor(
@@ -72,11 +71,11 @@ export class NgtModalComponent implements AfterViewInit {
 
     public ngAfterViewInit() {
         if (!this.disableDefaultCloses) {
-            document.getElementsByTagName('body').item(0).onkeydown = (event: any) => {
+            window.addEventListener('keydown', (event: any) => {
                 if (event.keyCode == 27) {
                     this.close();
                 }
-            };
+            }, true);
         }
     }
 }
