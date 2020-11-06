@@ -1,0 +1,20 @@
+<label class="inline-flex items-center cursor-pointer">
+    <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' #element>
+
+    <div class="{{ value ? ngtStyle.compile(['color.border', 'color.text']) : 'border-gray-500' }}  
+                    shadow rounded-full border border-gray-400 {{ !shining ? 'flex justify-center items-center' : 'hidden' }}"
+        style="width: 19px; height: 19px;">
+        <svg *ngIf="value" class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.107 29.107">
+            <path
+                d="M14.554 0C6.561 0 0 6.562 0 14.552c0 7.996 6.561 14.555 14.554 14.555 7.996 0 14.553-6.559 14.553-14.555C29.106 6.562 22.55 0 14.554 0z" />
+        </svg>
+    </div>
+
+    <span *ngIf='label && !shining' class="text-sm ml-2">{{ label }}</span>
+</label>
+
+<ng-container *ngIf='shining'>
+    <div class="flex">
+        <ngt-shining class="w-16 h-12"></ngt-shining>
+    </div>
+</ng-container>

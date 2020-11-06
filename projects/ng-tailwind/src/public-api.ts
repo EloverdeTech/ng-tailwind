@@ -44,6 +44,11 @@ export * from './components/ngt-action/ngt-action.component';
 export * from './components/ngt-checkbox/ngt-checkbox.module';
 export * from './components/ngt-checkbox/ngt-checkbox.component';
 
+//NgtRadioButton
+export * from './components/ngt-radio-button/ngt-radio-button.module';
+export * from './components/ngt-radio-button/ngt-radio-button.component';
+export * from './components/ngt-radio-button/ngt-radio-button-container/ngt-radio-button-container.component';
+
 //NgtTextarea
 export * from './components/ngt-textarea/ngt-textarea.module';
 export * from './components/ngt-textarea/ngt-textarea.component';
