@@ -30,11 +30,9 @@
     </ngt-modal-header>
 
     <ngt-modal-body>
-        <div [hidden]='hasCustomSearch'>
-            <ngt-input #searchInput jit='true' [(ngModel)]='searchTerm' (ngModelChange)='search($event)'
-                placeholder='Pesquisar...' name='{{ reference }}_filter'>
-            </ngt-input>
-        </div>
+        <ngt-input *ngIf="!hasCustomSearch" jit='true' [(ngModel)]='searchTerm' (ngModelChange)='search($event)'
+            placeholder='Pesquisar...' name='{{ reference }}_filter' #searchInput>
+        </ngt-input>
 
         <div [hidden]='!hasCustomSearch'>
             <ng-content select='[customSearch]'></ng-content>
