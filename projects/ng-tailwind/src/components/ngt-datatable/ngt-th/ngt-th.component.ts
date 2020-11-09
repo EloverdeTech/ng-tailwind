@@ -75,7 +75,7 @@ export class NgtThComponent implements OnChanges, OnDestroy {
                 this.ngtDataTable.onClearFilter.subscribe((reference) => {
                     if (reference == this.reference || !reference) {
                         this.searchTerm = '';
-                        this.customSearchTerm = '';
+                        this.customSearchTerm = null;
                     }
                 })
             );
@@ -114,17 +114,18 @@ export class NgtThComponent implements OnChanges, OnDestroy {
         this.ngtDataTable.setSearchModalTemplate(this.modal);
         this.ngtDataTable.openSearchModal(this.reference);
 
-        if (!this.hasCustomSearch) {
-            setTimeout(() => {
+        setTimeout(() => {
+            if (this.searchInput) {
                 this.searchInput.setFocus();
-            });
-        }
+            }
+        }, 100);
 
         this.onEnableSearch.emit();
     }
 
     public search(term: any) {
-        if (this.searchTerm === undefined && this.customSearchTerm === undefined && !term) {
+        if (!this.hasCustomSearch && this.searchTerm === undefined
+            && this.customSearchTerm === undefined && !term) {
             return;
         }
 
