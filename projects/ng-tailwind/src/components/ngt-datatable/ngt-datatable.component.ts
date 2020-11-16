@@ -173,6 +173,8 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             this.filtersTranslated = [];
         } else {
             delete this.currentState.filters.defaultFilters[reference];
+            delete this.currentState.filters.silentFilters[reference];
+
             this.filtersTranslated = this.filtersTranslated.filter(element => element && element.reference !== reference);
         }
 
