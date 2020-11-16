@@ -111,6 +111,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
         this.ngtStyle.load(this.injector, 'NgtInput', {
             h: 'h-12',
+            rounded: 'rounded',
             color: {
                 border: 'border-gray-400 focus:border-gray-700',
                 bg: 'bg-bg-white focus:bg-white',

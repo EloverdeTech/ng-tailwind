@@ -15,7 +15,7 @@
 
 <div class="{{ shining ? '' : 'flex relative'}}" [hidden]='shining'>
   <input autocomplete="new-password"
-    class="flex border appearance-none focus:outline-none leading-tight rounded w-full {{ getInputPaddings() }} {{ ngtStyle.compile(['h', 'color.border', 'color.bg', 'color.text']) }}"
+    class="flex border appearance-none focus:outline-none leading-tight w-full {{ getInputPaddings() }} {{ ngtStyle.compile(['h', 'color.border', 'color.bg', 'color.text', 'rounded']) }}"
     [disabled]="isDisabled" [readonly]="isReadonly || loading" placeholder="{{ placeholder ? placeholder : '' }}"
     [ngClass]="{'input-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
     [attr.type]="inputProperties.htmlType" #element>
