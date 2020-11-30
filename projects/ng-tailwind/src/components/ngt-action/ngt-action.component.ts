@@ -35,14 +35,6 @@ export class NgtActionComponent {
         });
     }
 
-    public getHref() {
-        if (this.isDisabled || !this.href) {
-            return undefined;
-        }
-
-        return this.href;
-    }
-
     public onClick(event: Event) {
         if (this.isDisabled) {
             event.stopPropagation();
