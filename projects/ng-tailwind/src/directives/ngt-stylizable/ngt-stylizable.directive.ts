@@ -246,4 +246,13 @@ export class NgtStylizableDirective {
     public set overflow(overflow: string) {
         this.ngtStylizableService.overflow = overflow;
     }
+
+    public get position(): string {
+        return this.ngtStylizableService.position;
+    }
+
+    @Input('position')
+    public set position(position: string) {
+        this.ngtStylizableService.position = position;
+    }
 }

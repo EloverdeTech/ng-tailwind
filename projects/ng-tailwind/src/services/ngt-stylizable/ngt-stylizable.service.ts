@@ -25,6 +25,7 @@ export class NgtStylizableService {
     private _text: string;
     private _breakWords: string;
     private _overflow: string;
+    private _position: string;
 
     public get color() {
         return this._color;
@@ -245,6 +246,14 @@ export class NgtStylizableService {
         this._overflow = this.getQualifiedValue('overflow', overflow);
     }
 
+    public get position(): string {
+        return this._position;
+    }
+
+    public set position(position: string) {
+        this._position = position;
+    }
+
     public load(injector: Injector, style: string, defaultValue = null, inheritanceStyles = []) {
         let ngtGlobalStyle = injector.get('NgtStyleGlobal', {});
 
@@ -323,6 +332,7 @@ export class NgtStylizableService {
                 'text',
                 'breakWords',
                 'overflow',
+                'position',
             ].includes(key));
         }
     }
