@@ -1,19 +1,19 @@
 <div class='border-b leading-loose {{ ngtStyle.compile(["h", "color.text", "color.bg"]) }}'>
-    <div class="flex flex-wrap h-full relative align-items-center px-3 md:px-8 py-2">
-        <div class="flex text-xl md:whitespace-no-wrap md:absolute">
+    <div class="flex flex-wrap md:flex-no-wrap h-full relative align-items-center px-3 md:px-8 py-2">
+        <div *ngIf="caption || icon" class="flex text-xl md:whitespace-no-wrap">
             <ngt-svg [src]="icon" class='mr-2' *ngIf="icon"></ngt-svg>
             <p class='text-xl font-medium self-center'>{{ caption }}</p>
         </div>
 
-        <div class="self-center w-full">
-            <ng-content select="[header]"></ng-content>
-        </div>
-
-        <div class="self-center w-full md:w-auto">
+        <div class="self-center w-full {{ ngtStyle.compile(['position']) }}">
             <ng-content select="[left-header]"></ng-content>
         </div>
 
-        <div class="ml-auto self-center w-full md:w-auto">
+        <div class="self-center w-full {{ ngtStyle.compile(['position']) }}">
+            <ng-content select="[header]"></ng-content>
+        </div>
+
+        <div class="flex justify-end ml-auto self-center w-full {{ ngtStyle.compile(['position']) }}">
             <ng-content select="[right-header]"></ng-content>
         </div>
     </div>
