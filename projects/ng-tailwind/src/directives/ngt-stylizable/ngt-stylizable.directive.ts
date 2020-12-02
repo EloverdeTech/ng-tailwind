@@ -255,4 +255,13 @@ export class NgtStylizableDirective {
     public set position(position: string) {
         this.ngtStylizableService.position = position;
     }
+
+    public get justifyContent(): string {
+        return this.ngtStylizableService.justifyContent;
+    }
+
+    @Input('justifyContent')
+    public set justifyContent(justifyContent: string) {
+        this.ngtStylizableService.justifyContent = justifyContent;
+    }
 }
