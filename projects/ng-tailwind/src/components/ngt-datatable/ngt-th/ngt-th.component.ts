@@ -200,6 +200,7 @@ export class NgtThComponent implements OnChanges, OnDestroy {
             font: 'font-bold',
             text: 'text-sm',
             border: 'border-b',
+            justifyContent: 'justify-center',
             color: {
                 bg: '',
                 text: '',
