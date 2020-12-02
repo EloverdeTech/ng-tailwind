@@ -133,7 +133,6 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
             minuteIncrement: this.minuteIncrement,
             minDate: this.minDate,
             maxDate: this.maxDate,
-            defaultDate: this.defaultDate,
             time_24hr: this.time_24hr,
             enableTime: this.enableTime,
             allowInput: this.allowInput,
@@ -281,6 +280,10 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
 
     private initComponent() {
         if (this.formContainer && this.formContainer.control && (this.formControl = this.formContainer.control.get(this.name))) {
+            if (this.defaultDate) {
+                this.value = moment(this.defaultDate).format(this.dateFormatNgModel);
+            }
+
             this.updateValidations();
 
             if (this.value) {
