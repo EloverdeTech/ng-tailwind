@@ -5,15 +5,18 @@
             <p class='text-xl font-medium self-center'>{{ caption }}</p>
         </div>
 
-        <div class="self-center w-full {{ ngtStyle.compile(['position']) }}">
+        <div [hidden]='!leftHeader?.children[0]?.children?.length'
+            class="self-center w-full {{ ngtStyle.compile(['position']) }}" #leftHeader>
             <ng-content select="[left-header]"></ng-content>
         </div>
 
-        <div class="self-center w-full {{ ngtStyle.compile(['position']) }}">
+        <div [hidden]='!header?.children[0]?.children?.length'
+            class="self-center w-full {{ ngtStyle.compile(['position']) }}" #header>
             <ng-content select="[header]"></ng-content>
         </div>
 
-        <div class="flex justify-end ml-auto self-center w-full {{ ngtStyle.compile(['position']) }}">
+        <div class="{{ !rightHeader?.children[0]?.children?.length ? 'hidden' : 'flex justify-end ml-auto self-center w-full' }} {{ ngtStyle.compile(['position']) }}"
+            #rightHeader>
             <ng-content select="[right-header]"></ng-content>
         </div>
     </div>
