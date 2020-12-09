@@ -1,21 +1,21 @@
 {
-  "name": "ng-tailwind",
-  "version": "1.0.203",
-  "peerDependencies": {
-    "@angular/common": ">6.0.0",
-    "@angular/core": ">6.0.0",
-    "flatpickr": ">=4.6.3",
-    "ng2-flatpickr": ">=9.0.0",
-    "@ng-select/ng-select": ">=2.20.5",
-    "ngx-dropzone": ">=2.2.2",
-    "rxjs": ">=6.5.4"
-  },
-  "devDependencies": {
-    "@types/node": "^13.9.4"
-  },
-  "dependencies": {
-    "moment": "^2.24.0",
-    "angular-svg-icon": "^8.0.0",
-    "inputmask": "^4.0.9"
-  }
+    "name": "ng-tailwind",
+    "version": "1.0.204",
+    "peerDependencies": {
+        "@angular/common": ">6.0.0",
+        "@angular/core": ">6.0.0",
+        "flatpickr": ">=4.6.3",
+        "ng2-flatpickr": ">=9.0.0",
+        "@ng-select/ng-select": ">=2.20.5",
+        "ngx-dropzone": ">=2.2.2",
+        "rxjs": ">=6.5.4"
+    },
+    "devDependencies": {
+        "@types/node": "^13.9.4"
+    },
+    "dependencies": {
+        "moment": "^2.24.0",
+        "angular-svg-icon": "^8.0.0",
+        "inputmask": "^4.0.9"
+    }
 }
