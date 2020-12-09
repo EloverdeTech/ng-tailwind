@@ -65,7 +65,9 @@ export class NgtThCheckComponent implements AfterContentInit, OnDestroy {
             text: 'text-center',
             border: 'border-b',
             color: {
-                border: ''
+                border: '',
+                bg: 'bg-gray-500',
+                text: 'text-white'
             }
         });
 
@@ -83,6 +85,8 @@ export class NgtThCheckComponent implements AfterContentInit, OnDestroy {
             'mt',
             'border',
             'color.border',
+            'color.bg',
+            'color.text'
         ]);
     }
 
