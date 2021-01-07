@@ -59,6 +59,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
     @Input() public mode: NgtDateMode;
     @Input() public time_24hr: boolean = true;
     @Input() public enableTime: boolean = true;
+    @Input() public noCalendar: boolean = false;
     @Input() public minuteIncrement: number = 1;
     @Input() public allowInput: boolean = false;
     @Input() public locale: NgtDateLocale;
@@ -135,6 +136,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
             maxDate: this.maxDate,
             time_24hr: this.time_24hr,
             enableTime: this.enableTime,
+            noCalendar: this.noCalendar,
             allowInput: this.allowInput,
             locale: this.getLocale(),
             onChange: (selectedDates, dateStr, instance) => this.onNativeChange(selectedDates, instance, true),
