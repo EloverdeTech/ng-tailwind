@@ -134,7 +134,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     }
 
     public async refresh() {
-        return this.apply(this.ngtPagination.getCurrentPage());
+        return this.apply(1);
     }
 
     public getData() {
