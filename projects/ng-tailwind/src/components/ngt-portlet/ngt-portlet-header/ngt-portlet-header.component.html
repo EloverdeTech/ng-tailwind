@@ -6,16 +6,16 @@
         </div>
 
         <div [hidden]='!leftHeader?.children[0]?.children?.length'
-            class="self-center w-full {{ ngtStyle.compile(['position']) }}" #leftHeader>
+            class="self-center {{ ngtStyle.compile(['position', 'w']) }}" #leftHeader>
             <ng-content select="[left-header]"></ng-content>
         </div>
 
         <div [hidden]='!header?.children[0]?.children?.length'
-            class="self-center w-full {{ ngtStyle.compile(['position']) }}" #header>
+            class="self-center {{ ngtStyle.compile(['position', 'w']) }}" #header>
             <ng-content select="[header]"></ng-content>
         </div>
 
-        <div class="{{ !rightHeader?.children[0]?.children?.length ? 'hidden' : 'flex justify-end ml-auto self-center w-full' }} {{ ngtStyle.compile(['position']) }}"
+        <div class="{{ !rightHeader?.children[0]?.children?.length ? 'hidden' : 'flex justify-end ml-auto self-center' }} {{ ngtStyle.compile(['position', 'w']) }}"
             #rightHeader>
             <ng-content select="[right-header]"></ng-content>
         </div>
