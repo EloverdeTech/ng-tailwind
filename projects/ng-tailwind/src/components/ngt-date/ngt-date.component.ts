@@ -278,6 +278,8 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
                 return nativeValue.format('DD/MM/YYYY HH:mm:00') + ' ';
             }
         }
+
+        return this.placeholder;
     }
 
     private initComponent() {
