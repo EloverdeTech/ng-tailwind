@@ -1,8 +1,9 @@
-.singleAttachmentComponent {
+.single-attachment {
     border: none !important;
-    height: 230px !important;
     margin: unset !important;
-    align-items: unset !important;
+    overflow: hidden !important;
+    display: flex !important;
+    justify-content: center !important;
 }
 
 ngx-dropzone-image-preview.image-preview-default-class.ng-star-inserted {
