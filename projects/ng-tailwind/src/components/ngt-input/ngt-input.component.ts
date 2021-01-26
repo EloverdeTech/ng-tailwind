@@ -126,7 +126,11 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }, 200);
     }
 
-    public clearInput() {
+    public clearInput(event?: Event) {
+        if (event) {
+            event.stopPropagation();
+        }
+
         this.element.nativeElement.value = '';
         this.value = '';
     }

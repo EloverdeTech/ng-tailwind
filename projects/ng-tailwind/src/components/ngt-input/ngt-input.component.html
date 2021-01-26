@@ -1,8 +1,7 @@
-<label class="{{ shining ? '' : 'block' }} {{ ngtStyle.compile(['color.text']) }} mb-2 text-sm flex" *ngIf="label"
-  [hidden]='shining'>
+<label *ngIf="label" class="mb-2 text-sm flex" [hidden]='shining'>
   {{ label }}:
 
-  <span class="text-red-500 font-bold text-md ml-1" *ngIf="isRequired">*</span>
+  <span *ngIf="isRequired" class="text-red-500 font-bold text-md ml-1">*</span>
 
   <div *ngIf='helpText' class="flex {{ helpTextColor }}" [title]="helpTitle" [attr.data-content]="helpText">
     &nbsp;
@@ -13,19 +12,19 @@
   </div>
 </label>
 
-<div class="{{ shining ? '' : 'flex relative'}}" [hidden]='shining'>
+<div class="{{ shining ? 'hidden' : 'flex relative'}}">
   <input autocomplete="new-password"
-    class="flex border appearance-none focus:outline-none leading-tight w-full {{ getInputPaddings() }} {{ ngtStyle.compile(['h', 'color.border', 'color.bg', 'color.text', 'rounded']) }}"
-    [disabled]="isDisabled" [readonly]="isReadonly || loading" placeholder="{{ placeholder ? placeholder : '' }}"
+    class="flex border appearance-none focus:outline-none leading-tight w-full {{ getInputPaddings() }} {{ ngtStyle.compile(['h', 'color.border', 'color.bg', 'color.text', 'rounded', 'cursor']) }}"
+    [disabled]="isDisabled" [readonly]="isReadonly || loading" [placeholder]="placeholder"
     [ngClass]="{'input-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
     [attr.type]="inputProperties.htmlType" #element>
-  <span *ngIf="innerLeftIcon" class="absolute self-center px-2">
+  <span *ngIf="innerLeftIcon" class="absolute self-center px-2 {{ ngtStyle.compile(['color.text']) }}">
     <ngt-svg class="fill-current" [src]='innerLeftIcon'></ngt-svg>
   </span>
 
   <div class="flex absolute h-full justify-end right-0 w-auto">
-    <span *ngIf="allowClear && value" class="self-center right-0 px-2 text-red-400 cursor-pointer"
-      (click)='!loading && clearInput()'>
+    <span *ngIf="allowClear && value && !loading" class="self-center right-0 px-2 text-red-400 cursor-pointer"
+      (click)='clearInput($event)'>
       <svg class="fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path
           d="M19.1 17.2l-5.3-5.3 5.3-5.3-1.8-1.8-5.3 5.4-5.3-5.3-1.8 1.7 5.3 5.3-5.3 5.3L6.7 19l5.3-5.3 5.3 5.3 1.8-1.8z" />
@@ -69,5 +68,6 @@
 <input *ngIf='componentReady' type="hidden" [ngModel]="value" [name]="name" [value]="value">
 
 <ng-content></ng-content>
+
 <ngt-validation [control]="formControl" [container]="formContainer" [minValue]='minValue' [minLength]='minLength'>
 </ngt-validation>
