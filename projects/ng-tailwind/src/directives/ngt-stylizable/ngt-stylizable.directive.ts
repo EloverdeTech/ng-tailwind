@@ -264,4 +264,13 @@ export class NgtStylizableDirective {
     public set justifyContent(justifyContent: string) {
         this.ngtStylizableService.justifyContent = justifyContent;
     }
+
+    public get cursor(): string {
+        return this.ngtStylizableService.cursor;
+    }
+
+    @Input('cursor')
+    public set cursor(cursor: string) {
+        this.ngtStylizableService.cursor = cursor;
+    }
 }

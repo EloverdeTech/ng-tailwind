@@ -27,6 +27,7 @@ export class NgtStylizableService {
     private _overflow: string;
     private _position: string;
     private _justifyContent: string;
+    private _cursor: string;
 
     public get color() {
         return this._color;
@@ -263,6 +264,14 @@ export class NgtStylizableService {
         this._justifyContent = this.getQualifiedValue('justify', justifyContent);
     }
 
+    public get cursor(): string {
+        return this._cursor;
+    }
+
+    public set cursor(cursor: string) {
+        this._cursor = this.getQualifiedValue('cursor', cursor);
+    }
+
     public load(injector: Injector, style: string, defaultValue = null, inheritanceStyles = []) {
         let ngtGlobalStyle = injector.get('NgtStyleGlobal', {});
 
@@ -343,6 +352,7 @@ export class NgtStylizableService {
                 'overflow',
                 'position',
                 'justifyContent',
+                'cursor',
             ].includes(key));
         }
     }
