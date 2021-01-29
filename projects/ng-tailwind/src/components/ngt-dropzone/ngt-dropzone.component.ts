@@ -23,6 +23,7 @@ import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-http.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+import { NgtDropzoneFileViewerComponent } from './ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
 
 @Component({
     selector: 'ngt-dropzone',
@@ -38,6 +39,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 })
 export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
     @ViewChild('ngxDropzone', { static: true }) public ngxDropzone: NgxDropzoneComponent;
+    @ViewChild(NgtDropzoneFileViewerComponent, { static: true }) public ngtDropzoneFileViewer: NgtDropzoneFileViewerComponent;
 
     // Visual
     @Input() public label: string;
@@ -47,11 +49,13 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Input() public helpText: boolean = false;
 
     // Behavior
+    @Input() public resources = [];
     @Input() public multipleSelection: boolean = false;
     @Input() public itemsLimit: number;
     @Input() public showFileName: boolean = false;
     @Input() public disableClick: boolean = false;
     @Input() public disabled: boolean = false;
+    @Input() public viewMode: boolean = false;
     @Input() public removable: boolean = false;
     @Input() public verticalExpandable: boolean = false;
     @Input() public acceptedFiles: string = '*' /** Mime type */;
@@ -68,12 +72,22 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Output() public onFileUploaded = new EventEmitter();
     @Output() public onFilePreviewLoaded = new EventEmitter();
 
-    public resources = [];
     public nativeValue = [];
     public shining: boolean;
+    public showNgtDropzoneFileViewer: boolean = false;
     public componentReady = false;
     public loading: boolean = false;
     public ngtDropzoneLoaderStyle: NgtStylizableService;
+    public imageViewerOptions: any = {
+        navbar: true,
+        toolbar: {
+            zoomIn: true,
+            zoomOut: true,
+            reset: true,
+            rotateLeft: true,
+            rotateRight: true
+        }
+    };
 
     private subscriptions: Array<Subscription> = [];
 
@@ -176,6 +190,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
                         if (response && response.data) {
                             temporaryFiles.push({
                                 id: response.data.id,
+                                size: file.size,
                                 file: file
                             });
                             response.data['loaded'] = true;
@@ -250,6 +265,54 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         this.onFileRemoved.emit(resource);
     }
 
+    public isImage(resource: any) {
+        return this.previewType == 'IMAGE' || (resource.file && resource.file.type && resource.file.type.includes('image'));
+    }
+
+    public isVideo(resource: any) {
+        return this.previewType == 'VIDEO' || (resource.file && resource.file.type && resource.file.type.includes('video'));
+    }
+
+    public isAudio(resource: any) {
+        return (resource.file && resource.file.type && resource.file.type.includes('audio'));
+    }
+
+    public getImages() {
+        return this.resources.filter((resource: any) => this.isImage(resource));
+    }
+
+    public getAudios() {
+        return this.resources.filter((resource: any) => this.isAudio(resource));
+    }
+
+    public getVideos() {
+        return this.resources.filter((resource: any) => this.isVideo(resource));
+    }
+
+    public getArchives() {
+        return this.resources.filter((resource: any) => !this.isAudio(resource) && !this.isImage(resource) && !this.isVideo(resource));
+    }
+
+    public getFormattedFileSize(resource: any) {
+        if (resource.size > 1000000) {
+            return (resource.size / 1000000).toFixed(2) + ' Mb';
+        }
+
+        return Math.round(resource.size / 1000) + ' Kb';
+    }
+
+    public openDocViewer(resource: any) {
+        this.showNgtDropzoneFileViewer = true;
+
+        this.ngtDropzoneFileViewer.url = resource.file.url;
+        this.ngtDropzoneFileViewer.fileName = resource.file.name;
+        this.ngtDropzoneFileViewer.init();
+
+        this.subscriptions.push(this.ngtDropzoneFileViewer.onClose.subscribe(() => {
+            this.showNgtDropzoneFileViewer = false;
+        }));
+    }
+
     public onNativeChange(value: any) {
         if (value === undefined) {
             this.value = [];
@@ -301,6 +364,10 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
                 this.formControl.markAsDirty();
             } else {
                 this.formControl.markAsPristine();
+            }
+
+            if (this.viewMode) {
+                this.previewType = NgtDropzonePreviewType.DEFAULT;
             }
         }
     }

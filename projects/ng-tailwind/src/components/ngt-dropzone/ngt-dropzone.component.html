@@ -13,7 +13,7 @@
         </div>
     </label>
 
-    <div [hidden]='shining' class="h-full w-full relative">
+    <div *ngIf="!viewMode" [hidden]='shining' class="h-full w-full relative">
         <ng-container *ngIf="loading">
             <div class="flex absolute justify-center w-full h-full cursor-wait z-10">
                 <svg class="rotate-center-infinity self-center fill-current {{ ngtDropzoneLoaderStyle.compile(['h', 'color.text']) }}"
@@ -27,40 +27,101 @@
         <ngx-dropzone [multiple]='multipleSelection' [maxFileSize]='maxFileSize'
             [class.single-attachment]='itemsLimit == 1' [accept]='acceptedFiles' [disabled]='disabled || loading'
             [expandable]='verticalExpandable' [disableClick]='disableClick' (change)='onSelect($event)' #ngxDropzone
-            style="height: 100% !important;">
+            style="height: 100% !important; min-height: 20px!important">
             <ng-container *ngIf="!loading">
                 <ngx-dropzone-label class="px-2" *ngIf="!resources || resources && !resources.length">
                     {{ placeholder }}
                 </ngx-dropzone-label>
 
-                <ng-container *ngIf="previewType == 'DEFAULT'">
-                    <ngx-dropzone-preview *ngFor="let resource of resources" [removable]="removable"
-                        (removed)="onRemove(resource)">
-                        <ngx-dropzone-label *ngIf="showFileName">
-                            {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}
-                        </ngx-dropzone-label>
-                    </ngx-dropzone-preview>
-                </ng-container>
+                <ng-container *ngFor="let resource of resources">
+                    <div title="{{ resource?.file?.name || '' }} ({{ getFormattedFileSize(resource) }})">
+                        <ngx-dropzone-preview [removable]="removable" (removed)="onRemove(resource)"
+                            *ngIf="previewType == 'DEFAULT' && (!isImage(resource) && !isVideo(resource) && !isAudio(resource))">
+                        </ngx-dropzone-preview>
+                        <ngx-dropzone-image-preview *ngIf="isImage(resource)" class="image-preview-default-class"
+                            [file]="resource.file" [removable]="removable" (removed)="onRemove(resource)">
+                        </ngx-dropzone-image-preview>
+                        <ngx-dropzone-video-preview *ngIf="isVideo(resource) || isAudio(resource)"
+                            [file]="resource.file" [removable]="removable" (removed)="onRemove(resource)">
+                        </ngx-dropzone-video-preview>
 
-                <ng-container *ngIf="previewType == 'IMAGE'">
-                    <ngx-dropzone-image-preview class="image-preview-default-class" *ngFor="let resource of resources"
-                        [file]="resource.file" [removable]="removable" (removed)="onRemove(resource)">
-                        <ngx-dropzone-label *ngIf="showFileName">
+                        <div class="w-48 truncate text-gray-500 text-center text-sm font-mono -mt-2"
+                            *ngIf="showFileName">
                             {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}
-                        </ngx-dropzone-label>
-                    </ngx-dropzone-image-preview>
-                </ng-container>
-
-                <ng-container *ngIf="previewType == 'VIDEO'">
-                    <ngx-dropzone-video-preview *ngFor="let resource of resources" [file]="resource.file"
-                        [removable]="removable" (removed)="onRemove(resource)">
-                        <ngx-dropzone-label *ngIf="showFileName">
-                            {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}
-                        </ngx-dropzone-label>
-                    </ngx-dropzone-video-preview>
+                        </div>
+                    </div>
                 </ng-container>
             </ng-container>
         </ngx-dropzone>
+    </div>
+    <div *ngIf="viewMode" class="border-2 border-dotted border-gray-700 rounded p-2"
+        style="height: 100%!important; min-height: 20px!important">
+
+        <ng-container *ngIf="loading">
+            <div class="flex justify-center w-full h-full cursor-wait z-10">
+                <svg class="rotate-center-infinity self-center fill-current {{ ngtDropzoneLoaderStyle.compile(['h', 'color.text']) }}"
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path
+                        d="M10 3v2a5 5 0 00-3.54 8.54l-1.41 1.41A7 7 0 0110 3zm4.95 2.05A7 7 0 0110 17v-2a5 5 0 003.54-8.54l1.41-1.41zM10 20l-4-4 4-4v8zm0-12V0l4 4-4 4z" />
+                </svg>
+            </div>
+        </ng-container>
+
+        <div *ngIf="getImages()?.length">
+            <div ngxViewer [viewerOptions]="imageViewerOptions" class="flex justify-left py-5">
+                <div *ngFor="let image of getImages()" class="w-48 mr-8">
+                    <div title="{{ image?.file?.name || '' }} ({{ getFormattedFileSize(image) }})"
+                        class="cursor-pointer">
+                        <img [src]="image.file.url" [alt]="image.file.name">
+                        <div class="w-48 truncate text-gray-500 text-center text-sm font-mono">
+                            {{ image?.file?.name || '' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ng-container *ngFor="let audio of getAudios()">
+            <div class="py-5">
+                <audio controls>
+                    <source [src]="audio.file.url">
+                </audio>
+                <div class="w-48 truncate text-gray-500 text-center text-sm font-mono">
+                    {{ audio?.file?.name || '' }}
+                </div>
+            </div>
+        </ng-container>
+
+        <div *ngFor="let video of getVideos()">
+            <div class="py-5">
+                <video width="240" controls>
+                    <source [src]="video.file.url">
+                </video>
+                <div class="w-48 truncate text-gray-500 text-center text-sm font-mono">
+                    {{ video?.file?.name || '' }}
+                </div>
+            </div>
+        </div>
+
+        <div class="flex">
+            <div *ngFor="let file of getArchives()">
+                <div class="w-48 mr-6 cursor-pointer" (click)="openDocViewer(file)">
+                    <div class="w-full flex justify-center border-2 rounded py-4 text-6xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path class="heroicon-ui" fill="#4a5568"
+                                d="M6 2h9a1 1 0 0 1 .7.3l4 4a1 1 0 0 1 .3.7v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zm9 2.41V7h2.59L15 4.41zM18 9h-3a2 2 0 0 1-2-2V4H6v16h12V9zm-2 7a1 1 0 0 1-1 1H9a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1zm0-4a1 1 0 0 1-1 1H9a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1zm-5-4a1 1 0 0 1-1 1H9a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1z" />
+                        </svg>
+                    </div>
+                    <div class="w-48 truncate text-gray-500 text-center text-sm font-mono">
+                        {{ file?.file?.name || '' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-2" *ngIf="!loading && !resources?.length">
+            {{ placeholder }}
+        </div>
     </div>
 
     <ng-container *ngIf='shining'>
@@ -73,4 +134,5 @@
 
     <ng-content></ng-content>
     <ngt-validation [control]="formControl" [container]="formContainer"></ngt-validation>
+    <ngt-dropzone-file-viewer [hidden]="!showNgtDropzoneFileViewer"></ngt-dropzone-file-viewer>
 </div>
