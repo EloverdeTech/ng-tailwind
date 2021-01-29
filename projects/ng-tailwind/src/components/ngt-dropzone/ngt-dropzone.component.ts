@@ -85,7 +85,9 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
             zoomOut: true,
             reset: true,
             rotateLeft: true,
-            rotateRight: true
+            rotateRight: true,
+            prev: true,
+            next: true,
         }
     };
 
