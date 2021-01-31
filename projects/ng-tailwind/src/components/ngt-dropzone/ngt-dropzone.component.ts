@@ -280,19 +280,27 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     }
 
     public getImages() {
-        return this.resources.filter((resource: any) => this.isImage(resource));
+        const images = this.resources.filter((resource: any) => this.isImage(resource));
+
+        return this.removeArrayDuplicates(images);
     }
 
     public getAudios() {
-        return this.resources.filter((resource: any) => this.isAudio(resource));
+        const audios = this.resources.filter((resource: any) => this.isAudio(resource));
+
+        return this.removeArrayDuplicates(audios);
     }
 
     public getVideos() {
-        return this.resources.filter((resource: any) => this.isVideo(resource));
+        const videos = this.resources.filter((resource: any) => this.isVideo(resource));
+
+        return this.removeArrayDuplicates(videos);
     }
 
     public getArchives() {
-        return this.resources.filter((resource: any) => !this.isAudio(resource) && !this.isImage(resource) && !this.isVideo(resource));
+        const files = this.resources.filter((resource: any) => !this.isAudio(resource) && !this.isImage(resource) && !this.isVideo(resource));
+
+        return this.removeArrayDuplicates(files);
     }
 
     public getFormattedFileSize(resource: any) {
@@ -404,6 +412,14 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     private destroySubscriptions() {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
+    }
+
+    private removeArrayDuplicates(array: Array<{ id: any; file: any }>): Array<any> {
+        return array.filter((item, index, self) =>
+            index === self.findIndex((t) => (
+                t.id === item.id
+            ))
+        );
     }
 }
 
