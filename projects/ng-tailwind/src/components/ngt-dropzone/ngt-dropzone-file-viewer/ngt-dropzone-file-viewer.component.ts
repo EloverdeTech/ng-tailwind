@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from "@angular/core";
 import { NgxDocViewerComponent } from "ngx-doc-viewer";
 
 @Component({
@@ -16,6 +16,14 @@ export class NgtDropzoneFileViewerComponent {
     public loading: boolean = true;
 
     public constructor() { }
+
+    @HostListener('window:keydown', ['$event'])
+    public keyEvent(event: KeyboardEvent) {
+        if (event.code == 'Escape') {
+            this.loading = false;
+            this.onClose.emit();
+        }
+    }
 
     public init() {
         if (this.ngxDocViewer.iframes.first) {
