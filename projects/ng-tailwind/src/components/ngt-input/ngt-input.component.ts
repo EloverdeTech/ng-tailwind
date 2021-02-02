@@ -39,39 +39,41 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @ViewChild("element", { static: true }) public element: ElementRef;
 
     // Visual
-    @Input() public label: string = "";
-    @Input() public placeholder: string = "";
-    @Input() public shining: boolean = false;
-    @Input() public loading: boolean = false;
+    @Input() public label: string;
+    @Input() public placeholder: string;
+    @Input() public shining: boolean;
+    @Input() public loading: boolean;
     @Input() public helpTitle: string;
     @Input() public helpTextColor: string = 'text-green-500';
-    @Input() public helpText: boolean = false;
-    @Input() public innerLeftIcon: string = null;
-    @Input() public innerRightIcon: string = null;
+    @Input() public helpText: boolean;
+    @Input() public innerLeftIcon: string;
+    @Input() public innerLeftIconColor: string;
+    @Input() public innerRightIcon: string;
+    @Input() public innerRightIconColor: string;
     @Input() public decimalMaskPrecision: number = 2;
 
     //Behavior
-    @Input() public isDisabled: boolean = false;
-    @Input() public isReadonly: boolean = false;
-    @Input() public type: string = "text";
+    @Input() public isDisabled: boolean;
+    @Input() public isReadonly: boolean;
+    @Input() public type: string = 'text';
     @Input() public name: string;
     @Input() public mask: string;
-    @Input() public focus: boolean = false;
-    @Input() public allowClear: boolean = false;
-    @Input() public jit: boolean = false;
+    @Input() public focus: boolean;
+    @Input() public allowClear: boolean;
+    @Input() public jit: boolean;
 
     //Validations
-    @Input() public isRequired: boolean = false;
+    @Input() public isRequired: boolean;
     @Input() public uniqueResource: any;
     @Input() public minValue: number;
     @Input() public maxValue: number;
     @Input() public maxLength: number;
     @Input() public minLength: number;
-    @Input() public match: string = "";
+    @Input() public match: string;
     @Input() public multipleOf: number;
-    @Input() public externalServerDependency: boolean = false;
+    @Input() public externalServerDependency: boolean;
 
-    public componentReady: boolean = false;
+    public componentReady: boolean;
     public inputProperties: {
         htmlType?: string;
         length?: number;
