@@ -142,10 +142,10 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         this.destroySubscriptions();
     }
 
-    public onClick(element, fileType: 'image' | 'archive') {
+    public onClick(element, fileType: NgtDropzoneFileTypeEnum) {
         this.disableClick = true;
 
-        if (fileType == 'image') {
+        if (fileType == NgtDropzoneFileTypeEnum.IMAGE) {
             const ngtDropzoneComponent = this;
 
             const viewer = new Viewer(element, {
@@ -158,7 +158,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
             });
 
             viewer.show();
-        } else if (fileType == 'archive') {
+        } else if (fileType == NgtDropzoneFileTypeEnum.ARCHIVE) {
             this.openDocViewer(element);
         }
     }
