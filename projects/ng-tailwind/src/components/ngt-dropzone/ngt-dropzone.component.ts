@@ -17,6 +17,7 @@ import { ControlContainer, NgForm, Validators } from '@angular/forms';
 import { NgxDropzoneChangeEvent, NgxDropzoneComponent } from 'ngx-dropzone';
 import { forkJoin, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import Viewer from 'viewerjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { getEnumFromString } from '../../helpers/enum/enum';
@@ -72,6 +73,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Output() public onFileUploaded = new EventEmitter();
     @Output() public onFilePreviewLoaded = new EventEmitter();
 
+    public ngtDropzoneFileTypeEnum = NgtDropzoneFileTypeEnum;
     public nativeValue = [];
     public shining: boolean;
     public showNgtDropzoneFileViewer: boolean = false;
@@ -138,6 +140,27 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
 
     public ngOnDestroy() {
         this.destroySubscriptions();
+    }
+
+    public onClick(element, fileType: NgtDropzoneFileTypeEnum) {
+        this.disableClick = true;
+
+        if (fileType == NgtDropzoneFileTypeEnum.IMAGE) {
+            const ngtDropzoneComponent = this;
+
+            const viewer = new Viewer(element, {
+                ...this.imageViewerOptions, ...{
+                    hidden() {
+                        ngtDropzoneComponent.disableClick = false;
+                        viewer.destroy();
+                    }
+                }
+            });
+
+            viewer.show();
+        } else if (fileType == NgtDropzoneFileTypeEnum.ARCHIVE) {
+            this.openDocViewer(element);
+        }
     }
 
     public async onSelect(event: NgxDropzoneChangeEvent) {
@@ -435,4 +458,9 @@ export enum NgtDropzoneErrorType {
     NO_MULTIPLE = 'NO_MULTIPLE',
     ITEMS_LIMIT = 'ITEMS_LIMIT',
     TYPE = 'TYPE'
+}
+
+enum NgtDropzoneFileTypeEnum {
+    IMAGE = 'IMAGE',
+    ARCHIVE = 'ARCHIVE'
 }
