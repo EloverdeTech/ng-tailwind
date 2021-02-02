@@ -73,6 +73,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Output() public onFileUploaded = new EventEmitter();
     @Output() public onFilePreviewLoaded = new EventEmitter();
 
+    public ngtDropzoneFileTypeEnum = NgtDropzoneFileTypeEnum;
     public nativeValue = [];
     public shining: boolean;
     public showNgtDropzoneFileViewer: boolean = false;
@@ -145,9 +146,9 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         this.disableClick = true;
 
         if (fileType == 'image') {
-            let ngtDropzoneComponent = this;
+            const ngtDropzoneComponent = this;
 
-            let viewer = new Viewer(element, {
+            const viewer = new Viewer(element, {
                 ...this.imageViewerOptions, ...{
                     hidden() {
                         ngtDropzoneComponent.disableClick = false;
@@ -457,4 +458,9 @@ export enum NgtDropzoneErrorType {
     NO_MULTIPLE = 'NO_MULTIPLE',
     ITEMS_LIMIT = 'ITEMS_LIMIT',
     TYPE = 'TYPE'
+}
+
+enum NgtDropzoneFileTypeEnum {
+    IMAGE = 'IMAGE',
+    ARCHIVE = 'ARCHIVE'
 }

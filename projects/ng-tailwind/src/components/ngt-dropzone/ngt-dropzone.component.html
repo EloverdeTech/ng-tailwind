@@ -35,13 +35,13 @@
 
                 <ng-container *ngFor="let resource of resources">
                     <div title="{{ resource?.file?.name || '' }} ({{ getFormattedFileSize(resource) }})">
-                        <div (click)="onClick(resource, 'archive')">
+                        <div (click)="onClick(resource, ngtDropzoneFileTypeEnum.ARCHIVE)">
                             <ngx-dropzone-preview [removable]="removable" (removed)="onRemove(resource)"
                                 *ngIf="previewType == 'DEFAULT' && (!isImage(resource) && !isVideo(resource) && !isAudio(resource))">
                             </ngx-dropzone-preview>
                         </div>
-                        <div *ngIf="isImage(resource)" (click)="onClick(gallery, 'image')" class="cursor-pointer"
-                            #gallery>
+                        <div *ngIf="isImage(resource)" (click)="onClick(gallery, ngtDropzoneFileTypeEnum.IMAGE)"
+                            class="cursor-pointer" #gallery>
                             <img [src]="resource.file.url" [alt]="resource.file.name" hidden>
                             <ngx-dropzone-image-preview class="image-preview-default-class" [file]="resource.file"
                                 [removable]="removable" (removed)="onRemove(resource)">
