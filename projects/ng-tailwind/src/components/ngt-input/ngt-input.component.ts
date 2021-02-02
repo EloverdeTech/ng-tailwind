@@ -40,7 +40,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     // Visual
     @Input() public label: string;
-    @Input() public placeholder: string;
+    @Input() public placeholder: string = '';
     @Input() public shining: boolean;
     @Input() public loading: boolean;
     @Input() public helpTitle: string;
