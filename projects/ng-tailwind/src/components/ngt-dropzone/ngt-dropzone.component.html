@@ -78,7 +78,7 @@
                 <div *ngFor="let image of getImages()" class="w-48 mr-8">
                     <div title="{{ image?.file?.name || '' }} ({{ getFormattedFileSize(image) }})"
                         class="cursor-pointer">
-                        <img [src]="image.file.url" [alt]="image.file.name">
+                        <img [src]="image.file.url" [alt]="image.file.name" class="w-full h-32">
                         <div class="w-48 truncate text-gray-500 text-center text-sm font-mono">
                             {{ image?.file?.name || '' }}
                         </div>
