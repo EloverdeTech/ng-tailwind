@@ -74,7 +74,8 @@
         </ng-container>
 
         <div *ngIf="getImages()?.length">
-            <div ngxViewer [viewerOptions]="imageViewerOptions" class="flex justify-center items-center py-5">
+            <div ngxViewer [viewerOptions]="imageViewerOptions"
+                class="flex overflow-x-auto justify-center items-center py-5">
                 <div *ngFor="let image of getImages()" class="w-48 mr-8">
                     <div title="{{ image?.file?.name || '' }} ({{ getFormattedFileSize(image) }})"
                         class="cursor-pointer">
