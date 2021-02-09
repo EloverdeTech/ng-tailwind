@@ -1,5 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from "@angular/core";
-import { NgxDocViewerComponent } from "ngx-doc-viewer";
+import { Component, EventEmitter, HostListener, Input, Output } from "@angular/core";
 
 @Component({
     selector: 'ngt-dropzone-file-viewer',
@@ -7,36 +6,30 @@ import { NgxDocViewerComponent } from "ngx-doc-viewer";
     templateUrl: './ngt-dropzone-file-viewer.component.html'
 })
 export class NgtDropzoneFileViewerComponent {
-    @ViewChild(NgxDocViewerComponent, { static: true }) public ngxDocViewer: NgxDocViewerComponent;
-
     @Input() public url: string = '';
     @Input() public fileName: string = '';
     @Output() public onClose: EventEmitter<any> = new EventEmitter();
 
-    public loading: boolean = true;
+    public canShowViewer: boolean = false;
 
     public constructor() { }
 
     @HostListener('window:keydown', ['$event'])
     public keyEvent(event: KeyboardEvent) {
         if (event.code == 'Escape') {
-            this.loading = false;
-            this.onClose.emit();
+            this.canShowViewer = false;
+            setTimeout(() => {
+                this.onClose.emit();
+            }, 500);
         }
     }
 
     public init() {
-        if (this.ngxDocViewer.iframes.first) {
-            this.loading = true;
-            this.ngxDocViewer.reloadIFrame(this.ngxDocViewer.iframes.first.nativeElement);
-        }
+        this.canShowViewer = true;
     }
 
     public close() {
+        this.canShowViewer = false;
         this.onClose.emit();
-    }
-
-    public afterLoad() {
-        this.loading = false;
     }
 }
