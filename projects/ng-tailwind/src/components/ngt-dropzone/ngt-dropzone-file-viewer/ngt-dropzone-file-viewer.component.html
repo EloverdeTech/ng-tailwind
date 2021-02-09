@@ -1,14 +1,5 @@
 <div style="width:100%; height: 100%;">
-    <ng-container *ngIf="loading">
-        <div class="flex absolute justify-center w-full h-full cursor-wait z-10">
-            <svg class="rotate-center-infinity self-center fill-current text-2xl" xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20">
-                <path
-                    d="M10 3v2a5 5 0 00-3.54 8.54l-1.41 1.41A7 7 0 0110 3zm4.95 2.05A7 7 0 0110 17v-2a5 5 0 003.54-8.54l1.41-1.41zM10 20l-4-4 4-4v8zm0-12V0l4 4-4 4z" />
-            </svg>
-        </div>
-    </ng-container>
-    <div style="width:100%; height: 100%;" [hidden]="loading">
+    <div style="width:100%; height: 100%;">
         <div class="w-full py-5 pr-10">
             <div class="w-full flex justify-end cursor-pointer text-2xl" (click)="close()">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -21,8 +12,8 @@
                 {{ fileName }}
             </div>
         </div>
-        <div class="px-10" style="width:100%; height: 83%;">
-            <ngx-doc-viewer class="h-full w-full" [url]="url" (loaded)="afterLoad()">
+        <div class="px-10" style="width:100%; height: 83%;" *ngIf="canShowViewer">
+            <ngx-doc-viewer class="h-full w-full" queryParams="hl=Nl" [url]="url">
             </ngx-doc-viewer>
         </div>
     </div>
