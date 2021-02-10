@@ -32,4 +32,12 @@ export class NgtDropzoneFileViewerComponent {
         this.canShowViewer = false;
         this.onClose.emit();
     }
+
+    public downloadFile() {
+        let file = document.createElement("a");
+
+        file.href = this.url;
+        file.setAttribute("download", this.fileName);
+        file.click();
+    }
 }
