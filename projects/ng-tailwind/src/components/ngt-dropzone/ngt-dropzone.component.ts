@@ -213,6 +213,8 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
                 observables.push(this.ngtAttachmentHttpService.upload(this.remoteResource, file).pipe(
                     map((response: any) => {
                         if (response && response.data) {
+                            file['url'] = response['data'].attributes.data.previewUrl;
+
                             temporaryFiles.push({
                                 id: response.data.id,
                                 size: file.size,
