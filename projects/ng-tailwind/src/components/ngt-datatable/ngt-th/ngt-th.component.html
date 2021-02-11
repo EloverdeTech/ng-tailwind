@@ -27,7 +27,9 @@
 
 <ng-template #modal>
     <ngt-modal-header [ngtModal]='ngtDataTable.searchModal'>
-        <span class="font-semibold text-gray-800 text-sm">{{ searchLabel }}</span>
+        <span *ngIf="searchLabel" class="font-semibold text-gray-800 text-sm">{{ searchLabel }}</span>
+
+        <ng-content select='[customSearchHeader]'></ng-content>
     </ngt-modal-header>
 
     <ngt-modal-body>
