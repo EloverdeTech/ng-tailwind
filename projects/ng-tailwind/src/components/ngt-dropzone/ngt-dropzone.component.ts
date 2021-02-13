@@ -25,7 +25,14 @@ import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-htt
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtDropzoneFileViewerComponent } from './ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
-
+export interface NgtDropzoneFile {
+    downloadUrl: string;
+    previewUrl: string;
+    thumbnailUrl: string;
+    name: string;
+    mimeType: string;
+    fileSize: any;
+};
 @Component({
     selector: 'ngt-dropzone',
     templateUrl: './ngt-dropzone.component.html',
@@ -50,7 +57,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Input() public helpText: boolean = false;
 
     // Behavior
-    @Input() public resources = [];
+    @Input() public resources: Array<NgtDropzoneFile> = [];
     @Input() public multipleSelection: boolean = false;
     @Input() public itemsLimit: number;
     @Input() public showFileName: boolean = false;
@@ -73,6 +80,8 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Output() public onFileUploaded = new EventEmitter();
     @Output() public onFilePreviewLoaded = new EventEmitter();
 
+    public uploadedResources = [];
+    public forceDisableClick: boolean = false;
     public ngtDropzoneFileTypeEnum = NgtDropzoneFileTypeEnum;
     public nativeValue = [];
     public shining: boolean;
@@ -142,25 +151,36 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         this.destroySubscriptions();
     }
 
-    public onClick(element, fileType: NgtDropzoneFileTypeEnum) {
-        this.disableClick = true;
-
-        if (fileType == NgtDropzoneFileTypeEnum.IMAGE) {
-            const ngtDropzoneComponent = this;
-
-            const viewer = new Viewer(element, {
-                ...this.imageViewerOptions, ...{
-                    hidden() {
-                        ngtDropzoneComponent.disableClick = false;
-                        viewer.destroy();
-                    }
-                }
-            });
-
-            viewer.show();
-        } else if (fileType == NgtDropzoneFileTypeEnum.ARCHIVE) {
-            this.openDocViewer(element);
+    public onImageClick(element) {
+        if (!this.viewMode) {
+            this.forceDisableClick = true;
         }
+
+        const ngtDropzoneComponent = this;
+
+        const viewer = new Viewer(element, {
+            ...this.imageViewerOptions, ...{
+                hidden() {
+                    ngtDropzoneComponent.forceDisableClick = false;
+                    viewer.destroy();
+                }
+            }
+        });
+
+        viewer.show();
+    }
+
+    public onFileClick(url, name) {
+        this.forceDisableClick = true;
+        this.showNgtDropzoneFileViewer = true;
+        this.ngtDropzoneFileViewer.url = url;
+        this.ngtDropzoneFileViewer.fileName = name;
+        this.ngtDropzoneFileViewer.init();
+
+        this.subscriptions.push(this.ngtDropzoneFileViewer.onClose.subscribe(() => {
+            this.showNgtDropzoneFileViewer = false;
+            this.forceDisableClick = false;
+        }));
     }
 
     public async onSelect(event: NgxDropzoneChangeEvent) {
@@ -184,12 +204,12 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
 
         if (this.itemsLimit) {
             if (this.itemsLimit == 1 && event.addedFiles
-                && event.addedFiles.length == this.itemsLimit && this.resources.length == this.itemsLimit) {
-                this.resources = [];
+                && event.addedFiles.length == this.itemsLimit && this.uploadedResources.length == this.itemsLimit) {
+                this.uploadedResources = [];
             }
 
             if (event.addedFiles
-                && event.addedFiles.length + this.resources.length <= this.itemsLimit) {
+                && event.addedFiles.length + this.uploadedResources.length <= this.itemsLimit) {
                 this.onFileSelected.emit(event);
                 this.uploadFiles(event.addedFiles);
             } else {
@@ -214,7 +234,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
                     map((response: any) => {
                         if (response && response.data) {
                             if (response.data.attributes && response.data.attributes.data) {
-                                file['url'] = response.data.attributes.data.previewUrl;
+                                file['url'] = response.data.attributes.data.url;
                             }
 
                             temporaryFiles.push({
@@ -232,7 +252,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
             this.subscriptions.push(
                 forkJoin(observables).subscribe(
                     (response) => {
-                        this.resources.push(...temporaryFiles);
+                        this.uploadedResources.push(...temporaryFiles);
 
                         if (this.itemsLimit == 1) {
                             this.onNativeChange([...temporaryAttachments]);
@@ -260,22 +280,21 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
                 if (!(attachment instanceof File) && !attachment.loaded) {
                     this.loading = true;
                     attachment['loaded'] = true;
-                    observables.push(this.ngtAttachmentHttpService.preview(attachment).pipe(
+                    observables.push(this.ngtAttachmentHttpService.thumbnail(attachment).pipe(
                         map((response: any) => {
                             temporaryResource.push({
                                 id: response.data.getApiId(),
                                 file: response.data.getAttribute('file')
                             });
                         })
-                    )
-                    );
+                    ));
                 }
             });
 
             this.subscriptions.push(
                 forkJoin(observables).subscribe(
                     (response) => {
-                        this.resources.push(...temporaryResource);
+                        this.uploadedResources.push(...temporaryResource);
                         this.onNativeChange(attachments);
                         this.onFilePreviewLoaded.emit();
                         this.loading = false;
@@ -288,7 +307,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     }
 
     public onRemove(resource: any) {
-        this.resources.splice(this.resources.indexOf(resource), 1);
+        this.uploadedResources.splice(this.uploadedResources.indexOf(resource), 1);
         this.nativeValue = this.nativeValue.filter(element => element.id != resource.id);
         this.onNativeChange(this.nativeValue);
         this.onFileRemoved.emit(resource);
@@ -306,48 +325,16 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         return (resource.file && resource.file.type && resource.file.type.includes('audio'));
     }
 
-    public getImages() {
-        const images = this.resources.filter((resource: any) => this.isImage(resource));
-
-        return this.removeArrayDuplicates(images);
+    public isFile(resource: any) {
+        return !this.isImage(resource) && !this.isAudio(resource) && !this.isVideo(resource);
     }
 
-    public getAudios() {
-        const audios = this.resources.filter((resource: any) => this.isAudio(resource));
-
-        return this.removeArrayDuplicates(audios);
-    }
-
-    public getVideos() {
-        const videos = this.resources.filter((resource: any) => this.isVideo(resource));
-
-        return this.removeArrayDuplicates(videos);
-    }
-
-    public getArchives() {
-        const files = this.resources.filter((resource: any) => !this.isAudio(resource) && !this.isImage(resource) && !this.isVideo(resource));
-
-        return this.removeArrayDuplicates(files);
-    }
-
-    public getFormattedFileSize(resource: any) {
-        if (resource.size > 1000000) {
-            return (resource.size / 1000000).toFixed(2) + ' Mb';
+    public getFormattedFileSize(size) {
+        if (size > 1000000) {
+            return (size / 1000000).toFixed(2) + ' Mb';
         }
 
-        return Math.round(resource.size / 1000) + ' Kb';
-    }
-
-    public openDocViewer(resource: any) {
-        this.showNgtDropzoneFileViewer = true;
-
-        this.ngtDropzoneFileViewer.url = resource.file.url;
-        this.ngtDropzoneFileViewer.fileName = resource.file.name;
-        this.ngtDropzoneFileViewer.init();
-
-        this.subscriptions.push(this.ngtDropzoneFileViewer.onClose.subscribe(() => {
-            this.showNgtDropzoneFileViewer = false;
-        }));
+        return Math.round(size / 1000) + ' Kb';
     }
 
     public onNativeChange(value: any) {
@@ -378,7 +365,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     }
 
     public reset() {
-        this.resources = [];
+        this.uploadedResources = [];
         this.value = [];
         this.nativeValue = [];
         this.initComponent();
@@ -391,6 +378,12 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     }
 
     private initComponent() {
+        if (this.viewMode) {
+            this.previewType = NgtDropzonePreviewType.DEFAULT;
+
+            return;
+        }
+
         if (this.formContainer && this.formContainer.control
             && (this.formControl = this.formContainer.control.get(this.name))) {
             this.resetFilesLoad();
@@ -401,10 +394,6 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
                 this.formControl.markAsDirty();
             } else {
                 this.formControl.markAsPristine();
-            }
-
-            if (this.viewMode) {
-                this.previewType = NgtDropzonePreviewType.DEFAULT;
             }
         }
     }
@@ -439,14 +428,6 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     private destroySubscriptions() {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
-    }
-
-    private removeArrayDuplicates(array: Array<{ id: any; file: any }>): Array<any> {
-        return array.filter((item, index, self) =>
-            index === self.findIndex((t) => (
-                t.id === item.id
-            ))
-        );
     }
 }
 

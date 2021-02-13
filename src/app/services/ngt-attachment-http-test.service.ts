@@ -10,6 +10,13 @@ export class NgtAttachmentHttpServiceTest extends NgtAttachmentHttpService {
         });
     }
 
+    public thumbnail(attachment: any): Observable<NgtAttachmentHttpResponse> {
+        return Observable.create((observer: any) => {
+            console.log('Attachment Thumbnail');
+            observer.complete();
+        });
+    }
+
     public download(attachment: any): Observable<any> {
         return Observable.create((observer: any) => {
             console.log('Attachment Download');
