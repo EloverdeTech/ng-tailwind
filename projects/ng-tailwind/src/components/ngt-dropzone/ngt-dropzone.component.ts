@@ -351,7 +351,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     }
 
     public change(value: any) {
-        if (value) {
+        if (value && !this.viewMode) {
             this.onNativeChange(Array.isArray(value) ? value : [value]);
 
             if (this.componentReady) {
