@@ -140,7 +140,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     public ngOnChanges(changes) {
         this.setupMasks();
 
-        if (changes.match || changes.isRequired || changes.type) {
+        if (changes.match || changes.isRequired || changes.type || changes.mask) {
             this.updateValidations();
         }
     }
@@ -346,6 +346,12 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     }
 
     private setupMasks() {
+        if (!this.mask) {
+            Inputmask.remove(this.element.nativeElement);
+
+            return this.clearInput();
+        }
+
         let masks = {
             'cpf': '999.999.999-99',
             'cnpj': '99.999.999/9999-99',
