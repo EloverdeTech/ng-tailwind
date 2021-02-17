@@ -199,6 +199,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 this.componentReady = true;
                 setTimeout(() => {
                     this.initComponent();
+
+                    if (!this.getElementTitle() || this.getElementTitle() === 'null') {
+                        this.element.nativeElement.parentElement.parentElement.title = '';
+                    }
                 });
             }, 500);
         }
@@ -616,6 +620,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     private getNativeValue() {
         return this.element.nativeElement.value;
+    }
+
+    private getElementTitle(): string {
+        return this.element.nativeElement.parentElement.parentElement.title;
     }
 
     private removeMasks(value: string) {
