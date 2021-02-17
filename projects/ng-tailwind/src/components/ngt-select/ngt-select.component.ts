@@ -2,7 +2,6 @@ import {
     ChangeDetectorRef,
     Component,
     ContentChild,
-    ElementRef,
     Host,
     Injector,
     Input,
@@ -43,7 +42,6 @@ import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } fr
 })
 export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnDestroy {
     @ViewChild(NgSelectComponent, { static: true }) public ngSelectComponent: NgSelectComponent;
-    @ViewChild('element', { static: true }) public nativeElement: ElementRef;
     @ContentChild(NgtSelectOptionTmp, { static: false, read: TemplateRef }) public ngtOptionTemplate: TemplateRef<any>;
     @ContentChild(NgtSelectOptionSelectedTmp, { static: false, read: TemplateRef }) public ngtOptionSelectedTemplate: TemplateRef<any>;
     @ContentChild(NgtSelectHeaderTmp, { static: false, read: TemplateRef }) public ngtSelectHeaderTemplate: TemplateRef<any>;
@@ -167,17 +165,22 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
     public ngAfterContentInit() {
         if (!this.formContainer) {
-            console.error("The element must be inside a <form #form='ngForm'> tag!", this.nativeElement.nativeElement);
+            console.error("The element must be inside a <form #form='ngForm'> tag!");
         }
 
         if (!this.name) {
-            console.error("The element must contain a name attribute!", this.nativeElement.nativeElement);
+            console.error("The element must contain a name attribute!");
         } else {
             setTimeout(() => {
                 this.componentReady = true;
                 this.initComponent();
                 this.replaceShowAddTag();
                 this.ngSelectComponent.itemsList.mapSelectedItems();
+
+                if (!this.getElementTitle() || this.getElementTitle() === 'null') {
+                    this.ngSelectComponent.element.parentElement.parentElement.parentElement.title = '';
+                }
+
                 this.changeDetector.detectChanges();
             }, 500);
         }
@@ -352,6 +355,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
             this.markAsPristine();
             this.updateValidations();
         }
+    }
+
+    private getElementTitle(): string {
+        return this.ngSelectComponent.element.parentElement.parentElement.parentElement.title;
     }
 
     private hasChangesBetweenModels(value, nativeValue) {
