@@ -372,9 +372,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     }
 
     public openFileSelector() {
-        if (this.ngxDropzone) {
-            this.ngxDropzone.showFileSelector();
-        }
+        document.getElementById('ngxDropzone').click();
     }
 
     private initComponent() {
@@ -401,7 +399,9 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     private resetFilesLoad() {
         if (Array.isArray(this.value)) {
             this.value.forEach(element => {
-                element['loaded'] = false;
+                if (element) {
+                    element['loaded'] = false;
+                }
             });
         }
     }

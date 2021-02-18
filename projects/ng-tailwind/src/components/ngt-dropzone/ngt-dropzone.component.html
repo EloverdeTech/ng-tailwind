@@ -25,8 +25,9 @@
         </ng-container>
 
         <ngx-dropzone [multiple]='multipleSelection' [maxFileSize]='maxFileSize' (change)='onSelect($event)'
-            [class.single-attachment]='itemsLimit == 1' [accept]='acceptedFiles' [disabled]='disabled || loading'
-            [expandable]='verticalExpandable' [disableClick]='disableClick || forceDisableClick' #ngxDropzone
+            id="ngxDropzone" [class.single-attachment]='itemsLimit == 1' [accept]='acceptedFiles'
+            [disabled]='disabled || loading' [expandable]='verticalExpandable'
+            [disableClick]='disableClick || forceDisableClick' #ngxDropzone
             style="height: 100% !important; min-height: 20px!important">
             <ng-container *ngIf="!loading">
                 <ngx-dropzone-label class="px-2"

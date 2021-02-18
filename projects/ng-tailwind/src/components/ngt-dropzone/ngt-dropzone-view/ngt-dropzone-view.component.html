@@ -11,10 +11,9 @@
         </div>
     </ng-container>
 
-    <div [hidden]="ngtDropzoneComponent.loading">
+    <div class="flex" [hidden]="ngtDropzoneComponent.loading">
         <ng-container *ngIf="images?.length">
-
-            <div class="flex justify-center py-5">
+            <div class="flex py-5">
                 <div *ngFor="let image of images" class="w-48 mr-8">
                     <div title="{{ image.name || '' }} ({{ ngtDropzoneComponent.getFormattedFileSize(image.fileSize) }})"
                         (click)="onImageClick()" class="cursor-pointer">
@@ -29,7 +28,7 @@
 
         <ng-container *ngIf="audios?.length">
             <ng-container *ngFor="let audio of audios">
-                <div class="py-5">
+                <div class="py-5 items-center">
                     <audio controls>
                         <source [src]="audio.previewUrl">
                     </audio>
@@ -42,7 +41,7 @@
 
         <ng-container *ngIf="videos?.length">
             <ng-container *ngFor="let video of videos">
-                <div class="py-5">
+                <div class="py-5 items-center">
                     <video width="240" controls>
                         <source [src]="video.previewUrl">
                     </video>
@@ -55,7 +54,7 @@
 
         <ng-container *ngIf="files?.length">
             <ng-container *ngFor="let file of files">
-                <div class="w-48 mr-6 cursor-pointer"
+                <div class="w-48 mr-6 cursor-pointer items-center"
                     (click)="ngtDropzoneComponent.onFileClick(file.previewUrl, file.name)">
                     <div class="w-full flex justify-center border-2 rounded py-4 text-6xl">
 

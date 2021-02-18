@@ -28,7 +28,7 @@
     "moment": "^2.24.0",
     "ng2-flatpickr": "^9.0.0",
     "ngx-doc-viewer": "^1.4.0",
-    "ngx-dropzone": "^2.2.2",
+    "ngx-dropzone": "^2.5.0",
     "ngx-viewer": "^1.0.5",
     "rxjs": "~6.4.0",
     "tailwindcss": "^1.2.0",
