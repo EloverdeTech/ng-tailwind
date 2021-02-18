@@ -10,6 +10,7 @@ import {
     Optional,
     Renderer2,
     Self,
+    SimpleChanges,
     SkipSelf,
     ViewChild,
 } from '@angular/core';
@@ -137,8 +138,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         this.value = '';
     }
 
-    public ngOnChanges(changes) {
-        this.setupMasks();
+    public ngOnChanges(changes: SimpleChanges) {
+        this.setupMasks(changes.mask ? changes.mask.previousValue : null);
 
         if (changes.match || changes.isRequired || changes.type || changes.mask) {
             this.updateValidations();
@@ -349,8 +350,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         });
     }
 
-    private setupMasks() {
-        if (!this.mask) {
+    private setupMasks(previousMask?: string) {
+        if (this.mask != previousMask && !this.mask) {
             Inputmask.remove(this.element.nativeElement);
 
             return this.clearInput();
