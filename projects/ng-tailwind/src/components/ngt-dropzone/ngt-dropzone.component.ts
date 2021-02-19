@@ -158,9 +158,12 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
 
         const ngtDropzoneComponent = this;
 
+        if (index) {
+            this.imageViewerOptions = { ...this.imageViewerOptions, ...{ initialViewIndex: index } };
+        }
+
         const viewer = new Viewer(element, {
             ...this.imageViewerOptions, ...{
-                initialViewIndex: index || 0,
                 hidden() {
                     ngtDropzoneComponent.forceDisableClick = false;
                     viewer.destroy();
