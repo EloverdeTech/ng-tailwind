@@ -151,7 +151,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         this.destroySubscriptions();
     }
 
-    public onImageClick(element) {
+    public onImageClick(element, index?) {
         if (!this.viewMode) {
             this.forceDisableClick = true;
         }
@@ -160,6 +160,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
 
         const viewer = new Viewer(element, {
             ...this.imageViewerOptions, ...{
+                initialViewIndex: index,
                 hidden() {
                     ngtDropzoneComponent.forceDisableClick = false;
                     viewer.destroy();

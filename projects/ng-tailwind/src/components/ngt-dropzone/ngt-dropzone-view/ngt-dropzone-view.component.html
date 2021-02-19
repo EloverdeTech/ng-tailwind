@@ -14,9 +14,9 @@
     <div class="flex" [hidden]="ngtDropzoneComponent.loading">
         <ng-container *ngIf="images?.length">
             <div class="flex py-5">
-                <div *ngFor="let image of images" class="w-48 mr-8">
+                <div *ngFor="let image of images; let index = index" class="w-48 mr-8">
                     <div title="{{ image.name || '' }} ({{ ngtDropzoneComponent.getFormattedFileSize(image.fileSize) }})"
-                        (click)="onImageClick()" class="cursor-pointer">
+                        (click)="onImageClick(index)" class="cursor-pointer">
                         <img [src]="image.thumbnailUrl" [alt]="image.name" class="w-full h-32">
                         <div class="w-48 truncate text-gray-500 text-center text-sm font-mono">
                             {{ image.name || '' }}

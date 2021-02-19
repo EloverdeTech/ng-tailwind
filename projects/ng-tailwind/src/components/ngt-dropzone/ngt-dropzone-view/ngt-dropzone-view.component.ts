@@ -43,7 +43,7 @@ export class NgtDropzoneViewComponent implements AfterViewInit {
         this.files = this.resources.filter((resource) => this.isFile(resource));
     }
 
-    public onImageClick() {
+    public onImageClick(index) {
         const imagesDiv = document.createElement("div");
 
         this.images.forEach((image: NgtDropzoneFile) => {
@@ -54,7 +54,7 @@ export class NgtDropzoneViewComponent implements AfterViewInit {
             imagesDiv.appendChild(imageElement);
         });
 
-        this.ngtDropzoneComponent.onImageClick(imagesDiv);
+        this.ngtDropzoneComponent.onImageClick(imagesDiv, index);
     }
 
     public getDropzoneIcon(resource: NgtDropzoneFile): NgtDropzoneViewFileTypeEnum {
