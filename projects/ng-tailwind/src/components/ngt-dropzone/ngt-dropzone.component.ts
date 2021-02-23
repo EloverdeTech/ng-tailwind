@@ -334,11 +334,11 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     }
 
     public getFormattedFileSize(size) {
-        if (size > 1000000) {
-            return (size / 1000000).toFixed(2) + ' Mb';
+        if (parseFloat(size) > 1000000) {
+            return (parseFloat(size) / 1000000).toFixed(2) + ' Mb';
         }
 
-        return Math.round(size / 1000) + ' Kb';
+        return Math.round(parseFloat(size) / 1000) + ' Kb';
     }
 
     public onNativeChange(value: any) {
