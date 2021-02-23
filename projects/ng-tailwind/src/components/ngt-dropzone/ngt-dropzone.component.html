@@ -1,4 +1,4 @@
-<div class="flex flex-col h-full w-full">
+<div class="flex flex-col h-full w-full" #container>
     <label class="{{ shining ? '' : 'block' }} mb-2 text-sm flex" *ngIf="label" [hidden]='shining'>
         {{ label }}:
 
@@ -24,11 +24,10 @@
             </div>
         </ng-container>
 
-        <ngx-dropzone [multiple]='multipleSelection' [maxFileSize]='maxFileSize' (change)='onSelect($event)'
-            id="ngxDropzone" [class.single-attachment]='itemsLimit == 1' [accept]='acceptedFiles'
+        <ngx-dropzone id="ngxDropzone" [multiple]='multipleSelection' [maxFileSize]='maxFileSize'
+            (change)='onSelect($event)' [class.single-attachment]='itemsLimit == 1' [accept]='acceptedFiles'
             [disabled]='disabled || loading' [expandable]='verticalExpandable'
-            [disableClick]='disableClick || forceDisableClick' #ngxDropzone
-            style="height: 100% !important; min-height: 20px!important">
+            [disableClick]='disableClick || forceDisableClick' #ngxDropzone [ngStyle]="{ 'height': dropzoneHeight }">
             <ng-container *ngIf="!loading">
                 <ngx-dropzone-label class="px-2"
                     *ngIf="!uploadedResources || uploadedResources && !uploadedResources.length">
@@ -42,18 +41,21 @@
                                 *ngIf="previewType == 'DEFAULT' && isFile(resource)">
                             </ngx-dropzone-preview>
                         </div>
+
                         <div *ngIf="isImage(resource)" (click)="onImageClick(gallery)" class="cursor-pointer" #gallery>
                             <img [src]="resource.file.previewUrl" [alt]="resource.file.name" hidden>
+
                             <ngx-dropzone-image-preview class="image-preview-default-class" [file]="resource.file"
                                 [removable]="removable" (removed)="onRemove(resource)">
                             </ngx-dropzone-image-preview>
                         </div>
+
                         <ngx-dropzone-video-preview *ngIf="isVideo(resource) || isAudio(resource)"
                             [file]="resource.file" [removable]="removable" (removed)="onRemove(resource)">
                         </ngx-dropzone-video-preview>
 
-                        <div class="w-48 truncate text-gray-500 text-center text-sm font-mono -mt-2"
-                            *ngIf="showFileName">
+                        <div *ngIf="showFileName"
+                            class="w-48 truncate text-gray-500 text-center text-sm font-mono -mt-2">
                             {{ resource && resource.file && resource.file.name ? resource.file.name : '' }}
                         </div>
                     </div>
@@ -61,6 +63,7 @@
             </ng-container>
         </ngx-dropzone>
     </div>
+
     <ngt-dropzone-view *ngIf="viewMode" [resources]="resources" class="h-full w-full"></ngt-dropzone-view>
 
     <ng-container *ngIf='shining'>
@@ -72,7 +75,9 @@
     <input *ngIf='componentReady' type="hidden" [ngModel]="value" [name]="name" [value]="value">
 
     <ng-content></ng-content>
+
     <ngt-validation [control]="formControl" [container]="formContainer"></ngt-validation>
+
     <ngt-dropzone-file-viewer [hidden]="!showNgtDropzoneFileViewer" (onClose)="forceDisableClick = false">
     </ngt-dropzone-file-viewer>
 </div>

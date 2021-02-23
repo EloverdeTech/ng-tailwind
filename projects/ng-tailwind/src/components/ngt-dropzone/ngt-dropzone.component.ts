@@ -1,5 +1,7 @@
 import {
+    ChangeDetectorRef,
     Component,
+    ElementRef,
     EventEmitter,
     Host,
     Injector,
@@ -25,6 +27,7 @@ import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-htt
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtDropzoneFileViewerComponent } from './ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
+
 export interface NgtDropzoneFile {
     downloadUrl: string;
     previewUrl: string;
@@ -46,6 +49,7 @@ export interface NgtDropzoneFile {
     ]
 })
 export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
+    @ViewChild('container', { static: false }) public container: ElementRef;
     @ViewChild('ngxDropzone', { static: true }) public ngxDropzone: NgxDropzoneComponent;
     @ViewChild(NgtDropzoneFileViewerComponent, { static: true }) public ngtDropzoneFileViewer: NgtDropzoneFileViewerComponent;
 
@@ -80,6 +84,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Output() public onFileUploaded = new EventEmitter();
     @Output() public onFilePreviewLoaded = new EventEmitter();
 
+    public dropzoneHeight: string = '180px';
     public uploadedResources = [];
     public forceDisableClick: boolean = false;
     public ngtDropzoneFileTypeEnum = NgtDropzoneFileTypeEnum;
@@ -111,6 +116,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         private ngtFormComponent: NgtFormComponent,
         private ngtAttachmentHttpService: NgtAttachmentHttpService,
         private injector: Injector,
+        private changeDetector: ChangeDetectorRef,
     ) {
         super();
 
@@ -142,7 +148,10 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
             this.componentReady = true;
 
             setTimeout(() => {
+                this.dropzoneHeight = `${this.container.nativeElement.parentElement.offsetHeight}px`;
+
                 this.initComponent();
+                this.changeDetector.detectChanges();
             });
         }, 500);
     }
