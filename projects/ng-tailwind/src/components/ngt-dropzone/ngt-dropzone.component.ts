@@ -145,13 +145,16 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
 
     public ngOnInit() {
         setTimeout(() => {
+            this.dropzoneHeight = `${this.container.nativeElement.parentElement.offsetHeight}px`;
+
+            this.changeDetector.detectChanges();
+        });
+
+        setTimeout(() => {
             this.componentReady = true;
 
             setTimeout(() => {
-                this.dropzoneHeight = `${this.container.nativeElement.parentElement.offsetHeight}px`;
-
                 this.initComponent();
-                this.changeDetector.detectChanges();
             });
         }, 500);
     }
