@@ -1,4 +1,5 @@
 import {
+    AfterContentChecked,
     ChangeDetectorRef,
     Component,
     ElementRef,
@@ -48,7 +49,7 @@ export interface NgtDropzoneFile {
         { provide: ControlContainer, useExisting: NgForm }
     ]
 })
-export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
+export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDestroy, AfterContentChecked {
     @ViewChild('container', { static: false }) public container: ElementRef;
     @ViewChild('ngxDropzone', { static: true }) public ngxDropzone: NgxDropzoneComponent;
     @ViewChild(NgtDropzoneFileViewerComponent, { static: true }) public ngtDropzoneFileViewer: NgtDropzoneFileViewerComponent;
@@ -143,13 +144,15 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         }
     }
 
-    public ngOnInit() {
-        setTimeout(() => {
+    public ngAfterContentChecked() {
+        if (this.container && this.container.nativeElement) {
             this.dropzoneHeight = `${this.container.nativeElement.parentElement.offsetHeight}px`;
 
             this.changeDetector.detectChanges();
-        });
+        }
+    }
 
+    public ngOnInit() {
         setTimeout(() => {
             this.componentReady = true;
 
