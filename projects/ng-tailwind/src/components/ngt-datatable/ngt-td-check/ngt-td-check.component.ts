@@ -1,4 +1,4 @@
-import { Component, ElementRef, Injector, Input, OnDestroy, Optional, Self, SkipSelf, ViewChild } from '@angular/core';
+import { Component, ElementRef, Injector, Input, OnDestroy, Optional, Output, Self, SkipSelf, ViewChild, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -15,6 +15,7 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
 export class NgtTdCheckComponent implements OnDestroy {
     @ViewChild(NgtCheckboxComponent, { static: true }) public checkbox: NgtCheckboxComponent;
     @Input() public reference: any;
+    @Output() public onCheckboxInit: EventEmitter<any> = new EventEmitter();
 
     public checked = false;
     public ngtStyle: NgtStylizableService;
@@ -45,6 +46,12 @@ export class NgtTdCheckComponent implements OnDestroy {
                     this.checked = false;
                 })
             );
+
+            this.onCheckboxInit.emit({
+                id: this.id,
+                checked: this.checked,
+                reference: this.reference
+            });
         }
     }
 
