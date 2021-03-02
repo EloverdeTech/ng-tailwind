@@ -1,0 +1,17 @@
+<div class="flex flex-col">
+    <span *ngIf='label && !shining' class="text-sm mb-2">{{ label }}:</span>
+
+    <div class="{{ shining ? 'hidden' : 'flex' }} items-center">
+        <input class="block w-full cursor-pointer" type="range" [name]='name' ([ngModel])='value'
+            oninput="display.innerHTML=value" onchange="display.innerHTML=value" [min]='min' [max]='max' [step]='step'
+            #element>
+
+        <span id='display' class="text-xs ml-2 font-semibold" #display></span>
+    </div>
+</div>
+
+<ng-container *ngIf='shining'>
+    <div class="flex">
+        <ngt-shining class="w-full h-6"></ngt-shining>
+    </div>
+</ng-container>
