@@ -1,5 +1,5 @@
 <div class="border-2 border-dotted border-gray-400 rounded p-2 flex items-center overflow-x-auto"
-    style="height: 100%!important; min-height: 20px!important">
+    [ngStyle]="{ 'height': ngtDropzoneComponent.dropzoneHeight }">
 
     <ng-container *ngIf="ngtDropzoneComponent.loading">
         <div class="flex justify-center w-full h-full cursor-wait z-10">
