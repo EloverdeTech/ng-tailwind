@@ -253,6 +253,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     }
 
     public onClearSelect() {
+        if (!this.nativeValue) {
+            this.markAsPristine();
+        }
+
         this.currentState.filters = {};
     }
 
@@ -318,6 +322,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
             }
 
             this.nativeValue = value;
+
+            if (!value) {
+                this.markAsPristine();
+            }
         }
     }
 
