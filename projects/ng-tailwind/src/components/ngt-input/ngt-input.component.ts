@@ -136,6 +136,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
         this.element.nativeElement.value = '';
         this.value = '';
+
+        this.markAsPristine();
     }
 
     public ngOnChanges(changes: SimpleChanges) {
