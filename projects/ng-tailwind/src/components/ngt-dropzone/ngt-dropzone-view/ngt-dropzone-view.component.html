@@ -87,9 +87,10 @@
                 </div>
             </ng-container>
         </ng-container>
+    </div>
 
-        <div class="px-2 text-center" *ngIf="!ngtDropzoneComponent.loading && !ngtDropzoneComponent.resources?.length">
-            {{ ngtDropzoneComponent.placeholder }}
-        </div>
+    <div class="px-2 text-center w-full"
+        *ngIf="!ngtDropzoneComponent.loading && !ngtDropzoneComponent.resources?.length">
+        {{ ngtDropzoneComponent.placeholder }}
     </div>
 </div>
