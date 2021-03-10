@@ -35,7 +35,7 @@
                 </ngx-dropzone-label>
 
                 <ng-container *ngFor="let resource of uploadedResources">
-                    <div title="{{ resource?.file?.name || '' }} ({{ getFormattedFileSize(resource.size) }})">
+                    <div title="{{ resource?.file?.name || '' }} ({{ getFormattedFileSize(resource) }})">
                         <div (click)="onFileClick(resource.file.url, resource.file.name)">
                             <ngx-dropzone-preview [removable]="removable" (removed)="onRemove(resource)"
                                 *ngIf="previewType == 'DEFAULT' && isFile(resource)">

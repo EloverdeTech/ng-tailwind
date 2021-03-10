@@ -15,9 +15,9 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
 export class NgtTdCheckComponent implements OnDestroy {
     @ViewChild(NgtCheckboxComponent, { static: true }) public checkbox: NgtCheckboxComponent;
     @Input() public reference: any;
+    @Input() public checked: boolean = false;
     @Output() public onCheckboxInit: EventEmitter<any> = new EventEmitter();
 
-    public checked = false;
     public ngtStyle: NgtStylizableService;
 
     private id = uuid();
