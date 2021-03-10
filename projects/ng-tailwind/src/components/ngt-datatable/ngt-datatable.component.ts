@@ -3,6 +3,7 @@ import {
     Component,
     ElementRef,
     EventEmitter,
+    Injector,
     Input,
     OnDestroy,
     OnInit,
@@ -32,10 +33,10 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     @Input() public type: NgtDatatableType = NgtDatatableType.REMOTE;
     @Input() public filterTagBgColor: string = 'bg-blue-500';
     @Input() public inputSearch: NgtInputComponent;
+    @Input() public searchDelay: number = 500;
+    @Input() public searchTermMinLength: number = 1;
     @Input() public defaultFilters: any = {};
-    @Input() public filtersDescription = {
-        reference: name
-    };
+    @Input() public filtersDescription = {};
 
     @Output() public onDataChange: EventEmitter<any> = new EventEmitter();
     @Output() public onClearFilter: EventEmitter<any> = new EventEmitter();
@@ -69,6 +70,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     };
 
     public constructor(
+        private injector: Injector,
         private ngtHttpService: NgtHttpService,
         private changeDetector: ChangeDetectorRef
     ) { }
@@ -84,6 +86,14 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         }
 
         this.initCheckboxEvent();
+
+        if (this.searchDelay == 500) {
+            this.searchDelay = this.injector.get('NgtDatatableSearchDelay', 500);
+        }
+
+        if (this.searchTermMinLength == 1) {
+            this.searchTermMinLength = this.injector.get('NgtDatatableSearchTermMinLength', 1);
+        }
     }
 
     public ngOnDestroy() {
@@ -258,7 +268,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
                             }
                         )
                     );
-                }, 500);
+                }, this.searchDelay);
             } else {
                 console.error('The property [remoteResource] needs to be present to be able to make remote search');
             }
@@ -311,8 +321,20 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
 
     private initSearchWithInput() {
         this.subscriptions.push(
-            this.inputSearch.onValueChange().subscribe((value) => {
-                this.search({ term: value });
+            this.inputSearch.onValueChange().subscribe((value: string) => {
+                if (this.currentState.filters.defaultFilters['term']) {
+                    if (!value) {
+                        this.removeFilter('term');
+                    } else if (value.length < this.searchTermMinLength) {
+                        delete this.currentState.filters.defaultFilters['term'];
+
+                        this.search({ term: '' });
+                    }
+                }
+
+                if (value.length >= this.searchTermMinLength) {
+                    this.search({ term: value });
+                }
             })
         );
     }
