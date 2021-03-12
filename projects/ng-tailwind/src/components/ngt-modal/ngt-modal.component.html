@@ -9,7 +9,7 @@
 
         <div class="{{ ngtStyle.compile(['w', 'overflow']) }} border border-teal-500 bg-white w-full self-center rounded shadow-lg z-10"
             style="max-height: 85%;">
-            <div class="modal-content text-left {{ ngtStyle.compile(['py', 'px']) }}">
+            <div class="relative text-left {{ ngtStyle.compile(['py', 'px']) }}">
                 <div *ngIf="!customLayout">
                     <ngt-modal-header class="w-full">
                         <ng-content select='[header]'></ng-content>
