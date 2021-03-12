@@ -2,11 +2,12 @@
     <div *ngIf="isOpen" class="flex fixed min-w-full h-full inset-0 px-6 py-6 md:py-0 md:px-0 justify-center"
         style="background: rgba(0,0,0,.7); z-index: 1100 !important;" @fade>
         <ng-container *ngIf="!disableDefaultCloses">
-            <button (click)='close()' tabindex="-1" type="button"
-                class="fixed inset-0 h-full w-full bg-black opacity-0 cursor-default"></button>
+            <button class="fixed inset-0 h-full w-full bg-black opacity-0 cursor-default z-0" tabindex="-1"
+                type="button" (click)='close()'>
+            </button>
         </ng-container>
 
-        <div class="{{ ngtStyle.compile(['w', 'overflow']) }} border border-teal-500 bg-white w-full self-center rounded shadow-lg"
+        <div class="{{ ngtStyle.compile(['w', 'overflow']) }} border border-teal-500 bg-white w-full self-center rounded shadow-lg z-10"
             style="max-height: 85%;">
             <div class="modal-content text-left {{ ngtStyle.compile(['py', 'px']) }}">
                 <div *ngIf="!customLayout">
