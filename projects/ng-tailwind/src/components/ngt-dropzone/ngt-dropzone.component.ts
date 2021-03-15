@@ -348,14 +348,24 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         return !this.isImage(resource) && !this.isAudio(resource) && !this.isVideo(resource);
     }
 
-    public getFormattedFileSize(resource) {
-        const size = resource.size || resource.file.size || 0;
+    public getFormattedFileSize(resource: any) {
+        if (resource) {
+            let size = resource.size || resource.fileSize;
 
-        if (parseFloat(size) > 1000000) {
-            return (parseFloat(size) / 1000000).toFixed(2) + ' Mb';
+            if (!size) {
+                if (resource.file && resource.file.size) {
+                    size = resource.file.size;
+                } else {
+                    size = 0;
+                }
+            }
+
+            if (parseFloat(size) > 1000000) {
+                return (parseFloat(size) / 1000000).toFixed(2) + ' Mb';
+            }
+
+            return Math.round(parseFloat(size) / 1000) + ' Kb';
         }
-
-        return Math.round(parseFloat(size) / 1000) + ' Kb';
     }
 
     public onNativeChange(value: any) {
