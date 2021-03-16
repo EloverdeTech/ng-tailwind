@@ -161,7 +161,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             this.element.nativeElement.value = value;
         }
 
-        if (!value) {
+        if (!value && value !== 0) {
             this.clearInput();
         }
 
