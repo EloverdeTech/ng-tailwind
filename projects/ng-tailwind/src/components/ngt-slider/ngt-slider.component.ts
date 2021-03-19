@@ -14,11 +14,13 @@ import { ControlContainer, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { Color } from '../../enums/color.enum';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 @Component({
     selector: 'ngt-slider',
     templateUrl: './ngt-slider.component.html',
+    styleUrls: ['./ngt-slider.component.css'],
     providers: [
         NgtMakeProvider(NgtSliderComponent),
     ],
@@ -36,6 +38,7 @@ export class NgtSliderComponent extends NgtBaseNgModel implements AfterViewInit,
     @Input() public min: string = '0';
     @Input() public max: string = '100';
     @Input() public step: string = '1';
+    @Input() public color: Color = Color.primary;
 
     private subscriptions: Array<Subscription> = [];
 

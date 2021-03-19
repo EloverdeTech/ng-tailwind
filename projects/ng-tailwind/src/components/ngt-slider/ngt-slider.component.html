@@ -2,7 +2,7 @@
     <span *ngIf='label && !shining' class="text-sm mb-2">{{ label }}:</span>
 
     <div class="{{ shining ? 'hidden' : 'flex' }} items-center">
-        <input class="block w-full cursor-pointer" type="range" [name]='name' ([ngModel])='value'
+        <input class="block w-full cursor-pointer overflow-hidden appearance-none bg-gray-400 {{color}}" type="range" [name]='name' ([ngModel])='value'
             oninput="display.innerHTML=value" onchange="display.innerHTML=value" [min]='min' [max]='max' [step]='step'
             #element>
 
