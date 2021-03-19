@@ -19,6 +19,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 @Component({
     selector: 'ngt-slider',
     templateUrl: './ngt-slider.component.html',
+    styleUrls: ['./ngt-slider.component.css'],
     providers: [
         NgtMakeProvider(NgtSliderComponent),
     ],
@@ -36,6 +37,7 @@ export class NgtSliderComponent extends NgtBaseNgModel implements AfterViewInit,
     @Input() public min: string = '0';
     @Input() public max: string = '100';
     @Input() public step: string = '1';
+    @Input() public color: NgtSliderColorSchemeEnum = NgtSliderColorSchemeEnum.PRIMARY;
 
     private subscriptions: Array<Subscription> = [];
 
@@ -84,3 +86,10 @@ export class NgtSliderComponent extends NgtBaseNgModel implements AfterViewInit,
         this.subscriptions = [];
     }
 }
+
+export enum NgtSliderColorSchemeEnum {
+  PRIMARY = 'primary',
+  SUCCESS = 'success',
+  WARNING = 'warning',
+  DANGER = 'danger'
+};
