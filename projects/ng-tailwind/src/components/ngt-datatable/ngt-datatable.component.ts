@@ -45,6 +45,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     @Output() public onToogleAllCheckboxes: EventEmitter<any> = new EventEmitter();
     @Output() public onToogleCheckbox: EventEmitter<NgtCheckedElement> = new EventEmitter();
     @Output() public onOpenSearchModal: EventEmitter<string> = new EventEmitter();
+    @Output() public onSearch: EventEmitter<any> = new EventEmitter();
 
     public searchModalTemplate: TemplateRef<any>;
     public data = [];
@@ -123,6 +124,8 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     }
 
     public async search(filters?: any, searchType: NgtDatatableSearchType = NgtDatatableSearchType.DEFAULT) {
+        this.onSearch.emit(filters);
+
         if (searchType == NgtDatatableSearchType.DEFAULT) {
             this.currentState.filters.defaultFilters = { ...this.currentState.filters.defaultFilters, ...filters };
         } else {
