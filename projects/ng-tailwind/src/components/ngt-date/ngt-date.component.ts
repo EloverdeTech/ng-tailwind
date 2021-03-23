@@ -118,6 +118,10 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
     }
 
     public ngOnChanges(changes: SimpleChanges) {
+        if (changes.isRequired) {
+            this.updateValidations();
+        }
+
         if (changes.mode) {
             this.mode = getEnumFromString(changes.mode.currentValue, NgtDateMode);
         }
@@ -308,8 +312,6 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         if (this.isRequired) {
             syncValidators.push(Validators.required);
         }
-
-        syncValidators.push();
 
         setTimeout(() => {
             this.formControl.setValidators(syncValidators);
