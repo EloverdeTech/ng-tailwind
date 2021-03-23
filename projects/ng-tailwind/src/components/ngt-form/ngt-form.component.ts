@@ -10,14 +10,15 @@ import { NgtHttpFormService } from '../../services/http/ngt-http-form.service';
 @Component({
     selector: 'ngt-form',
     templateUrl: './ngt-form.component.html',
-    styleUrls: ['./ngt-form.component.css']
 })
 export class NgtFormComponent implements OnInit, OnDestroy {
     @Input() public guessFormState: boolean = true;
     @Input() public message: string = 'Preencha corretamente todos os campos';
     @Input() public routeIdentifier: string = 'id';
     @Input() public resource: any;
-    @Input() public customLayout: boolean = false;
+    @Input() public customLayout: boolean;
+
+    @Output() public static onSubmitInvalidForm: EventEmitter<NgForm> = new EventEmitter;
 
     @Output() public onCreating: EventEmitter<any> = new EventEmitter;
     @Output() public onEditing: EventEmitter<any> = new EventEmitter;
@@ -28,8 +29,8 @@ export class NgtFormComponent implements OnInit, OnDestroy {
     public formState: NgtFormState;
     public uriId: any;
 
-    private loading: boolean = false;
-    private shining: boolean = false;
+    private loading: boolean;
+    private shining: boolean;
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
@@ -49,11 +50,17 @@ export class NgtFormComponent implements OnInit, OnDestroy {
                     this.setupComponent.emit();
                 })
             );
-
-            return;
+        } else {
+            this.setupComponent.emit();
         }
 
-        this.setupComponent.emit();
+        this.subscriptions.push(
+            this.ngForm.ngSubmit.subscribe(() => {
+                if (!this.ngForm.valid) {
+                    NgtFormComponent.onSubmitInvalidForm.emit(this.ngForm);
+                }
+            })
+        );
     }
 
     public ngOnDestroy() {
@@ -114,7 +121,7 @@ export class NgtFormComponent implements OnInit, OnDestroy {
     }
 
     public saveResource() {
-        return Observable.create((observer) => {
+        return new Observable((observer) => {
             if (isValidNgForm(this.ngForm)) {
                 this.setLoading(true);
 
@@ -164,9 +171,9 @@ export class NgtFormComponent implements OnInit, OnDestroy {
     }
 
     private determineFormState() {
-        return Observable.create((observer) => {
+        return new Observable((observer) => {
             this.subscriptions.push(
-                getIdFromUri(this.route, this.routeIdentifier).subscribe((id) => {
+                getIdFromUri(this.route, this.routeIdentifier).subscribe((id: string) => {
                     this.uriId = id;
 
                     if (this.uriId) {
