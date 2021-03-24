@@ -329,7 +329,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             syncValidators.push(this.matchValidator());
         }
 
-        if (this.minValue) {
+        if (this.minValue !== undefined) {
             syncValidators.push(this.minValueValidator());
         }
 
@@ -385,7 +385,6 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             },
             'cep': '99999-999',
             'integer': {
-                min: '0',
                 max: this.maxValue,
                 rightAlign: false
             },
@@ -443,9 +442,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     private minValueValidator() {
         return (control: AbstractControl) => {
-            if (control.value) {
-                return (parseFloat(control.value) <= this.minValue) ? { 'minValue': true } : null;
-            }
+            return !control.value || (parseFloat(control.value) <= this.minValue) ? { 'minValue': true } : null;
         };
     }
 
