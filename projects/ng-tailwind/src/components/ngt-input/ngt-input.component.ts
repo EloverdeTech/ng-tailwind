@@ -143,7 +143,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     public ngOnChanges(changes: SimpleChanges) {
         this.setupMasks(changes.mask ? changes.mask.previousValue : null);
 
-        if (changes.match || changes.isRequired || changes.type || changes.mask) {
+        if (changes.match || changes.isRequired || changes.type || changes.mask || changes.minValue) {
             this.updateValidations();
         }
     }
@@ -442,7 +442,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     private minValueValidator() {
         return (control: AbstractControl) => {
-            return !control.value || (parseFloat(control.value) <= this.minValue) ? { 'minValue': true } : null;
+            return parseFloat(control.value) < this.minValue ? { 'minValue': true } : null;
         };
     }
 
