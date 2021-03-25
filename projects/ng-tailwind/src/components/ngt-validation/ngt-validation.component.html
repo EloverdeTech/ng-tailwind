@@ -55,7 +55,7 @@
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.minValue && (control?.dirty || (container && container['submitted']))">
-        O valor informado deve ser maior que {{ minValue }}.
+        O valor informado deve ser maior ou igual à {{ minValue }}.
     </span>
 
     <span class="help-block has-error"
