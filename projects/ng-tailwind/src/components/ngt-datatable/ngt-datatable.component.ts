@@ -14,7 +14,7 @@ import {
 import { Subscription } from 'rxjs';
 
 import { getEnumFromString } from '../../helpers/enum/enum';
-import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
+import { NgtHttpPagination, NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
 import { NgtInputComponent } from '../ngt-input/ngt-input.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 import { NgtPaginationComponent } from '../ngt-pagination/ngt-pagination.component';
@@ -63,6 +63,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         filters: {
             defaultFilters: {},
             silentFilters: {},
+            qualifiedFilters: {},
         },
         sort: {
             field: '',
@@ -252,11 +253,13 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
                 this.bindVisibilityAttributes();
 
                 this.searchTimeout = setTimeout(() => {
-                    let pagination = { ...this.ngtPagination.getPagination(), ...{ page: page } };
+                    const pagination: NgtHttpPagination = { ...this.ngtPagination.getPagination(), ...{ page: page } };
+
+                    this.currentState.filters.qualifiedFilters = this.getQualifiedFilters();
 
                     this.subscriptions.push(
                         this.ngtHttpService.get(
-                            this.remoteResource, this.getQualifiedFilters(), pagination, this.currentState.sort
+                            this.remoteResource, this.currentState.filters.qualifiedFilters, pagination, this.currentState.sort
                         ).subscribe(
                             (response: NgtHttpResponse) => {
                                 this.proccessRemoteResponse(response.data);
