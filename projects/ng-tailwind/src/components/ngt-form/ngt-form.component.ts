@@ -25,6 +25,7 @@ export class NgtFormComponent implements OnInit, OnDestroy {
     @Output() public onLoadingChange: EventEmitter<boolean> = new EventEmitter;
     @Output() public onShiningChange: EventEmitter<boolean> = new EventEmitter;
     @Output() public setupComponent: EventEmitter<any> = new EventEmitter;
+    @Output() public onResourceLoadingError: EventEmitter<string> = new EventEmitter;
 
     public formState: NgtFormState;
     public uriId: any;
@@ -154,12 +155,14 @@ export class NgtFormComponent implements OnInit, OnDestroy {
                         (resource: any) => {
                             this.setLoading(false);
                             this.setShining(false);
+
                             this.onEditing.emit(resource);
                         },
                         (error) => {
                             this.setLoading(false);
                             this.setShining(false);
-                            console.error(error);
+
+                            this.onResourceLoadingError.emit(error);
                         }
                     )
             );
