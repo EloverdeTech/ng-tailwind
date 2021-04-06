@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input, OnDestroy, Optional, SimpleChanges, SkipSelf } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Optional, Output, SimpleChanges, SkipSelf } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { getEnumFromString } from '../../helpers/enum/enum';
@@ -34,6 +34,8 @@ export class NgtDropdownComponent implements OnDestroy {
     @Input() public reversePosition: boolean = false;
     @Input() public closeOnClick: boolean = false;
     @Input() public openMethod: NgtDropdownOpenMethod = NgtDropdownOpenMethod.HOVER;
+
+    @Output() public onToggle: EventEmitter<boolean> = new EventEmitter();
 
     public name = uuid();
     public isOpen: boolean = false;
@@ -82,6 +84,8 @@ export class NgtDropdownComponent implements OnDestroy {
             } else {
                 this.open();
             }
+
+            this.onToggle.emit(this.isOpen);
         });
     }
 
