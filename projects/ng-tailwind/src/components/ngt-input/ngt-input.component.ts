@@ -82,6 +82,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     public ngtStyle: NgtStylizableService;
 
+    private uniqueValidatorTimeout: any;
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
@@ -511,22 +512,28 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }
 
         return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+            if (this.uniqueValidatorTimeout) {
+                clearTimeout(this.uniqueValidatorTimeout);
+            }
+
             if (this.value && this.uniqueResource) {
                 return new Promise((resolve) => {
-                    this.loading = true;
+                    this.uniqueValidatorTimeout = setTimeout(() => {
+                        this.loading = true;
 
-                    this.ngtValidationService.unique(this.uniqueResource, this.value).then((response: NgtHttpValidationResponse) => {
-                        this.loading = false;
+                        this.ngtValidationService.unique(this.uniqueResource, this.value).then((response: NgtHttpValidationResponse) => {
+                            this.loading = false;
 
-                        if (!response.valid) {
-                            return resolve({ 'unique': true });
-                        }
+                            if (!response.valid) {
+                                return resolve({ 'unique': true });
+                            }
 
-                        resolve(null);
-                    }).catch(() => {
-                        this.loading = false;
-                        resolve({ 'unique': true });
-                    });
+                            resolve(null);
+                        }).catch(() => {
+                            this.loading = false;
+                            resolve({ 'unique': true });
+                        });
+                    }, 500);
                 });
             }
 
