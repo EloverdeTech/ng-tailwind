@@ -1,10 +1,10 @@
-<div class="flex flex-wrap mb-6">
+<div class="flex mb-6">
   <ngt-svg *ngIf="icon" [src]='icon'
     class="hidden md:block {{ ngtSectionStyle.compile(['color.text', 'h', 'w', 'my', 'pr']) }}">
   </ngt-svg>
 
   <div
-    class="w-full pb-4 md:pb-0 border-b-4 md:border-b-0 border-dashed md:border-solid md:border-l {{ icon ? 'md:w-11/12' : '' }} {{ accordion && !showSection ? 'flex' : '' }}">
+    class="w-full pb-4 md:pb-0 border-b-4 md:border-b-0 border-dashed md:border-solid md:border-l {{ accordion && !showSection ? 'flex' : '' }}">
     <span *ngIf='!accordion && caption'
       class="px-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
       {{ caption }}
