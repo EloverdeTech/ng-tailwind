@@ -8,6 +8,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    SimpleChanges,
     TemplateRef,
     ViewChild,
 } from '@angular/core';
@@ -225,9 +226,11 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    public ngOnChanges(changes) {
+    public ngOnChanges(changes: SimpleChanges) {
         if (changes.inputSearch) {
-            this.initSearchWithInput();
+            if (changes.inputSearch.currentValue) {
+                this.initSearchWithInput();
+            }
         }
 
         if (changes.type) {
