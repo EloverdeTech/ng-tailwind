@@ -442,9 +442,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     }
 
     private minValueValidator() {
-        return (control: AbstractControl) => {
-            return parseFloat(control.value) < this.minValue ? { 'minValue': true } : null;
-        };
+        return (control: AbstractControl) => parseFloat(control.value) < this.minValue ? { 'minValue': true } : null;
     }
 
     private multipleOfValidator() {
