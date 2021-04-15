@@ -36,6 +36,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     @Input() public inputSearch: NgtInputComponent;
     @Input() public searchDelay: number = 500;
     @Input() public searchTermMinLength: number = 1;
+    @Input() public searchTermOnEnter: boolean = true;
     @Input() public defaultFilters: any = {};
     @Input() public filtersDescription = {};
 
@@ -56,8 +57,8 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     public filtersTranslated = [];
     public emptyStateVisible: boolean;
     public columnCount = [];
-
     public selectedElements: Array<NgtCheckedElement> = [];
+
     private searchTimeout: any;
     private subscriptions: Array<Subscription> = [];
     private currentState = {
@@ -238,7 +239,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         }
     }
 
-    public async apply(page = 1) {
+    public async apply(page = 1, applyDelayOnSearch: boolean = true) {
         if (this.searchTimeout) {
             clearTimeout(this.searchTimeout);
         }
@@ -255,35 +256,43 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
                 this.loading = true;
                 this.bindVisibilityAttributes();
 
-                this.searchTimeout = setTimeout(() => {
-                    const pagination: NgtHttpPagination = { ...this.ngtPagination.getPagination(), ...{ page: page } };
-
-                    this.currentState.filters.qualifiedFilters = this.getQualifiedFilters();
-
-                    this.subscriptions.push(
-                        this.ngtHttpService.get(
-                            this.remoteResource, this.currentState.filters.qualifiedFilters, pagination, this.currentState.sort
-                        ).subscribe(
-                            (response: NgtHttpResponse) => {
-                                this.proccessRemoteResponse(response.data);
-                                this.ngtPagination.proccessPagination(response.meta);
-                                this.onDataChange.emit(this.data);
-                                this.loading = false;
-                                this.bindVisibilityAttributes();
-                            },
-                            (error) => {
-                                console.error(error);
-                                this.loading = false;
-                            }
-                        )
-                    );
-                }, this.searchDelay);
+                if (applyDelayOnSearch) {
+                    this.searchTimeout = setTimeout(() => {
+                        this.loadData(page);
+                    }, this.searchDelay);
+                } else {
+                    this.loadData(page);
+                }
             } else {
                 console.error('The property [remoteResource] needs to be present to be able to make remote search');
             }
         } else if (this.type == NgtDatatableType.FIXED) {
             this.bindVisibilityAttributes();
         }
+    }
+
+    private loadData(page: number) {
+        const pagination: NgtHttpPagination = { ...this.ngtPagination.getPagination(), ...{ page: page } };
+
+        this.currentState.filters.qualifiedFilters = this.getQualifiedFilters();
+
+        this.subscriptions.push(
+            this.ngtHttpService.get(
+                this.remoteResource, this.currentState.filters.qualifiedFilters, pagination, this.currentState.sort
+            ).subscribe(
+                (response: NgtHttpResponse) => {
+                    this.proccessRemoteResponse(response.data);
+                    this.ngtPagination.proccessPagination(response.meta);
+                    this.onDataChange.emit(this.data);
+                    this.loading = false;
+                    this.bindVisibilityAttributes();
+                },
+                (error) => {
+                    console.error(error);
+                    this.loading = false;
+                }
+            )
+        );
     }
 
     private getQualifiedFilters() {
@@ -346,6 +355,16 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
                 }
             })
         );
+
+        if (this.searchTermOnEnter) {
+            this.inputSearch.element.nativeElement.addEventListener('keydown', (event: any) => {
+                if (event.keyCode == 13) {
+                    if (this.inputSearch.value.length >= this.searchTermMinLength) {
+                        this.apply(1, false);
+                    }
+                }
+            });
+        }
     }
 
     private initCheckboxEvent() {
