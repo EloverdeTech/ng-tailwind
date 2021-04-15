@@ -358,8 +358,10 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
 
         if (this.searchTermOnEnter) {
             this.inputSearch.element.nativeElement.addEventListener('keydown', (event: any) => {
+                event.stopImmediatePropagation();
+
                 if (event.keyCode == 13) {
-                    if (this.inputSearch.value.length >= this.searchTermMinLength) {
+                    if (this.inputSearch.value && this.inputSearch.value.length >= this.searchTermMinLength) {
                         this.apply(1, false);
                     }
                 }
