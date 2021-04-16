@@ -14,33 +14,17 @@ ngx-dropzone-image-preview.image-preview-default-class.ng-star-inserted {
     padding: 0 5px !important;
 }
 
-.rotate-center-infinity {
-    -webkit-animation: rotate-center 0.9s linear infinite none;
-    animation: rotate-center 0.9s linear infinite none;
+.div-loader {
+    width: 4rem;
+    height: 4rem;
+    border: 3px solid #a0aec038;
+    border-top-color: #a0aec0;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
-ngx-dropzone-label {
-    word-break: break-all !important;
-}
-
-@-webkit-keyframes rotate-center {
-    0% {
-        -webkit-transform: rotate(0);
-        transform: rotate(0);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes rotate-center {
-    0% {
-        -webkit-transform: rotate(0);
-        transform: rotate(0);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
+@keyframes spin {
+    to {
         transform: rotate(360deg);
     }
 }

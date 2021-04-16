@@ -1,26 +1,14 @@
-.ngt-rotate-center-infinity {
-    -webkit-animation: rotate-center 0.9s linear infinite none;
-    animation: rotate-center 0.9s linear infinite none;
+.div-loader {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #a0aec038;
+    border-top-color: #a0aec0;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
-@-webkit-keyframes rotate-center {
-    0% {
-        -webkit-transform: rotate(0);
-        transform: rotate(0);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes rotate-center {
-    0% {
-        -webkit-transform: rotate(0);
-        transform: rotate(0);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
+@keyframes spin {
+    to {
         transform: rotate(360deg);
     }
 }
