@@ -23,7 +23,7 @@
 
     <ng-container *ngIf="showCharactersLength && !shining">
         <p class="text-xs mt-1">
-            Caracteres restantes: <span class="font-semibold">
+            {{ ngtTranslateService.ngtTextAreaRemainingCharacters }}: <span class="font-semibold">
                 {{ getRemainingCharacters() }}
             </span>
         </p>

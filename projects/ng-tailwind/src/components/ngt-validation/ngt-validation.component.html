@@ -1,65 +1,65 @@
 <div type="hidden" class="text-xs text-red-700 font-bold">
     <span class="help-block has-error" *ngIf="control?.errors?.maxlength">
-        Número máximo de caracteres excedido.
+        {{ ngtTranslateService.ngtValidationMaxCharactersExceded }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.required && (control?.dirty || (container && container['submitted']))">
-        Campo obrigatório.
+        {{ ngtTranslateService.ngtValidationRequiredField }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.email && (control?.dirty || (container && container['submitted']))">
-        E-mail inválido.
+        {{ ngtTranslateService.ngtValidationInvalidEmail }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.unique && (control?.dirty || (container && container['submitted']))">
-        Já existe.
+        {{ ngtTranslateService.ngtValidationAlreadyExists }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.cnpj && (control?.dirty || (container && container['submitted']))">
-        CNPJ inválido.
+        {{ ngtTranslateService.ngtValidationInvalidCnpj }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.cpf && (control?.dirty || (container && container['submitted']))">
-        CPF inválido.
+        {{ ngtTranslateService.ngtValidationInvalidCpf }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.password && (control?.dirty || (container && container['submitted']))">
-        O Campo deve ter no minimo 8 caracteres.
+        {{ ngtTranslateService.ngtValidationPasswordRequiredMinCharacters }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.match && (control?.dirty || (container && container['submitted']))">
-        Os campos não coincidem.
+        {{ ngtTranslateService.ngtValidationFieldsNotMatch }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.invalidDate && (control?.dirty || (container && container['submitted']))">
-        Data inválida
+        {{ ngtTranslateService.ngtValidationInvalidDate }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.time && (control?.dirty || (container && container['submitted']))">
-        Previsão inválida.
+        {{ ngtTranslateService.ngtValidationInvalidPrevision }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.externalServerDependency && (control?.dirty || (container && container['submitted']))">
-        Servidor externo indisponível.
+        {{ ngtTranslateService.ngtValidationExternalServerUnavailable }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.minValue && (control?.dirty || (container && container['submitted']))">
-        O valor informado deve ser maior ou igual à {{ minValue }}.
+        {{ ngtTranslateService.ngtValidationValueMustBeGreaterThan(minValue) }}
     </span>
 
     <span class="help-block has-error"
         *ngIf="control?.errors?.minlength && (control?.dirty || (container && container['submitted']))">
-        O Campo deve ter no mínimo {{ minLength }} caracteres.
+        {{ ngtTranslateService.ngtValidationMinLengthField(minLength) }}
     </span>
 </div>

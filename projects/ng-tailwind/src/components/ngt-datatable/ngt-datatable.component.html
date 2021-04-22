@@ -18,7 +18,7 @@
     </table>
 
     <p *ngIf="emptyStateVisible" class="mt-8 mx-auto self-center text-center text-xl">
-        Nenhum registro encontrado
+        {{ ngtTranslateService.ngtDatatableNoDataFound }}
     </p>
 
     <div *ngIf="loading">

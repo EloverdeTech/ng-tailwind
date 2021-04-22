@@ -94,14 +94,12 @@
             [items]='registersPerPageOptions' name='registersPerPageSelect' [(ngModel)]="pagination.per_page" h='h-auto'
             (ngModelChange)='onRegistersPerPageChange($event)' ngt-stylizable>
             <ng-template let-item="item" let-index="index" ngt-select-option>
-                {{  item ? item : '' }}
+                {{ item ? item : '' }}
             </ng-template>
         </ngt-select>
 
         <P class="ml-2">
-            Visualizando {{ pagination.from }} -
-            {{ pagination.to }} de
-            {{ pagination.total }} registros
+            {{ ngtTranslateService.ngtPagination(pagination.from, pagination.to, pagination.total) }}
         </P>
     </div>
 </div>

@@ -24,6 +24,7 @@ import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-styl
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { uuid } from '../../helpers/uuid';
 import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
+import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } from './ngt-select.directive';
@@ -53,13 +54,13 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public helpTextColor: string = 'text-green-500';
     @Input() public shining = false;
     @Input() public loading: boolean = false;
-    @Input() public loadingText: string = "Carregando resultados...";
+    @Input() public loadingText: string = '';
     @Input() public notFoundText: string;
     @Input() public dropdownPosition = 'auto';
-    @Input() public typeToSearchText: string = 'Digite para procurar...';
-    @Input() public clearAllTooltip: string = 'Limpar seleção';
-    @Input() public placeholder: string = 'Selecione...';
-    @Input() public createText: string = 'Adicionar ';
+    @Input() public typeToSearchText: string = '';
+    @Input() public clearAllTooltip: string = '';
+    @Input() public placeholder: string = '';
+    @Input() public createText: string = '';
     @Input() public labelForId: string = '';
     @Input() public dropdownPanelMinHeight: NgtSelectDropdownPanelHeight = NgtSelectDropdownPanelHeight.AUTO;
 
@@ -127,6 +128,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         public ngtFormComponent: NgtFormComponent,
         private ngtHttp: NgtHttpService,
         private changeDetector: ChangeDetectorRef,
+        @Optional()
+        public ngtTranslateService: NgtTranslateService
     ) {
         super();
 
@@ -150,6 +153,12 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
                 bg: 'bg-white'
             }
         });
+
+        this.loadingText = ngtTranslateService.get('ngtSelectLoadingText');
+        this.typeToSearchText = ngtTranslateService.get('ngtSelectTypeToSearchText');
+        this.clearAllTooltip = ngtTranslateService.get('ngtSelectClearAllTooltip');
+        this.placeholder = ngtTranslateService.get('ngtSelectPlaceholder');
+        this.createText = ngtTranslateService.get('ngtSelectCreateText');
     }
 
     @Input()

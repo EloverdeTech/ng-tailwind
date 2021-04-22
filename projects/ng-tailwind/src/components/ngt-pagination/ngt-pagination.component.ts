@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Injector, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, Optional, Output } from '@angular/core';
 
 import { NgtHttpMeta, NgtHttpPagination } from '../../services/http/ngt-http.service';
+import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
@@ -46,6 +47,8 @@ export class NgtPaginationComponent {
 
     public constructor(
         private injector: Injector,
+        @Optional()
+        public ngtTranslateService: NgtTranslateService
     ) {
         this.ngtPaginationNextPreviousButtonStyle = new NgtStylizableService();
         this.ngtPaginationNextPreviousSectionButtonStyle = new NgtStylizableService();

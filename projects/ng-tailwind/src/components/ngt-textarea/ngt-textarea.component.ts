@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
@@ -67,7 +68,9 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit, OnDe
         public formContainer: ControlContainer,
         @Optional() @SkipSelf()
         private ngtFormComponent: NgtFormComponent,
-        private renderer: Renderer2
+        private renderer: Renderer2,
+        @Optional()
+        public ngtTranslateService: NgtTranslateService
     ) {
         super();
 

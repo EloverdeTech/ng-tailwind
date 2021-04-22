@@ -7,6 +7,7 @@ import {
     Input,
     OnDestroy,
     OnInit,
+    Optional,
     Output,
     SimpleChanges,
     TemplateRef,
@@ -16,6 +17,7 @@ import { Subscription } from 'rxjs';
 
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtHttpPagination, NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
+import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtInputComponent } from '../ngt-input/ngt-input.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 import { NgtPaginationComponent } from '../ngt-pagination/ngt-pagination.component';
@@ -76,7 +78,9 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     public constructor(
         private injector: Injector,
         private ngtHttpService: NgtHttpService,
-        private changeDetector: ChangeDetectorRef
+        private changeDetector: ChangeDetectorRef,
+        @Optional()
+        public ngtTranslateService: NgtTranslateService
     ) { }
 
     public ngOnInit() {

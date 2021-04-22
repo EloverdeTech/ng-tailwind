@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Optional } from '@angular/core';
 import { ControlContainer, FormControl } from '@angular/forms';
+import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 
 @Component({
     selector: 'ngt-validation',
@@ -12,5 +13,8 @@ export class NgtValidationComponent {
     @Input() public minValue: number;
     @Input() public minLength: number;
 
-    public constructor() { }
+    public constructor(
+        @Optional()
+        public ngtTranslateService: NgtTranslateService
+    ) { }
 }
