@@ -31,7 +31,8 @@ export class NgtDropdownComponent implements OnDestroy {
     @Input() public badge: any;
     @Input() public withHeader: boolean = true;
     @Input() public withArrow: boolean = false;
-    @Input() public reversePosition: boolean = false;
+    @Input() public reversePositionY: boolean = false;
+    @Input() public reversePositionX: boolean = false;
     @Input() public closeOnClick: boolean = false;
     @Input() public openMethod: NgtDropdownOpenMethod = NgtDropdownOpenMethod.HOVER;
 
