@@ -22,11 +22,6 @@ export abstract class NgtTranslateService {
     public abstract ngtValidationInvalidDate: string;
     public abstract ngtValidationInvalidPrevision: string;
     public abstract ngtValidationExternalServerUnavailable: string;
-
-    public get(varName: string) {
-        return this[varName];
-    }
-
     public abstract ngtValidationValueMustBeGreaterThan(minValue?: number | string): string;
     public abstract ngtValidationMinLengthField(minLenth?: number | string): string;
 

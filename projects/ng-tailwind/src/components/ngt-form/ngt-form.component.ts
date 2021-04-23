@@ -6,7 +6,6 @@ import { Observable, Subscription } from 'rxjs';
 import { isValidNgForm } from '../../helpers/form/form';
 import { getIdFromUri } from '../../helpers/routing/route';
 import { NgtHttpFormService } from '../../services/http/ngt-http-form.service';
-import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 
 @Component({
     selector: 'ngt-form',
@@ -14,7 +13,7 @@ import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 })
 export class NgtFormComponent implements OnInit, OnDestroy {
     @Input() public guessFormState: boolean = true;
-    @Input() public message: string = "";
+    @Input() public message: string = 'Preencha corretamente todos os campos';
     @Input() public routeIdentifier: string = 'id';
     @Input() public resource: any;
     @Input() public customLayout: boolean;
@@ -40,14 +39,10 @@ export class NgtFormComponent implements OnInit, OnDestroy {
         public formContainer: ControlContainer,
         @Optional() @Host()
         public ngForm: NgForm,
-        @Optional()
-        public ngtTranslateService: NgtTranslateService,
         public router: Router,
         public route: ActivatedRoute,
         private ngtHttpFormService: NgtHttpFormService
-    ) {
-        this.message = ngtTranslateService.get('ngtFormDefaultValidationMessage') || '';
-    }
+    ) { }
 
     public ngOnInit() {
         if (this.guessFormState) {
