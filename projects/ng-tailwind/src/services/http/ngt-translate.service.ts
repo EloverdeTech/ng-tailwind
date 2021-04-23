@@ -4,6 +4,7 @@ export abstract class NgtTranslateService {
     public abstract ngtDatatableNoDataFound: string;
 
     public abstract ngtSelectLoadingText: string;
+    public abstract ngtSelectNotFoundText: string;
     public abstract ngtSelectTypeToSearchText: string;
     public abstract ngtSelectClearAllTooltip: string;
     public abstract ngtSelectPlaceholder: string;

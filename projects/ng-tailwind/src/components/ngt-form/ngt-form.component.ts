@@ -13,7 +13,7 @@ import { NgtHttpFormService } from '../../services/http/ngt-http-form.service';
 })
 export class NgtFormComponent implements OnInit, OnDestroy {
     @Input() public guessFormState: boolean = true;
-    @Input() public message: string = 'Preencha corretamente todos os campos';
+    @Input() public message: string = '';
     @Input() public routeIdentifier: string = 'id';
     @Input() public resource: any;
     @Input() public customLayout: boolean;

@@ -2,6 +2,9 @@
  * Public API Surface of ng-tailwind
  */
 
+//Translate
+export * from './services/http/ngt-translate.service';
+
 //NgtHttpService
 export * from './services/http/ngt-http.service';
 

@@ -15,16 +15,19 @@
 <div [hidden]='shining'>
     <div class="{{ getSelectClass() }} {{ ngtStyle.compile(['h', 'color.bg', 'color.text']) }}">
         <ng-select class="custom" [(ngModel)]='nativeValue' [name]='nativeName' (change)="onNativeChange($event)"
-            [addTag]='allowCreate' [addTagText]="createText" [bindLabel]="bindLabel" [multiple]="multiple"
-            [hideSelected]="hideSelected" [notFoundText]="notFoundText" [searchable]="searchable"
+            [addTag]='allowCreate' [addTagText]="createText || ngtTranslateService.ngtSelectCreateText"
+            [bindLabel]="bindLabel" [multiple]="multiple" [hideSelected]="hideSelected" [typeahead]="typeahead"
+            [notFoundText]="notFoundText || ngtTranslateService.ngtSelectNotFoundText" [searchable]="searchable"
             [disabled]='isDisabled' [clearable]="clearable && hasSelectedValue()" [closeOnSelect]="closeOnSelect"
             [trackByFn]="trackBy" [labelForId]="labelForId" [clearSearchOnAdd]="clearSearchOnAdd"
-            [typeahead]="typeahead" [typeToSearchText]="typeToSearchText" [placeholder]="placeholder"
-            [dropdownPosition]="dropdownPosition" [groupBy]="groupBy" [clearAllText]="clearAllTooltip"
+            [typeToSearchText]="typeToSearchText || ngtTranslateService.ngtSelectTypeToSearchText"
+            [placeholder]="placeholder || ngtTranslateService.ngtSelectPlaceholder"
+            [dropdownPosition]="dropdownPosition" [groupBy]="groupBy"
+            [clearAllText]="clearAllTooltip || ngtTranslateService.ngtSelectClearAllTooltip"
             [virtualScroll]="virtualScroll" [tabIndex]="tabIndex" [items]="ngSelectItems | async"
             (scroll)="onScroll($event)" [bindValue]="bindValue" [groupValue]="groupValue" [loading]="loading"
-            [loadingText]="loadingText" [maxSelectedItems]="maxSelectedItems" [compareWith]='compareWith'
-            (clear)='onClearSelect()'>
+            [loadingText]="loadingText || ngtTranslateService.ngtSelectLoadingText"
+            [maxSelectedItems]="maxSelectedItems" [compareWith]='compareWith' (clear)='onClearSelect()'>
 
             <ng-template *ngIf='ngtSelectHeaderTemplate' ng-header-tmp>
                 <ng-template [ngTemplateOutlet]="ngtSelectHeaderTemplate">
