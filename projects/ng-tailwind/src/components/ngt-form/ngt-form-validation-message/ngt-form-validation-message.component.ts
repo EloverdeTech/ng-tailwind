@@ -1,6 +1,5 @@
 import { Component, Optional, SkipSelf } from '@angular/core';
-import { NgtTranslateService } from 'projects/ng-tailwind/src/services/http/ngt-translate.service';
-
+import { NgtTranslateService } from '../../../services/http/ngt-translate.service';
 import { NgtFormComponent } from '../ngt-form.component';
 
 @Component({
