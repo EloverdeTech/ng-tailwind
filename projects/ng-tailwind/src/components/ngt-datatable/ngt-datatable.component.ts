@@ -204,9 +204,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             this.inputSearch.clearInput();
         }
 
-        this.apply(this.ngtPagination.getCurrentPage()).then(() => {
-            this.cleaningFilter = false;
-        });
+        this.apply(this.ngtPagination.getCurrentPage(), false).then(() => this.cleaningFilter = false);
     }
 
     public hasAppliedFilters(searchType: NgtDatatableSearchType = NgtDatatableSearchType.DEFAULT) {

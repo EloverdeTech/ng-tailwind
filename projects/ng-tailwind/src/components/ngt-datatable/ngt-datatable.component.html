@@ -45,7 +45,8 @@
 </div>
 
 <div class="clearfix mt-2 md:mt-8" [hidden]='!data || data.length == 0'>
-    <ngt-pagination [pagesInterval]='4' (onPageChange)='apply($event)' (onPerPageChange)='apply()' #ngtPagination>
+    <ngt-pagination [pagesInterval]='4' (onPageChange)='apply($event, false)' (onPerPageChange)='apply(1, false)'
+        #ngtPagination>
     </ngt-pagination>
 </div>
 
