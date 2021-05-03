@@ -15,9 +15,9 @@
                 {{ subtitle }}
             </span>
 
-            <ngt-helper *ngIf="helperText" [helpTitle]="helperTitle" class="ml-1"
-                [iconColor]="helperIconColor || ngtSectionStyle.compile(['color.text'])">
-                {{ helperText }}
+            <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" class="ml-1"
+                [iconColor]="helpIconColor || ngtSectionStyle.compile(['color.text'])">
+                {{ helpText }}
             </ngt-helper>
         </div>
 
@@ -47,9 +47,9 @@
                     {{ subtitle }}
                 </span>
 
-                <ngt-helper *ngIf="helperText" [helpTitle]="helperTitle" class="ml-1"
-                    [iconColor]="helperIconColor || ngtSectionStyle.compile(['color.text'])">
-                    {{ helperText }}
+                <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" class="ml-1"
+                    [iconColor]="helpIconColor || ngtSectionStyle.compile(['color.text'])">
+                    {{ helpText }}
                 </ngt-helper>
             </div>
         </ng-container>
