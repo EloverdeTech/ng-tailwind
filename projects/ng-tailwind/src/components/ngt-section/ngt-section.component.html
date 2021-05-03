@@ -1,46 +1,57 @@
 <div class="flex mb-6">
-  <ngt-svg *ngIf="icon" [src]='icon'
-    class="hidden md:block {{ ngtSectionStyle.compile(['color.text', 'h', 'w', 'my', 'pr']) }}">
-  </ngt-svg>
+    <ngt-svg *ngIf="icon" [src]='icon'
+        class="hidden md:block {{ ngtSectionStyle.compile(['color.text', 'h', 'w', 'my', 'pr']) }}">
+    </ngt-svg>
 
-  <div
-    class="w-full pb-4 md:pb-0 border-b-4 md:border-b-0 border-dashed md:border-solid md:border-l {{ accordion && !showSection ? 'flex' : '' }}">
-    <span *ngIf='!accordion && caption'
-      class="px-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
-      {{ caption }}
-    </span>
+    <div
+        class="w-full pb-4 md:pb-0 border-b-4 md:border-b-0 border-dashed md:border-solid md:border-l {{ accordion && !showSection ? 'flex' : '' }}">
+        <div class="flex">
+            <span *ngIf='!accordion && caption'
+                class="px-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
+                {{ caption }}
+            </span>
 
-    <ng-container *ngIf="accordion">
-      <div
-        class="flex flex-wrap items-center px-5 cursor-pointer hover:opacity-75 {{ accordion && showSection ? ngtCaptionStyle.compile(['pb']) : '' }}"
-        (click)='toggle()' style="max-width: fit-content;">
-        <div *ngIf="!showSection"
-          class="flex align-items-center text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
-          <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M2.82 4.59l9.18 9.16 9.18 -9.16 2.82 2.82 -12 12 -12 -12 2.82 -2.82z" />
-          </svg>
+            <ngt-helper *ngIf="helperText" [helpTitle]="helperTitle" class="ml-1"
+                [iconColor]="helperIconColor || ngtSectionStyle.compile(['color.text'])">
+                {{ helperText }}
+            </ngt-helper>
         </div>
 
-        <div *ngIf="showSection"
-          class="flex align-items-center text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
-          <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M2.82 19.41l9.18 -9.16 9.18 9.16 2.82 -2.82 -12 -12 -12 12 2.82 2.82z" />
-          </svg>
+        <ng-container *ngIf="accordion">
+            <div class="flex flex-wrap items-center px-5 cursor-pointer hover:opacity-75 {{ accordion && showSection ? ngtCaptionStyle.compile(['pb']) : '' }}"
+                (click)='toggle()' style="max-width: fit-content;">
+                <div *ngIf="!showSection"
+                    class="flex align-items-center text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
+                    <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M2.82 4.59l9.18 9.16 9.18 -9.16 2.82 2.82 -12 12 -12 -12 2.82 -2.82z" />
+                    </svg>
+                </div>
+
+                <div *ngIf="showSection"
+                    class="flex align-items-center text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
+                    <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M2.82 19.41l9.18 -9.16 9.18 9.16 2.82 -2.82 -12 -12 -12 12 2.82 2.82z" />
+                    </svg>
+                </div>
+
+                <span [class]="ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml'])">
+                    {{ caption }}
+                </span>
+
+                <span *ngIf="subtitle"
+                    [class]="ngtSubtitleStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml'])">
+                    {{ subtitle }}
+                </span>
+
+                <ngt-helper *ngIf="helperText" [helpTitle]="helperTitle" class="ml-1"
+                    [iconColor]="helperIconColor || ngtSectionStyle.compile(['color.text'])">
+                    {{ helperText }}
+                </ngt-helper>
+            </div>
+        </ng-container>
+
+        <div *ngIf='showSection' class="{{ ngtSectionStyle.compile(['px']) }}" [@enterAnimation]='!showSection'>
+            <ng-content></ng-content>
         </div>
-
-        <span [class]="ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml'])">
-          {{ caption }}
-        </span>
-
-        <span *ngIf="subtitle"
-          [class]="ngtSubtitleStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml'])">
-          {{ subtitle }}
-        </span>
-      </div>
-    </ng-container>
-
-    <div *ngIf='showSection' class="{{ ngtSectionStyle.compile(['px']) }}" [@enterAnimation]='!showSection'>
-      <ng-content></ng-content>
     </div>
-  </div>
 </div>
