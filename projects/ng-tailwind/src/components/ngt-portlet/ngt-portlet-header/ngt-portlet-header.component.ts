@@ -9,8 +9,11 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
     styleUrls: ['./ngt-portlet-header.component.css']
 })
 export class NgtPortletHeaderComponent {
-    @Input() public caption: string;
-    @Input() public icon: string = null;
+    @Input() public caption: string = '';
+    @Input() public icon: string = '';
+    @Input() public helperTitle: string = '';
+    @Input() public helperText: string = '';
+    @Input() public helperIconColor: string = '';
 
     public ngtStyle: NgtStylizableService;
 

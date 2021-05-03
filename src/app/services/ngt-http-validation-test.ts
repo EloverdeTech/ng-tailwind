@@ -1,4 +1,4 @@
-import { NgtHttpValidationResponse, NgtHttpValidationService } from 'ng-tailwind';
+import { NgtHttpValidationResponse, NgtHttpValidationService } from "projects/ng-tailwind/src/public-api";
 
 export class NgtHttpValidationTestService extends NgtHttpValidationService {
     public unique(validationResource: any, value: any): Promise<NgtHttpValidationResponse> {

@@ -23,6 +23,9 @@ export class NgtPortletComponent {
     @Input() public customLayout: boolean = false;
     @Input() public withFooter: boolean = false;
     @Input() public withBody: boolean = true;
+    @Input() public helperTitle: string = '';
+    @Input() public helperText: string = '';
+    @Input() public helperIconColor: string = '';
 
     public ngtStyle: NgtStylizableService;
 
