@@ -6,12 +6,12 @@
     <div
         class="w-full pb-4 md:pb-0 border-b-4 md:border-b-0 border-dashed md:border-solid md:border-l {{ accordion && !showSection ? 'flex' : '' }}">
         <div *ngIf="!accordion && caption" class="flex">
-            <span class="px-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
+            <span class="pl-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
                 {{ caption }}
             </span>
 
             <span *ngIf="subtitle"
-                [class]="ngtSubtitleStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml'])">
+                class=" pt-1 self-center {{ ngtSubtitleStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml']) }}">
                 {{ subtitle }}
             </span>
 
