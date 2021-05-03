@@ -1,9 +1,10 @@
 {
     "name": "ng-tailwind",
-    "version": "1.6.263",
+    "version": "1.7.263",
     "peerDependencies": {
         "@angular/common": ">6.0.0",
         "@angular/core": ">6.0.0",
+        "@angular/cdk": "8.2.3",
         "flatpickr": ">=4.6.3",
         "ng2-flatpickr": ">=9.0.0",
         "@ng-select/ng-select": ">=2.20.5",
@@ -11,7 +12,8 @@
         "ngx-doc-viewer": ">=1.4.0",
         "ngx-viewer": ">=1.0.5",
         "viewerjs": ">=1.9.0",
-        "rxjs": ">=6.5.4"
+        "rxjs": ">=6.5.4",
+        "@ncstate/sat-popover": "^4.0.0"
     },
     "devDependencies": {
         "@types/node": "^13.9.4"
