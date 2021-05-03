@@ -12,6 +12,8 @@ export abstract class NgtTranslateService {
 
     public abstract ngtTextAreaRemainingCharacters: string;
 
+    public abstract ngtStandardHelperTitle: string;
+
     public abstract ngtValidationMaxCharactersExceded: string;
     public abstract ngtValidationRequiredField: string;
     public abstract ngtValidationInvalidEmail: string;

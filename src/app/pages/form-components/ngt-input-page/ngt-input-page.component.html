@@ -9,6 +9,7 @@
             <form class="flex flex-col w-full pb-2 border-b">
                 <div class="flex flex-col w-full px-8 mt-2">
                     <ngt-input class="block" [jit]='true' name='allowClearInput' [(ngModel)]="allowClearInput"
+                        [helpText]="'Login e/ou Email serão utilizados para entrar na plataforma. É necessário que um dos 2 seja informado.'"
                         label='Allow Clear Input' [isRequired]='true' [allowClear]='true'>
                     </ngt-input>
                     <span class="my-2 font-semibold text-sm">
