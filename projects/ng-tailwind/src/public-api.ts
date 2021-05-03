@@ -136,3 +136,7 @@ export * from './services/http/ngt-attachment-http.service';
 
 //NgtAnimations
 export * from './animations/ngt-angular-animations';
+
+// NgtHelper
+export * from './components/ngt-helper/ngt-helper.module';
+export * from './components/ngt-helper/ngt-helper.component';
