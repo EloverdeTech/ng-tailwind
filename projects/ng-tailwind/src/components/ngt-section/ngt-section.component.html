@@ -10,6 +10,11 @@
                 {{ caption }}
             </span>
 
+            <span *ngIf="subtitle"
+                [class]="ngtSubtitleStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml'])">
+                {{ subtitle }}
+            </span>
+
             <ngt-helper *ngIf="helperText" [helpTitle]="helperTitle" class="ml-1"
                 [iconColor]="helperIconColor || ngtSectionStyle.compile(['color.text'])">
                 {{ helperText }}
