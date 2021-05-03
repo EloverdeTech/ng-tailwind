@@ -5,9 +5,8 @@
 
     <div
         class="w-full pb-4 md:pb-0 border-b-4 md:border-b-0 border-dashed md:border-solid md:border-l {{ accordion && !showSection ? 'flex' : '' }}">
-        <div class="flex">
-            <span *ngIf='!accordion && caption'
-                class="px-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
+        <div *ngIf="!accordion && caption" class="flex">
+            <span class="px-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
                 {{ caption }}
             </span>
 
