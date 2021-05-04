@@ -15,7 +15,7 @@
                 {{ subtitle }}
             </span>
 
-            <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" class="ml-1"
+            <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [showHelperOnTop]="true" class="ml-1 hover:opacity-100 opacity-100"
                 [iconColor]="helpIconColor || ngtSectionStyle.compile(['color.text'])">
                 {{ helpText }}
             </ngt-helper>

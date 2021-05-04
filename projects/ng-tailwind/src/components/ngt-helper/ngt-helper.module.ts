@@ -3,6 +3,7 @@ import { NgModule } from "@angular/core";
 import { SatPopoverModule } from "@ncstate/sat-popover";
 import { NgtSvgModule } from "../ngt-svg/ngt-svg.module";
 import { NgtHelperComponent } from "./ngt-helper.component";
+import { NgtDropdownModule } from '../ngt-dropdown/ngt-dropdown.module';
 
 @NgModule({
     declarations: [NgtHelperComponent],
@@ -10,7 +11,8 @@ import { NgtHelperComponent } from "./ngt-helper.component";
     imports: [
         CommonModule,
         NgtSvgModule,
-        SatPopoverModule
+        SatPopoverModule,
+        NgtDropdownModule
     ]
 })
 export class NgtHelperModule { }
