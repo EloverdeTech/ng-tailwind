@@ -15,14 +15,14 @@
                 {{ subtitle }}
             </span>
 
-            <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [showHelperOnTop]="true" class="ml-1 hover:opacity-100 opacity-100"
-                [iconColor]="helpIconColor || ngtSectionStyle.compile(['color.text'])">
+            <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [showHelperOnTop]="true"
+                class="ml-1 hover:opacity-100 opacity-100" [iconColor]="helpIconColor">
                 {{ helpText }}
             </ngt-helper>
         </div>
 
         <ng-container *ngIf="accordion">
-            <div class="flex flex-wrap items-center px-5 cursor-pointer hover:opacity-75 {{ accordion && showSection ? ngtCaptionStyle.compile(['pb']) : '' }}"
+            <div class="flex flex-wrap items-center px-5 cursor-pointer {{ helpText ? '' : 'hover:opacity-75' }} {{ accordion && showSection ? ngtCaptionStyle.compile(['pb']) : '' }}"
                 (click)='toggle()' style="max-width: fit-content;">
                 <div *ngIf="!showSection"
                     class="flex align-items-center text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
@@ -47,8 +47,8 @@
                     {{ subtitle }}
                 </span>
 
-                <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" class="ml-1"
-                    [iconColor]="helpIconColor || ngtSectionStyle.compile(['color.text'])">
+                <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" class="ml-1" [iconColor]="helpIconColor"
+                    class="ml-1 hover:opacity-100 opacity-100" [showHelperOnTop]="true">
                     {{ helpText }}
                 </ngt-helper>
             </div>

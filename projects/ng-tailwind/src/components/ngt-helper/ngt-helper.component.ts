@@ -1,4 +1,5 @@
-import { Component, Input, ViewChild, ViewEncapsulation, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, ViewChild, ViewEncapsulation, ElementRef, AfterViewInit, Optional } from '@angular/core';
+import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 
 @Component({
     selector: 'ngt-helper',
@@ -13,9 +14,11 @@ export class NgtHelperComponent {
     @Input() public iconColor: string = '';
     @Input() public showHelperOnTop: boolean = false;
 
-    private parentOverflowRef: any;
-
-    public constructor(private elementRef: ElementRef) {}
+    public constructor(
+        private elementRef: ElementRef,
+        @Optional()
+        public ngtTranslateService: NgtTranslateService
+    ) { }
 
     public reversePositionX(): boolean {
         return (document.documentElement.clientWidth - this.elementRef.nativeElement.getBoundingClientRect().right) >= this.elementRef.nativeElement.getBoundingClientRect().width;

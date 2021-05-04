@@ -3,8 +3,8 @@
         @fadeUp>
         <!--Header-->
         <div *ngIf="!customLayout">
-            <ngt-portlet-header [icon]='icon' [caption]='caption' [helperText]="helperText" [helperTitle]="helperTitle"
-                [helperIconColor]="helperIconColor || ngtStyle.compile(['color.text'])">
+            <ngt-portlet-header [icon]='icon' [caption]='caption' [helperText]="helpText" [helperTitle]="helpTitle"
+                [helperIconColor]="helpIconColor">
                 <div right-header>
                     <ng-content select='[right-header]'></ng-content>
                 </div>

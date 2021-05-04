@@ -1,6 +1,7 @@
-<ngt-dropdown class="flex w-full justify-center" [reversePositionX]="reversePositionX()" [closeOnClick]='true' 
-                [reversePositionY]="showHelperOnTop" style="z-index: 1300 !important;" #element>
-    <div class="flex items-center px-2 h-6 text-sm text-white cursor-pointer rounded-full {{ iconColor || 'text-green-500'}} hover:bg-green-500 hover:text-white" host>
+<ngt-dropdown class="flex w-full hover:opacity-100" [reversePositionX]="reversePositionX()" [closeOnClick]="true"
+    [reversePositionY]="showHelperOnTop" style="z-index: 999999!important;" #element>
+    <div class="flex px-2 h-6 w-6 text-sm text-white rounded-full {{ iconColor || 'text-green-500'}}"
+        style="cursor: help;" host>
         <ngt-svg *ngIf="icon" [src]="icon" style="cursor: help;"></ngt-svg>
 
         <div *ngIf="!icon" style="cursor: help;">
@@ -12,12 +13,13 @@
         </div>
     </div>
 
-    <div class="bg-gray-100 text-sm rounded-lg text-gray-800 max-w-xs" container>
+    <div class="bg-gray-100 text-sm rounded-lg hover:opacity-100 text-gray-800 max-w-xs shadow-lg {{ showHelperOnTop ? '-mb-3' : '-mt-3' }}"
+        style="opacity: 1!important" container>
         <div
-            class="bg-gray-200 rounded-t-lg font-semibold border-b border-dashed border-gray-400 text-center px-6 py-1">
-            {{ helpTitle || 'Ajuda?' }}
+            class="bg-gray-200 rounded-t-lg hover:opacity-100 font-semibold border-b border-dashed border-gray-400 text-center px-6 py-1">
+            {{ helpTitle || ngtTranslateService.ngtStandardHelperTitle }}
         </div>
-        <div class="px-2 text-center">
+        <div class="px-2 py-1 text-center hover:opacity-100">
             <ng-content></ng-content>
         </div>
     </div>

@@ -5,8 +5,8 @@
             <div class="flex font-medium self-center">
                 <span class="text-xl">{{ caption }}</span>
 
-                <ngt-helper *ngIf="helperText" [helpTitle]="helperTitle" class="ml-1"
-                    [iconColor]="helperIconColor || ngtStyle.compile(['color.text'])">
+                <ngt-helper *ngIf="helperText" [helpTitle]="helperTitle" class="ml-1 mt-1"
+                    [iconColor]="helperIconColor">
                     {{ helperText }}
                 </ngt-helper>
             </div>
