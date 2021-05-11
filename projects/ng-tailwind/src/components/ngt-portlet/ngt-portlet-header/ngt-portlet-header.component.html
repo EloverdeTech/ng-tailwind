@@ -1,8 +1,15 @@
 <div class='border-b leading-loose {{ ngtStyle.compile(["h", "color.text", "color.bg"]) }}'>
     <div class="flex flex-wrap md:flex-no-wrap h-full relative align-items-center px-3 md:px-8 py-2">
-        <div *ngIf="caption || icon" class="flex text-xl md:whitespace-no-wrap">
-            <ngt-svg [src]="icon" class='mr-2' *ngIf="icon"></ngt-svg>
-            <p class='text-xl font-medium self-center'>{{ caption }}</p>
+        <div *ngIf="caption || icon" class="flex md:whitespace-no-wrap">
+            <ngt-svg [src]="icon" class="mr-1 text-xl" *ngIf="icon"></ngt-svg>
+            <div class="flex font-medium self-center">
+                <span class="text-xl">{{ caption }}</span>
+
+                <ngt-helper *ngIf="helperText" [helpTitle]="helperTitle" class="ml-1 mt-1"
+                    [iconColor]="helperIconColor">
+                    {{ helperText }}
+                </ngt-helper>
+            </div>
         </div>
 
         <div [hidden]='!leftHeader?.children[0]?.children?.length'

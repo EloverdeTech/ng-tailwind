@@ -6,6 +6,7 @@ import { NgtPortletFooterComponent } from './ngt-portlet-footer/ngt-portlet-foot
 import { NgtPortletHeaderComponent } from './ngt-portlet-header/ngt-portlet-header.component';
 import { NgtPortletComponent } from './ngt-portlet.component';
 import { NgtSvgModule } from '../ngt-svg/ngt-svg.module';
+import { NgtHelperModule } from '../ngt-helper/ngt-helper.module';
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { NgtSvgModule } from '../ngt-svg/ngt-svg.module';
     ],
     imports: [
         CommonModule,
-        NgtSvgModule
+        NgtSvgModule,
+        NgtHelperModule
     ]
 })
 export class NgtPortletModule { }

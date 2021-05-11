@@ -1,5 +1,4 @@
-import { NgtHttpPagination, NgtHttpResponse } from 'ng-tailwind/services/http/ngt-http.service';
-import { NgtHttpService } from 'projects/ng-tailwind/src/services/http/ngt-http.service';
+import { NgtHttpPagination, NgtHttpResponse, NgtHttpService } from 'projects/ng-tailwind/src/services/http/ngt-http.service';
 import { Observable, Observer } from 'rxjs';
 
 export class NgtHttpTest extends NgtHttpService {

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgtAttachmentHttpService, NgtHttpFormService, NgtHttpService } from 'projects/ng-tailwind/src/public-api';
+import { NgtAttachmentHttpService, NgtHttpFormService, NgtHttpService, NgtTranslateService } from 'projects/ng-tailwind/src/public-api';
 
 import { NgtHttpFormTestService } from '../app/services/ngt-http-form-test.service';
 import { AppRoutingModule } from './app-routing.module';
@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { HomeModule } from './pages/home/home.module';
 import { NgtAttachmentHttpServiceTest } from './services/ngt-attachment-http-test.service';
 import { NgtHttpTest } from './services/ngt-http-test.service';
+import { NgtTranslateDefaultService } from './services/ngt-translate-default.service';
 
 @NgModule({
     declarations: [
@@ -32,6 +33,10 @@ import { NgtHttpTest } from './services/ngt-http-test.service';
         {
             provide: NgtAttachmentHttpService,
             useClass: NgtAttachmentHttpServiceTest
+        },
+        {
+            provide: NgtTranslateService,
+            useClass: NgtTranslateDefaultService
         },
         {
             provide: 'NgtThStyle',

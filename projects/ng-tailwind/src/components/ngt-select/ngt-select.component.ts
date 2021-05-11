@@ -2,12 +2,14 @@ import {
     ChangeDetectorRef,
     Component,
     ContentChild,
+    EventEmitter,
     Host,
     Injector,
     Input,
     OnChanges,
     OnDestroy,
     Optional,
+    Output,
     Self,
     SimpleChanges,
     SkipSelf,
@@ -88,6 +90,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
     /** Validation */
     @Input() public isRequired: boolean = false;
+
+    @Output() public onLoadRemoteResource: EventEmitter<any> = new EventEmitter<any>();
 
     public nativeName = uuid();
     public ngtStyle: NgtStylizableService;
@@ -209,7 +213,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
     public initNgSelectItems() {
         if (this.remoteResource) {
-            this.ngSelectItems = Observable.create(observer => {
+            this.ngSelectItems = new Observable(observer => {
                 this.ngSearchObserver = observer;
                 this.search({});
             });
@@ -298,6 +302,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
                         (response: NgtHttpResponse) => {
                             this.loading = false;
                             this.ngSearchObserver.next(response.data);
+                            this.onLoadRemoteResource.emit(response.data);
                             this.currentState.pagination = response.meta.pagination;
                             this.changeDetector.detectChanges();
                         },

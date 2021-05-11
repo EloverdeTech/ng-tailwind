@@ -23,6 +23,9 @@ export class NgtSectionComponent {
     @Input() public subtitle: string;
     @Input() public accordion = false;
     @Input() public showSection = true;
+    @Input() public helpTitle: string = '';
+    @Input() public helpText: string = '';
+    @Input() public helpIconColor: string = '';
 
     @Output() public onToggleSection: EventEmitter<any> = new EventEmitter();
 
