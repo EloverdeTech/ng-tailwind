@@ -27,12 +27,6 @@ export class NgtPaginationComponent {
     public displayNextSectionButton: boolean = false;
     public displayPreviousSectionButton: boolean = false;
 
-    public registersPerPageOptions = [
-        5, 10, 15, 30, 50, 100
-    ];
-
-    public isFirstPerPageChange: boolean = true;
-
     public pagination: NgtHttpPagination = {
         count: null,
         page: 1,
@@ -44,6 +38,12 @@ export class NgtPaginationComponent {
     };
 
     public pages = [];
+
+    public registersPerPageOptions = [
+        5, 10, 15, 30, 50, 100
+    ];
+
+    public currentRegistersPerPage: number = 15;
 
     public constructor(
         private injector: Injector,
@@ -103,11 +103,11 @@ export class NgtPaginationComponent {
     }
 
     public onRegistersPerPageChange(value: any) {
-        if (this.isFirstPerPageChange) {
-            return this.isFirstPerPageChange = false;
-        }
+        if (value && this.pagination.per_page != value) {
+            this.pagination.per_page = value;
 
-        this.onPerPageChange.emit(value);
+            this.onPerPageChange.emit(value);
+        }
     }
 
     public async goToPage(page: number) {
