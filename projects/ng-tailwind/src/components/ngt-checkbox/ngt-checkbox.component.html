@@ -1,12 +1,12 @@
-<div class="inline-flex items-center cursor-pointer" [class.flex-col]='isToggleMode()'>
-    <label class="inline-flex items-center cursor-pointer" [class.flex-col]='isToggleMode()'>
-        <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' #element>
+<div class="inline-flex items-center {{ isDisabled ? 'cursor-not-allowed' : 'cursor-pointer' }}" [class.flex-col]='isToggleMode()'>
+    <label class="inline-flex items-center {{ isDisabled ? 'cursor-not-allowed' : 'cursor-pointer' }}" [class.flex-col]='isToggleMode()'>
+        <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' [disabled]="isDisabled" #element>
 
         <span *ngIf="isToggleMode() && label" class="text-sm mb-2">{{ label }}</span>
 
         <ng-container *ngIf="isDefaultMode()">
             <div style="transition: background-color .2s ease-out" class="{{ value ? ngtStyle.compile(['color.bg']) : 'bg-white' }}  
-                    shadow w-6 h-6 rounded border border-gray-400 {{ !shining ? 'flex justify-center' : 'hidden' }}">
+                    shadow w-6 h-6 rounded border border-gray-400 {{ isDisabled ? 'opacity-50' : '' }} {{ !shining ? 'flex justify-center' : 'hidden' }}">
                 <svg class="fill-current self-center text-white pointer-events-none" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 20 20">
                     <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
@@ -16,7 +16,7 @@
 
         <ng-container *ngIf="isRadioMode()">
             <div style="transition: background-color .2s ease-out"
-                class="{{ value ? ngtStyle.compile(['color.border', 'color.text']) : 'border-gray-500' }}  
+                class="{{ value ? ngtStyle.compile(['color.border', 'color.text']) : 'border-gray-500' }} {{ isDisabled ? 'opacity-50' : '' }}
                     shadow w-6 h-6 rounded-full border-2 border-gray-400 {{ !shining ? 'flex justify-center' : 'hidden' }}">
                 <svg *ngIf="value" class="fill-current self-center h-3" xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 29.107 29.107">
@@ -27,7 +27,7 @@
         </ng-container>
 
         <ng-container *ngIf="isToggleMode()">
-            <div class="{{ value ? 'justify-end' : 'bg-white justify-start' }}  
+            <div class="{{ value ? 'justify-end' : 'bg-white justify-start' }} {{ isDisabled ? 'opacity-50' : '' }}
                     shadow w-16 h-8 rounded-full border border-gray-400 {{ !shining ? 'flex' : 'hidden' }}"
                 style="padding: 1px;">
                 <div *ngIf="value"

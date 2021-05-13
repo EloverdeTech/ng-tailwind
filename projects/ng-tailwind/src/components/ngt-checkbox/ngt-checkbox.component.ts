@@ -54,6 +54,7 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
 
     @Input() public label: string;
     @Input() public shining: boolean = false;
+    @Input() public isDisabled: boolean = false;
     @Input() public name: string;
     @Input() public mode: NgtCheckboxMode = NgtCheckboxMode.DEFAULT;
 
