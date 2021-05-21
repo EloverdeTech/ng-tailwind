@@ -19,6 +19,7 @@
     "dependencies": {
         "moment": "^2.24.0",
         "angular-svg-icon": "^8.0.0",
-        "inputmask": "^4.0.9"
+        "inputmask": "^4.0.9",
+        "tslib": "^2.0.0"
     }
 }
