@@ -7,7 +7,7 @@
       "ng2-flatpickr": "ng2-flatpickr"
     }
   },
-  "whitelistedNonPeerDependencies": [
+  "allowedNonPeerDependencies": [
     "flatpickr",
     "moment",
     "ng2-flatpickr",
