@@ -268,8 +268,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     }
 
     public getFilterInputValue() {
-        let inputField = this.ngSelectComponent.filterInput ?
-            this.ngSelectComponent.filterInput :
+        let inputField = this.ngSelectComponent.searchInput ?
+            this.ngSelectComponent.searchInput :
             this.ngSelectComponent['searchInput'];
 
         if (

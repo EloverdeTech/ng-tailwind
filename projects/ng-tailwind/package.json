@@ -6,7 +6,7 @@
         "@angular/core": ">6.0.0",
         "flatpickr": ">=4.6.3",
         "ng2-flatpickr": ">=9.0.0",
-        "@ng-select/ng-select": ">=2.20.5",
+        "@ng-select/ng-select": ">=6.1.0",
         "ngx-dropzone": ">=2.2.2",
         "ngx-doc-viewer": ">=1.4.0",
         "ngx-viewer": ">=1.0.5",
