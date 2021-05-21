@@ -1,7 +1,9 @@
 import { uuid } from 'projects/ng-tailwind/src/helpers/uuid';
 import { NgtAttachmentHttpResponse, NgtAttachmentHttpService } from 'projects/ng-tailwind/src/public-api';
 import { Observable } from 'rxjs';
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class NgtAttachmentHttpServiceTest extends NgtAttachmentHttpService {
     public preview(attachment: any): Observable<NgtAttachmentHttpResponse> {
         return Observable.create((observer: any) => {

@@ -1,6 +1,8 @@
 import { NgtHttpFormService } from 'projects/ng-tailwind/src/public-api';
 import { Observable, Observer } from 'rxjs';
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class NgtHttpFormTestService extends NgtHttpFormService {
     public loadResourceById(resource: any, resourceId: any): Observable<any> {
         return Observable.create((observer: Observer<any>) => {

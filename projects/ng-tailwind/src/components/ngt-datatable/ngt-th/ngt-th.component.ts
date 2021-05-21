@@ -27,7 +27,7 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
     styleUrls: ['./ngt-th.component.css'],
 })
 export class NgtThComponent implements OnChanges, OnDestroy {
-    @ViewChild('searchInput', { static: false }) public searchInput: NgtInputComponent;
+    @ViewChild('searchInput') public searchInput: NgtInputComponent;
     @ViewChild('modal', { static: true }) public modal: TemplateRef<any>;
 
     @Input() public reference: string;

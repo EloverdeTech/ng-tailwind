@@ -1,6 +1,8 @@
 import { NgtHttpPagination, NgtHttpResponse, NgtHttpService } from 'projects/ng-tailwind/src/services/http/ngt-http.service';
 import { Observable, Observer } from 'rxjs';
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class NgtHttpTest extends NgtHttpService {
     public get(connector: any, filters: any, pagination: NgtHttpPagination): Observable<NgtHttpResponse> {
         return Observable.create((observer: Observer<NgtHttpResponse>) => {

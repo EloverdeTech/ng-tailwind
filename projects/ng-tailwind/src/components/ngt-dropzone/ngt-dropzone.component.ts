@@ -50,7 +50,7 @@ export interface NgtDropzoneFile {
     ]
 })
 export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDestroy, AfterContentChecked {
-    @ViewChild('container', { static: false }) public container: ElementRef;
+    @ViewChild('container') public container: ElementRef;
     @ViewChild('ngxDropzone', { static: true }) public ngxDropzone: NgxDropzoneComponent;
     @ViewChild(NgtDropzoneFileViewerComponent, { static: true }) public ngtDropzoneFileViewer: NgtDropzoneFileViewerComponent;
 

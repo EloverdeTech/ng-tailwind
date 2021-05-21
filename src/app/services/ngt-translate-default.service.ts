@@ -1,5 +1,7 @@
 import { NgtTranslateService } from "projects/ng-tailwind/src/public-api";
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class NgtTranslateDefaultService extends NgtTranslateService {
     public ngtFormDefaultValidationMessage: string = 'Preencha corretamente todos os campos';
     public ngtDatatableNoDataFound: string = 'Nenhum registro encontrado';

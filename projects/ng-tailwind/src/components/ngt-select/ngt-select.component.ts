@@ -45,9 +45,9 @@ import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } fr
 })
 export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnDestroy {
     @ViewChild(NgSelectComponent, { static: true }) public ngSelectComponent: NgSelectComponent;
-    @ContentChild(NgtSelectOptionTmp, { static: false, read: TemplateRef }) public ngtOptionTemplate: TemplateRef<any>;
-    @ContentChild(NgtSelectOptionSelectedTmp, { static: false, read: TemplateRef }) public ngtOptionSelectedTemplate: TemplateRef<any>;
-    @ContentChild(NgtSelectHeaderTmp, { static: false, read: TemplateRef }) public ngtSelectHeaderTemplate: TemplateRef<any>;
+    @ContentChild(NgtSelectOptionTmp, { read: TemplateRef }) public ngtOptionTemplate: TemplateRef<any>;
+    @ContentChild(NgtSelectOptionSelectedTmp, { read: TemplateRef }) public ngtOptionSelectedTemplate: TemplateRef<any>;
+    @ContentChild(NgtSelectHeaderTmp, { read: TemplateRef }) public ngtSelectHeaderTemplate: TemplateRef<any>;
 
     /** Visual */
     @Input() public label: string = '';
