@@ -46,7 +46,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public loading: boolean;
     @Input() public helpTitle: string;
     @Input() public helpTextColor: string = 'text-green-500';
-    @Input() public helpText: boolean;
+    @Input() public helpText: string;
     @Input() public innerLeftIcon: string;
     @Input() public innerLeftIconColor: string;
     @Input() public innerRightIcon: string;
