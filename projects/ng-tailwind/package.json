@@ -1,6 +1,6 @@
 {
     "name": "ng-tailwind",
-    "version": "2.11.274",
+    "version": "2.11.275",
     "peerDependencies": {
         "@angular/common": ">6.0.0",
         "@angular/core": ">6.0.0",
@@ -18,7 +18,7 @@
     },
     "dependencies": {
         "moment": "^2.24.0",
-        "angular-svg-icon": "^12.0.0",
+        "angular-svg-icon": "^8.0.0",
         "inputmask": "^4.0.9",
         "tslib": "^2.0.0"
     }
