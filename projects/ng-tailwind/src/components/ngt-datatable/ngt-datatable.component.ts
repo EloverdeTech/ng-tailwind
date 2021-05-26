@@ -255,8 +255,10 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
 
         if (this.type === NgtDatatableType.REMOTE) {
             if (this.remoteResource) {
-                this.loading = true;
-                this.bindVisibilityAttributes();
+                setTimeout(() => {
+                    this.loading = true;
+                    this.bindVisibilityAttributes();
+                });
 
                 if (applyDelayOnSearch) {
                     this.searchTimeout = setTimeout(() => {
@@ -292,6 +294,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
                 (error) => {
                     console.error(error);
                     this.loading = false;
+                    this.changeDetector.detectChanges();
                 }
             )
         );
