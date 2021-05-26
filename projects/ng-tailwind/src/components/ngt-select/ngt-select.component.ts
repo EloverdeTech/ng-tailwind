@@ -18,7 +18,7 @@ import {
     ViewEncapsulation,
 } from '@angular/core';
 import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
-import { NgSelectComponent } from '@ng-select/ng-select';
+import { NgOption, NgSelectComponent } from '@ng-select/ng-select';
 import { Observable, Observer, Subject, Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
@@ -69,6 +69,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     /** Behavior */
     @Input() public name: string;
     @Input() public allowCreate: boolean | Promise<any> | Function = false;
+    @Input() public allowOriginalItemsUnselect: boolean = true;
     @Input() public isDisabled: boolean = false;
     @Input() public remoteResource: any;
     @Input() public hideSelected: boolean;
@@ -87,6 +88,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public typeahead: Subject<any>;
     @Input() public groupValue: (groupKey: string, cildren: any[]) => Object;
     @Input() public trackBy: (item: any) => any;
+    @Input() public compareWith = (a: any, b: any) => a === b;
 
     /** Validation */
     @Input() public isRequired: boolean = false;
@@ -102,6 +104,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     private ngSearchObserver: Observer<any>;
     private originalPerPage = 15;
     private subscriptions: Array<Subscription> = [];
+    private originalItems: Array<any>;
 
     private currentState = {
         filters: {},
@@ -159,9 +162,6 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         });
     }
 
-    @Input()
-    public compareWith = (a: any, b: any) => a === b;
-
     public ngOnInit() {
         this.initNgSelectItems();
     }
@@ -187,6 +187,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
                 if (!this.getElementTitle() || this.getElementTitle() === 'null') {
                     this.ngSelectComponent.element.parentElement.parentElement.parentElement.title = '';
                 }
+
+                this.originalItems = this.ngSelectComponent.selectedItems?.map((element) => element.value);
 
                 this.changeDetector.detectChanges();
             }, 500);
@@ -265,6 +267,12 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         }
 
         this.currentState.filters = {};
+    }
+
+    public onRemoveSelectedItem(item: NgOption) {
+        if (!this.allowOriginalItemsUnselect && this.hadPreviousSelection(item.value)) {
+            setTimeout(() => this.ngSelectComponent.select(item));
+        }
     }
 
     public getFilterInputValue() {
@@ -462,6 +470,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
             return elementValue && elementValue.toLocaleLowerCase() === term;
         });
+    }
+
+    private hadPreviousSelection(item: any): boolean {
+        return !!this.originalItems?.find(element => this.compareWith(element, item));
     }
 
     private isColoquentResource() {

@@ -23,7 +23,8 @@
             [virtualScroll]="virtualScroll" [tabIndex]="tabIndex" [items]="ngSelectItems | async"
             (scroll)="onScroll($event)" [bindValue]="bindValue" [groupValue]="groupValue" [loading]="loading"
             [loadingText]="loadingText || ngtTranslateService.ngtSelectLoadingText"
-            [maxSelectedItems]="maxSelectedItems" [compareWith]='compareWith' (clear)='onClearSelect()'>
+            [maxSelectedItems]="maxSelectedItems" [compareWith]='compareWith' (clear)='onClearSelect()'
+            (remove)='onRemoveSelectedItem($event)'>
 
             <ng-template *ngIf='ngtSelectHeaderTemplate' ng-header-tmp>
                 <ng-template [ngTemplateOutlet]="ngtSelectHeaderTemplate">
