@@ -46,7 +46,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
     @Input() public label: string = "";
     @Input() public placeholder: string = "";
     @Input() public helpTitle: string;
-    @Input() public helpText = false;
+    @Input() public helpText: string;
     @Input() public helpTextColor: string = 'text-green-500';
     @Input() public shining = false;
     @Input() public dateFormat: string = 'd/m/Y H:i';
@@ -164,6 +164,14 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
     }
 
     public ngOnDestroy() {
+        const flatpickrElement = document.getElementsByClassName('flatpickr-calendar');
+
+        if (flatpickrElement?.length) {
+            for (let i = 0; i < flatpickrElement.length; i++) {
+                flatpickrElement[i].remove();
+            }
+        }
+
         this.destroySubscriptions();
     }
 
