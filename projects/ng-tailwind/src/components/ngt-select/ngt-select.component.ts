@@ -88,7 +88,6 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public typeahead: Subject<any>;
     @Input() public groupValue: (groupKey: string, cildren: any[]) => Object;
     @Input() public trackBy: (item: any) => any;
-    @Input() public compareWith = (a: any, b: any) => a === b;
 
     /** Validation */
     @Input() public isRequired: boolean = false;
@@ -161,6 +160,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
             }
         });
     }
+
+    @Input() public compareWith = (a: any, b: any) => a === b;
 
     public ngOnInit() {
         this.initNgSelectItems();
