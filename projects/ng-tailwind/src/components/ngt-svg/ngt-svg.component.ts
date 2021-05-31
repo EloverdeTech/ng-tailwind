@@ -15,7 +15,7 @@ import { SvgIconComponent } from 'angular-svg-icon';
     templateUrl: './ngt-svg.component.html',
     styleUrls: ['./ngt-svg.component.css'],
     host: {
-        class: 'flex align-items-center'
+        class: 'flex justify-center'
     },
     encapsulation: ViewEncapsulation.None
 })

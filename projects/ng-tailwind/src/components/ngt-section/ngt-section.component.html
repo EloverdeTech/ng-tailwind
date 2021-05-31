@@ -25,14 +25,14 @@
             <div class="flex flex-wrap items-center px-5 cursor-pointer {{ helpText ? '' : 'hover:opacity-75' }} {{ accordion && showSection ? ngtCaptionStyle.compile(['pb']) : '' }}"
                 (click)='toggle()' style="max-width: fit-content;">
                 <div *ngIf="!showSection"
-                    class="flex align-items-center text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
+                    class="flex text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
                     <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M2.82 4.59l9.18 9.16 9.18 -9.16 2.82 2.82 -12 12 -12 -12 2.82 -2.82z" />
                     </svg>
                 </div>
 
                 <div *ngIf="showSection"
-                    class="flex align-items-center text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
+                    class="flex text-xs {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'border', 'font']) }}">
                     <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M2.82 19.41l9.18 -9.16 9.18 9.16 2.82 -2.82 -12 -12 -12 12 2.82 2.82z" />
                     </svg>

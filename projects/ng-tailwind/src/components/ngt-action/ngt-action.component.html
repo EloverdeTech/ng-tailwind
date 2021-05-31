@@ -2,7 +2,7 @@
     [class]="isDisabled ? 'block rounded-full cursor-not-allowed text-gray-600 bg-gray-400 hover:bg-gray-400 opacity-50' : 'cursor-pointer'"
     [routerLink]="href" (click)='onClick($event)'>
     <div
-        class="flex align-items-center justify-center rounded-full {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py', 'shadow', 'text']) }}">
+        class="flex justify-center rounded-full {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py', 'shadow', 'text']) }}">
         <ngt-svg [src]="icon" class='self-center' *ngIf="icon"></ngt-svg>
         <div class="self-center">
             <ng-content></ng-content>
@@ -14,7 +14,7 @@
     [class]="isDisabled ? 'block rounded-full cursor-not-allowed text-gray-600 bg-gray-400 hover:bg-gray-400 opacity-50' : 'cursor-pointer'"
     (click)='onClick($event)'>
     <div
-        class="flex align-items-center justify-center rounded-full {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py', 'shadow', 'text']) }}">
+        class="flex justify-center rounded-full {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py', 'shadow', 'text']) }}">
         <ngt-svg [src]="icon" class='self-center' *ngIf="icon"></ngt-svg>
         <div class="self-center">
             <ng-content></ng-content>
