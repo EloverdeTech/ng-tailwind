@@ -169,6 +169,10 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         return this.currentState.sort;
     }
 
+    public setPerPage(perPage: number) {
+        this.ngtPagination.onRegistersPerPageChange(perPage);
+    }
+
     public applyFiltersDescription() {
         if (!this.cleaningFilter) {
             this.filtersTranslated = [];
@@ -238,12 +242,10 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     }
 
     public async apply(page = 1, applyDelayOnSearch: boolean = true, loader: NgtDatatableParam = NgtDatatableParam.ENABLE_LOADER) {
-        if (this.searchTimeout) {
-            clearTimeout(this.searchTimeout);
-        }
-
         if (!this.componentReady) {
             return;
+        } else if (this.searchTimeout) {
+            clearTimeout(this.searchTimeout);
         }
 
         this.ngtPagination.displayPagination = false;

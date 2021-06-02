@@ -106,6 +106,7 @@ export class NgtPaginationComponent {
     public onRegistersPerPageChange(value: any) {
         if (value && this.pagination.per_page != value) {
             this.pagination.per_page = value;
+            this.currentRegistersPerPage = value;
 
             this.onPerPageChange.emit(value);
         }
