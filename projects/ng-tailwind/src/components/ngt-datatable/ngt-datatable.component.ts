@@ -153,8 +153,12 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         return this.apply(this.ngtPagination.getCurrentPage());
     }
 
-    public async refresh() {
-        return this.apply(1, false);
+    public async refresh(stayInPage: NgtDatatableParam = NgtDatatableParam.RESET_PAGE, loader: NgtDatatableParam = NgtDatatableParam.ENABLE_LOADER) {
+        return this.apply(
+            stayInPage ? this.ngtPagination.getCurrentPage() : 1,
+            false,
+            loader
+        );
     }
 
     public getData() {
@@ -218,15 +222,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             appliedFilters = { ...this.currentState.filters.defaultFilters, ...this.currentState.filters.silentFilters };
         }
 
-        if (appliedFilters) {
-            for (let reference in appliedFilters) {
-                if (appliedFilters[reference]) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return !!Object.values(appliedFilters)?.find(filter => !!filter);
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -241,7 +237,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         }
     }
 
-    public async apply(page = 1, applyDelayOnSearch: boolean = true) {
+    public async apply(page = 1, applyDelayOnSearch: boolean = true, loader: NgtDatatableParam = NgtDatatableParam.ENABLE_LOADER) {
         if (this.searchTimeout) {
             clearTimeout(this.searchTimeout);
         }
@@ -250,15 +246,15 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.data = [];
+        this.ngtPagination.displayPagination = false;
         this.selectedElements = [];
 
         if (this.type === NgtDatatableType.REMOTE) {
             if (this.remoteResource) {
-                setTimeout(() => {
+                if (loader) {
                     this.loading = true;
                     this.bindVisibilityAttributes();
-                });
+                }
 
                 if (applyDelayOnSearch) {
                     this.searchTimeout = setTimeout(() => {
@@ -402,6 +398,13 @@ export enum NgtDatatableType {
 export enum NgtDatatableSearchType {
     DEFAULT = 'DEFAULT',
     SILENT = 'SILENT',
+}
+
+export enum NgtDatatableParam {
+    STAY_IN_PAGE = 1,
+    RESET_PAGE = 0,
+    ENABLE_LOADER = 1,
+    DISABLE_LOADER = 0
 }
 
 export class NgtCheckedElement {
