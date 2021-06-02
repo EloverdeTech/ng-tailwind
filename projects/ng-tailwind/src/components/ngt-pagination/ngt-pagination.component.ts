@@ -24,8 +24,9 @@ export class NgtPaginationComponent {
 
     public sectionStartPage: number;
     public sectionEndPage: number;
-    public displayNextSectionButton: boolean = false;
-    public displayPreviousSectionButton: boolean = false;
+    public displayNextSectionButton: boolean;
+    public displayPreviousSectionButton: boolean;
+    public displayPagination: boolean = true;
 
     public pagination: NgtHttpPagination = {
         count: null,
@@ -168,6 +169,7 @@ export class NgtPaginationComponent {
         }
 
         this.bindDisplayedButtonSections(this.sectionStartPage, this.sectionEndPage, totalPages);
+        this.displayPagination = true;
     }
 
     public resetPagination() {
