@@ -288,8 +288,6 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             } else {
                 this.formControl.markAsPristine();
             }
-        } else {
-            console.warn("The element must contain a ngModel property", this.element.nativeElement);
         }
 
         this.setupProperties();
