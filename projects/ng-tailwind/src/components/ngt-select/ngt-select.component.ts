@@ -2,12 +2,14 @@ import {
     ChangeDetectorRef,
     Component,
     ContentChild,
+    DoCheck,
     EventEmitter,
     Host,
     Injector,
     Input,
     OnChanges,
     OnDestroy,
+    OnInit,
     Optional,
     Output,
     Self,
@@ -43,7 +45,7 @@ import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } fr
     ],
     encapsulation: ViewEncapsulation.None
 })
-export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnDestroy {
+export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnDestroy, OnInit, DoCheck {
     @ViewChild(NgSelectComponent, { static: true }) public ngSelectComponent: NgSelectComponent;
     @ContentChild(NgtSelectOptionTmp, { read: TemplateRef }) public ngtOptionTemplate: TemplateRef<any>;
     @ContentChild(NgtSelectOptionSelectedTmp, { read: TemplateRef }) public ngtOptionSelectedTemplate: TemplateRef<any>;
@@ -123,6 +125,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     };
 
     private searchTimeout: any;
+    private becameVisible: boolean;
 
     public constructor(
         @Optional() @Self()
@@ -164,25 +167,36 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public compareWith = (a: any, b: any) => a === b;
 
     public ngOnInit() {
-        this.initNgSelectItems();
-    }
-
-    public ngOnDestroy() {
-        this.destroySubscriptions();
-    }
-
-    public ngAfterContentInit() {
         if (!this.formContainer) {
             console.error("The element must be inside a <form #form='ngForm'> tag!");
         }
 
         if (!this.name) {
             console.error("The element must contain a name attribute!");
-        } else {
+        }
+
+        this.ngSelectItems = new Observable((observer) => {
+            this.ngSearchObserver = observer;
+            observer.next([]);
+        });
+    }
+
+    public ngAfterViewInit() {
+        this.bindInnerInputUniqueId();
+    }
+
+    public ngDoCheck() {
+        if (!this.becameVisible && !this.isHidden()) {
+            this.becameVisible = true;
+
+            this.initNgSelectItems();
+
             setTimeout(() => {
                 this.componentReady = true;
+
                 this.initComponent();
                 this.replaceShowAddTag();
+
                 this.ngSelectComponent.itemsList.mapSelectedItems();
 
                 if (!this.getElementTitle() || this.getElementTitle() === 'null') {
@@ -194,6 +208,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
                 this.changeDetector.detectChanges();
             }, 500);
         }
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
     }
 
     public removeItem(event: Event, item: any) {
@@ -214,40 +232,12 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         this.refresh();
     }
 
-    public initNgSelectItems() {
-        if (this.remoteResource) {
-            this.ngSelectItems = new Observable(observer => {
-                this.ngSearchObserver = observer;
-                this.search({});
-            });
-
-            this.typeahead = new Subject();
-
-            this.subscriptions.push(
-                this.typeahead.subscribe((term) => {
-                    this.search({ term: term });
-                })
-            );
-        } else if (this.items instanceof Observable) {
-            this.ngSelectItems = this.items;
-        } else {
-            if (!this.items) {
-                this.items = [];
-            }
-
-            this.ngSelectItems = new Observable((observer) => {
-                this.ngSearchObserver = observer;
-                observer.next(this.items);
-            });
-        }
-    }
-
     public ngOnChanges(changes: SimpleChanges) {
         if (changes.isRequired) {
             this.updateValidations();
         }
 
-        if (changes.remoteResource || changes.items) {
+        if ((changes.remoteResource && this.becameVisible) || changes.items) {
             this.initNgSelectItems();
         }
 
@@ -374,6 +364,34 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         return selectClass;
     }
 
+    private initNgSelectItems() {
+        if (this.remoteResource && this.becameVisible) {
+            this.ngSelectItems = new Observable(observer => {
+                this.ngSearchObserver = observer;
+                this.search({});
+            });
+
+            this.typeahead = new Subject();
+
+            this.subscriptions.push(
+                this.typeahead.subscribe((term) => {
+                    this.search({ term: term });
+                })
+            );
+        } else if (this.items instanceof Observable) {
+            this.ngSelectItems = this.items;
+        } else {
+            if (!this.items) {
+                this.items = [];
+            }
+
+            this.ngSelectItems = new Observable((observer) => {
+                this.ngSearchObserver = observer;
+                observer.next(this.items);
+            });
+        }
+    }
+
     private initComponent() {
         if (this.formContainer && this.formContainer.control && (this.formControl = this.formContainer.control.get(this.name))) {
             this.formControl = this.formContainer.control.get(this.name);
@@ -437,6 +455,16 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         });
     }
 
+    private bindInnerInputUniqueId() {
+        const childInputs = this.ngSelectComponent.element.getElementsByTagName('input');
+
+        if (childInputs?.length) {
+            const innerInput = childInputs[0];
+
+            innerInput.id = uuid();
+        }
+    }
+
     private hasTermInFilteredItems(term: string) {
         const filteredItems = this.ngSelectComponent.itemsList.filteredItems;
 
@@ -481,6 +509,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         const filteredItems = this.ngSelectComponent.itemsList.filteredItems;
 
         return filteredItems && filteredItems.length && typeof filteredItems[0].value['getAttribute'] === 'function';
+    }
+
+    private isHidden(): boolean {
+        return this.ngSelectComponent.element.offsetParent === null;
     }
 
     private destroySubscriptions() {
