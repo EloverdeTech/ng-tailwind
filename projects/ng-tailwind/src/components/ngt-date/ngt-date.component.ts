@@ -110,8 +110,6 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         this.ngtStyle.load(this.injector, 'NgtDate', {
             h: 'h-12',
             color: {
-                border: 'border-gray-400 focus:border-gray-700',
-                bg: 'bg-bg-white focus:bg-white',
                 text: 'text-gray-800'
             }
         });
@@ -292,6 +290,10 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         }
 
         return this.placeholder;
+    }
+
+    public hasErrors(): boolean {
+        return this.formControl?.errors && (this.formControl?.dirty || (this.formContainer && this.formContainer['submitted']));
     }
 
     private initComponent() {

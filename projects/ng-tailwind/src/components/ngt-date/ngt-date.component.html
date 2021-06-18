@@ -10,11 +10,9 @@
 
 <div class="relative" [hidden]='shining || isDisabled'>
     <div
-        class="{{ !(formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))) ? 'border-normal' : 'border-error' }}">
-        <ng2-flatpickr
-            class="block {{ ngtStyle.compile(['h', 'w', 'px', 'py', 'mx', 'my', 'color.border', 'color.bg', 'color.text']) }}"
-            [config]='dateConfig' disabled='true' placeholder="{{ placeholder ? placeholder : '' }}"
-            #ng2FlatpickrComponent>
+        class="overflow-hidden {{ ngtStyle.compile(['h', 'color.text']) }} {{ hasErrors() ? 'border-error' : 'border-normal' }}">
+        <ng2-flatpickr class="block h-full" [config]='dateConfig' disabled='true'
+            placeholder="{{ placeholder ? placeholder : '' }}" #ng2FlatpickrComponent>
         </ng2-flatpickr>
 
         <div *ngIf="allowClear && value" class="flex absolute right-0 top-0 w-auto cursor-pointer mt-4 mr-2"
