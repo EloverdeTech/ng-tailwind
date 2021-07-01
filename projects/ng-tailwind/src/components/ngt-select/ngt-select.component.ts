@@ -175,6 +175,11 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
             console.error("The element must contain a name attribute!");
         }
 
+        setTimeout(() => {
+            this.componentReady = true;
+            this.initComponentValidation();
+        }, 500);
+
         this.ngSelectItems = new Observable((observer) => {
             this.ngSearchObserver = observer;
             observer.next([]);
@@ -192,9 +197,6 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
             this.initNgSelectItems();
 
             setTimeout(() => {
-                this.componentReady = true;
-
-                this.initComponent();
                 this.replaceShowAddTag();
 
                 this.ngSelectComponent.itemsList.mapSelectedItems();
@@ -223,7 +225,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
     public refresh() {
         this.initNgSelectItems();
-        this.initComponent();
+        this.initComponentValidation();
     }
 
     public reset() {
@@ -392,7 +394,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         }
     }
 
-    private initComponent() {
+    private initComponentValidation() {
         if (this.formContainer && this.formContainer.control && (this.formControl = this.formContainer.control.get(this.name))) {
             this.formControl = this.formContainer.control.get(this.name);
             this.markAsPristine();
