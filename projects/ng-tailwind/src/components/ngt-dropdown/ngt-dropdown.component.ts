@@ -36,6 +36,8 @@ export class NgtDropdownComponent implements OnDestroy {
 
     @Input() public autoXReverse: boolean;
     @Input() public autoYReverse: boolean = true;
+    @Input() public reverseXPosition: boolean;
+    @Input() public reverseYPosition: boolean;
     @Input() public closeOnClick: boolean;
     @Input() public openMethod: NgtDropdownOpenMethod = NgtDropdownOpenMethod.HOVER;
 
@@ -86,6 +88,11 @@ export class NgtDropdownComponent implements OnDestroy {
 
     public close(): void {
         this.isOpen = false;
+
+        setTimeout(() => {
+            this.containerXPosition = null;
+            this.containerYPosition = null;
+        }, 300);
     }
 
     public toggle(): void {
@@ -123,22 +130,22 @@ export class NgtDropdownComponent implements OnDestroy {
         }
     }
 
-    public reversePositionX(): boolean {
-        if (!this.autoXReverse) {
-            return false;
+    public shouldReverseXPosition(): boolean {
+        if (!this.autoXReverse || this.reverseXPosition !== undefined) {
+            return this.reverseXPosition;
         }
 
         if (this.isOpen) {
-            this.bindDropdownContainerXPosition();
+            this.bindContainerXPosition();
             this.isXPositionReversed = !(this.containerXPosition > document.documentElement.clientWidth);
 
             return this.isXPositionReversed;
         }
     }
 
-    public reverseYPosition(): boolean {
-        if (!this.autoYReverse) {
-            return false;
+    public shouldReverseYPosition(): boolean {
+        if (!this.autoYReverse || this.reverseYPosition !== undefined) {
+            return this.reverseYPosition;
         }
 
         if (this.isOpen) {
@@ -149,7 +156,7 @@ export class NgtDropdownComponent implements OnDestroy {
         }
     }
 
-    private bindDropdownContainerXPosition(): void {
+    private bindContainerXPosition(): void {
         if (!this.containerXPosition && this.containerRef.nativeElement.offsetWidth) {
             setTimeout(() => {
                 this.containerXPosition = this.containerRef.nativeElement.getBoundingClientRect().x
@@ -170,7 +177,7 @@ export class NgtDropdownComponent implements OnDestroy {
     private watchHover(host: any, container: any): void {
         const interval = setInterval(() => {
             if (!host || !container || !this.isInHover(host, container)) {
-                this.isOpen = false;
+                this.close();
                 clearInterval(interval);
             }
         }, 1000);

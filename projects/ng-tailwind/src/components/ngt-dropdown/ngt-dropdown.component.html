@@ -4,7 +4,7 @@
     </div>
 
     <div [hidden]='!isOpen'
-        class="{{ reverseYPosition() ? 'mb-12 bottom-0' : 'mt-4' }} {{ reversePositionX() ? 'left-0': 'right-0' }} ngt-dropdown-container sm:mr-0 mr-3 max-w-xs absolute"
+        class="{{ shouldReverseYPosition() ? 'mb-12 bottom-0' : 'mt-4' }} {{ shouldReverseXPosition() ? 'left-0': 'right-0' }} ngt-dropdown-container sm:mr-0 mr-3 max-w-xs absolute"
         [@openClose]="isOpen ? 'open' : 'closed'" (mouseenter)="onHover(host, container)"
         (click)='closeOnSelectOption()' style="z-index: 1100 !important;" #container>
 
