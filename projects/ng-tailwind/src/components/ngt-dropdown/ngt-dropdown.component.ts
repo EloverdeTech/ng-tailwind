@@ -1,5 +1,16 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnDestroy, Optional, Output, SimpleChanges, SkipSelf } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnDestroy,
+    Optional,
+    Output,
+    SimpleChanges,
+    SkipSelf,
+    ViewChild,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { getEnumFromString } from '../../helpers/enum/enum';
@@ -21,27 +32,23 @@ import { NgtDropdownContainerComponent } from './ngt-dropdown-container/ngt-drop
     ]
 })
 export class NgtDropdownComponent implements OnDestroy {
-    @Input() public icon: string;
-    @Input() public iconClass: string = 'text-xl self-center mr-3 text-white';
-    @Input() public imageIcon: string;
-    @Input() public label: string;
-    @Input() public labelClass: string = 'text-md font-semibold mr-4 text-white';
-    @Input() public headerBg: any;
-    @Input() public withFooter: boolean = false;
-    @Input() public badge: any;
-    @Input() public withHeader: boolean = true;
-    @Input() public withArrow: boolean = false;
-    @Input() public reversePositionY: boolean = false;
-    @Input() public reversePositionX: boolean = false;
-    @Input() public closeOnClick: boolean = false;
+    @ViewChild('container', { static: true }) public containerRef: ElementRef;
+
+    @Input() public autoXReverse: boolean;
+    @Input() public autoYReverse: boolean = true;
+    @Input() public closeOnClick: boolean;
     @Input() public openMethod: NgtDropdownOpenMethod = NgtDropdownOpenMethod.HOVER;
 
     @Output() public onToggle: EventEmitter<boolean> = new EventEmitter();
 
-    public name = uuid();
-    public isOpen: boolean = false;
+    public name: string = uuid();
+    public isOpen: boolean;
+    public isYPositionReversed: boolean = false;
+    public isXPositionReversed: boolean = false;
 
     private subscriptions: Array<Subscription> = [];
+    private containerXPosition: number;
+    private containerYPosition: number;
 
     public constructor(
         @Optional() @SkipSelf()
@@ -56,29 +63,32 @@ export class NgtDropdownComponent implements OnDestroy {
         }
     }
 
-    public ngOnDestroy() {
-        this.destroySubscriptions();
-    }
-
-    public open() {
-        this.isOpen = true;
-
-        if (this.ngtDropdownContainer) {
-            this.ngtDropdownContainer.setActiveDropdown(this);
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.openMethod) {
+            this.openMethod = getEnumFromString(changes.openMethod.currentValue, NgtDropdownOpenMethod);
         }
     }
 
-    public closeOnSelectOption() {
+    public ngOnDestroy(): void {
+        this.destroySubscriptions();
+    }
+
+    public open(): void {
+        this.isOpen = true;
+        this.ngtDropdownContainer?.setActiveDropdown(this);
+    }
+
+    public closeOnSelectOption(): void {
         if (this.closeOnClick) {
             this.close();
         }
     }
 
-    public close() {
+    public close(): void {
         this.isOpen = false;
     }
 
-    public toggle() {
+    public toggle(): void {
         setTimeout(() => {
             if (this.isOpen) {
                 this.close();
@@ -90,14 +100,14 @@ export class NgtDropdownComponent implements OnDestroy {
         });
     }
 
-    public onHover(host, container) {
+    public onHover(host: any, container: any): void {
         if (this.openMethod == NgtDropdownOpenMethod.HOVER && host && container) {
             this.open();
             this.watchHover(host, container);
         }
     }
 
-    public onClick(event: any) {
+    public onClick(event: Event): void {
         if (this.openMethod == NgtDropdownOpenMethod.CLICK) {
             event.preventDefault();
             event.stopPropagation();
@@ -105,7 +115,7 @@ export class NgtDropdownComponent implements OnDestroy {
         }
     }
 
-    public onRightClick(event: any) {
+    public onRightClick(event: Event): void {
         if (this.openMethod == NgtDropdownOpenMethod.RIGHT_CLICK) {
             event.preventDefault();
             event.stopPropagation();
@@ -113,8 +123,52 @@ export class NgtDropdownComponent implements OnDestroy {
         }
     }
 
-    public watchHover(host, container) {
-        let interval = setInterval(() => {
+    public reversePositionX(): boolean {
+        if (!this.autoXReverse) {
+            return false;
+        }
+
+        if (this.isOpen) {
+            this.bindDropdownContainerXPosition();
+            this.isXPositionReversed = !(this.containerXPosition > document.documentElement.clientWidth);
+
+            return this.isXPositionReversed;
+        }
+    }
+
+    public reverseYPosition(): boolean {
+        if (!this.autoYReverse) {
+            return false;
+        }
+
+        if (this.isOpen) {
+            this.bindContainerYPosition();
+            this.isYPositionReversed = this.containerYPosition > (document.documentElement.clientHeight * 0.9);
+
+            return this.isYPositionReversed;
+        }
+    }
+
+    private bindDropdownContainerXPosition(): void {
+        if (!this.containerXPosition && this.containerRef.nativeElement.offsetWidth) {
+            setTimeout(() => {
+                this.containerXPosition = this.containerRef.nativeElement.getBoundingClientRect().x
+                    + this.containerRef.nativeElement.offsetWidth;
+            });
+        }
+    }
+
+    private bindContainerYPosition(): void {
+        if (!this.containerYPosition && this.containerRef?.nativeElement.offsetHeight) {
+            setTimeout(() => {
+                this.containerYPosition = this.containerRef?.nativeElement.getBoundingClientRect().y
+                    + this.containerRef?.nativeElement.offsetHeight;
+            });
+        }
+    }
+
+    private watchHover(host: any, container: any): void {
+        const interval = setInterval(() => {
             if (!host || !container || !this.isInHover(host, container)) {
                 this.isOpen = false;
                 clearInterval(interval);
@@ -122,18 +176,12 @@ export class NgtDropdownComponent implements OnDestroy {
         }, 1000);
     }
 
-    public isInHover(host: any, container: any) {
+    private isInHover(host: any, container: any): boolean {
         return host.parentElement.querySelector(':hover') == host ||
             container.parentElement.querySelector(':hover') == container;
     }
 
-    public ngOnChanges(changes: SimpleChanges) {
-        if (changes.openMethod) {
-            this.openMethod = getEnumFromString(changes.openMethod.currentValue, NgtDropdownOpenMethod);
-        }
-    }
-
-    private destroySubscriptions() {
+    private destroySubscriptions(): void {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
     }

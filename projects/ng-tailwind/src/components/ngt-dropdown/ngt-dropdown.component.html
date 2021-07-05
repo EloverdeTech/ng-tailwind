@@ -3,20 +3,15 @@
         <ng-content select='[host]'></ng-content>
     </div>
 
-    <div (mouseenter)="onHover(host, container)" (click)='closeOnSelectOption()'
-        class="{{ reversePositionY ? 'mb-12 bottom-0' : 'mt-4' }} {{reversePositionX ? 'left-0': 'right-0'}} ngt-dropdown-container sm:mr-0 mr-3 max-w-xs absolute"
-        [class.hidden]='!isOpen' [@openClose]="isOpen ? 'open' : 'closed'" style="z-index: 1100 !important;" #container>
-
-        <div *ngIf="withArrow" class="hidden sm:inline-block  absolute right-0 -mt-6 mr-16 text-4xl text-gray-700">
-            <svg version="1.0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 344 344">
-                <path
-                    d="M167.5 107.1c-4.2 1.2-88.1 85.3-89.1 89.2-1 4.5.2 10.7 2.8 13.4 5.1 5.5 1 5.3 90.8 5.3 74.3 0 83.6-.2 86.6-1.6 4.8-2.3 7.4-7 7.4-13.5v-5.3l-42.7-42.9c-24.2-24.3-44.2-43.5-46-44.3-3.6-1.6-5.4-1.6-9.8-.3z" />
-            </svg>
-        </div>
+    <div [hidden]='!isOpen'
+        class="{{ reverseYPosition() ? 'mb-12 bottom-0' : 'mt-4' }} {{ reversePositionX() ? 'left-0': 'right-0' }} ngt-dropdown-container sm:mr-0 mr-3 max-w-xs absolute"
+        [@openClose]="isOpen ? 'open' : 'closed'" (mouseenter)="onHover(host, container)"
+        (click)='closeOnSelectOption()' style="z-index: 1100 !important;" #container>
 
         <ng-content select='[container]'></ng-content>
     </div>
 </div>
 
-<button (click)="toggle()" *ngIf="isOpen && openMethod != 'HOVER'" tabindex="-1"
-    class="fixed z-40 inset-0 h-full w-full opacity-0 cursor-default"></button>
+<button *ngIf="isOpen && openMethod != 'HOVER'" class="fixed z-40 inset-0 h-full w-full opacity-0 cursor-default"
+    (click)='toggle()'>
+</button>
