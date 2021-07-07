@@ -158,7 +158,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             stayInPage ? this.ngtPagination.getCurrentPage() : 1,
             false,
             loader
-        );
+        ).then(() => !this.data?.length ? this.apply(1, false) : null);
     }
 
     public getData() {
@@ -242,60 +242,70 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     }
 
     public async apply(page = 1, applyDelayOnSearch: boolean = true, loader: NgtDatatableParam = NgtDatatableParam.ENABLE_LOADER) {
-        if (!this.componentReady) {
-            return;
-        } else if (this.searchTimeout) {
-            clearTimeout(this.searchTimeout);
-        }
-
-        this.ngtPagination.displayPagination = false;
-        this.selectedElements = [];
-
-        if (this.type === NgtDatatableType.REMOTE) {
-            if (this.remoteResource) {
-                if (loader) {
-                    this.loading = true;
-                    this.bindVisibilityAttributes();
-                }
-
-                if (applyDelayOnSearch) {
-                    this.searchTimeout = setTimeout(() => {
-                        this.loadData(page);
-                    }, this.searchDelay);
-                } else {
-                    this.loadData(page);
-                }
-            } else {
-                console.error('The property [remoteResource] needs to be present to be able to make remote search');
+        return new Promise<void>(resolve => {
+            if (!this.componentReady) {
+                return resolve();
+            } else if (this.searchTimeout) {
+                clearTimeout(this.searchTimeout);
             }
-        } else if (this.type == NgtDatatableType.FIXED) {
-            this.bindVisibilityAttributes();
-        }
+
+            this.ngtPagination.displayPagination = false;
+            this.selectedElements = [];
+
+            if (this.type === NgtDatatableType.REMOTE) {
+                if (this.remoteResource) {
+                    if (loader) {
+                        this.loading = true;
+                        this.bindVisibilityAttributes();
+                    }
+
+                    if (applyDelayOnSearch) {
+                        this.searchTimeout = setTimeout(() => {
+                            this.loadData(page).then(() => resolve());
+                        }, this.searchDelay);
+                    } else {
+                        this.loadData(page).then(() => resolve());
+                    }
+                } else {
+                    console.error('The property [remoteResource] needs to be present to be able to make remote search');
+                }
+            } else if (this.type == NgtDatatableType.FIXED) {
+                this.bindVisibilityAttributes();
+
+                resolve();
+            }
+        });
     }
 
     private loadData(page: number) {
-        const pagination: NgtHttpPagination = { ...this.ngtPagination.getPagination(), ...{ page: page } };
+        return new Promise<void>((resolve, reject) => {
+            const pagination: NgtHttpPagination = { ...this.ngtPagination.getPagination(), ...{ page: page } };
 
-        this.currentState.filters.qualifiedFilters = this.getQualifiedFilters();
+            this.currentState.filters.qualifiedFilters = this.getQualifiedFilters();
 
-        this.subscriptions.push(
-            this.ngtHttpService.get(
-                this.remoteResource, this.currentState.filters.qualifiedFilters, pagination, this.currentState.sort
-            ).subscribe(
-                (response: NgtHttpResponse) => {
-                    this.proccessRemoteResponse(response.data);
-                    this.ngtPagination.proccessPagination(response.meta);
-                    this.onDataChange.emit(this.data);
-                    this.loading = false;
-                    this.bindVisibilityAttributes();
-                },
-                (error) => {
-                    console.error(error);
-                    this.loading = false;
-                    this.changeDetector.detectChanges();
-                }
-            )
-        );
+            this.subscriptions.push(
+                this.ngtHttpService.get(
+                    this.remoteResource, this.currentState.filters.qualifiedFilters, pagination, this.currentState.sort
+                ).subscribe(
+                    (response: NgtHttpResponse) => {
+                        this.proccessRemoteResponse(response.data);
+                        this.ngtPagination.proccessPagination(response.meta);
+                        this.onDataChange.emit(this.data);
+                        this.loading = false;
+                        this.bindVisibilityAttributes();
+
+                        resolve();
+                    },
+                    (error) => {
+                        console.error(error);
+                        this.loading = false;
+                        this.changeDetector.detectChanges();
+
+                        reject();
+                    }
+                )
+            );
+        });
     }
 
     private getQualifiedFilters() {
