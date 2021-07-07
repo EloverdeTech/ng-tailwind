@@ -14,8 +14,8 @@ import {
     SkipSelf,
     ViewChild,
 } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, ValidationErrors, Validators } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
+import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -82,6 +82,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     public ngtStyle: NgtStylizableService;
 
+    private emailValidatorTimeout: any;
     private uniqueValidatorTimeout: any;
     private subscriptions: Array<Subscription> = [];
 
@@ -298,9 +299,9 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             return;
         }
 
-        let syncValidators = [];
+        const syncValidators = [];
 
-        if (this.type == "email") {
+        if (this.type == 'email') {
             syncValidators.push(Validators.email);
         }
 
@@ -343,10 +344,17 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         setTimeout(() => {
             this.formControl.setValidators(syncValidators);
 
+            const asyncValidators = [];
+
             if (this.uniqueResource) {
-                this.formControl.setAsyncValidators([this.uniqueValidator()]);
+                asyncValidators.push(this.uniqueValidator());
             }
 
+            if (this.type == 'email' && this.hasEmailServiceValidation()) {
+                asyncValidators.push(this.emailValidator());
+            }
+
+            this.formControl.setAsyncValidators(asyncValidators);
             this.formControl.updateValueAndValidity();
         });
     }
@@ -502,12 +510,42 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         };
     }
 
-    private uniqueValidator(): AsyncValidatorFn {
+    private emailValidator(): AsyncValidatorFn {
         if (!this.ngtValidationService) {
-            throw new Error("In order to use uniqueValidation you must provide a implementation for NgtHttpValidationService class!");
+            throw new Error("In order to use email validation you must provide a implementation for NgtHttpValidationService class!");
         }
 
-        return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+        return (control: AbstractControl) => {
+            if (this.emailValidatorTimeout) {
+                clearTimeout(this.emailValidatorTimeout);
+            }
+
+            if (this.value) {
+                return new Promise((resolve) => {
+                    this.emailValidatorTimeout = setTimeout(() => {
+                        this.loading = true;
+
+                        this.ngtValidationService.emailValidation(this.value).then((response: NgtHttpValidationResponse) => {
+                            this.loading = false;
+                            resolve(response.valid ? null : { 'email': true });
+                        }).catch(() => {
+                            this.loading = false;
+                            resolve(null);
+                        });
+                    }, 500);
+                });
+            }
+
+            return Promise.resolve(null);
+        };
+    }
+
+    private uniqueValidator(): AsyncValidatorFn {
+        if (!this.ngtValidationService) {
+            throw new Error("In order to use unique validation you must provide a implementation for NgtHttpValidationService class!");
+        }
+
+        return (control: AbstractControl) => {
             if (this.uniqueValidatorTimeout) {
                 clearTimeout(this.uniqueValidatorTimeout);
             }
@@ -520,14 +558,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                         this.ngtValidationService.unique(this.uniqueResource, this.value).then((response: NgtHttpValidationResponse) => {
                             this.loading = false;
 
-                            if (!response.valid) {
-                                return resolve({ 'unique': true });
-                            }
-
-                            resolve(null);
+                            resolve(response.valid ? null : { 'unique': true });
                         }).catch(() => {
                             this.loading = false;
-                            resolve({ 'unique': true });
+                            resolve(null);
                         });
                     }, 500);
                 });
@@ -649,6 +683,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }
 
         return value;
+    }
+
+    private hasEmailServiceValidation(): boolean {
+        return typeof this.ngtValidationService.emailValidation === 'function';
     }
 
     private destroySubscriptions() {
