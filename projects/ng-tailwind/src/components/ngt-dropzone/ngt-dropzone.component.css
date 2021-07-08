@@ -6,12 +6,14 @@
     justify-content: center !important;
 }
 
-ngx-dropzone-image-preview.image-preview-default-class.ng-star-inserted {
-    min-width: 180px !important;
-    max-width: 180px !important;
-    min-height: 140px !important;
-    height: 140px !important;
-    padding: 0 5px !important;
+.image-preview-default-class {
+    margin: unset !important;
+}
+
+custom-dropzone-preview {
+    height: 100% !important;
+    min-height: unset !important;
+    margin: unset !important;
 }
 
 .div-loader {

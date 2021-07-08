@@ -26,7 +26,6 @@ import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-http.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtDropzoneFileViewerComponent } from './ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
 
 export interface NgtDropzoneFile {
@@ -37,6 +36,28 @@ export interface NgtDropzoneFile {
     mimeType: string;
     fileSize: any;
 };
+
+export enum NgtDropzoneFileTypeEnum {
+    DOC = 'DOC',
+    PDF = 'PDF',
+    XLS = 'XLS',
+    OTHER = 'OTHER'
+}
+
+export enum NgtDropzonePreviewType {
+    DEFAULT = 'DEFAULT',
+    IMAGE = 'IMAGE',
+    VIDEO = 'VIDEO'
+}
+
+export enum NgtDropzoneErrorType {
+    DEFAULT = 'DEFAULT',
+    SIZE = 'SIZE',
+    NO_MULTIPLE = 'NO_MULTIPLE',
+    ITEMS_LIMIT = 'ITEMS_LIMIT',
+    TYPE = 'TYPE'
+}
+
 @Component({
     selector: 'ngt-dropzone',
     templateUrl: './ngt-dropzone.component.html',
@@ -57,9 +78,9 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     // Visual
     @Input() public label: string;
     @Input() public placeholder: string;
-    @Input() public helpTitle: string;
     @Input() public helpTextColor: string = 'text-green-500';
-    @Input() public helpText: boolean = false;
+    @Input() public helpText: string;
+    @Input() public helpTitle: string;
 
     // Behavior
     @Input() public resources: Array<NgtDropzoneFile> = [];
@@ -88,9 +109,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     public dropzoneHeight: string = '180px';
     public uploadedResources = [];
     public forceDisableClick: boolean = false;
-    public ngtDropzoneFileTypeEnum = NgtDropzoneFileTypeEnum;
     public nativeValue = [];
-    public shining: boolean;
     public showNgtDropzoneFileViewer: boolean = false;
     public componentReady = false;
     public loading: boolean = false;
@@ -114,22 +133,14 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         @Optional() @Host()
         public formContainer: ControlContainer,
         @Optional() @SkipSelf()
-        private ngtFormComponent: NgtFormComponent,
         private ngtAttachmentHttpService: NgtAttachmentHttpService,
         private injector: Injector,
         private changeDetector: ChangeDetectorRef,
     ) {
         super();
 
-        if (this.ngtFormComponent) {
-            this.subscriptions.push(
-                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                    this.shining = shining;
-                })
-            );
-        }
-
         this.ngtDropzoneLoaderStyle = new NgtStylizableService();
+
         this.ngtDropzoneLoaderStyle.load(this.injector, 'NgtDropzoneLoader', {
             h: 'h-8',
             color: {
@@ -460,23 +471,4 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
     }
-}
-
-export enum NgtDropzonePreviewType {
-    DEFAULT = 'DEFAULT',
-    IMAGE = 'IMAGE',
-    VIDEO = 'VIDEO'
-}
-
-export enum NgtDropzoneErrorType {
-    DEFAULT = 'DEFAULT',
-    SIZE = 'SIZE',
-    NO_MULTIPLE = 'NO_MULTIPLE',
-    ITEMS_LIMIT = 'ITEMS_LIMIT',
-    TYPE = 'TYPE'
-}
-
-enum NgtDropzoneFileTypeEnum {
-    IMAGE = 'IMAGE',
-    ARCHIVE = 'ARCHIVE'
 }
