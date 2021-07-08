@@ -1,22 +1,22 @@
 <div class="border-2 border-dotted border-gray-400 rounded p-2 flex items-center overflow-x-auto"
     [ngStyle]="{ 'height': ngtDropzoneComponent.dropzoneHeight }">
+    <div *ngIf="ngtDropzoneComponent.loading"
+        class="flex absolute justify-center items-center w-full h-full cursor-wait z-10">
+        <div class="div-loader"></div>
+    </div>
 
-    <ng-container *ngIf="ngtDropzoneComponent.loading">
-        <div class="flex absolute justify-center items-center w-full h-full cursor-wait z-10">
-            <div class="div-loader"></div>
-        </div>
-    </ng-container>
-
-    <div class="flex" [hidden]="ngtDropzoneComponent.loading">
+    <div [class]="ngtDropzoneComponent.loading ? 'hidden' : 'flex items-center'">
         <ng-container *ngIf="images?.length">
             <div class="flex py-5">
                 <div *ngFor="let image of images; let index = index" class="w-48 mr-8">
-                    <div title="{{ image.name || '' }} ({{ ngtDropzoneComponent.getFormattedFileSize(image) }})"
-                        (click)="onImageClick(index)" class="cursor-pointer">
+                    <div class="flex flex-col w-48 mx-4 cursor-pointer"
+                        title="{{ image.name || '' }} ({{ ngtDropzoneComponent.getFormattedFileSize(image) }})"
+                        (click)="onImageClick(index)">
                         <img [src]="image.thumbnailUrl" [alt]="image.name" class="w-full h-32">
-                        <div class="w-48 truncate text-gray-500 text-center text-sm font-mono">
+
+                        <p class="w-full truncate text-gray-500 text-center text-sm font-mono">
                             {{ image.name || '' }}
-                        </div>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -24,69 +24,72 @@
 
         <ng-container *ngIf="audios?.length">
             <ng-container *ngFor="let audio of audios">
-                <div class="py-5 items-center">
+                <div class="flex flex-col w-48 mx-4 py-5">
                     <audio controls>
                         <source [src]="audio.previewUrl">
                     </audio>
-                    <div class="w-48 truncate text-gray-500 text-center text-sm font-mono">
+
+                    <p class="w-full truncate text-gray-500 text-center text-sm font-mono">
                         {{ audio.name || '' }}
-                    </div>
+                    </p>
                 </div>
             </ng-container>
         </ng-container>
 
         <ng-container *ngIf="videos?.length">
             <ng-container *ngFor="let video of videos">
-                <div class="py-5 items-center">
+                <div class="flex flex-col w-48 mx-4 py-5">
                     <video width="240" controls>
                         <source [src]="video.previewUrl">
                     </video>
-                    <div class="w-48 truncate text-gray-500 text-center text-sm font-mono">
+
+                    <p class="w-full truncate text-gray-500 text-center text-sm font-mono">
                         {{ video.name || '' }}
-                    </div>
+                    </p>
                 </div>
             </ng-container>
         </ng-container>
 
         <ng-container *ngIf="files?.length">
             <ng-container *ngFor="let file of files">
-                <div class="w-48 mr-6 cursor-pointer items-center"
+                <div class="flex flex-col w-48 mr-6 cursor-pointer"
                     (click)="ngtDropzoneComponent.onFileClick(file.previewUrl, file.name)">
                     <div class="w-full flex justify-center border-2 rounded py-4 text-6xl">
-
-                        <svg *ngIf="getDropzoneIcon(file) == ngtDropzoneViewFileTypeEnum.OTHER"
+                        <svg *ngIf="getFileType(file) == ngtDropzoneViewFileTypeEnum.OTHER"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path class="heroicon-ui" fill="#4a5568"
                                 d="M6 2h9a1 1 0 0 1 .7.3l4 4a1 1 0 0 1 .3.7v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zm9 2.41V7h2.59L15 4.41zM18 9h-3a2 2 0 0 1-2-2V4H6v16h12V9zm-2 7a1 1 0 0 1-1 1H9a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1zm0-4a1 1 0 0 1-1 1H9a1 1 0 0 1 0-2h6a1 1 0 0 1 1 1zm-5-4a1 1 0 0 1-1 1H9a1 1 0 1 1 0-2h1a1 1 0 0 1 1 1z" />
                         </svg>
-                        <svg *ngIf="getDropzoneIcon(file) == ngtDropzoneViewFileTypeEnum.DOC" fill="#4a5568"
+
+                        <svg *ngIf="getFileType(file) == ngtDropzoneViewFileTypeEnum.DOC" fill="#4a5568"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path
                                 d="M14.4 0l-9.6 0c-1.33,0 -2.4,1.08 -2.4,2.4l0 19.2c0,1.33 1.07,2.4 2.4,2.4l14.4 0c1.33,0 2.4,-1.07 2.4,-2.4l0 -14.4 -7.2 -7.2 0 0zm4.8 21.6l-14.4 0 0 -19.2 8.4 0 0 6 6 0 0 13.2 0 0zm-0.78 -12l-2.52 10.8 -1.68 0 -2.16 -8.15 -2.16 8.15 -1.68 0 -2.64 -10.8 1.8 0 1.68 8.17 2.16 -8.17 1.56 0 2.16 8.17 1.68 -8.17 1.8 0z" />
                         </svg>
-                        <svg *ngIf="getDropzoneIcon(file) == ngtDropzoneViewFileTypeEnum.XLS" fill="#4a5568"
+
+                        <svg *ngIf="getFileType(file) == ngtDropzoneViewFileTypeEnum.XLS" fill="#4a5568"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path
                                 d="M14.4 0l-9.6 0c-1.33,0 -2.4,1.08 -2.4,2.4l0 19.2c0,1.33 1.07,2.4 2.4,2.4l14.4 0c1.33,0 2.4,-1.07 2.4,-2.4l0 -14.4 -7.2 -7.2 0 0zm4.8 21.6l-14.4 0 0 -19.2 8.4 0 0 6 6 0 0 13.2 0 0zm-6.12 -6.6l3.48 5.4 -2.16 0 -2.4 -4.08 -2.4 4.08 -2.16 0 3.48 -5.4 -3.48 -5.4 2.16 0 2.4 4.08 2.4 -4.08 2.16 0 -3.48 5.4z" />
                         </svg>
-                        <svg *ngIf="getDropzoneIcon(file) == ngtDropzoneViewFileTypeEnum.PDF" fill="#4a5568"
+
+                        <svg *ngIf="getFileType(file) == ngtDropzoneViewFileTypeEnum.PDF" fill="#4a5568"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <path
                                 d="M14.4 0l7.2 7.2 0 14.4c0,1.32 -1.08,2.4 -2.4,2.4l-14.4 0c-1.32,0 -2.4,-1.08 -2.4,-2.4l0 -19.2c0,-1.32 1.08,-2.4 2.4,-2.4l9.6 0 0 0zm4.8 21.6l0 -13.2 -6 0 0 -6 -8.4 0 0 19.2 14.4 0 0 0zm-8.5 -9.23c-0.28,-0.92 -0.92,-3.87 0.76,-3.92 1.68,-0.05 0.58,3.74 0.58,3.74 0.46,1.79 2.42,3.07 2.42,3.07 0.6,-0.18 4.02,-0.57 3.54,1.21 -0.52,1.77 -4.2,0.1 -4.2,0.1 -2.34,0.17 -4.09,0.8 -4.09,0.8 -1.36,2.53 -2.94,3.63 -3.59,2.56 -0.8,-1.33 2.56,-3.04 2.56,-3.04 1.74,-2.83 2,-4.47 2.02,-4.52l0 0zm0.78 1.01c-0.48,1.56 -1.44,3.23 -1.44,3.23 1.02,-0.41 3.26,-0.88 3.26,-0.88 -1.37,-1.2 -1.79,-2.34 -1.82,-2.35l0 0zm3.77 2.6c0,0 2.1,0.79 2.15,0.47 0.08,-0.32 -1.6,-0.61 -2.15,-0.47l0 0zm-6.79 1.79c-0.93,0.36 -1.81,1.9 -1.6,1.9 0.22,0.01 1.1,-0.72 1.6,-1.9l0 0zm3.02 -6.66c0,-0.06 0.52,-2.01 0,-2.07 -0.36,-0.04 -0.01,2.02 0,2.07z" />
                         </svg>
-
-
                     </div>
-                    <div class="w-48 truncate text-gray-500 text-center text-sm font-mono">
+
+                    <p class="w-full truncate text-gray-500 text-center text-sm font-mono">
                         {{ file.name || '' }}
-                    </div>
+                    </p>
                 </div>
             </ng-container>
         </ng-container>
     </div>
 
-    <div class="px-2 text-center w-full"
-        *ngIf="!ngtDropzoneComponent.loading && !ngtDropzoneComponent.resources?.length">
+    <div *ngIf="!ngtDropzoneComponent.loading && !ngtDropzoneComponent.resources?.length"
+        class="px-2 text-center w-full">
         {{ ngtDropzoneComponent.placeholder }}
     </div>
 </div>

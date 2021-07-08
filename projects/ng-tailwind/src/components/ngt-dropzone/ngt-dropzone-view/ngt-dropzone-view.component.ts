@@ -1,12 +1,6 @@
-import { AfterViewInit, Component, Input, SimpleChanges, SkipSelf, ViewEncapsulation } from "@angular/core";
-import { NgtDropzoneComponent, NgtDropzoneFile } from "../ngt-dropzone.component";
+import { AfterViewInit, Component, Input, SimpleChanges, SkipSelf, ViewEncapsulation } from '@angular/core';
 
-export enum NgtDropzoneViewFileTypeEnum {
-    DOC = 'DOC',
-    PDF = 'PDF',
-    XLS = 'XLS',
-    OTHER = 'OTHER'
-}
+import { NgtDropzoneComponent, NgtDropzoneFile, NgtDropzoneFileTypeEnum } from '../ngt-dropzone.component';
 
 @Component({
     selector: 'ngt-dropzone-view',
@@ -21,7 +15,7 @@ export class NgtDropzoneViewComponent implements AfterViewInit {
     public videos: Array<NgtDropzoneFile>;
     public files: Array<NgtDropzoneFile>;
 
-    public ngtDropzoneViewFileTypeEnum = NgtDropzoneViewFileTypeEnum;
+    public ngtDropzoneViewFileTypeEnum = NgtDropzoneFileTypeEnum;
 
     public constructor(
         @SkipSelf()
@@ -57,20 +51,20 @@ export class NgtDropzoneViewComponent implements AfterViewInit {
         this.ngtDropzoneComponent.onImageClick(imagesDiv, index);
     }
 
-    public getDropzoneIcon(resource: NgtDropzoneFile): NgtDropzoneViewFileTypeEnum {
+    public getFileType(resource: NgtDropzoneFile): NgtDropzoneFileTypeEnum {
         if (resource.mimeType.includes('.sheet')) {
-            return NgtDropzoneViewFileTypeEnum.XLS;
+            return NgtDropzoneFileTypeEnum.XLS;
         }
 
         if (resource.mimeType.includes('pdf')) {
-            return NgtDropzoneViewFileTypeEnum.PDF;
+            return NgtDropzoneFileTypeEnum.PDF;
         }
 
         if (resource.mimeType.includes('.document')) {
-            return NgtDropzoneViewFileTypeEnum.DOC;
+            return NgtDropzoneFileTypeEnum.DOC;
         }
 
-        return NgtDropzoneViewFileTypeEnum.OTHER;
+        return NgtDropzoneFileTypeEnum.OTHER;
     }
 
     private isImage(resource: NgtDropzoneFile) {
