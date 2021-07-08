@@ -28,6 +28,7 @@
             "scripts": [],
             "vendorChunk": false,
             "extractLicenses": false,
+            "buildOptimizer": false,
             "sourceMap": false,
             "optimization": false,
             "namedChunks": true,
