@@ -363,6 +363,12 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
             selectClass += ' select-border-normal';
         }
 
+        if (this.multiple) {
+            selectClass += ` h-auto ${this.ngtStyle.compile(['color.bg', 'color.text'])}`;
+        } else {
+            selectClass += ` ${this.ngtStyle.compile(['h', 'color.bg', 'color.text'])}`;
+        }
+
         return selectClass;
     }
 
