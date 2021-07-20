@@ -89,10 +89,8 @@ export class NgtDropdownComponent implements OnDestroy {
     public close(): void {
         this.isOpen = false;
 
-        setTimeout(() => {
-            this.containerXPosition = null;
-            this.containerYPosition = null;
-        }, 300);
+        this.containerXPosition = null;
+        this.containerYPosition = null;
     }
 
     public toggle(): void {
@@ -168,8 +166,8 @@ export class NgtDropdownComponent implements OnDestroy {
     private bindContainerYPosition(): void {
         if (!this.containerYPosition && this.containerRef?.nativeElement.offsetHeight) {
             setTimeout(() => {
-                this.containerYPosition = this.containerRef?.nativeElement.getBoundingClientRect().y
-                    + this.containerRef?.nativeElement.offsetHeight;
+                this.containerYPosition = this.containerRef.nativeElement.getBoundingClientRect().y
+                    + this.containerRef.nativeElement.offsetHeight;
             });
         }
     }
