@@ -1,0 +1,66 @@
+<label *ngIf="label && !shining" class="flex text-sm" [class.mb-2]='!hasValidationErrors()'>
+    {{ label }}:
+
+    <span *ngIf="isRequired" class="text-red-500 font-bold text-md ml-1">*</span>
+
+    <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor" class="ml-1">
+        {{ helpText }}
+    </ngt-helper>
+</label>
+
+<ngt-validation [hidden]='shining' class="block mb-1" [control]='formControl' [container]='formContainer'>
+</ngt-validation>
+
+<div class="{{ shining ? 'hidden' : 'flex flex-col' }} border w-full rounded {{ ngtStyle.compile(['h']) }}"
+    style="min-height: 16rem;" [class.border-red-500]='hasValidationErrors()' [class.disabled-background]='isDisabled'>
+    <div class="flex items-center w-full p-2 border-b">
+        <ngt-checkbox class="flex" title="Selecionar todos" [label]="!searchable ? 'Selecionar todos' : ''"
+            [(ngModel)]="selectAllCheckbox" name="selectAllCheckbox" [isClickDisabled]='true'
+            [isDisabled]='loading || isDisabled' h='h-5' w='w-5' (click)='selectAll()' ngt-stylizable>
+        </ngt-checkbox>
+
+        <ngt-input *ngIf="searchable" class="block w-full pl-2" name='searchTerm' [(ngModel)]='searchTerm'
+            placeholder='Buscar...' [allowClear]='true' [jit]='true' h='h-10' (ngModelChange)='search($event)'
+            [loading]='loading' [isDisabled]='isDisabled' ngt-stylizable #inputSearch>
+        </ngt-input>
+    </div>
+
+    <div *ngIf="loading" class="flex justify-center items-center h-full w-full cursor-wait">
+        <div class="div-loader"></div>
+    </div>
+
+    <div class="w-full overflow-y-auto text-sm {{ loading ? 'hidden' : 'flex flex-col' }}" (scroll)='onScroll($event)'
+        #containerRef>
+        <ng-container *ngFor="let element of getSelectableElements()">
+            <div class="flex w-full items-center p-2 hover:bg-gray-200 {{ isDisabled ? 'cursor-not-allowed' : 'cursor-pointer' }}"
+                (click)='toggleItem($event, element)'>
+                <ngt-checkbox class="flex pr-2" [name]='element.uuid' [(ngModel)]="element.isSelected"
+                    (ngModelChange)='onNativeChange(element)' [isClickDisabled]='true' [isDisabled]='isDisabled' h='h-5'
+                    w='w-5' (click)='toggleItem($event, element)' ngt-stylizable>
+                </ngt-checkbox>
+
+                {{ getSelectableElementValue(element) }}
+            </div>
+        </ng-container>
+
+        <p *ngIf="!getSelectableElements()?.length" class="text-center mt-4">
+            {{ ngtTranslateService.ngtMultiSelectNoDataFound }}
+        </p>
+    </div>
+</div>
+
+<div class="{{ shining ? 'hidden' : 'flex' }} w-full items-center mt-2">
+    <span class="text-sm mr-4">
+        {{ selectedElements?.length || 0 }} / {{ itemsTotal || 0 }}
+    </span>
+
+    <ngt-checkbox class="flex" label="Visualizar selecionados" name='onlySelectedCheckbox'
+        [(ngModel)]="displayOnlySelected" [isDisabled]='loading' h='h-5' w='w-5' ngt-stylizable>
+    </ngt-checkbox>
+</div>
+
+<ngt-shining *ngIf='shining' class="block w-full {{ ngtStyle.compile(['h']) }}" style="min-height: 16rem;"
+    rounded='rounded' ngt-stylizable>
+</ngt-shining>
+
+<input *ngIf='componentReady' type='hidden' [ngModel]='value' [name]='name' [value]='value'>

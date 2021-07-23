@@ -1,0 +1,21 @@
+.disabled-background {
+    border: solid #cbd5e0 1px !important;
+    background-color: #fafafa !important;
+    border-radius: 0.25rem !important;
+    padding: 1px !important;
+}
+
+.div-loader {
+    width: 4rem;
+    height: 4rem;
+    border: 3px solid #a0aec038;
+    border-top-color: #a0aec0;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

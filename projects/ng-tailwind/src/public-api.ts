@@ -112,6 +112,10 @@ export * from './components/ngt-select/ngt-select.module';
 export * from './components/ngt-select/ngt-select.component';
 export * from './components/ngt-select/ngt-select.directive';
 
+//NgtSelectContainer
+export * from './components/ngt-multi-select/ngt-multi-select.module';
+export * from './components/ngt-multi-select/ngt-multi-select.component';
+
 //NgtSvg
 export * from './components/ngt-svg/ngt-svg.module';
 export * from './components/ngt-svg/ngt-svg.component';
