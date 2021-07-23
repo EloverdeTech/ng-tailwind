@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class NgtTranslateDefaultService extends NgtTranslateService {
+    public ngtMultiSelectNoDataFound: string = 'Nenhum registro encontrado';
     public ngtFormDefaultValidationMessage: string = 'Preencha corretamente todos os campos';
     public ngtDatatableNoDataFound: string = 'Nenhum registro encontrado';
     public ngtSelectLoadingText: string = 'Carregando resultados';
