@@ -55,6 +55,7 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
     @Input() public label: string;
     @Input() public shining: boolean = false;
     @Input() public isDisabled: boolean = false;
+    @Input() public isClickDisabled: boolean = false;
     @Input() public name: string;
     @Input() public mode: NgtCheckboxMode = NgtCheckboxMode.DEFAULT;
 
@@ -89,6 +90,8 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         }
 
         this.ngtStyle.load(this.injector, 'NgtCheckbox', {
+            h: 'h-6',
+            w: 'w-6',
             color: {
                 bg: 'bg-gray-500',
                 text: 'text-gray-500',
