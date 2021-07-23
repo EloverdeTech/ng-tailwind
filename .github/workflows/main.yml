@@ -16,10 +16,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js 12.8
+    - name: Use Node.js 14.15.5
       uses: actions/setup-node@v1
       with:
-        node-version: 12.8
+        node-version: 14.15.5
     - name: Create environment file
       run: touch ./src/environments/environment.ts
     - name: Install dependencies
