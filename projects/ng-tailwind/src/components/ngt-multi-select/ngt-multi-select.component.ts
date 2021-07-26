@@ -71,7 +71,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
 
     public selectedElements: Array<NgtSelectContainerSelectableElementInterface> = [];
     public itemsTotal: number;
-    public searchTerm: string;
+    public searchTerm: string = '';
     public selectAllCheckbox: boolean;
     public displayOnlySelected: boolean;
 
@@ -96,7 +96,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     private subscriptions: Array<Subscription> = [];
     private inSearch: boolean;
     private searchTimeout: any;
-    private previousSearchTerm: string;
+    private previousSearchTerm: string = '';
     private becameVisible: boolean;
 
     public constructor(
@@ -172,6 +172,10 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
             this.updateValidations();
         }
 
+        if (changes.isDisabled) {
+            this.displayOnlySelected = changes.isDisabled.currentValue;
+        }
+
         if (changes.items) {
             this.bindSelectableElements(changes.items.currentValue);
             this.componentReady = true;
@@ -219,15 +223,17 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     }
 
     public onNativeChange(selectableElement: NgtSelectContainerSelectableElementInterface): void {
-        this.handleElementSelection(selectableElement);
+        if (this.componentReady) {
+            this.handleElementSelection(selectableElement);
 
-        if (this.hasChangesBetweenBindings(this.value, this.selectedElements)) {
-            this.value = this.selectedElements.map(e => e.value);
+            if (this.hasChangesBetweenBindings(this.value, this.selectedElements)) {
+                this.value = this.selectedElements.map(e => e.value);
+            }
         }
     }
 
     public change(selectedElements: Array<any>): void {
-        if (this.hasChangesBetweenBindings(selectedElements, this.selectedElements)) {
+        if (this.componentReady && this.hasChangesBetweenBindings(selectedElements, this.selectedElements)) {
             if (this.selectableElements?.length) {
                 this.bindSelectedElements(selectedElements);
 
@@ -357,6 +363,8 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
                             this.onDataChange.emit(this.selectableElements);
                             this.componentReady = true;
                             this.changeDetector.detectChanges();
+
+                            setTimeout(() => this.displayOnlySelected = this.isDisabled);
 
                             resolve();
                         },
