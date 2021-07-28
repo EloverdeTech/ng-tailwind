@@ -19,6 +19,11 @@ import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import {
+    NgtHttpFindExistingResourceInterface,
+    NgtHttpFindExistingResourceResponse,
+    NgtHttpResourceService,
+} from '../../services/http/ngt-http-resource.service';
 import { NgtHttpValidationResponse, NgtHttpValidationService } from '../../services/http/ngt-http-validation.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
@@ -64,6 +69,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public jit: boolean;
 
     //Validations
+    @Input() public findExistingResource: NgtHttpFindExistingResourceInterface;
     @Input() public isRequired: boolean;
     @Input() public uniqueResource: any;
     @Input() public minValue: number;
@@ -74,6 +80,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public multipleOf: number;
     @Input() public externalServerDependency: boolean;
 
+    public existingResourceId: string;
     public componentReady: boolean;
     public inputProperties: {
         htmlType?: string;
@@ -84,6 +91,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     private emailValidatorTimeout: any;
     private uniqueValidatorTimeout: any;
+    private searchExistingResourceTimeout: any;
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
@@ -96,6 +104,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         private renderer: Renderer2,
         @Optional() @SkipSelf()
         private ngtValidationService: NgtHttpValidationService,
+        @Optional() @SkipSelf()
+        private ngtResourceService: NgtHttpResourceService,
         private changeDetector: ChangeDetectorRef
     ) {
         super();
@@ -189,6 +199,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
         if (this.componentReady) {
             this.onValueChangeEvent.emit(this.value);
+        }
+
+        if (this.ngtResourceService && this.findExistingResource && this.value) {
+            this.searchExistingResource();
         }
     }
 
@@ -538,6 +552,22 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
             return Promise.resolve(null);
         };
+    }
+
+    private async searchExistingResource(): Promise<void> {
+        if (this.searchExistingResourceTimeout) {
+            clearTimeout(this.searchExistingResourceTimeout);
+        }
+
+        this.searchExistingResourceTimeout = setTimeout(() => {
+            this.loading = true;
+            this.findExistingResource.value = this.value;
+
+            this.ngtResourceService.findExisting(this.findExistingResource)
+                .then((response: NgtHttpFindExistingResourceResponse) => this.existingResourceId = response.id)
+                .catch(() => this.existingResourceId = null)
+                .finally(() => this.loading = false);
+        }, 500);
     }
 
     private uniqueValidator(): AsyncValidatorFn {
