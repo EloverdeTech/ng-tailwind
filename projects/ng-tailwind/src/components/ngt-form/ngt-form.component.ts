@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Host, Input, OnDestroy, OnInit, Optional, Output } from '@angular/core';
-import { ControlContainer, NgForm } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import {Component, EventEmitter, Host, Input, OnDestroy, OnInit, Optional, Output} from '@angular/core';
+import {ControlContainer, NgForm} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Observable, Subscription} from 'rxjs';
 
-import { isValidNgForm } from '../../helpers/form/form';
-import { getIdFromUri } from '../../helpers/routing/route';
-import { NgtHttpFormService } from '../../services/http/ngt-http-form.service';
+import {isValidNgForm} from '../../helpers/form/form';
+import {getIdFromUri} from '../../helpers/routing/route';
+import {NgtHttpFormService} from '../../services/http/ngt-http-form.service';
 
 @Component({
     selector: 'ngt-form',
@@ -42,7 +42,8 @@ export class NgtFormComponent implements OnInit, OnDestroy {
         public router: Router,
         public route: ActivatedRoute,
         private ngtHttpFormService: NgtHttpFormService
-    ) { }
+    ) {
+    }
 
     public ngOnInit() {
         if (this.guessFormState) {
@@ -121,6 +122,10 @@ export class NgtFormComponent implements OnInit, OnDestroy {
         }
     }
 
+    public formHasChanges() {
+        return this.ngForm.dirty;
+    }
+
     public saveResource() {
         return new Observable((observer) => {
             if (isValidNgForm(this.ngForm)) {
@@ -157,6 +162,8 @@ export class NgtFormComponent implements OnInit, OnDestroy {
                             this.setShining(false);
 
                             this.onEditing.emit(resource);
+
+                            setTimeout(() => this.ngForm.form.markAsPristine(), 500);
                         },
                         (error) => {
                             this.setLoading(false);
