@@ -163,7 +163,7 @@ export class NgtFormComponent implements OnInit, OnDestroy {
 
                             this.onEditing.emit(resource);
 
-                            setTimeout(() => this.ngForm.form.markAsPristine(), 1000);
+                            setTimeout(() => this.ngForm.form.markAsPristine(), 1500);
                         },
                         (error) => {
                             this.setLoading(false);
