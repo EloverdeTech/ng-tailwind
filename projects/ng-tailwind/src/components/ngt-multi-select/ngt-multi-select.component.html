@@ -19,7 +19,7 @@
             [isDisabled]='loading || isDisabled' h='h-5' w='w-5' (click)='selectAll()' ngt-stylizable>
         </ngt-checkbox>
 
-        <ngt-input *ngIf="searchable" class="block w-full pl-2" name='searchTerm' [(ngModel)]='searchTerm'
+        <ngt-input *ngIf="searchable" class="block w-full pl-2" [name]='searchInputName' [(ngModel)]='searchTerm'
             placeholder='Buscar...' [allowClear]='true' [jit]='true' h='h-10' (ngModelChange)='search($event)'
             [loading]='loading' [isDisabled]='isDisabled' ngt-stylizable #inputSearch>
         </ngt-input>

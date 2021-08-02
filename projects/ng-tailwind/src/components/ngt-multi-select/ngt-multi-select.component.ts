@@ -69,13 +69,15 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
 
     @Output() public onDataChange: EventEmitter<Array<NgtSelectContainerSelectableElementInterface>> = new EventEmitter();
 
+    public searchTerm: string = '';
+    public searchInputName: string = uuid();
+
     public selectedElements: Array<NgtSelectContainerSelectableElementInterface> = [];
     public itemsTotal: number;
-    public searchTerm: string = '';
     public selectAllCheckbox: boolean;
     public displayOnlySelected: boolean;
 
-    public nativeName = uuid();
+    public nativeName: string = uuid();
     public nativeValue: any;
 
     public ngtStyle: NgtStylizableService;
