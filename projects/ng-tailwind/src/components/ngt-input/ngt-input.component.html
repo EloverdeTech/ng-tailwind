@@ -14,7 +14,8 @@
         [disabled]="isDisabled" [readonly]="isReadonly || loading" [placeholder]="placeholder"
         [ngClass]="{'input-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
         [attr.type]="inputProperties.htmlType" #element>
-    <span *ngIf="innerLeftIcon" class="absolute self-center px-2 {{ innerLeftIconColor }}">
+    <span *ngIf="innerLeftIcon" class="absolute self-center px-2 {{ innerLeftIconColor }} {{ onClickLeftIcon ? 'cursor-pointer' : '' }}"
+          (click)="onClickLeftIcon.emit()">
         <ngt-svg class="fill-current" [src]='innerLeftIcon'></ngt-svg>
     </span>
 
@@ -45,7 +46,8 @@
             </svg>
         </span>
 
-        <span *ngIf="innerRightIcon && type != 'password'" class="self-center px-2 {{ innerRightIconColor }}">
+        <span *ngIf="innerRightIcon && type != 'password'" class="self-center px-2 {{ innerRightIconColor }}  {{ onClickRightIcon ? 'cursor-pointer' : '' }}"
+              (click)="onClickRightIcon.emit()">
             <ngt-svg class="fill-current" [src]='innerRightIcon'></ngt-svg>
         </span>
     </div>

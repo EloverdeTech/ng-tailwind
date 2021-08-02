@@ -1,13 +1,13 @@
 import {
     ChangeDetectorRef,
     Component,
-    ElementRef,
+    ElementRef, EventEmitter,
     Host,
     Injector,
     Input,
     OnDestroy,
     OnInit,
-    Optional,
+    Optional, Output,
     Renderer2,
     Self,
     SimpleChanges,
@@ -79,6 +79,9 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public match: string;
     @Input() public multipleOf: number;
     @Input() public externalServerDependency: boolean;
+
+    @Output() public onClickLeftIcon: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public onClickRightIcon: EventEmitter<any> = new EventEmitter<any>();
 
     public existingResourceId: string;
     public componentReady: boolean;
