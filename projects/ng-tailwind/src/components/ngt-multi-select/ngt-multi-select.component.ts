@@ -404,7 +404,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     private bindSelectedElements(selectedElements: Array<any>): void {
         this.selectableElements.forEach(selectableElement => {
             const shouldBeSelected: boolean = !!selectedElements?.find(
-                selectedElement => JSON.stringify(selectedElement) === JSON.stringify(selectableElement.value)
+                selectedElement => this.compareWith(selectedElement, selectableElement.value)
             );
 
             if (shouldBeSelected) {
@@ -446,7 +446,17 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     }
 
     private findSelectedElement(item: any): any {
-        return this.selectedElements.find(selectedElement => JSON.stringify(selectedElement.value) === JSON.stringify(item));
+        return this.selectedElements.find(selectedElement => this.compareWith(selectedElement.value, item));
+    }
+
+    private compareWith(a: any, b: any): boolean {
+        if (typeof a['getApiId'] === 'function' && typeof b['getApiId'] === 'function') {
+            return a.getApiId() == b.getApiId();
+        } else if (a.id && b.id) {
+            return a.id == b.id;
+        }
+
+        return JSON.stringify(a) === JSON.stringify(b);
     }
 
     private hasChangesBetweenBindings(value: Array<any>, nativeValue: Array<any>): boolean {
