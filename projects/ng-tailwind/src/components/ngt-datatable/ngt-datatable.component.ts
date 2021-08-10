@@ -282,6 +282,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             const pagination: NgtHttpPagination = { ...this.ngtPagination.getPagination(), ...{ page: page } };
 
             this.currentState.filters.qualifiedFilters = this.getQualifiedFilters();
+            this.inputSearch.isDisabled = true;
 
             this.subscriptions.push(
                 this.ngtHttpService.get(
@@ -290,8 +291,11 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
                     (response: NgtHttpResponse) => {
                         this.proccessRemoteResponse(response.data);
                         this.ngtPagination.proccessPagination(response.meta);
-                        this.onDataChange.emit(this.data);
+
                         this.loading = false;
+                        this.inputSearch.isDisabled = false;
+
+                        this.onDataChange.emit(this.data);
                         this.bindVisibilityAttributes();
 
                         resolve();
@@ -299,6 +303,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
                     (error) => {
                         console.error(error);
                         this.loading = false;
+                        this.inputSearch.isDisabled = false;
                         this.changeDetector.detectChanges();
 
                         reject();
