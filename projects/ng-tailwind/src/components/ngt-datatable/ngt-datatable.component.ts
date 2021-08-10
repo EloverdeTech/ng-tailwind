@@ -61,6 +61,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     public columnCount = [];
     public selectedElements: Array<NgtCheckedElement> = [];
 
+    private searching: boolean;
     private searchTimeout: any;
     private subscriptions: Array<Subscription> = [];
     private currentState = {
@@ -130,14 +131,14 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         this.componentReady = true;
     }
 
-    public async search(filters?: any, searchType: NgtDatatableSearchType = NgtDatatableSearchType.DEFAULT, applyDelayOnSearch: boolean = true) {
-        if (!this.loading) {
-            this.onSearch.emit(filters);
+    public async search(filter: Object | NgtCustomFilter, searchType: NgtDatatableSearchType = NgtDatatableSearchType.DEFAULT, applyDelayOnSearch: boolean = true) {
+        if (this.canApplyFilter(filter)) {
+            this.onSearch.emit(filter);
 
             if (searchType == NgtDatatableSearchType.DEFAULT) {
-                this.currentState.filters.defaultFilters = { ...this.currentState.filters.defaultFilters, ...filters };
+                this.currentState.filters.defaultFilters = { ...this.currentState.filters.defaultFilters, ...filter };
             } else {
-                this.currentState.filters.silentFilters = { ...this.currentState.filters.silentFilters, ...filters };
+                this.currentState.filters.silentFilters = { ...this.currentState.filters.silentFilters, ...filter };
             }
 
             this.applyFiltersDescription();
@@ -217,6 +218,13 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         this.apply(this.ngtPagination.getCurrentPage(), false).then(() => this.cleaningFilter = false);
     }
 
+    public hasAppliedFilter(filter: Object | NgtCustomFilter | string): boolean {
+        const reference: string = typeof filter === 'string' ? filter : Object.keys(filter)[0];
+        const appliedFilters = this.currentState.filters.qualifiedFilters;
+
+        return !!Object.keys(appliedFilters).find(key => key == reference);
+    }
+
     public hasAppliedFilters(searchType: NgtDatatableSearchType = NgtDatatableSearchType.DEFAULT) {
         let appliedFilters = {};
 
@@ -256,13 +264,13 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
 
             if (this.type === NgtDatatableType.REMOTE) {
                 if (this.remoteResource) {
+                    if (loader) {
+                        this.loading = true;
+                        this.bindVisibilityAttributes();
+                    }
+
                     if (applyDelayOnSearch) {
                         this.searchTimeout = setTimeout(() => {
-                            if (loader) {
-                                this.loading = true;
-                                this.bindVisibilityAttributes();
-                            }
-
                             this.loadData(page).then(() => resolve());
                         }, this.searchDelay);
                     } else {
@@ -284,7 +292,11 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             const pagination: NgtHttpPagination = { ...this.ngtPagination.getPagination(), ...{ page: page } };
 
             this.currentState.filters.qualifiedFilters = this.getQualifiedFilters();
-            this.inputSearch.isDisabled = true;
+            this.searching = true;
+
+            if (this.inputSearch) {
+                this.inputSearch.isDisabled = true;
+            }
 
             this.subscriptions.push(
                 this.ngtHttpService.get(
@@ -294,8 +306,12 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
                         this.proccessRemoteResponse(response.data);
                         this.ngtPagination.proccessPagination(response.meta);
 
+                        this.searching = false;
                         this.loading = false;
-                        this.inputSearch.isDisabled = false;
+
+                        if (this.inputSearch) {
+                            this.inputSearch.isDisabled = false;
+                        }
 
                         this.onDataChange.emit(this.data);
                         this.bindVisibilityAttributes();
@@ -401,6 +417,14 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
                 this.onSelectedElementsChange.emit(this.selectedElements);
             })
         );
+    }
+
+    private canApplyFilter(filter: Object | NgtCustomFilter): boolean {
+        const value: string | NgtCustomFilter = Object.values(filter ?? {})[0];
+        const hasValue: boolean = !!((value instanceof NgtCustomFilter && value.term) || value);
+        const isApplied: boolean = this.hasAppliedFilter(filter);
+
+        return !this.searching && (isApplied || (!isApplied && hasValue));
     }
 
     private destroySubscriptions() {
