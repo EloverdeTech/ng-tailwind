@@ -131,17 +131,19 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     }
 
     public async search(filters?: any, searchType: NgtDatatableSearchType = NgtDatatableSearchType.DEFAULT, applyDelayOnSearch: boolean = true) {
-        this.onSearch.emit(filters);
+        if (!this.loading) {
+            this.onSearch.emit(filters);
 
-        if (searchType == NgtDatatableSearchType.DEFAULT) {
-            this.currentState.filters.defaultFilters = { ...this.currentState.filters.defaultFilters, ...filters };
-        } else {
-            this.currentState.filters.silentFilters = { ...this.currentState.filters.silentFilters, ...filters };
+            if (searchType == NgtDatatableSearchType.DEFAULT) {
+                this.currentState.filters.defaultFilters = { ...this.currentState.filters.defaultFilters, ...filters };
+            } else {
+                this.currentState.filters.silentFilters = { ...this.currentState.filters.silentFilters, ...filters };
+            }
+
+            this.applyFiltersDescription();
+
+            return this.apply(1, applyDelayOnSearch);
         }
-
-        this.applyFiltersDescription();
-
-        return this.apply(1, applyDelayOnSearch);
     }
 
     public async sort(field: any, direction: any) {
@@ -254,13 +256,13 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
 
             if (this.type === NgtDatatableType.REMOTE) {
                 if (this.remoteResource) {
-                    if (loader) {
-                        this.loading = true;
-                        this.bindVisibilityAttributes();
-                    }
-
                     if (applyDelayOnSearch) {
                         this.searchTimeout = setTimeout(() => {
+                            if (loader) {
+                                this.loading = true;
+                                this.bindVisibilityAttributes();
+                            }
+
                             this.loadData(page).then(() => resolve());
                         }, this.searchDelay);
                     } else {
