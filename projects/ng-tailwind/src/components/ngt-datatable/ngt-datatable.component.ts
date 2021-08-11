@@ -132,19 +132,17 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     }
 
     public async search(filter: Object | NgtCustomFilter, searchType: NgtDatatableSearchType = NgtDatatableSearchType.DEFAULT, applyDelayOnSearch: boolean = true) {
-        if (this.canApplyFilter(filter)) {
-            this.onSearch.emit(filter);
+        this.onSearch.emit(filter);
 
-            if (searchType == NgtDatatableSearchType.DEFAULT) {
-                this.currentState.filters.defaultFilters = { ...this.currentState.filters.defaultFilters, ...filter };
-            } else {
-                this.currentState.filters.silentFilters = { ...this.currentState.filters.silentFilters, ...filter };
-            }
-
-            this.applyFiltersDescription();
-
-            return this.apply(1, applyDelayOnSearch);
+        if (searchType == NgtDatatableSearchType.DEFAULT) {
+            this.currentState.filters.defaultFilters = { ...this.currentState.filters.defaultFilters, ...filter };
+        } else {
+            this.currentState.filters.silentFilters = { ...this.currentState.filters.silentFilters, ...filter };
         }
+
+        this.applyFiltersDescription();
+
+        return this.apply(1, applyDelayOnSearch);
     }
 
     public async sort(field: any, direction: any) {
