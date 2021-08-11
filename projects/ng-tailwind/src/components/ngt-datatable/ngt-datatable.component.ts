@@ -131,18 +131,24 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         this.componentReady = true;
     }
 
-    public async search(filter: Object | NgtCustomFilter, searchType: NgtDatatableSearchType = NgtDatatableSearchType.DEFAULT, applyDelayOnSearch: boolean = true) {
-        this.onSearch.emit(filter);
+    public async search(
+        filters: Object,
+        searchType: NgtDatatableSearchType = NgtDatatableSearchType.DEFAULT,
+        applyDelayOnSearch: boolean = true
+    ) {
+        if (this.canApplyFilters(filters)) {
+            this.onSearch.emit(filters);
 
-        if (searchType == NgtDatatableSearchType.DEFAULT) {
-            this.currentState.filters.defaultFilters = { ...this.currentState.filters.defaultFilters, ...filter };
-        } else {
-            this.currentState.filters.silentFilters = { ...this.currentState.filters.silentFilters, ...filter };
+            if (searchType == NgtDatatableSearchType.DEFAULT) {
+                this.currentState.filters.defaultFilters = { ...this.currentState.filters.defaultFilters, ...filters };
+            } else {
+                this.currentState.filters.silentFilters = { ...this.currentState.filters.silentFilters, ...filters };
+            }
+
+            this.applyFiltersDescription();
+
+            return this.apply(1, applyDelayOnSearch);
         }
-
-        this.applyFiltersDescription();
-
-        return this.apply(1, applyDelayOnSearch);
     }
 
     public async sort(field: any, direction: any) {
@@ -217,7 +223,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     }
 
     public hasAppliedFilter(filter: Object | NgtCustomFilter | string): boolean {
-        const reference: string = typeof filter === 'string' ? filter : Object.keys(filter)[0];
+        const reference: string = typeof filter === 'string' ? filter : Object.keys(filter ?? {})[0];
         const appliedFilters = this.currentState.filters.qualifiedFilters;
 
         return !!Object.keys(appliedFilters).find(key => key == reference);
@@ -334,18 +340,20 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         const requestedFilters = { ...this.currentState.filters.defaultFilters, ...this.currentState.filters.silentFilters };
 
         if (requestedFilters) {
-            for (let reference in requestedFilters) {
-                let filter = requestedFilters[reference];
+            for (const reference in requestedFilters) {
+                const filter = requestedFilters[reference];
 
-                if (filter instanceof NgtCustomFilter) {
-                    if (filter.tagLabel) {
-                        this.filtersDescription[reference] = filter.tagLabel;
-                        this.applyFiltersDescription();
+                if (this.isValidFilter(filter)) {
+                    if (filter instanceof NgtCustomFilter) {
+                        if (filter.tagLabel) {
+                            this.filtersDescription[reference] = filter.tagLabel;
+                            this.applyFiltersDescription();
+                        }
+
+                        qualifiedFilters[reference] = filter.term;
+                    } else {
+                        qualifiedFilters[reference] = filter;
                     }
-
-                    qualifiedFilters[reference] = filter.term;
-                } else {
-                    qualifiedFilters[reference] = filter;
                 }
             }
         }
@@ -417,12 +425,24 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         );
     }
 
-    private canApplyFilter(filter: Object | NgtCustomFilter): boolean {
+    private canApplyFilters(filters: Object): boolean {
+        if (!this.searching) {
+            for (const reference in filters) {
+                if (this.isValidFilter(filters[reference])) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private isValidFilter(filter: Object | NgtCustomFilter): boolean {
         const value: string | NgtCustomFilter = Object.values(filter ?? {})[0];
         const hasValue: boolean = !!((value instanceof NgtCustomFilter && value.term) || value);
         const isApplied: boolean = this.hasAppliedFilter(filter);
 
-        return !this.searching && (isApplied || (!isApplied && hasValue));
+        return isApplied || (!isApplied && hasValue);
     }
 
     private destroySubscriptions() {
