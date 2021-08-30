@@ -76,6 +76,8 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         super();
 
         if (this.ngtFormComponent) {
+            this.shining = this.ngtFormComponent.isShining();
+
             this.subscriptions.push(
                 this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
                     this.shining = shining;

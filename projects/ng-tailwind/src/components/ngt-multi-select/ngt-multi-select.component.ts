@@ -121,6 +121,8 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
         super();
 
         if (this.ngtFormComponent) {
+            this.shining = this.ngtFormComponent.isShining();
+
             this.subscriptions.push(
                 this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
                     this.shining = shining;

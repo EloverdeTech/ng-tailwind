@@ -143,6 +143,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         super();
 
         if (this.ngtFormComponent) {
+            this.shining = this.ngtFormComponent.isShining();
+
             this.subscriptions.push(
                 this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
                     this.shining = shining;

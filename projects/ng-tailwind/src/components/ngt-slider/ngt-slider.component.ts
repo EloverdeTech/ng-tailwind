@@ -51,6 +51,8 @@ export class NgtSliderComponent extends NgtBaseNgModel implements AfterViewInit,
         super();
 
         if (this.ngtFormComponent) {
+            this.shining = this.ngtFormComponent.isShining();
+
             this.subscriptions.push(
                 this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
                     this.shining = shining;
@@ -88,8 +90,8 @@ export class NgtSliderComponent extends NgtBaseNgModel implements AfterViewInit,
 }
 
 export enum NgtSliderColorSchemeEnum {
-  PRIMARY = 'primary',
-  SUCCESS = 'success',
-  WARNING = 'warning',
-  DANGER = 'danger'
+    PRIMARY = 'primary',
+    SUCCESS = 'success',
+    WARNING = 'warning',
+    DANGER = 'danger'
 };

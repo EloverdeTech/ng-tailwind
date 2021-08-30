@@ -58,6 +58,8 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
         super();
 
         if (this.ngtFormComponent) {
+            this.shining = this.ngtFormComponent.isShining();
+
             this.subscriptions.push(
                 this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
                     this.shining = shining;

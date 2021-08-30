@@ -94,6 +94,8 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         super();
 
         if (this.ngtFormComponent) {
+            this.shining = this.ngtFormComponent.isShining();
+
             this.subscriptions.push(
                 this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
                     this.shining = shining;
