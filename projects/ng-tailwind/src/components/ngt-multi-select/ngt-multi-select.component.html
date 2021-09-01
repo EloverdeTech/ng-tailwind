@@ -31,15 +31,30 @@
 
     <div class="w-full overflow-y-auto text-sm {{ loading ? 'hidden' : 'flex flex-col' }}" (scroll)='onScroll($event)'
         #containerRef>
-        <ng-container *ngFor="let element of getSelectableElements()">
-            <div class="flex w-full items-center p-2 hover:bg-gray-200 {{ isDisabled ? 'cursor-not-allowed' : 'cursor-pointer' }}"
-                (click)='toggleItem($event, element)'>
-                <ngt-checkbox class="flex pr-2" [name]='element.uuid' [(ngModel)]="element.isSelected"
-                    (ngModelChange)='onNativeChange(element)' [isClickDisabled]='true' [isDisabled]='isDisabled' h='h-5'
-                    w='w-5' (click)='toggleItem($event, element)' ngt-stylizable>
-                </ngt-checkbox>
+        <ng-container *ngIf="customHeaderTemplate" [ngTemplateOutlet]="customHeaderTemplate">
+        </ng-container>
 
-                {{ getSelectableElementValue(element) }}
+        <ng-container *ngFor="let element of getSelectableElements(); let i = index">
+            <div class="flex w-full items-center hover:bg-gray-200 {{ isDisabled ? 'cursor-not-allowed' : 'cursor-pointer' }}"
+                [class.p-2]='!customOptionTemplate' (click)='toggleItem($event, element)'>
+                <ng-template let-element #elementCheckboxTemplate>
+                    <ngt-checkbox class="flex pr-2" [name]='element.uuid' [(ngModel)]="element.isSelected"
+                        (ngModelChange)='onNativeChange(element)' [isClickDisabled]='true' [isDisabled]='isDisabled'
+                        h='h-5' w='w-5' (click)='toggleItem($event, element)' ngt-stylizable>
+                    </ngt-checkbox>
+                </ng-template>
+
+                <ng-template let-element #defaultOptionTemplate>
+                    {{ getSelectableElementValue(element) }}
+                </ng-template>
+
+                <ng-container *ngIf="!customOptionTemplate" [ngTemplateOutlet]="elementCheckboxTemplate"
+                    [ngTemplateOutletContext]="{ $implicit: element }">
+                </ng-container>
+
+                <ng-container [ngTemplateOutlet]="customOptionTemplate || defaultOptionTemplate"
+                    [ngTemplateOutletContext]="{ $implicit: element, index: i }">
+                </ng-container>
             </div>
         </ng-container>
 

@@ -15,6 +15,7 @@ import {
     Self,
     SimpleChanges,
     SkipSelf,
+    TemplateRef,
     ViewChild,
     ViewEncapsulation,
 } from '@angular/core';
@@ -45,8 +46,11 @@ import { NgtInputComponent } from '../ngt-input/ngt-input.component';
 export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, OnDestroy, OnChanges {
     @ViewChild('containerRef') public containerRef: ElementRef;
     @ViewChild('inputSearch') public inputSearch: NgtInputComponent;
+    @ViewChild('elementCheckboxTemplate') public elementCheckboxTemplate: TemplateRef<any>;
 
     /** Visual */
+    @Input() public customOptionTemplate: TemplateRef<any>;
+    @Input() public customHeaderTemplate: TemplateRef<any>;
     @Input() public label: string;
     @Input() public helpTitle: string;
     @Input() public helpText: string;
@@ -237,7 +241,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     }
 
     public change(selectedElements: Array<any>): void {
-        if (this.componentReady && this.hasChangesBetweenBindings(selectedElements, this.selectedElements)) {
+        if (this.hasChangesBetweenBindings(selectedElements, this.selectedElements)) {
             if (this.selectableElements?.length) {
                 this.bindSelectedElements(selectedElements);
 
@@ -250,6 +254,8 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
                 this.selectedElements = selectedElements?.map(
                     element => ({ uuid: uuid(), isSelected: true, value: element })
                 ) ?? [];
+
+                this.changeDetector.detectChanges();
             }
 
             if (!selectedElements?.length) {
