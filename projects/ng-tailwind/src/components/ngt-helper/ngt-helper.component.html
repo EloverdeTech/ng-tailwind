@@ -1,5 +1,4 @@
-<ngt-dropdown class="flex w-full hover:opacity-100" [closeOnClick]="true" [autoXReverse]='true'
-    style="z-index: 999999!important;" #dropdownRef>
+<ngt-dropdown class="flex w-full hover:opacity-100" [closeOnClick]="true" [autoXReverse]='true' #dropdownRef>
     <div class="flex px-2 text-sm text-white rounded-full {{ iconColor || 'text-green-500'}}" style="cursor: help;"
         host>
         <ngt-svg *ngIf="icon" [src]="icon" style="cursor: help;"></ngt-svg>
@@ -13,7 +12,7 @@
     </div>
 
     <div class="bg-gray-100 text-sm rounded-lg hover:opacity-100 text-gray-800 max-w-xs shadow-lg"
-        [class.-mb-4]='dropdownRef.isYPositionReversed' style="opacity: 1!important" container #dropdownContainerRef>
+        [class.-mb-4]='dropdownRef.isYPositionReversed' container #dropdownContainerRef>
         <div
             class="bg-gray-200 rounded-t-lg hover:opacity-100 font-semibold border-b border-dashed border-gray-400 text-center px-6 py-1">
             {{ helpTitle || ngtTranslateService.ngtStandardHelperTitle }}
