@@ -177,6 +177,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
             console.error("The element must contain a name attribute!");
         }
 
+        if (!this.multiple && this.isRequired) {
+            this.clearable = false;
+        }
+
         setTimeout(() => {
             this.componentReady = true;
             this.initComponentValidation();
