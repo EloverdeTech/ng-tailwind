@@ -181,6 +181,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
             this.clearable = false;
         }
 
+        if (this.multiple) {
+            this.closeOnSelect = false;
+        }
+
         setTimeout(() => {
             this.componentReady = true;
             this.initComponentValidation();
