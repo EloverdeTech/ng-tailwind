@@ -5,7 +5,13 @@
         <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value'
             [disabled]="isDisabled || isClickDisabled" #element>
 
-        <span *ngIf="isToggleMode() && label" class="text-sm mb-2">{{ label }}</span>
+        <span *ngIf="isToggleMode() && label" class="flex">
+            <span class="text-sm mb-2">{{ label }}</span>
+
+            <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor" class="ml-1">
+                {{ helpText }}
+            </ngt-helper>
+        </span>
 
         <ng-container *ngIf="isDefaultMode()">
             <div style="transition: background-color .2s ease-out"
@@ -53,7 +59,13 @@
             </div>
         </ng-container>
 
-        <span *ngIf='label && !shining && !isToggleMode()' class="text-sm ml-2">{{ label }}</span>
+        <ng-container *ngIf='label && !shining && !isToggleMode()'>
+            <span class="text-sm ml-2">{{ label }}</span>
+
+            <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor" class="ml-1">
+                {{ helpText }}
+            </ngt-helper>
+        </ng-container>
     </label>
 </div>
 

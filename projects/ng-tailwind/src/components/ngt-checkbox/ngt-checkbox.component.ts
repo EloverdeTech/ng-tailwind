@@ -58,6 +58,9 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
     @Input() public isClickDisabled: boolean = false;
     @Input() public name: string;
     @Input() public mode: NgtCheckboxMode = NgtCheckboxMode.DEFAULT;
+    @Input() public helpTitle: string;
+    @Input() public helpTextColor: string = 'text-green-500';
+    @Input() public helpText: string;
 
     public ngtStyle: NgtStylizableService;
 
