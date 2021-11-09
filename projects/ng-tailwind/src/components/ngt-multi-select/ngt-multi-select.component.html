@@ -15,7 +15,7 @@
     style="min-height: 16rem;" [class.border-red-500]='hasValidationErrors()' [class.disabled-background]='isDisabled'>
     <div class="flex items-center w-full p-2 border-b">
         <ngt-checkbox class="flex" title="Selecionar todos" [label]="!searchable ? 'Selecionar todos' : ''"
-            [(ngModel)]="selectAllCheckbox" name="selectAllCheckbox" [isClickDisabled]='true'
+            [(ngModel)]="selectAllCheckbox" [name]="selectAllCheckboxName" [isClickDisabled]='true'
             [isDisabled]='loading || isDisabled' h='h-5' w='w-5' (click)='selectAll()' ngt-stylizable>
         </ngt-checkbox>
 
@@ -69,7 +69,7 @@
         {{ selectedElements?.length || 0 }} / {{ itemsTotal || 0 }}
     </span>
 
-    <ngt-checkbox class="flex" label="Visualizar selecionados" name='onlySelectedCheckbox'
+    <ngt-checkbox class="flex" label="Visualizar selecionados" [name]='displayOnlySelectedName'
         [(ngModel)]="displayOnlySelected" [isDisabled]='loading' h='h-5' w='w-5' ngt-stylizable>
     </ngt-checkbox>
 </div>

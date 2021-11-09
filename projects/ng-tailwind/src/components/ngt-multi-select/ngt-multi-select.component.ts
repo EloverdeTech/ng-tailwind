@@ -76,6 +76,9 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     public searchTerm: string = '';
     public searchInputName: string = uuid();
 
+    public selectAllCheckboxName: string = uuid();
+    public displayOnlySelectedName: string = uuid();
+
     public selectedElements: Array<NgtSelectContainerSelectableElementInterface> = [];
     public itemsTotal: number;
     public selectAllCheckbox: boolean;
@@ -221,11 +224,18 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
         if (!this.loading && !this.isDisabled) {
             this.selectAllCheckbox = !this.selectAllCheckbox;
 
+            this.value = [];
+            this.nativeValue = [];
+            this.selectedElements = [];
+
             this.loadData(this.selectAllCheckbox ? this.pagination.total : this.itemsPerPage)
                 .then(() => {
                     this.containerRef?.nativeElement?.scrollTo({ top: 0 });
                     this.selectableElements.forEach(element => element.isSelected = this.selectAllCheckbox);
-                    this.selectedElements = this.selectableElements;
+
+                    if (this.selectAllCheckbox) {
+                        this.selectedElements = this.selectableElements;
+                    }
                 });
         }
     }
