@@ -434,7 +434,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             },
             text: {
                 htmlType: "text",
-                length: 60
+                length: 100
             },
             longText: {
                 htmlType: "text",
@@ -450,7 +450,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             },
             email: {
                 htmlType: "text",
-                length: 60,
+                length: 100,
             },
             decimal: {
                 htmlType: "text",
