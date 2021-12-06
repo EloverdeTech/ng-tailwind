@@ -1,4 +1,4 @@
-<div class='border-b leading-loose {{ ngtStyle.compile(["h", "color.text", "color.bg"]) }}'>
+<div class='leading-loose {{ ngtStyle.compile(["h", "color.text", "color.bg", "border"]) }}'>
     <div class="flex flex-wrap md:flex-no-wrap h-full relative px-3 md:px-8 py-2">
         <div *ngIf="caption || icon" class="flex md:whitespace-no-wrap">
             <ngt-svg [src]="icon" class="mr-1 text-xl" *ngIf="icon"></ngt-svg>
