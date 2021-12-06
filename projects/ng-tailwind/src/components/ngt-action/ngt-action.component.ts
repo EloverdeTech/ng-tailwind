@@ -29,9 +29,11 @@ export class NgtActionComponent {
             w: 'w-full',
             color: {
                 bg: 'bg-gray-500',
-                text: 'text-white'
+                text: 'text-white',
+                border: '',
             },
-            text: 'text-xl'
+            text: 'text-xl',
+            border: '',
         });
     }
 
