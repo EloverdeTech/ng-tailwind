@@ -1,4 +1,4 @@
-<label *ngIf="label" class="mb-2 text-sm flex" [hidden]='shining'>
+<label *ngIf="label" class="mb-2 text-sm flex {{ ngtStyle.compile(['color.text']) }}" [hidden]='shining'>
     {{ label }}:
 
     <span *ngIf="isRequired" class="text-red-500 font-bold text-md ml-1">*</span>
