@@ -31,7 +31,9 @@ export class NgtTbodyComponent {
                 bg: 'bg-white',
                 text: '',
                 border: ''
-            }
+            },
+            my: '',
+            border: '',
         });
 
         this.hostElement.nativeElement.classList += this.ngtStyle.compile([
