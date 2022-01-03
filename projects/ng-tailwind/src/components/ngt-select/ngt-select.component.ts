@@ -53,6 +53,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
     /** Visual */
     @Input() public label: string = '';
+    @Input() public labelIcon: string;
+    @Input() public labelIconColor: string;
     @Input() public helpTitle: string;
     @Input() public helpText: string;
     @Input() public helpTextColor: string = 'text-green-500';

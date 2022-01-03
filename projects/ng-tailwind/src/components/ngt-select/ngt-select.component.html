@@ -1,5 +1,6 @@
 <label class="{{ shining ? '' : 'block' }} {{ ngtStyle.compile(['color.text']) }}
 mb-2 text-sm flex" *ngIf="label" [hidden]='shining'>
+    <ngt-svg *ngIf="labelIcon" class="mr-1 {{labelIconColor}}" src="{{labelIcon}}"></ngt-svg>
     {{ label }}:
 
     <span class="text-red-500 font-bold text-md ml-1" *ngIf="isRequired">*</span>
