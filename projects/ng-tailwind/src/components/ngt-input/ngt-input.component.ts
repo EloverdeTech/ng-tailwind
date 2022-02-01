@@ -79,7 +79,6 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public match: string;
     @Input() public multipleOf: number;
     @Input() public externalServerDependency: boolean;
-    @Input() public labelTextSize: string = 'text-sm';
 
     @Output() public onClickLeftIcon: EventEmitter<any> = new EventEmitter<any>();
     @Output() public onClickRightIcon: EventEmitter<any> = new EventEmitter<any>();
@@ -133,6 +132,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         this.ngtStyle.load(this.injector, 'NgtInput', {
             h: 'h-12',
             rounded: 'rounded',
+            text: 'text-sm',
+            fontCase: '',
             color: {
                 border: 'border-gray-400 focus:border-gray-700',
                 bg: 'bg-bg-white focus:bg-white',
