@@ -27,9 +27,7 @@ export class NgtTheadComponent {
                 bg: 'bg-gray-200',
                 text: '',
                 border: ''
-            },
-            my: '',
-            border: '',
+            }
         });
 
         this.hostElement.nativeElement.classList += this.ngtStyle.compile([

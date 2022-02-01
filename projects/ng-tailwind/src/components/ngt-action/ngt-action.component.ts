@@ -30,10 +30,8 @@ export class NgtActionComponent {
             color: {
                 bg: 'bg-gray-500',
                 text: 'text-white',
-                border: '',
             },
-            text: 'text-xl',
-            border: '',
+            text: 'text-xl'
         });
     }
 

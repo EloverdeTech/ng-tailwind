@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output } from "@angular/core";
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 
 @Component({
     selector: 'ngt-dropzone-file-viewer',
@@ -36,6 +36,7 @@ export class NgtDropzoneFileViewerComponent {
     public downloadFile() {
         let file = document.createElement("a");
 
+        file.target = '_blank';
         file.href = this.url;
         file.setAttribute("download", this.fileName);
         file.click();
