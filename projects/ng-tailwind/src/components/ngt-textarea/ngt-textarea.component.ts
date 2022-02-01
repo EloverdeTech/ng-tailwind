@@ -91,6 +91,8 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit, OnDe
         }
 
         this.ngtStyle.load(this.injector, 'NgtTextarea', {
+            text: 'text-sm',
+            fontCase: '',
             color: {
                 border: 'border-gray-400 focus:border-gray-700',
                 bg: 'bg-bg-white focus:bg-white',

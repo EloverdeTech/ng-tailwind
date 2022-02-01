@@ -1,4 +1,4 @@
-<label class="{{ shining ? '' : 'block' }} mb-2 text-sm flex" *ngIf="label" [hidden]='shining'>
+<label class="{{ shining ? '' : 'block' }} mb-2 flex {{ ngtStyle.compile(['text', 'fontCase']) }}" *ngIf="label" [hidden]='shining'>
     {{ label }}:
 
     <span class="text-red-500 font-bold text-md ml-1" *ngIf="isRequired">*</span>
@@ -18,7 +18,8 @@
             class="appearance-none block border focus:outline-none leading-tight px-4 py-3 rounded w-full h-full {{ ngtStyle.compile(['h', 'color.border', 'color.bg', 'color.text']) }}"
             [disabled]="isDisabled" [readonly]="isReadonly" placeholder="{{ placeholder ? placeholder : ''}}"
             [ngClass]="{'textarea-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
-            #element></textarea>
+            #element>
+        </textarea>
     </div>
 
     <ng-container *ngIf="showCharactersLength && !shining">
