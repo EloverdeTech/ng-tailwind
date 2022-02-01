@@ -28,6 +28,7 @@ export class NgtStylizableService {
     private _position: string;
     private _justifyContent: string;
     private _cursor: string;
+    private _fontCase: string;
 
     public get color() {
         return this._color;
@@ -272,6 +273,14 @@ export class NgtStylizableService {
         this._cursor = this.getQualifiedValue('cursor', cursor);
     }
 
+    public get fontCase(): string {
+        return this._fontCase;
+    }
+
+    public set fontCase(fontCase: string) {
+        this._fontCase = this.getQualifiedValue('', fontCase);
+    }
+
     public load(injector: Injector, style: string, defaultValue = null, inheritanceStyles = []) {
         let ngtGlobalStyle = injector.get('NgtStyleGlobal', {});
 
@@ -353,6 +362,7 @@ export class NgtStylizableService {
                 'position',
                 'justifyContent',
                 'cursor',
+                'fontCase'
             ].includes(key));
         }
     }

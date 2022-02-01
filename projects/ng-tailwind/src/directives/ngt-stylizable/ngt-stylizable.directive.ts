@@ -118,7 +118,7 @@ export class NgtStylizableDirective {
 
     @Input('pl')
     public set pl(pl: string) {
-        this.pl = this.ngtStylizableService.pl;
+        this.ngtStylizableService.pl = pl;
     }
 
     public get m(): string {
@@ -272,5 +272,14 @@ export class NgtStylizableDirective {
     @Input('cursor')
     public set cursor(cursor: string) {
         this.ngtStylizableService.cursor = cursor;
+    }
+
+    public get fontCase(): string {
+        return this.ngtStylizableService.fontCase;
+    }
+
+    @Input('fontCase')
+    public set fontCase(fontCase: string) {
+        this.ngtStylizableService.fontCase = fontCase;
     }
 }
