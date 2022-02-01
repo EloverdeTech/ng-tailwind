@@ -162,6 +162,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
         this.ngtStyle.load(this.injector, 'NgtSelect', {
             h: 'h-12',
+            text: 'text-sm',
+            fontCase: '',
             color: {
                 bg: 'bg-white'
             }

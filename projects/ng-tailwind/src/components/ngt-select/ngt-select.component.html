@@ -1,5 +1,5 @@
-<label class="{{ shining ? '' : 'block' }} {{ ngtStyle.compile(['color.text']) }}
-mb-2 text-sm flex" *ngIf="label" [hidden]='shining'>
+<label *ngIf="label" [hidden]='shining'
+       class="{{ shining ? '' : 'block' }} {{ ngtStyle.compile(['color.text', 'text', 'fontCase']) }} mb-2 flex" >
     <ngt-svg *ngIf="labelIcon" class="mr-1 {{labelIconColor}}" src="{{labelIcon}}"></ngt-svg>
     {{ label }}:
 
@@ -10,7 +10,7 @@ mb-2 text-sm flex" *ngIf="label" [hidden]='shining'>
     </ngt-helper>
 </label>
 
-<div [hidden]='shining' class="{{ getSelectClass() }}" style="min-height: 3rem;">
+<div [hidden]='shining' class="{{ getSelectClass() }} normal-case" style="min-height: 3rem;">
     <ng-select class="custom" [(ngModel)]='nativeValue' [name]='nativeName' (change)="onNativeChange($event)"
         [addTag]='allowCreate' [addTagText]="createText || ngtTranslateService.ngtSelectCreateText"
         [bindLabel]="bindLabel" [multiple]="multiple" [hideSelected]="hideSelected" [typeahead]="typeahead"
@@ -33,7 +33,7 @@ mb-2 text-sm flex" *ngIf="label" [hidden]='shining'>
         <ng-template ng-label-tmp let-item="item">
             <div class="flex w-full items-center pr-1">
                 <ng-container *ngIf="multiple">
-                    <div class="ng-value-icon px-1 h-full border-r mr-2 text-sm text-gray-700 cursor-pointer"
+                    <div class="ng-value-icon px-1 h-full border-r mr-2 {{ ngtStyle.compile(['color.text', 'text']) }} cursor-pointer"
                         (click)='removeItem($event, item)'>
                         <svg class="ng-value-icon fill-current self-center" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24">
