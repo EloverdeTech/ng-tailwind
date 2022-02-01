@@ -44,7 +44,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
 
     // Visual
     @Input() public label: string = "";
-    @Input() public placeholder: string = "";
+    @Input() public placeholder: string = "dd/mm/yyyy";
     @Input() public helpTitle: string;
     @Input() public helpText: string;
     @Input() public helpTextColor: string = 'text-green-500';
@@ -111,6 +111,8 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
 
         this.ngtStyle.load(this.injector, 'NgtDate', {
             h: 'h-12',
+            text: 'text-sm',
+            fontCase: '',
             color: {
                 text: 'text-gray-800'
             }

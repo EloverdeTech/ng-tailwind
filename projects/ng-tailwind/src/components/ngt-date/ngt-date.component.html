@@ -1,4 +1,4 @@
-<label class="{{ shining ? '' : 'block' }} mb-2 text-sm flex" *ngIf="label" [hidden]='shining'>
+<label class="{{ shining ? '' : 'block' }} mb-2 {{ngtStyle.compile(['text', 'fontCase'])}} flex" *ngIf="label" [hidden]='shining'>
     {{ label }}:
 
     <span class="text-red-500 font-bold text-md ml-1" *ngIf="isRequired">*</span>
@@ -12,7 +12,7 @@
     <div
         class="overflow-hidden {{ ngtStyle.compile(['h', 'color.text']) }} {{ hasErrors() ? 'border-error' : 'border-normal' }}">
         <ng2-flatpickr class="block h-full" [config]='dateConfig' disabled='true'
-            placeholder="{{ placeholder ? placeholder : '' }}" #ng2FlatpickrComponent>
+            placeholder="{{ placeholder }}" #ng2FlatpickrComponent>
         </ng2-flatpickr>
 
         <div *ngIf="allowClear && value" class="flex absolute right-0 top-0 w-auto cursor-pointer mt-4 mr-2"
