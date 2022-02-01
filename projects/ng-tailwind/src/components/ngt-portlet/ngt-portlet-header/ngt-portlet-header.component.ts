@@ -30,6 +30,8 @@ export class NgtPortletHeaderComponent {
         this.ngtStyle.load(this.injector, 'NgtPortletHeader', {
             h: 'h-auto',
             w: 'w-auto',
+            text: 'text-xl',
+            fontCase: '',
             border: 'border-b',
             color: {}
         }, ['NgtPortletStyle']);
