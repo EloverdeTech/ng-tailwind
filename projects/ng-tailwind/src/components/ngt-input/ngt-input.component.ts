@@ -30,6 +30,19 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 let Inputmask = require('inputmask');
 
+export enum NgtInputMaskEnum {
+    CPF = 'cpf',
+    CNPJ = 'cnpj',
+    CPF_CNPJ = 'cnpj-cpf',
+    DECIMAL = 'decimal',
+    CELLPHONE = 'cellphone',
+    PLATE = 'plate',
+    CEP = 'cep',
+    INTEGER = 'integer',
+    TIME = 'time',
+    INTERNATIONAL_PHONE = 'international-phone'
+}
+
 @Component({
     selector: 'ngt-input',
     templateUrl: './ngt-input.component.html',
@@ -388,9 +401,13 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }
 
         let masks = {
-            'cpf': '999.999.999-99',
-            'cnpj': '99.999.999/9999-99',
-            'decimal': {
+            [NgtInputMaskEnum.CPF]: '999.999.999-99',
+            [NgtInputMaskEnum.CNPJ]: '99.999.999/9999-99',
+            [NgtInputMaskEnum.CPF_CNPJ]: {
+                mask: ['999.999.999-99', '99.999.999/9999-99'],
+                keepStatic: true
+            },
+            [NgtInputMaskEnum.DECIMAL]: {
                 digits: this.decimalMaskPrecision,
                 groupSeparator: '.',
                 radixPoint: ',',
@@ -399,30 +416,30 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 rightAlign: false,
                 max: this.maxValue,
             },
-            'cnpj-cpf': {
-                mask: ['999.999.999-99', '99.999.999/9999-99'],
-                keepStatic: true
-            },
-            'cellphone': {
+            [NgtInputMaskEnum.CELLPHONE]: {
                 mask: ['(99) 9999-9999', '(99) 99999-9999'],
                 keepStatic: true
             },
-            'plate': {
+            [NgtInputMaskEnum.INTERNATIONAL_PHONE]: {
+                mask: ['+99 (99) 9999-9999', '+99 (99) 99999-9999'],
+                keepStatic: true
+            },
+            [NgtInputMaskEnum.PLATE]: {
                 mask: ['AAA-9999', 'AAA9A99'],
                 keepStatic: true
             },
-            'cep': '99999-999',
-            'integer': {
+            [NgtInputMaskEnum.CEP]: '99999-999',
+            [NgtInputMaskEnum.INTEGER]: {
                 max: this.maxValue,
                 rightAlign: false
             },
-            'time': '99:99',
+            [NgtInputMaskEnum.TIME]: '99:99',
         };
 
-        if (this.mask == "decimal") {
-            Inputmask('decimal', masks[this.mask]).mask(this.element.nativeElement);
-        } else if (this.mask == "integer") {
-            Inputmask("integer", masks[this.mask]).mask(this.element.nativeElement);
+        if (this.mask == NgtInputMaskEnum.DECIMAL) {
+            Inputmask(NgtInputMaskEnum.DECIMAL, masks[this.mask]).mask(this.element.nativeElement);
+        } else if (this.mask == NgtInputMaskEnum.INTEGER) {
+            Inputmask(NgtInputMaskEnum.INTEGER, masks[this.mask]).mask(this.element.nativeElement);
         } else {
             Inputmask(masks[this.mask]).mask(this.element.nativeElement);
         }
