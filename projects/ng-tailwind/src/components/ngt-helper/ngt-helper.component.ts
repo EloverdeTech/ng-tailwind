@@ -1,6 +1,8 @@
-import { Component, ElementRef, Input, Optional, ViewChild, ViewEncapsulation } from '@angular/core';
+import {Component, ElementRef, Injector, Input, Optional, Self, ViewChild, ViewEncapsulation} from '@angular/core';
 
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
+import {NgtStylizableService} from "../../services/ngt-stylizable/ngt-stylizable.service";
+import {NgtStylizableDirective} from "../../directives/ngt-stylizable/ngt-stylizable.directive";
 
 @Component({
     selector: 'ngt-helper',
@@ -14,8 +16,28 @@ export class NgtHelperComponent {
     @Input() public helpTitle: string;
     @Input() public iconColor: string;
 
+    public ngtStyle: NgtStylizableService;
+
     public constructor(
+        @Optional() @Self()
+        public ngtStylizableDirective: NgtStylizableDirective,
         @Optional()
-        public ngtTranslateService: NgtTranslateService
-    ) { }
+        public ngtTranslateService: NgtTranslateService,
+        private injector: Injector,
+    ) {
+        if (this.ngtStylizableDirective) {
+            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+        } else {
+            this.ngtStyle = new NgtStylizableService();
+        }
+
+        this.ngtStyle.load(this.injector, 'NgtHelper', {
+            text: 'text-sm',
+            fontCase: '',
+            color: {
+                text: 'text-black',
+                bg: 'bg-gray-200'
+            }
+        });
+    }
 }
