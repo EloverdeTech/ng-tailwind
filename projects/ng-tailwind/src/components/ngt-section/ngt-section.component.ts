@@ -21,13 +21,15 @@ export class NgtSectionComponent {
     @Input() public icon: string;
     @Input() public caption: string;
     @Input() public subtitle: string;
-    @Input() public accordion = false;
-    @Input() public showSection = true;
-    @Input() public helpTitle: string = '';
-    @Input() public helpText: string = '';
-    @Input() public helpIconColor: string = '';
+    @Input() public accordion: boolean;
+    @Input() public showSection: boolean = true;
+    @Input() public removable: boolean;
+    @Input() public helpTitle: string;
+    @Input() public helpText: string;
+    @Input() public helpIconColor: string;
 
-    @Output() public onToggleSection: EventEmitter<any> = new EventEmitter();
+    @Output() public onRemove: EventEmitter<void> = new EventEmitter();
+    @Output() public onToggleSection: EventEmitter<boolean> = new EventEmitter();
 
     public ngtSectionStyle: NgtStylizableService;
     public ngtCaptionStyle: NgtStylizableService;
@@ -81,18 +83,27 @@ export class NgtSectionComponent {
         });
     }
 
-    public open() {
+    public open(): void {
         this.showSection = true;
+
         this.onToggleSection.emit(this.showSection);
     }
 
-    public close() {
+    public close(): void {
         this.showSection = false;
+
         this.onToggleSection.emit(this.showSection);
     }
 
-    public toggle() {
+    public toggle(): void {
         this.showSection = !this.showSection;
+
         this.onToggleSection.emit(this.showSection);
+    }
+
+    public remove(event: Event): void {
+        event.stopImmediatePropagation();
+
+        this.onRemove.emit();
     }
 }
