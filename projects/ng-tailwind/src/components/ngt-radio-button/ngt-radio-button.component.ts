@@ -36,8 +36,10 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
     @ViewChild('element', { static: true }) public element: ElementRef;
 
     @Input() public label: string;
-    @Input() public shining: boolean = false;
     @Input() public name: string;
+    @Input() public shining: boolean;
+    @Input() public isSelectable: boolean = true;
+    @Input() public isDisabled: boolean;
 
     public ngtStyle: NgtStylizableService;
 

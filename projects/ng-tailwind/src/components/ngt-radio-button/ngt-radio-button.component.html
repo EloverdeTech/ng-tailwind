@@ -1,5 +1,6 @@
-<label class="inline-flex items-center cursor-pointer">
-    <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' #element>
+<label class="inline-flex items-center {{ isDisabled || !isSelectable ? 'cursor-not-allowed' : 'cursor-pointer' }}">
+    <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' [disabled]='isDisabled || !isSelectable'
+        #element>
 
     <div class="{{ value ? ngtStyle.compile(['color.border', 'color.text']) : 'border-gray-500' }}  
                     shadow rounded-full border border-gray-400 {{ !shining ? 'flex justify-center items-center' : 'hidden' }}"
@@ -10,7 +11,9 @@
         </svg>
     </div>
 
-    <span *ngIf='label && !shining' class="text-sm ml-2">{{ label }}</span>
+    <span *ngIf='label && !shining' class="text-sm ml-2" [class.line-through]='!isSelectable'>
+        {{ label }}
+    </span>
 </label>
 
 <ng-container *ngIf='shining'>
