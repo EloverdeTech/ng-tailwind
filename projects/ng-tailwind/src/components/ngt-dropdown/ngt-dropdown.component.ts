@@ -146,8 +146,9 @@ export class NgtDropdownComponent implements OnDestroy {
             return this.reverseYPosition;
         }
 
+        this.bindContainerYPosition();
+
         if (this.isOpen) {
-            this.bindContainerYPosition();
             this.isYPositionReversed = this.containerYPosition > (document.documentElement.clientHeight * 0.9);
 
             return this.isYPositionReversed;
