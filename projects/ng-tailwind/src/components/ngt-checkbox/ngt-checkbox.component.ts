@@ -97,6 +97,8 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         this.ngtStyle.load(this.injector, 'NgtCheckbox', {
             h: 'h-6',
             w: 'w-6',
+            text: 'text-sm',
+            fontCase: '',
             color: {
                 bg: 'bg-gray-500',
                 text: 'text-gray-500',

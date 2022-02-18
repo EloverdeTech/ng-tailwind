@@ -6,7 +6,7 @@
             [disabled]="isDisabled || isClickDisabled" #element>
 
         <span *ngIf="isToggleMode() && label" class="flex">
-            <span class="text-sm mb-2">{{ label }}</span>
+            <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} mb-2">{{ label }}</span>
 
             <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor" class="ml-1">
                 {{ helpText }}
@@ -60,7 +60,7 @@
         </ng-container>
 
         <ng-container *ngIf='label && !shining && !isToggleMode()'>
-            <span class="text-sm ml-2">{{ label }}</span>
+            <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} ml-2">{{ label }}</span>
 
             <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor" class="ml-1">
                 {{ helpText }}
