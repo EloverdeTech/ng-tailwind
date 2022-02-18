@@ -300,7 +300,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
 
     private initComponent() {
         if (this.formContainer && this.formContainer.control && (this.formControl = this.formContainer.control.get(this.name))) {
-            if (this.defaultDate) {
+            if (this.defaultDate && !this.value) {
                 this.value = moment(this.defaultDate).format(this.dateFormatNgModel);
             }
 
