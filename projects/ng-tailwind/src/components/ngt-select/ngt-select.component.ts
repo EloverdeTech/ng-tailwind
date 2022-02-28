@@ -75,6 +75,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public allowCreate: boolean | Promise<any> | Function = false;
     @Input() public allowOriginalItemsUnselect: boolean = true;
     @Input() public isDisabled: boolean = false;
+    @Input() public isReadonly: boolean = false;
     @Input() public remoteResource: any;
     @Input() public hideSelected: boolean;
     @Input() public bindLabel: string = 'name';

@@ -15,7 +15,7 @@
         [addTag]='allowCreate' [addTagText]="createText || ngtTranslateService.ngtSelectCreateText"
         [bindLabel]="bindLabel" [multiple]="multiple" [hideSelected]="hideSelected" [typeahead]="typeahead"
         [notFoundText]="notFoundText || ngtTranslateService.ngtSelectNotFoundText" [searchable]="searchable"
-        [disabled]='isDisabled' [clearable]="clearable && hasSelectedValue()" [closeOnSelect]="closeOnSelect"
+        [disabled]='isDisabled || isReadonly' [clearable]="clearable && hasSelectedValue()" [closeOnSelect]="closeOnSelect"
         [trackByFn]="trackBy" [labelForId]="labelForId" [clearSearchOnAdd]="clearSearchOnAdd"
         [typeToSearchText]="typeToSearchText || ngtTranslateService.ngtSelectTypeToSearchText"
         [placeholder]="placeholder || ngtTranslateService.ngtSelectPlaceholder" [dropdownPosition]="dropdownPosition"
