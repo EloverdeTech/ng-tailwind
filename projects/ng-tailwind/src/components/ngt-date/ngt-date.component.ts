@@ -282,6 +282,8 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
             });
 
             return formattedNativeValue;
+        } else if (this.dateFormat == 'H:i') {
+            return nativeValue;
         } else if (nativeValue) {
             nativeValue = moment(nativeValue);
 
