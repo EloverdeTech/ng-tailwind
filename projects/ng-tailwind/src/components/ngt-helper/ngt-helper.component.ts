@@ -1,8 +1,8 @@
-import {Component, ElementRef, Injector, Input, Optional, Self, ViewChild, ViewEncapsulation} from '@angular/core';
+import { Component, ElementRef, Injector, Input, Optional, Self, ViewChild, ViewEncapsulation } from '@angular/core';
 
+import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
-import {NgtStylizableService} from "../../services/ngt-stylizable/ngt-stylizable.service";
-import {NgtStylizableDirective} from "../../directives/ngt-stylizable/ngt-stylizable.directive";
+import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
     selector: 'ngt-helper',
@@ -12,6 +12,8 @@ import {NgtStylizableDirective} from "../../directives/ngt-stylizable/ngt-styliz
 export class NgtHelperComponent {
     @ViewChild('dropdownRef', { static: true }) public dropdownRef: ElementRef;
 
+    @Input() public helpTextColor: string;
+    @Input() public helpText: string;
     @Input() public icon: string;
     @Input() public helpTitle: string;
     @Input() public iconColor: string;
