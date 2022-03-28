@@ -1,13 +1,15 @@
 import {
     ChangeDetectorRef,
     Component,
-    ElementRef, EventEmitter,
+    ElementRef,
+    EventEmitter,
     Host,
     Injector,
     Input,
     OnDestroy,
     OnInit,
-    Optional, Output,
+    Optional,
+    Output,
     Renderer2,
     Self,
     SimpleChanges,
@@ -34,6 +36,7 @@ export enum NgtInputMaskEnum {
     CPF = 'cpf',
     CNPJ = 'cnpj',
     CPF_CNPJ = 'cnpj-cpf',
+    CPF_CNPJ_RUT = 'cnpj-cpf-rut',
     DECIMAL = 'decimal',
     CELLPHONE = 'cellphone',
     PLATE = 'plate',
@@ -351,7 +354,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             syncValidators.push(Validators.minLength(this.minLength));
         }
 
-        if (this.mask == 'cnpj-cpf') {
+        if (this.mask == 'cnpj-cpf' || this.mask == 'cnpj-cpf-rut') {
             syncValidators.push(this.cnpjCpfValidator());
         }
 
@@ -403,6 +406,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         let masks = {
             [NgtInputMaskEnum.CPF]: '999.999.999-99',
             [NgtInputMaskEnum.CNPJ]: '99.999.999/9999-99',
+            [NgtInputMaskEnum.CPF_CNPJ_RUT]: {
+                mask: ['999.999.999-99', '99.999.999/9999', '99.999.999/9999-99'],
+                keepStatic: true
+            },
             [NgtInputMaskEnum.CPF_CNPJ]: {
                 mask: ['999.999.999-99', '99.999.999/9999-99'],
                 keepStatic: true
@@ -528,7 +535,9 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 } else {
                     return { 'cpf': true };
                 }
-            } else {
+            } else if(control.value && control.value.length == 12){
+                return null;
+            }else{
                 if (control.value && this.validatorCNPJ(control.value)) {
                     return null;
                 } else {
@@ -722,7 +731,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             value = (value + "")
                 .replace(/\./g, '')
                 .replace(',', '.');
-        } else if (this.mask == "cnpj-cpf" || this.mask == "cpf" || this.mask == "cnpj") {
+        } else if (this.mask == "cnpj-cpf" || this.mask == "cpf" || this.mask == "cnpj" || this.mask == "cnpj-cpf-rut") {
             value = (value + "")
                 .replace('.', '')
                 .replace('.', '')
