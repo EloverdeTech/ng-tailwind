@@ -16,7 +16,8 @@
     <div class="bg-gray-100 text-sm rounded-lg hover:opacity-100 text-gray-800 max-w-xs shadow-lg {{ ngtStyle.compile(['text', 'fontCase']) }}"
         [class.-mb-4]='dropdownRef.isYPositionReversed' container>
         <div
-            class="{{ ngtStyle.compile(['color.bg', 'color.text']) }} rounded-t-lg hover:opacity-100 font-semibold border-b border-dashed border-gray-400 text-center px-6 py-1">
+            class="{{ ngtStyle.compile(['color.bg', 'color.text']) }} flex justify-center rounded-t-lg hover:opacity-100 font-semibold border-b border-dashed border-gray-400 text-center px-6 py-1">
+            <ngt-svg *ngIf="iconTitle" [src]="iconTitle" style="margin-right: 3px"></ngt-svg>
             {{ helpTitle || ngtTranslateService.ngtStandardHelperTitle }}
         </div>
         <div class="px-2 py-1 text-center hover:opacity-100">

@@ -17,6 +17,7 @@ export class NgtHelperComponent {
     @Input() public icon: string;
     @Input() public helpTitle: string;
     @Input() public iconColor: string;
+    @Input() public iconTitle: string;
 
     public ngtStyle: NgtStylizableService;
 
