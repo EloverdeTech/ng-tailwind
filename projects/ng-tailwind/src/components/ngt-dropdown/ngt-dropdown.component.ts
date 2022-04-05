@@ -47,6 +47,8 @@ export class NgtDropdownComponent implements OnDestroy {
     public isOpen: boolean;
     public isYPositionReversed: boolean = false;
     public isXPositionReversed: boolean = false;
+    public isBindingYPosition: boolean = true;
+    public isBindingXPosition: boolean = true;
 
     private subscriptions: Array<Subscription> = [];
     private containerXPosition: number;
@@ -135,9 +137,10 @@ export class NgtDropdownComponent implements OnDestroy {
 
         if (this.isOpen) {
             this.bindContainerXPosition();
+
             this.isXPositionReversed = !(this.containerXPosition > document.documentElement.clientWidth);
 
-            return this.isXPositionReversed;
+            return !this.isBindingXPosition && this.isXPositionReversed;
         }
     }
 
@@ -146,29 +149,37 @@ export class NgtDropdownComponent implements OnDestroy {
             return this.reverseYPosition;
         }
 
-        this.bindContainerYPosition();
-
         if (this.isOpen) {
+            this.bindContainerYPosition();
+
             this.isYPositionReversed = this.containerYPosition > (document.documentElement.clientHeight * 0.9);
 
-            return this.isYPositionReversed;
+            return !this.isBindingYPosition && this.isYPositionReversed;
         }
     }
 
     private bindContainerXPosition(): void {
         if (!this.containerXPosition && this.containerRef.nativeElement.offsetWidth) {
+            this.isBindingXPosition = true;
+
             setTimeout(() => {
                 this.containerXPosition = this.containerRef.nativeElement.getBoundingClientRect().x
                     + this.containerRef.nativeElement.offsetWidth;
+
+                this.isBindingXPosition = false;
             });
         }
     }
 
     private bindContainerYPosition(): void {
         if (!this.containerYPosition && this.containerRef?.nativeElement.offsetHeight) {
+            this.isBindingYPosition = true;
+
             setTimeout(() => {
                 this.containerYPosition = this.containerRef.nativeElement.getBoundingClientRect().y
                     + this.containerRef.nativeElement.offsetHeight;
+
+                this.isBindingYPosition = false;
             });
         }
     }
