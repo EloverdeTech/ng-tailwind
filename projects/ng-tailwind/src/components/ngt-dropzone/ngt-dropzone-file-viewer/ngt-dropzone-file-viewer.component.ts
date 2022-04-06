@@ -1,4 +1,5 @@
-import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { NgxDocViewerComponent } from 'ngx-doc-viewer';
 
 @Component({
     selector: 'ngt-dropzone-file-viewer',
@@ -6,13 +7,13 @@ import { Component, EventEmitter, HostListener, Input, Output } from '@angular/c
     templateUrl: './ngt-dropzone-file-viewer.component.html'
 })
 export class NgtDropzoneFileViewerComponent {
+    @ViewChild(NgxDocViewerComponent) public ngxDocViewer: NgxDocViewerComponent;
+
     @Input() public url: string = '';
     @Input() public fileName: string = '';
     @Output() public onClose: EventEmitter<any> = new EventEmitter();
 
     public canShowViewer: boolean = false;
-
-    public constructor() { }
 
     @HostListener('window:keydown', ['$event'])
     public keyEvent(event: KeyboardEvent) {
@@ -26,6 +27,8 @@ export class NgtDropzoneFileViewerComponent {
 
     public init() {
         this.canShowViewer = true;
+
+        this.initReloadInterval();
     }
 
     public close() {
@@ -40,5 +43,17 @@ export class NgtDropzoneFileViewerComponent {
         file.href = this.url;
         file.setAttribute("download", this.fileName);
         file.click();
+    }
+
+    private initReloadInterval(): void {
+        const reloadInterval = setInterval(() => {
+            this.ngxDocViewer?.iframes.forEach(iframe => {
+                if (iframe.nativeElement.contentDocument) {
+                    this.ngxDocViewer.reloadIFrame(iframe.nativeElement);
+                } else {
+                    clearInterval(reloadInterval);
+                }
+            });
+        }, 1000);
     }
 }
