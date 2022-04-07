@@ -1,10 +1,25 @@
-:host{
+:host {
     background: rgba(0, 0, 0, 0.5);
-    color:#fff;
+    color: #fff;
     position: fixed;
-    top:0;
+    top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
     z-index: 10000000;
-  }
+}
+
+.div-loader {
+    width: 5rem;
+    height: 5rem;
+    border: 5px solid #89C43F38;
+    border-top-color: #89C43F;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

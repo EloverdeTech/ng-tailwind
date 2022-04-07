@@ -9,11 +9,13 @@ import { NgxDocViewerComponent } from 'ngx-doc-viewer';
 export class NgtDropzoneFileViewerComponent {
     @ViewChild(NgxDocViewerComponent) public ngxDocViewer: NgxDocViewerComponent;
 
-    @Input() public url: string = '';
-    @Input() public fileName: string = '';
-    @Output() public onClose: EventEmitter<any> = new EventEmitter();
+    @Input() public url: string;
+    @Input() public fileName: string;
 
-    public canShowViewer: boolean = false;
+    @Output() public onClose: EventEmitter<void> = new EventEmitter();
+
+    public canShowViewer: boolean;
+    public loading: boolean;
 
     @HostListener('window:keydown', ['$event'])
     public keyEvent(event: KeyboardEvent) {
@@ -25,18 +27,19 @@ export class NgtDropzoneFileViewerComponent {
         }
     }
 
-    public init() {
+    public init(): void {
+        this.loading = true;
         this.canShowViewer = true;
 
         this.initReloadInterval();
     }
 
-    public close() {
+    public close(): void {
         this.canShowViewer = false;
         this.onClose.emit();
     }
 
-    public downloadFile() {
+    public downloadFile(): void {
         let file = document.createElement("a");
 
         file.target = '_blank';
@@ -52,6 +55,7 @@ export class NgtDropzoneFileViewerComponent {
                     this.ngxDocViewer.reloadIFrame(iframe.nativeElement);
                 } else {
                     clearInterval(reloadInterval);
+                    this.loading = false;
                 }
             });
         }, 1000);
