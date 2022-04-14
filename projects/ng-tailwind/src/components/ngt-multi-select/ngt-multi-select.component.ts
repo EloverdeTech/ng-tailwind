@@ -20,6 +20,7 @@ import {
     ViewEncapsulation,
 } from '@angular/core';
 import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
+import { element } from 'protractor';
 import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
@@ -348,7 +349,8 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
         } else if (!selectableElement.isSelected && this.isSelectedElement(selectableElement)) {
             this.selectedElements = this.selectedElements.filter(
                 selectedElement => selectedElement.uuid !== selectableElement.uuid
-            );
+            );;
+            this.onNativeChange(selectableElement);
 
             if (this.displayOnlySelected && !this.selectedElements.length) {
                 this.displayOnlySelected = false;
