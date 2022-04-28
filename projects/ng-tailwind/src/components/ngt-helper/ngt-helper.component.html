@@ -13,7 +13,7 @@
         <p *ngIf="helpText" class="cursor-pointer {{helpTextColor}}" style="margin-left: 2px">{{helpText}}</p>
     </div>
 
-    <div class="bg-gray-100 text-sm rounded-lg hover:opacity-100 text-gray-800 max-w-xs shadow-lg {{ ngtStyle.compile(['text', 'fontCase']) }}"
+    <div class="bg-gray-100 text-sm rounded-lg hover:opacity-100 text-gray-800 {{tooltipSize}} shadow-lg {{ ngtStyle.compile(['text', 'fontCase']) }}"
         [class.-mb-4]='dropdownRef.isYPositionReversed' container>
         <div
             class="{{ ngtStyle.compile(['color.bg', 'color.text']) }} flex justify-center rounded-t-lg hover:opacity-100 font-semibold border-b border-dashed border-gray-400 text-center px-6 py-1">

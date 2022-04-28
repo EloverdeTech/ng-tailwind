@@ -18,6 +18,7 @@ export class NgtHelperComponent {
     @Input() public helpTitle: string;
     @Input() public iconColor: string;
     @Input() public iconTitle: string;
+    @Input() public tooltipSize: string = 'max-w-xs';
 
     public ngtStyle: NgtStylizableService;
 
