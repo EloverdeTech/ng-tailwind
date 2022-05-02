@@ -13,7 +13,7 @@
     line-height: 24px;
     border-radius: 5px;
     position: absolute;
-    width: 307.875px;
+    width: auto;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     -ms-touch-action: manipulation;
@@ -801,7 +801,7 @@ span.flatpickr-weekday {
     height: inherit;
     line-height: inherit;
     color: #393939;
-    font-size: 14px;
+    font-size: 12px;
     position: relative;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
