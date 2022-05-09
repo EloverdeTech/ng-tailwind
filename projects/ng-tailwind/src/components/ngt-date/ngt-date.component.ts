@@ -25,7 +25,9 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 const Brazil = require("flatpickr/dist/l10n/pt.js").default.pt;
 const US = require("flatpickr/dist/l10n/default.js").default;
+
 let moment = require('moment');
+let Inputmask = require('inputmask');
 
 @Component({
     selector: 'ngt-date',
@@ -63,7 +65,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
     @Input() public noCalendar: boolean = false;
     @Input() public minuteIncrement: number = 1;
     @Input() public allowInput: boolean = false;
-    @Input() public locale: NgtDateLocale;
+    @Input() public locale: NgtDateLocale = NgtDateLocale.BRAZIL;
     @Input() public allowClear: boolean = true;
     @Input() public minDate: string;
     @Input() public maxDate: string;
@@ -83,6 +85,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
     } = {};
 
     private subscriptions: Array<Subscription> = [];
+    private lastInputedDateString: string;
 
     public constructor(
         private injector: Injector,
@@ -144,10 +147,10 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
             time_24hr: this.time_24hr,
             enableTime: this.enableTime,
             noCalendar: this.noCalendar,
-            allowInput: this.allowInput,
+            allowInput: this.allowInput && !this.enableTime,
             locale: this.getLocale(),
-            onChange: (selectedDates, dateStr, instance) => this.onNativeChange(selectedDates, instance, true),
-            onClose: (selectedDates, dateStr, instance) => this.onNativeChange(selectedDates, instance, false),
+            onChange: (selectedDates, dateStr, instance) => this.onNativeChange(selectedDates, dateStr, instance, true),
+            onClose: (selectedDates, dateStr, instance) => this.onNativeChange(selectedDates, dateStr, instance, false),
         };
 
         if (!this.formContainer) {
@@ -223,7 +226,13 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         }
     }
 
-    public onNativeChange(value: any, instance: any, triggerClose: boolean) {
+    public onNativeChange(value: any, dateStr: string, instance: any, triggerClose: boolean) {
+        if (dateStr && this.allowInput && !this.enableTime && dateStr != this.lastInputedDateString) {
+            this.lastInputedDateString = dateStr;
+
+            return this.change(this.convertDateToAmericanFormat(dateStr));
+        }
+
         if (!value || (value instanceof Object && !Object.keys(value).length)) {
             if (triggerClose) {
                 instance.close();
@@ -314,6 +323,20 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
             } else {
                 this.formControl.markAsPristine();
             }
+
+            if (this.allowInput && !this.enableTime) {
+                this.setupDateInputMask();
+            }
+        }
+    }
+
+    private setupDateInputMask(): void {
+        if (this.locale == NgtDateLocale.BRAZIL) {
+            return Inputmask('date', { mask: '99/99/9999' }).mask(this.ng2FlatpickrComponent.flatpickr['input']);
+        }
+
+        if (this.locale == NgtDateLocale.US) {
+            return Inputmask('date', { mask: '9999-99-99' }).mask(this.ng2FlatpickrComponent.flatpickr['input']);
         }
     }
 
@@ -335,13 +358,9 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
     }
 
     private getLocale() {
-        if (this.locale) {
-            if (this.locale == NgtDateLocale.BRAZIL) {
-                return Brazil;
-            }
-        }
-
-        return US;
+        return this.locale == NgtDateLocale.US
+            ? US
+            : Brazil;
     }
 
     private getDateMode() {
@@ -397,6 +416,16 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         }
 
         return dateFormat ? dateFormat : 'DD/MM/YYYY HH:mm:00';
+    }
+
+    private convertDateToAmericanFormat(dateTimeString: string): string {
+        if (this.locale == NgtDateLocale.US) {
+            return dateTimeString;
+        }
+
+        const splittedDate: Array<string> = dateTimeString.split('/');
+
+        return `${splittedDate[2]}-${splittedDate[1]}-${splittedDate[0]}`;
     }
 
     private destroySubscriptions() {
