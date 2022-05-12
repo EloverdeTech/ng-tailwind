@@ -86,6 +86,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     //Validations
     @Input() public findExistingResource: NgtHttpFindExistingResourceInterface;
+    @Input() public allowPhoneValidation: boolean;
     @Input() public isRequired: boolean;
     @Input() public uniqueResource: any;
     @Input() public minValue: number;
@@ -98,6 +99,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     @Output() public onClickLeftIcon: EventEmitter<any> = new EventEmitter<any>();
     @Output() public onClickRightIcon: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public validatePhoneResult: EventEmitter<any> = new EventEmitter<any>();
 
     public existingResourceId: string;
     public componentReady: boolean;
@@ -109,6 +111,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     public ngtStyle: NgtStylizableService;
 
     private emailValidatorTimeout: any;
+    private phoneValidatorTimeout: any;
     private uniqueValidatorTimeout: any;
     private searchExistingResourceTimeout: any;
     private subscriptions: Array<Subscription> = [];
@@ -207,6 +210,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
             if (nativeValue && ngModelValue != this.value) {
                 this.value = ngModelValue;
+            }
+
+            if (this.mask == 'cellphone' && this.allowPhoneValidation && this.value) {
+                this.validatePhone();
             }
         } else {
             let ngModelValue = this.removeMasks(value);
@@ -601,6 +608,20 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 .catch(() => this.existingResourceId = null)
                 .finally(() => this.loading = false);
         }, 500);
+    }
+
+    private async validatePhone(): Promise<void> {
+        if (this.phoneValidatorTimeout) {
+            clearTimeout(this.phoneValidatorTimeout);
+        }
+
+        this.phoneValidatorTimeout = setTimeout(() => {
+            this.loading = true;
+
+            this.ngtValidationService.phoneValidation(this.value)
+                .then((response: any) => this.validatePhoneResult.emit(response))
+                .finally(() => this.loading = false);
+        });
     }
 
     private uniqueValidator(): AsyncValidatorFn {
