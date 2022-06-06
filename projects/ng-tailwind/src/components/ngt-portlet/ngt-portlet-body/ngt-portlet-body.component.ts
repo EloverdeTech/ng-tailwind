@@ -23,7 +23,9 @@ export class NgtPortletBodyComponent {
 
         this.ngtStyle.load(this.injector, 'NgtPortletBody', {
             color: {
-                text: 'text-black'
+                text: 'text-black',
+                py: 'py-6',
+                px: 'px-4 md:px-8'
             }
         }, ['NgtPortletStyle']);
     }
