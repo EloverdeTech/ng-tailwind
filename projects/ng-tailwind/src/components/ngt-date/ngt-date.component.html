@@ -43,7 +43,7 @@
 
 <ng-container *ngIf='isDisabled || isReadonly'>
     <div
-        class="{{isDisabled ? 'disabledDiv' : ''}} w-full px-4 py-3 rounded appearance-none block border border-gray-400">
+        class="{{isDisabled ? 'disabledDiv' : ''}} {{ngtStyle.compile(['h'])}} w-full px-4 rounded appearance-none flex items-center border border-gray-400">
         {{ getFormattedNativeValue() }}
     </div>
 </ng-container>
