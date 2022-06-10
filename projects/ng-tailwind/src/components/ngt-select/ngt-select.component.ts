@@ -98,6 +98,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public isRequired: boolean = false;
 
     @Output() public onLoadRemoteResource: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public onClear: EventEmitter<void> = new EventEmitter<void>();
 
     public nativeName = uuid();
     public ngtStyle: NgtStylizableService;
@@ -275,6 +276,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         }
 
         this.currentState.filters = {};
+
+        this.onClear.emit();
     }
 
     public onRemoveSelectedItem(item: NgOption) {
