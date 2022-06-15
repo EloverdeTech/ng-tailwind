@@ -41,6 +41,10 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
     @Input() public isSelectable: boolean = true;
     @Input() public isDisabled: boolean;
 
+    @Input() public helpTitle: string;
+    @Input() public helpTextColor: string = 'text-green-500';
+    @Input() public helpText: string;
+
     public ngtStyle: NgtStylizableService;
 
     private subscriptions: Array<Subscription> = [];
