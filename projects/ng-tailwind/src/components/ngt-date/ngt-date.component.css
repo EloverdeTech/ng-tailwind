@@ -889,13 +889,13 @@ span.flatpickr-weekday {
 }
 
 .border-error {
-    border: solid #c53030 1px !important;
+    border: solid #c53030 1px;
     background-color: unset !important;
     border-radius: 0.25rem;
 }
 
 .border-normal {
-    border: solid #cbd5e0 1px !important;
+    border: solid #cbd5e0 1px;
     background-color: unset !important;
     border-radius: 0.25rem;
 }
