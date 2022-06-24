@@ -91,6 +91,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public virtualScroll: boolean = true;
     @Input() public tabIndex: number;
     @Input() public typeahead: Subject<any>;
+    @Input() public guessCompareWith: boolean = true;
     @Input() public groupValue: (groupKey: string, cildren: any[]) => Object;
     @Input() public trackBy: (item: any) => any;
 
@@ -320,9 +321,15 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
                     .subscribe(
                         (response: NgtHttpResponse) => {
                             this.loading = false;
+
+                            this.bindCompareWithByResponse(response);
+
                             this.ngSearchObserver.next(response.data);
+
                             this.onLoadRemoteResource.emit(response.data);
+
                             this.currentState.pagination = response.meta.pagination;
+
                             this.changeDetector.detectChanges();
                         },
                         (error) => {
@@ -491,10 +498,20 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         }
     }
 
+    private bindCompareWithByResponse(response: NgtHttpResponse): void {
+        if (this.guessCompareWith) {
+            if (response.data?.length && typeof response.data[0]['getApiId'] === 'function') {
+                this.compareWith = (a: any, b: any) => a.getApiId() == b.getApiId();
+            } else {
+                this.compareWith = (a: any, b: any) => a === b;
+            }
+        }
+    }
+
     private hasTermInFilteredItems(term: string) {
         const filteredItems = this.ngSelectComponent.itemsList.filteredItems;
 
-        if (this.isColoquentResource()) {
+        if (filteredItems?.length && this.isColoquentResource()) {
             return filteredItems.some((element: any) => {
                 const elementValue = (<any>element.value).getAttribute(this.bindLabel);
 
@@ -512,7 +529,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     private hasTermInSelectedItems(term: string) {
         const selectedItems = this.ngSelectComponent.selectedItems;
 
-        if (this.isColoquentResource()) {
+        if (selectedItems?.length && this.isColoquentResource()) {
             return selectedItems.some((element: any) => {
                 const elementValue = (<any>element.value).getAttribute(this.bindLabel);
 
@@ -532,9 +549,9 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     }
 
     private isColoquentResource() {
-        const filteredItems = this.ngSelectComponent.itemsList.filteredItems;
+        const items = this.ngSelectComponent.itemsList.items;
 
-        return filteredItems && filteredItems.length && typeof filteredItems[0].value['getAttribute'] === 'function';
+        return items?.length && typeof items[0].value['getAttribute'] === 'function';
     }
 
     private isHidden(): boolean {
