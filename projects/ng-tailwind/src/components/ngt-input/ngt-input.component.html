@@ -10,7 +10,7 @@
 
 <div class="{{ shining ? 'hidden' : 'flex relative'}}">
     <input autocomplete="new-password"
-        class="flex border appearance-none focus:outline-none leading-tight w-full {{ getInputPaddings() }} {{ ngtStyle.compile(['h', 'color.border', 'color.bg', 'color.text', 'rounded', 'cursor']) }}"
+        class="flex border appearance-none focus:outline-none leading-tight w-full {{ getInputPaddings() }} {{ ngtStyle.compile(['h', 'text', 'color.border', 'color.bg', 'color.text', 'rounded', 'cursor']) }}"
         [disabled]="isDisabled" [readonly]="isReadonly || loading" [placeholder]="placeholder"
         [ngClass]="{'input-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
         [attr.type]="inputProperties.htmlType" #element>
