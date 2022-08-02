@@ -361,7 +361,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             syncValidators.push(Validators.minLength(this.minLength));
         }
 
-        if (this.mask == 'cnpj-cpf' || this.mask == 'cnpj-cpf-rut') {
+        if (this.mask == 'cnpj-cpf' || this.mask == 'cnpj-cpf-rut' || this.mask == 'cpf') {
             syncValidators.push(this.cnpjCpfValidator());
         }
 
@@ -542,9 +542,9 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 } else {
                     return { 'cpf': true };
                 }
-            } else if(control.value && control.value.length == 12){
+            } else if (control.value && control.value.length == 12) {
                 return null;
-            }else{
+            } else {
                 if (control.value && this.validatorCNPJ(control.value)) {
                     return null;
                 } else {
