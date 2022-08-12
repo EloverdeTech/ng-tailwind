@@ -212,7 +212,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 this.value = ngModelValue;
             }
 
-            if (this.mask == 'cellphone' && this.allowPhoneValidation && this.value) {
+            if (
+                (this.mask == NgtInputMaskEnum.CELLPHONE || this.mask == NgtInputMaskEnum.INTERNATIONAL_PHONE)
+                && this.allowPhoneValidation && this.value
+            ) {
                 this.validatePhone();
             }
         } else {
@@ -435,7 +438,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 keepStatic: true
             },
             [NgtInputMaskEnum.INTERNATIONAL_PHONE]: {
-                mask: ['+99 (99) 9999-9999', '+99 (99) 99999-9999'],
+                mask: ['+99 (99) 9999-9999', '+99 (99) 99999-9999', '+999 (99) 9999-9999', '+999 (99) 99999-9999'],
                 keepStatic: true
             },
             [NgtInputMaskEnum.PLATE]: {
@@ -758,12 +761,17 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 .replace('.', '')
                 .replace('-', '')
                 .replace('/', '');
-        } else if (this.mask == "cellphone") {
+        } else if (
+            this.mask == NgtInputMaskEnum.CELLPHONE
+            || this.mask == NgtInputMaskEnum.INTERNATIONAL_PHONE
+        ) {
             value = (value + "")
                 .replace('(', '')
                 .replace(')', '')
                 .replace(' ', '')
-                .replace('-', '');
+                .replace(' ', '')
+                .replace('-', '')
+                .replace('+', '')
         }
 
         return value;
