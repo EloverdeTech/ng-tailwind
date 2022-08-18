@@ -24,6 +24,7 @@ import Viewer from 'viewerjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { getEnumFromString } from '../../helpers/enum/enum';
+import { uuid } from '../../helpers/uuid';
 import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-http.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtDropzoneFileViewerComponent } from './ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
@@ -72,7 +73,7 @@ export enum NgtDropzoneErrorType {
 })
 export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDestroy, AfterContentChecked {
     @ViewChild('container') public container: ElementRef;
-    @ViewChild('ngxDropzone', { static: true }) public ngxDropzone: NgxDropzoneComponent;
+    @ViewChild(NgxDropzoneComponent, { static: true }) public ngxDropzone: NgxDropzoneComponent;
     @ViewChild(NgtDropzoneFileViewerComponent, { static: true }) public ngtDropzoneFileViewer: NgtDropzoneFileViewerComponent;
 
     // Visual
@@ -114,6 +115,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     public componentReady = false;
     public loading: boolean = false;
     public ngtDropzoneLoaderStyle: NgtStylizableService;
+    public ngxElementId: string = uuid();
     public imageViewerOptions: any = {
         navbar: true,
         toolbar: {
@@ -414,7 +416,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     }
 
     public openFileSelector() {
-        document.getElementById('ngxDropzone').click();
+        document.getElementById(this.ngxElementId).click();
     }
 
     private initComponent() {

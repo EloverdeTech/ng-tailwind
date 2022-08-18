@@ -14,7 +14,7 @@
             <div class="div-loader"></div>
         </div>
 
-        <ngx-dropzone id="ngxDropzone" [multiple]='multipleSelection' [maxFileSize]='maxFileSize'
+        <ngx-dropzone [id]="ngxElementId" [multiple]='multipleSelection' [maxFileSize]='maxFileSize'
             (change)='onSelect($event)' [class.single-attachment]='itemsLimit == 1' [accept]='acceptedFiles'
             [disabled]='disabled || loading' [expandable]='verticalExpandable'
             [disableClick]='disableClick || forceDisableClick' [ngStyle]="{ 'height': dropzoneHeight }" #ngxDropzone>
