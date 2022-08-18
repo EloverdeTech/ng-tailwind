@@ -771,7 +771,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 .replace(' ', '')
                 .replace(' ', '')
                 .replace('-', '')
-                .replace('+', '')
+                .replace('+', '');
         }
 
         return value;
