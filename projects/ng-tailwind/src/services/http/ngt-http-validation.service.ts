@@ -10,5 +10,5 @@ export abstract class NgtHttpValidationService {
 }
 
 export interface NgtHttpValidationResponse {
-    valid: boolean;
+    valid: any;
 }
