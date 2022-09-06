@@ -72,6 +72,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
     /** Behavior */
     @Input() public name: string;
+    @Input() public autoLoad: boolean;
     @Input() public allowCreate: boolean | Promise<any> | Function = false;
     @Input() public allowOriginalItemsUnselect: boolean = true;
     @Input() public isDisabled: boolean = false;
@@ -556,7 +557,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     }
 
     private canLoadItems(): boolean {
-        return !this.isDisabled && this.wasClicked;
+        return this.autoLoad || (!this.isDisabled && this.wasClicked);
     }
 
     private destroySubscriptions() {
