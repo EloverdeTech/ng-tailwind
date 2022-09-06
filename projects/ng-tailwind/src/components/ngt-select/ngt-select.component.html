@@ -1,5 +1,5 @@
 <label *ngIf="label" [hidden]='shining'
-       class="{{ shining ? '' : 'block' }} {{ ngtStyle.compile(['color.text', 'text', 'font', 'fontCase']) }} mb-2 flex" >
+    class="{{ shining ? '' : 'block' }} {{ ngtStyle.compile(['color.text', 'text', 'font', 'fontCase']) }} mb-2 flex">
     <ngt-svg *ngIf="labelIcon" class="mr-1 {{labelIconColor}}" src="{{labelIcon}}"></ngt-svg>
     {{ label }}:
 
@@ -11,19 +11,20 @@
 </label>
 
 <div [hidden]='shining' class="{{ getSelectClass() }} normal-case" style="min-height: 3rem;">
-    <ng-select class="custom" [(ngModel)]='nativeValue' [name]='nativeName' (change)="onNativeChange($event)"
-        [addTag]='allowCreate' [addTagText]="createText || ngtTranslateService.ngtSelectCreateText"
-        [bindLabel]="bindLabel" [multiple]="multiple" [hideSelected]="hideSelected" [typeahead]="typeahead"
+    <ng-select class="custom" [(ngModel)]='nativeValue' [name]='nativeName' [addTag]='allowCreate'
+        [addTagText]="createText || ngtTranslateService.ngtSelectCreateText" [bindLabel]="bindLabel"
+        [multiple]="multiple" [hideSelected]="hideSelected" [typeahead]="typeahead"
         [notFoundText]="notFoundText || ngtTranslateService.ngtSelectNotFoundText" [searchable]="searchable"
-        [disabled]='isDisabled || isReadonly' [clearable]="clearable && hasSelectedValue()" [closeOnSelect]="closeOnSelect"
-        [trackByFn]="trackBy" [labelForId]="labelForId" [clearSearchOnAdd]="clearSearchOnAdd"
+        [disabled]='isDisabled || isReadonly' [clearable]="clearable && hasSelectedValue()"
+        [closeOnSelect]="closeOnSelect" [trackByFn]="trackBy" [labelForId]="labelForId"
         [typeToSearchText]="typeToSearchText || ngtTranslateService.ngtSelectTypeToSearchText"
         [placeholder]="placeholder || ngtTranslateService.ngtSelectPlaceholder" [dropdownPosition]="dropdownPosition"
         [groupBy]="groupBy" [clearAllText]="clearAllTooltip || ngtTranslateService.ngtSelectClearAllTooltip"
-        [virtualScroll]="virtualScroll" [tabIndex]="tabIndex" [items]="ngSelectItems | async"
-        (scroll)="onScroll($event)" [bindValue]="bindValue" [groupValue]="groupValue" [loading]="loading"
+        [clearSearchOnAdd]="clearSearchOnAdd" [bindValue]="bindValue" [virtualScroll]="virtualScroll"
         [loadingText]="loadingText || ngtTranslateService.ngtSelectLoadingText" [maxSelectedItems]="maxSelectedItems"
-        [compareWith]='compareWith' (clear)='onClearSelect()' (remove)='onRemoveSelectedItem($event)'>
+        [tabIndex]="tabIndex" [items]="ngSelectItems | async" [groupValue]="groupValue" [loading]="loading"
+        [compareWith]='compareWith' (scroll)="onScroll($event)" (change)="onNativeChange($event)"
+        (clear)='onClearSelect()' (remove)='onRemoveSelectedItem($event)' (click)="wasClicked = true">
 
         <ng-template *ngIf='ngtSelectHeaderTemplate' ng-header-tmp>
             <ng-template [ngTemplateOutlet]="ngtSelectHeaderTemplate">

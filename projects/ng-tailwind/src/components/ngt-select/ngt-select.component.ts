@@ -106,6 +106,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     public ngSelectItems: any = [];
     public nativeValue: any;
     public componentReady: boolean = false;
+    public wasClicked: boolean;
 
     private ngSearchObserver: Observer<any>;
     private originalPerPage = 15;
@@ -130,7 +131,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     };
 
     private searchTimeout: any;
-    private becameVisible: boolean;
+    private hadFirstItemsLoad: boolean;
 
     public constructor(
         @Optional() @Self()
@@ -207,9 +208,9 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         this.bindInnerInputUniqueId();
     }
 
-    public ngDoCheck() {
-        if (!this.becameVisible && !this.isHidden()) {
-            this.becameVisible = true;
+    public ngDoCheck(): void {
+        if (!this.hadFirstItemsLoad && this.canLoadItems()) {
+            this.hadFirstItemsLoad = true;
 
             this.initNgSelectItems();
 
@@ -256,7 +257,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
             this.updateValidations();
         }
 
-        if ((changes.remoteResource && this.becameVisible) || changes.items) {
+        if (changes.remoteResource || changes.items) {
             this.initNgSelectItems();
         }
 
@@ -398,7 +399,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     }
 
     private initNgSelectItems() {
-        if (this.remoteResource && this.becameVisible) {
+        if (this.remoteResource && this.canLoadItems()) {
             this.ngSelectItems = new Observable(observer => {
                 this.ngSearchObserver = observer;
                 this.search({});
@@ -554,8 +555,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         return items?.length && typeof items[0].value['getAttribute'] === 'function';
     }
 
-    private isHidden(): boolean {
-        return this.ngSelectComponent.element.offsetParent === null;
+    private canLoadItems(): boolean {
+        return !this.isDisabled && this.wasClicked;
     }
 
     private destroySubscriptions() {
