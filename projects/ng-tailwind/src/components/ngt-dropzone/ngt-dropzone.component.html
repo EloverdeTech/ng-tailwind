@@ -28,7 +28,7 @@
                         title="{{ resource?.file?.name || '' }} ({{ getFormattedFileSize(resource) }})">
                         <custom-dropzone-preview *ngIf="previewType == 'DEFAULT' && isFile(resource)"
                             [file]='resource.file' [removable]="removable" (removed)="onRemove(resource)"
-                            (click)="onFileClick(resource.file.url, resource.file.name)"
+                            (click)="onFileClick(resource.file.url, resource.file.name, resource.file.size)"
                             ngProjectAs="ngx-dropzone-preview">
                         </custom-dropzone-preview>
 

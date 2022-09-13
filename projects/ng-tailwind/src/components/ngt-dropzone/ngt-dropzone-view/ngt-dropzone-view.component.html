@@ -53,7 +53,7 @@
         <ng-container *ngIf="files?.length">
             <ng-container *ngFor="let file of files">
                 <div class="flex flex-col w-48 mr-6 cursor-pointer"
-                    (click)="ngtDropzoneComponent.onFileClick(file.previewUrl, file.name)">
+                    (click)="ngtDropzoneComponent.onFileClick(file.previewUrl, file.name, file.fileSize)">
                     <div class="w-full flex justify-center border-2 rounded py-4 text-6xl">
                         <svg *ngIf="getFileType(file) == ngtDropzoneViewFileTypeEnum.OTHER"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

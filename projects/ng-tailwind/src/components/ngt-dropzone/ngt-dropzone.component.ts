@@ -202,11 +202,12 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         viewer.show();
     }
 
-    public onFileClick(url, name) {
+    public onFileClick(url: string, name: string, size: number) {
         this.forceDisableClick = true;
         this.showNgtDropzoneFileViewer = true;
         this.ngtDropzoneFileViewer.url = url;
         this.ngtDropzoneFileViewer.fileName = name;
+        this.ngtDropzoneFileViewer.fileSize = size;
         this.ngtDropzoneFileViewer.init();
 
         this.subscriptions.push(this.ngtDropzoneFileViewer.onClose.subscribe(() => {
