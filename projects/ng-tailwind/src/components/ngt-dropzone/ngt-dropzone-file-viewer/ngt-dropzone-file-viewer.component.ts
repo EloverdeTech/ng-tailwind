@@ -1,6 +1,8 @@
 import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { NgxDocViewerComponent } from 'ngx-doc-viewer';
 
+import { NgtTranslateService } from '../../../services/http/ngt-translate.service';
+
 @Component({
     selector: 'ngt-dropzone-file-viewer',
     styleUrls: ['./ngt-dropzone-file-viewer.component.css'],
@@ -11,11 +13,16 @@ export class NgtDropzoneFileViewerComponent {
 
     @Input() public url: string;
     @Input() public fileName: string;
+    @Input() public fileSize: number;
 
     @Output() public onClose: EventEmitter<void> = new EventEmitter();
 
     public canShowViewer: boolean;
     public loading: boolean;
+
+    public constructor(
+        public ngtTranslateService: NgtTranslateService
+    ) { }
 
     @HostListener('window:keydown', ['$event'])
     public keyEvent(event: KeyboardEvent) {
@@ -28,10 +35,12 @@ export class NgtDropzoneFileViewerComponent {
     }
 
     public init(): void {
-        this.loading = true;
-        this.canShowViewer = true;
+        if (this.fileSize < 5000000) {
+            this.loading = true;
+            this.canShowViewer = true;
 
-        this.initReloadInterval();
+            this.initReloadInterval();
+        }
     }
 
     public close(): void {
@@ -58,6 +67,6 @@ export class NgtDropzoneFileViewerComponent {
                     this.loading = false;
                 }
             });
-        }, 1000);
+        }, 3000);
     }
 }
