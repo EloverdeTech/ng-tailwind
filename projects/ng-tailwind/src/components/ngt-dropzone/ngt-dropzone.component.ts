@@ -104,6 +104,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Output() public onFileSelectError: EventEmitter<NgtDropzoneErrorType> = new EventEmitter();
     @Output() public onFileUploadFail: EventEmitter<any> = new EventEmitter();
     @Output() public onFileRemoved = new EventEmitter();
+    @Output() public onFileUploadInit = new EventEmitter();
     @Output() public onFileUploaded = new EventEmitter();
     @Output() public onFilePreviewLoaded = new EventEmitter();
 
@@ -261,6 +262,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
             let observables = [];
 
             this.loading = true;
+            this.onFileUploadInit.emit();
 
             files.forEach(file => {
                 observables.push(this.ngtAttachmentHttpService.upload(this.remoteResource, file).pipe(
