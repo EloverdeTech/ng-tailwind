@@ -23,7 +23,7 @@
                     {{ placeholder }}
                 </ngx-dropzone-label>
 
-                <ng-container *ngFor="let resource of uploadedResources">
+                <ng-container *ngFor="let resource of uploadedResources; let index = index">
                     <div class="flex flex-col w-48 mx-4"
                         title="{{ resource?.file?.name || '' }} ({{ getFormattedFileSize(resource) }})">
                         <custom-dropzone-preview *ngIf="previewType == 'DEFAULT' && isFile(resource)"
@@ -32,7 +32,7 @@
                             ngProjectAs="ngx-dropzone-preview">
                         </custom-dropzone-preview>
 
-                        <div *ngIf="isImage(resource)" class="cursor-pointer" (click)="onImageClick(gallery)" #gallery>
+                        <div *ngIf="isImage(resource)" class="cursor-pointer" (click)="imagePreview(index)" #gallery>
                             <ngx-dropzone-image-preview class="image-preview-default-class" [file]="resource.file"
                                 [removable]="removable" (removed)="onRemove(resource)">
                             </ngx-dropzone-image-preview>
