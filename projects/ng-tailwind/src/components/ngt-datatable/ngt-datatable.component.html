@@ -1,12 +1,14 @@
 <div class="w-full">
     <div class="flex flex-wrap w-full">
-        <ngt-tag *ngIf="hasAppliedFilters()" (click)="removeFilter()" class="mr-0 sm:mr-4 mb-4 w-full sm:w-auto"
-            color.bg="bg-red-500" ngt-stylizable>Limpar Filtros</ngt-tag>
+        <ngt-tag *ngIf="hasAppliedFilters()" class="w-full sm:w-auto {{ filterTagMargin }}"
+            [class.sm:mr-4]="filterTagMargin == 'mb-4'" color.bg="bg-red-500" (click)="removeFilter()" ngt-stylizable>
+            Limpar Filtros
+        </ngt-tag>
 
         <ng-container *ngIf="hasAppliedFilters()">
             <ng-container *ngFor="let filter of filtersTranslated">
-                <ngt-tag (click)="removeFilter(filter.reference)" class="mr-0 sm:mr-4 mb-4 w-full sm:w-auto"
-                    [color.bg]="filterTagBgColor" ngt-stylizable>
+                <ngt-tag class="w-full sm:w-auto {{ filterTagMargin }}" [class.sm:mr-4]="filterTagMargin == 'mb-4'"
+                    [color.bg]="filterTagBgColor" (click)="removeFilter(filter.reference)" ngt-stylizable>
                     {{ filter.translation + ': ' + (filter?.value?.tagValue ? filter.value.tagValue : filter.value)}}
                 </ngt-tag>
             </ng-container>
@@ -44,7 +46,7 @@
     </div>
 </div>
 
-<div class="clearfix mt-2 md:mt-8" [hidden]='!data || data.length == 0'>
+<div class="clearfix {{ paginationMargin }}" [hidden]='!data || data.length == 0'>
     <ngt-pagination [pagesInterval]='4' (onPageChange)='apply($event, false)' (onPerPageChange)='apply(1, false)'
         #ngtPagination>
     </ngt-pagination>

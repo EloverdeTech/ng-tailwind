@@ -35,6 +35,8 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     @Input() public remoteResource: any;
     @Input() public type: NgtDatatableType = NgtDatatableType.REMOTE;
     @Input() public filterTagBgColor: string = 'bg-blue-500';
+    @Input() public filterTagMargin: string = 'mb-4';
+    @Input() public paginationMargin: string = 'mt-2 md:mt-8';
     @Input() public inputSearch: NgtInputComponent;
     @Input() public searchDelay: number = 500;
     @Input() public searchTermMinLength: number = 1;
