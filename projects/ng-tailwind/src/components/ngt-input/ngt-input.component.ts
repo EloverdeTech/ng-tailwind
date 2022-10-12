@@ -167,6 +167,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }, 200);
     }
 
+    public hasFocus(): boolean {
+        return document.activeElement === this.element.nativeElement;
+    }
+
     public clearInput(event?: Event) {
         if (event) {
             event.stopPropagation();
