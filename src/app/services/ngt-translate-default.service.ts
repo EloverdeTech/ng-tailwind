@@ -1,8 +1,9 @@
-import { NgtTranslateService } from "projects/ng-tailwind/src/public-api";
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
+import { NgtTranslateService } from 'projects/ng-tailwind/src/public-api';
 
 @Injectable()
 export class NgtTranslateDefaultService extends NgtTranslateService {
+    public ngtFileTooLargeForPreview: string = 'O arquivo é muito grande e não pôde ser pré-visualizado';
     public ngtMultiSelectNoDataFound: string = 'Nenhum registro encontrado';
     public ngtFormDefaultValidationMessage: string = 'Preencha corretamente todos os campos';
     public ngtDatatableNoDataFound: string = 'Nenhum registro encontrado';
