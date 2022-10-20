@@ -82,6 +82,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public bindLabel: string = 'name';
     @Input() public bindValue: string;
     @Input() public items: Array<any> | Observable<any> = [];
+    @Input() public inputAttrs: { [key: string]: string };
     @Input() public closeOnSelect: boolean = true;
     @Input() public clearable: boolean = true;
     @Input() public groupBy: string | Function = null;
