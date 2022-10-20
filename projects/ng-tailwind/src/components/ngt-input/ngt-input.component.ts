@@ -470,7 +470,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         let props = {
             shortText: {
                 htmlType: "text",
-                length: 20
+                length: 30
             },
             text: {
                 htmlType: "text",
