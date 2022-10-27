@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { NgtFormModule } from '../ngt-form/ngt-form.module';
+import { NgtHelperModule } from '../ngt-helper/ngt-helper.module';
 import { NgtShiningModule } from '../ngt-shining/ngt-shining.module';
 import { NgtValidationModule } from '../ngt-validation/ngt-validation.module';
 import { NgtTextareaComponent } from './ngt-textarea.component';
@@ -16,6 +17,7 @@ import { NgtTextareaComponent } from './ngt-textarea.component';
         ReactiveFormsModule,
         NgtValidationModule,
         NgtShiningModule,
+        NgtHelperModule,
         NgtFormModule
     ]
 })

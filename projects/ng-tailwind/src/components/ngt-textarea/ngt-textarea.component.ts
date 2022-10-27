@@ -39,9 +39,9 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Input() public label: string = "";
     @Input() public placeholder: string = "";
     @Input() public rows: string = "3";
-    @Input() public helpTitle: string;
     @Input() public showCharactersLength: boolean = false;
-    @Input() public helpText: boolean = false;
+    @Input() public helpTitle: string;
+    @Input() public helpText: string;
     @Input() public helpTextColor: string = 'text-green-500';
     @Input() public shining: boolean = false;
 
