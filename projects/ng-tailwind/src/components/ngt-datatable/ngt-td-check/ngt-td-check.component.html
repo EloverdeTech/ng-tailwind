@@ -1,2 +1,2 @@
-<ngt-checkbox [(ngModel)]='checked' (ngModelChange)='onCheckboxChange($event)'></ngt-checkbox>
+<ngt-checkbox [(ngModel)]='checked' [isDisabled]="isDisabled" (ngModelChange)='onCheckboxChange($event)'></ngt-checkbox>
 <ng-content></ng-content>

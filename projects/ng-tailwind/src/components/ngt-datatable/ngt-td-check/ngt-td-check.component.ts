@@ -1,4 +1,16 @@
-import { Component, ElementRef, Injector, Input, OnDestroy, Optional, Output, Self, SkipSelf, ViewChild, EventEmitter } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    Injector,
+    Input,
+    OnDestroy,
+    Optional,
+    Output,
+    Self,
+    SkipSelf,
+    ViewChild,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -15,13 +27,15 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
 export class NgtTdCheckComponent implements OnDestroy {
     @ViewChild(NgtCheckboxComponent, { static: true }) public checkbox: NgtCheckboxComponent;
     @Input() public reference: any;
+    @Input() public isDisabled: boolean;
     @Input() public checked: boolean = false;
     @Output() public onCheckboxInit: EventEmitter<any> = new EventEmitter();
 
     public ngtStyle: NgtStylizableService;
 
-    private id = uuid();
+    private id: string = uuid();
     private subscriptions: Array<Subscription> = [];
+    private isFirstChange: boolean = true;
 
     public constructor(
         private injector: Injector,
@@ -33,7 +47,7 @@ export class NgtTdCheckComponent implements OnDestroy {
         this.bindNgtStyle();
     }
 
-    public ngAfterContentInit() {
+    public ngAfterContentInit(): void {
         if (this.ngtDataTable) {
             this.subscriptions.push(
                 this.ngtDataTable.onToogleAllCheckboxes.subscribe((checked: boolean) => {
@@ -55,21 +69,23 @@ export class NgtTdCheckComponent implements OnDestroy {
         }
     }
 
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.destroySubscriptions();
     }
 
-    public onCheckboxChange(checked: boolean) {
-        if (this.ngtDataTable) {
+    public onCheckboxChange(checked: boolean): void {
+        if (this.ngtDataTable && !this.isFirstChange) {
             this.ngtDataTable.onToogleCheckbox.emit({
                 id: this.id,
                 checked: checked,
                 reference: this.reference
             });
         }
+
+        this.isFirstChange = false;
     }
 
-    private bindNgtStyle() {
+    private bindNgtStyle(): void {
         if (this.ngtStylizableDirective) {
             this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
         } else {
@@ -103,7 +119,7 @@ export class NgtTdCheckComponent implements OnDestroy {
         ]);
     }
 
-    private destroySubscriptions() {
+    private destroySubscriptions(): void {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
     }
