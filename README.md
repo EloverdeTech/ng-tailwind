@@ -16,7 +16,7 @@ Passos para publicação de nova versão do NgTailwind:
 
 * Execute o seguinte comando para realizar o build da nova versão:
 
-  ``` ng build ng-tailwind ```
+  ``` npm run build-ngt ```
 
 * Por fim, navegue até o diretório /dist/ng-tailwind e rode o seguinte comando para finalizar a publicação:
 
