@@ -438,7 +438,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 max: this.maxValue,
             },
             [NgtInputMaskEnum.CELLPHONE]: {
-                mask: ['(99) 9999-9999', '(99) 99999-9999'],
+                mask: ['(99) 999-999', '(99) 9999-9999', '(99) 99999-9999'],
                 keepStatic: true
             },
             [NgtInputMaskEnum.INTERNATIONAL_PHONE]: {
