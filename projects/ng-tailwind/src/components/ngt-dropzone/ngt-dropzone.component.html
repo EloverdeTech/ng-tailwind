@@ -54,7 +54,8 @@
 
     <ngt-dropzone-view *ngIf="viewMode" [resources]="resources" class="h-full w-full"></ngt-dropzone-view>
 
-    <ngt-dropzone-file-viewer [hidden]="!showNgtDropzoneFileViewer" (onClose)="forceDisableClick = false">
+    <ngt-dropzone-file-viewer [hidden]="!showNgtDropzoneFileViewer" (onClose)="forceDisableClick = false"
+        [canDownloadFile]="canDownloadFile" [disableContent]="canDownloadFile ? 'none' : 'all'">
     </ngt-dropzone-file-viewer>
 
     <input *ngIf='componentReady' type="hidden" [ngModel]="value" [name]="name" [value]="value">

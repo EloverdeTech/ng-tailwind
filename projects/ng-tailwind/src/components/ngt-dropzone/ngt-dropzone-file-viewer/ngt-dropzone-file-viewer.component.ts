@@ -14,6 +14,8 @@ export class NgtDropzoneFileViewerComponent {
     @Input() public url: string;
     @Input() public fileName: string;
     @Input() public fileSize: number;
+    @Input() public disableContent: string = 'none';
+    @Input() public canDownloadFile: boolean = true;
 
     @Output() public onClose: EventEmitter<void> = new EventEmitter();
 

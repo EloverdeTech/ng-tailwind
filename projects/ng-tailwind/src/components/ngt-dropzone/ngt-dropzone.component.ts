@@ -92,6 +92,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Input() public disabled: boolean = false;
     @Input() public viewMode: boolean = false;
     @Input() public removable: boolean = false;
+    @Input() public canDownloadFile: boolean = true;
     @Input() public verticalExpandable: boolean = false;
     @Input() public acceptedFiles: string = '*' /** Mime type */;
     @Input() public maxFileSize: number; /** Bytes */
