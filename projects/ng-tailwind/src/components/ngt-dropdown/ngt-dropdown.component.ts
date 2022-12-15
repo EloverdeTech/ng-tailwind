@@ -39,6 +39,7 @@ export class NgtDropdownComponent implements OnDestroy {
     @Input() public reverseXPosition: boolean;
     @Input() public reverseYPosition: boolean;
     @Input() public closeOnClick: boolean;
+    @Input() public closeTimeout: number;
     @Input() public openMethod: NgtDropdownOpenMethod = NgtDropdownOpenMethod.HOVER;
 
     @Output() public onToggle: EventEmitter<boolean> = new EventEmitter();
@@ -89,10 +90,13 @@ export class NgtDropdownComponent implements OnDestroy {
     }
 
     public close(): void {
-        this.isOpen = false;
+        if (this.closeTimeout) {
+            setTimeout(() => this.hideContainer(), this.closeTimeout);
 
-        this.containerXPosition = null;
-        this.containerYPosition = null;
+            return;
+        }
+
+        this.hideContainer();
     }
 
     public toggle(): void {
@@ -201,6 +205,12 @@ export class NgtDropdownComponent implements OnDestroy {
     private destroySubscriptions(): void {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
+    }
+
+    private hideContainer(): void {
+        this.isOpen = false;
+        this.containerXPosition = null;
+        this.containerYPosition = null;
     }
 }
 
