@@ -56,8 +56,6 @@ export class NgtDropdownComponent implements OnDestroy {
     private containerXPosition: number;
     private containerYPosition: number;
 
-    private closeTimeoutInstance;
-
     public constructor(
         @Optional() @SkipSelf()
         private ngtDropdownContainer: NgtDropdownContainerComponent
