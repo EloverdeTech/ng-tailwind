@@ -1,4 +1,4 @@
-import { Component, ElementRef, Injector, Input, Optional, Self, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Injector, Input, Optional, Output, Self, ViewChild } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
@@ -11,12 +11,15 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 
 export class NgtPopoverComponent {
     @ViewChild('dropdownRef', { static: true }) public dropdownRef: ElementRef;
+    @ViewChild('hostDiv') public hostDiv: ElementRef;
 
     @Input() public closeTimeout: number;
     @Input() public openMethod: string = NgtPopoverOpenMethod.HOVER;
 
     @Input() public closeOnClick: boolean;
     @Input() public placeOnBottom: boolean;
+
+    @Output() public onClick: EventEmitter<any> = new EventEmitter();
 
     public ngtStyle: NgtStylizableService;
 
@@ -43,6 +46,18 @@ export class NgtPopoverComponent {
                 bg: 'bg-gray-200'
             }
         });
+    }
+
+    public fireClickEvent(): void {
+        this.onClick.emit();
+
+        setTimeout(() => {
+            const event = new MouseEvent('click', {bubbles: true});
+
+            event.preventDefault();
+            event.stopPropagation();
+            this.hostDiv.nativeElement.dispatchEvent(event);
+        }, 50);
     }
 }
 
