@@ -18,12 +18,13 @@ export class NgtPopoverComponent {
 
     @Input() public closeOnClick: boolean;
     @Input() public placeOnBottom: boolean;
+    @Input() public placeOnLeft: boolean;
 
     @Output() public onClick: EventEmitter<any> = new EventEmitter();
 
     public ngtStyle: NgtStylizableService;
 
-    public stylesToCompile: Array<string> = ['h', 'w', 'px', 'py', 'shadow', 'text', 'border', 'color.border', 'color.bg', 'color.text'];
+    public stylesToCompile: Array<string> = ['h', 'w', 'px', 'py', 'm', 'mx', 'my', 'shadow', 'text', 'border', 'color.border', 'color.bg', 'color.text'];
 
     public constructor(
         @Optional() @Self()
@@ -38,13 +39,17 @@ export class NgtPopoverComponent {
             this.ngtStyle = new NgtStylizableService();
         }
 
-        this.ngtStyle.load(this.injector, 'NgtHelper', {
+        this.ngtStyle.load(this.injector, 'NgtPopover', {
             text: 'text-sm',
             fontCase: '',
+            py: 'py-3',
+            px: 'px-2',
+            border: 'border',
             color: {
+                border: 'border-gray-400',
                 text: 'text-black',
-                bg: 'bg-gray-200'
-            }
+                bg: 'bg-white'
+            },
         });
     }
 
@@ -63,6 +68,7 @@ export class NgtPopoverComponent {
 
 export enum NgtPopoverOpenMethod {
     CLICK = 'CLICK',
+    POPOVER_CLICK = 'POPOVER_CLICK',
     RIGHT_CLICK = 'RIGHT_CLICK',
     HOVER = 'HOVER'
 }
