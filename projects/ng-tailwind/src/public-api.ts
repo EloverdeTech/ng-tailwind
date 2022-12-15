@@ -147,3 +147,7 @@ export * from './animations/ngt-angular-animations';
 // NgtHelper
 export * from './components/ngt-helper/ngt-helper.module';
 export * from './components/ngt-helper/ngt-helper.component';
+
+// NgtPopover
+export * from './components/ngt-popover/ngt-popover.module';
+export * from './components/ngt-popover/ngt-popover.component';

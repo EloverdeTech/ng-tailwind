@@ -1,0 +1,14 @@
+<ngt-dropdown class="flex w-full hover:opacity-100" [closeOnClick]="closeOnClick" [openMethod]="openMethod"
+            [autoXReverse]="false" [autoYReverse]="false" [reverseYPosition]="!placeOnBottom" [closeTimeout]="closeTimeout"
+            #dropdownRef>
+    <div host>
+        <ng-content></ng-content>
+    </div>
+
+    <div class="bg-gray-100 px-2 text-sm rounded-lg hover:opacity-100 text-gray-800 shadow-lg"
+        [class.-mb-4]='dropdownRef.isYPositionReversed' [ngClass]="ngtStyle.compile(stylesToCompile)"
+        container>
+
+        <ng-content select="[popover-content]"></ng-content>
+    </div>
+</ngt-dropdown>
