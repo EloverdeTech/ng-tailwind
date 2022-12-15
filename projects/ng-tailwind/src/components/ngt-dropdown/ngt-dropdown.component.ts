@@ -43,6 +43,7 @@ export class NgtDropdownComponent implements OnDestroy {
     @Input() public openMethod: NgtDropdownOpenMethod = NgtDropdownOpenMethod.HOVER;
 
     @Output() public onToggle: EventEmitter<boolean> = new EventEmitter();
+    @Output() public onHostClick: EventEmitter<any> = new EventEmitter();
 
     public name: string = uuid();
     public isOpen: boolean;
@@ -54,6 +55,8 @@ export class NgtDropdownComponent implements OnDestroy {
     private subscriptions: Array<Subscription> = [];
     private containerXPosition: number;
     private containerYPosition: number;
+
+    private closeTimeoutInstance;
 
     public constructor(
         @Optional() @SkipSelf()
@@ -90,8 +93,12 @@ export class NgtDropdownComponent implements OnDestroy {
     }
 
     public close(): void {
+        if (this.closeTimeoutInstance) {
+            clearTimeout(this.closeTimeoutInstance);
+        }
+
         if (this.closeTimeout) {
-            setTimeout(() => this.hideContainer(), this.closeTimeout);
+            this.closeTimeoutInstance = setTimeout(() => this.hideContainer(), this.closeTimeout);
 
             return;
         }
@@ -119,6 +126,8 @@ export class NgtDropdownComponent implements OnDestroy {
     }
 
     public onClick(event: Event): void {
+        this.onHostClick?.emit();
+
         if (this.openMethod == NgtDropdownOpenMethod.CLICK) {
             event.preventDefault();
             event.stopPropagation();
