@@ -39,7 +39,7 @@ export class NgtDropdownComponent implements OnDestroy {
     @Input() public reverseXPosition: boolean;
     @Input() public reverseYPosition: boolean;
     @Input() public closeOnClick: boolean;
-    @Input() public closeTimeout: number;
+    @Input() public closeTimeout: number = 1000;
     @Input() public openMethod: NgtDropdownOpenMethod = NgtDropdownOpenMethod.HOVER;
 
     @Output() public onToggle: EventEmitter<boolean> = new EventEmitter();
@@ -93,17 +93,9 @@ export class NgtDropdownComponent implements OnDestroy {
     }
 
     public close(): void {
-        if (this.closeTimeoutInstance) {
-            clearTimeout(this.closeTimeoutInstance);
-        }
-
-        if (this.closeTimeout) {
-            this.closeTimeoutInstance = setTimeout(() => this.hideContainer(), this.closeTimeout);
-
-            return;
-        }
-
-        this.hideContainer();
+        this.isOpen = false;
+        this.containerXPosition = null;
+        this.containerYPosition = null;
     }
 
     public toggle(): void {
@@ -125,13 +117,18 @@ export class NgtDropdownComponent implements OnDestroy {
         }
     }
 
-    public onClick(event: Event): void {
+    public onClick(event: Event, host: any, container: any): void {
         this.onHostClick?.emit();
 
-        if (this.openMethod == NgtDropdownOpenMethod.CLICK) {
+        if (this.isClickMethod()) {
             event.preventDefault();
             event.stopPropagation();
+
             this.toggle();
+        }
+
+        if (this.openMethod == NgtDropdownOpenMethod.POPOVER_CLICK) {
+            this.watchHover(host, container);
         }
     }
 
@@ -203,7 +200,7 @@ export class NgtDropdownComponent implements OnDestroy {
                 this.close();
                 clearInterval(interval);
             }
-        }, 1000);
+        }, this.closeTimeout);
     }
 
     private isInHover(host: any, container: any): boolean {
@@ -216,15 +213,15 @@ export class NgtDropdownComponent implements OnDestroy {
         this.subscriptions = [];
     }
 
-    private hideContainer(): void {
-        this.isOpen = false;
-        this.containerXPosition = null;
-        this.containerYPosition = null;
+    private isClickMethod(): boolean {
+        return this.openMethod == NgtDropdownOpenMethod.CLICK
+            || this.openMethod == NgtDropdownOpenMethod.POPOVER_CLICK;
     }
 }
 
 export enum NgtDropdownOpenMethod {
     CLICK = 'CLICK',
+    POPOVER_CLICK = 'POPOVER_CLICK',
     RIGHT_CLICK = 'RIGHT_CLICK',
     HOVER = 'HOVER'
 }

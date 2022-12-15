@@ -1,5 +1,5 @@
 <div class="sm:relative">
-    <div (mouseenter)="onHover(host, container)" (click)="onClick($event)" (contextmenu)="onRightClick($event)" #host>
+    <div (mouseenter)="onHover(host, container)" (click)="onClick($event, host, container)" (contextmenu)="onRightClick($event)" #host>
         <ng-content select='[host]'></ng-content>
     </div>
 
