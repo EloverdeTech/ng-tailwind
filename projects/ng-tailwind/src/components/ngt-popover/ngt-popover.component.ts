@@ -26,6 +26,8 @@ export class NgtPopoverComponent {
 
     public stylesToCompile: Array<string> = ['h', 'w', 'px', 'py', 'm', 'mx', 'my', 'shadow', 'text', 'border', 'color.border', 'color.bg', 'color.text'];
 
+    private clickTimeout;
+
     public constructor(
         @Optional() @Self()
         public ngtStylizableDirective: NgtStylizableDirective,
@@ -54,15 +56,20 @@ export class NgtPopoverComponent {
     }
 
     public fireClickEvent(): void {
-        this.onClick.emit();
+        if (this.clickTimeout) {
+            clearTimeout(this.clickTimeout);
+        }
 
-        setTimeout(() => {
+        this.clickTimeout = setTimeout(() => {
+            this.onClick.emit();
+
             const event = new MouseEvent('click', {bubbles: true});
 
             event.preventDefault();
             event.stopPropagation();
+
             this.hostDiv.nativeElement.dispatchEvent(event);
-        }, 50);
+        }, 500);
     }
 }
 
