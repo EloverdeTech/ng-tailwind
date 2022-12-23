@@ -202,7 +202,11 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         this.filtersDescription[reference] = description;
     }
 
-    public removeFilter(reference?: any) {
+    public removeFilter(reference?: string, refresh: boolean = true): void {
+        if (reference && !this.hasAppliedFilter(reference)) {
+            return;
+        }
+
         this.cleaningFilter = true;
 
         if (!reference) {
@@ -222,7 +226,9 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             this.inputSearch.clearInput();
         }
 
-        this.apply(this.ngtPagination.getCurrentPage(), false).then(() => this.cleaningFilter = false);
+        if (refresh) {
+            this.apply(this.ngtPagination.getCurrentPage(), false).then(() => this.cleaningFilter = false);
+        }
     }
 
     public hasAppliedFilter(filter: Object | NgtCustomFilter | string): boolean {
