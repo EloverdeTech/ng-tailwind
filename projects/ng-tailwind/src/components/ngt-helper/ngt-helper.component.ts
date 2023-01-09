@@ -14,8 +14,9 @@ export class NgtHelperComponent {
 
     @Input() public helpTextColor: string;
     @Input() public helpText: string;
-    @Input() public icon: string;
     @Input() public helpTitle: string;
+    @Input() public icon: string;
+    @Input() public iconSize: string;
     @Input() public iconColor: string;
     @Input() public iconTitle: string;
     @Input() public tooltipSize: string = 'max-w-xs';
@@ -38,6 +39,7 @@ export class NgtHelperComponent {
         this.ngtStyle.load(this.injector, 'NgtHelper', {
             text: 'text-sm',
             fontCase: '',
+            px: 'px-2',
             color: {
                 text: 'text-black',
                 bg: 'bg-gray-200'

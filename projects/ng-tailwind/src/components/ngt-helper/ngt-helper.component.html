@@ -1,7 +1,7 @@
 <ngt-dropdown class="flex w-full hover:opacity-100" [closeOnClick]="true" [autoXReverse]='true' #dropdownRef>
-    <div class="flex px-2 text-s rounded-full {{ iconColor ?? 'text-green-500'}}" style="cursor: help;"
+    <div class="flex rounded-full {{ iconColor ?? 'text-green-500'}} {{ ngtStyle.compile(['px', 'text']) }}" style="cursor: help;"
         host>
-        <ngt-svg *ngIf="icon" [src]="icon" style="cursor: help;"></ngt-svg>
+        <ngt-svg *ngIf="icon" [class]="iconSize" [src]="icon" style="cursor: help;"></ngt-svg>
 
         <div *ngIf="!icon" style="cursor: help;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -13,7 +13,7 @@
         <p *ngIf="helpText" class="cursor-pointer {{helpTextColor}}" style="margin-left: 2px">{{helpText}}</p>
     </div>
 
-    <div class="bg-gray-100 text-sm rounded-lg hover:opacity-100 text-gray-800 {{tooltipSize}} shadow-lg {{ ngtStyle.compile(['text', 'fontCase']) }}"
+    <div class="bg-gray-100 rounded-lg hover:opacity-100 text-gray-800 {{tooltipSize}} shadow-lg {{ ngtStyle.compile(['text', 'fontCase']) }}"
         [class.-mb-4]='dropdownRef.isYPositionReversed' container>
         <div
             class="{{ ngtStyle.compile(['color.bg', 'color.text']) }} flex justify-center rounded-t-lg hover:opacity-100 font-semibold border-b border-dashed border-gray-400 text-center px-6 py-1">
