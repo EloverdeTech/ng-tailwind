@@ -21,6 +21,7 @@ export class NgtDropzoneFileViewerComponent {
 
     public canShowViewer: boolean;
     public loading: boolean;
+    public maxFileSize: number = 10000000; /** 10 MB */
 
     public constructor(
         public ngtTranslateService: NgtTranslateService
@@ -37,7 +38,7 @@ export class NgtDropzoneFileViewerComponent {
     }
 
     public init(): void {
-        if (this.fileSize < 5000000) {
+        if (this.fileSize < this.maxFileSize) {
             this.loading = true;
             this.canShowViewer = true;
 
