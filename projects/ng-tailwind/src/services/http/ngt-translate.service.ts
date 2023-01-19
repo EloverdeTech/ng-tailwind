@@ -16,6 +16,7 @@ export abstract class NgtTranslateService {
     public abstract ngtStandardHelperTitle: string;
 
     public abstract ngtFileTooLargeForPreview: string;
+    public abstract ngtFileTooLargeForPreviewNoDownloadPermission: string;
 
     public abstract ngtValidationMaxCharactersExceded: string;
     public abstract ngtValidationRequiredField: string;
