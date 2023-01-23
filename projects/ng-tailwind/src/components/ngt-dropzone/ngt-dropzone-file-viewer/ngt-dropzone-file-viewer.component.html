@@ -27,12 +27,14 @@
         <div *ngIf="fileSize > maxFileSize" class="flex w-full h-full justify-center items-center">
             <div class="flex flex-col w-auto bg-gray-700 rounded-lg p-6" style="max-width: 80%;">
                 <p class="text-white font-medium text-center w-full">
-                    {{ canDownloadFile 
-                        ? ngtTranslateService.ngtFileTooLargeForPreview 
-                        : ngtTranslateService.ngtFileTooLargeForPreviewNoDownloadPermission }}
+                    {{
+                    canDownloadFile
+                    ? ngtTranslateService.ngtFileTooLargeForPreview
+                    : ngtTranslateService.ngtFileTooLargeForPreviewNoDownloadPermission
+                    }}
                 </p>
 
-                <div *ngIf="canDownloadFile" class="cursor-pointer mt-5 text-2xl self-center border rounded p-2" 
+                <div *ngIf="canDownloadFile" class="cursor-pointer mt-5 text-2xl self-center border rounded p-2"
                     (click)="downloadFile()">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                         <path fill="#fff" d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
@@ -42,8 +44,9 @@
         </div>
 
         <div class="px-10" style="width:100%; height: 83%;" *ngIf="canShowViewer">
-            <ngx-doc-viewer class="h-full w-full flex justify-center" [url]="url" [disableContent]="disableContent">
-            </ngx-doc-viewer>
+            <eloverde-doc-viewer class="h-full w-full flex justify-center" [url]="url" [disableContent]="disableContent"
+                (loaded)="loading = false" (onClose)="handleClose()">
+            </eloverde-doc-viewer>
         </div>
     </div>
 </div>
