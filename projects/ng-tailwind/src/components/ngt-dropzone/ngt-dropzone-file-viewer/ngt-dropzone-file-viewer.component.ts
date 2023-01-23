@@ -1,5 +1,5 @@
 import { Component, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
-import { NgxDocViewerComponent } from 'ngx-doc-viewer';
+import { EloverdeDocViewerComponent } from 'eloverde-doc-viewer';
 
 import { NgtTranslateService } from '../../../services/http/ngt-translate.service';
 
@@ -9,7 +9,7 @@ import { NgtTranslateService } from '../../../services/http/ngt-translate.servic
     templateUrl: './ngt-dropzone-file-viewer.component.html'
 })
 export class NgtDropzoneFileViewerComponent {
-    @ViewChild(NgxDocViewerComponent) public ngxDocViewer: NgxDocViewerComponent;
+    @ViewChild(EloverdeDocViewerComponent) public eloverdeDocViewer: EloverdeDocViewerComponent;
 
     @Input() public url: string;
     @Input() public fileName: string;
@@ -23,6 +23,8 @@ export class NgtDropzoneFileViewerComponent {
     public loading: boolean;
     public maxFileSize: number = 10000000; /** 10 MB */
 
+    private printScreenListener: (e: KeyboardEvent) => void;
+
     public constructor(
         public ngtTranslateService: NgtTranslateService
     ) { }
@@ -31,9 +33,8 @@ export class NgtDropzoneFileViewerComponent {
     public keyEvent(event: KeyboardEvent) {
         if (event.code == 'Escape') {
             this.canShowViewer = false;
-            setTimeout(() => {
-                this.onClose.emit();
-            }, 500);
+
+            setTimeout(() => this.onClose.emit(), 500);
         }
     }
 
@@ -42,13 +43,22 @@ export class NgtDropzoneFileViewerComponent {
             this.loading = true;
             this.canShowViewer = true;
 
-            this.initReloadInterval();
+            if (!this.canDownloadFile) {
+                this.disablePrintScreen();
+            }
         }
     }
 
     public close(): void {
         this.canShowViewer = false;
+    }
+
+    public handleClose(): void {
         this.onClose.emit();
+
+        if (this.printScreenListener) {
+            document.removeEventListener('keyup', this.printScreenListener);
+        }
     }
 
     public downloadFile(): void {
@@ -60,16 +70,13 @@ export class NgtDropzoneFileViewerComponent {
         file.click();
     }
 
-    private initReloadInterval(): void {
-        const reloadInterval = setInterval(() => {
-            this.ngxDocViewer?.iframes.forEach(iframe => {
-                if (iframe.nativeElement.contentDocument) {
-                    this.ngxDocViewer.reloadIFrame(iframe.nativeElement);
-                } else {
-                    clearInterval(reloadInterval);
-                    this.loading = false;
-                }
-            });
-        }, 3000);
+    private disablePrintScreen(): void {
+        this.printScreenListener = (e: KeyboardEvent) => {
+            if (e.key == 'PrintScreen') {
+                navigator.clipboard.writeText('');
+            }
+        };
+
+        document.addEventListener('keyup', this.printScreenListener);
     }
 }
