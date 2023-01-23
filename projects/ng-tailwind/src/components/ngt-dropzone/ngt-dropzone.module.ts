@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { EloverdeDocViewerModule } from 'eloverde-doc-viewer';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { NgxViewerModule } from 'ngx-viewer';
 
@@ -28,8 +28,8 @@ import { NgtDropzoneComponent } from './ngt-dropzone.component';
         NgxDropzoneModule,
         NgxViewerModule,
         NgtSvgModule,
-        NgxDocViewerModule,
-        NgtHelperModule,
+        EloverdeDocViewerModule,
+        NgtHelperModule
     ]
 })
 export class NgtDropzoneModule { }

@@ -6,7 +6,7 @@
     "umdModuleIds": {
       "ng2-flatpickr": "ng2-flatpickr",
       "angular-svg-icon": "angular-svg-icon",
-      "ngx-doc-viewer": "ngx-doc-viewer",
+      "eloverde-doc-viewer": "eloverde-doc-viewer",
       "ngx-dropzone": "ngx-dropzone",
       "ngx-viewer": "ngx-viewer",
       "viewerjs": "viewerjs",
