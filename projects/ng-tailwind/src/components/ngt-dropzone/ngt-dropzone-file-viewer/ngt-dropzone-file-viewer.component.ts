@@ -23,8 +23,6 @@ export class NgtDropzoneFileViewerComponent {
     public loading: boolean;
     public maxFileSize: number = 10000000; /** 10 MB */
 
-    private printScreenListener: (e: KeyboardEvent) => void;
-
     public constructor(
         public ngtTranslateService: NgtTranslateService
     ) { }
@@ -42,10 +40,6 @@ export class NgtDropzoneFileViewerComponent {
         if (this.fileSize < this.maxFileSize) {
             this.loading = true;
             this.canShowViewer = true;
-
-            if (!this.canDownloadFile) {
-                this.disablePrintScreen();
-            }
         }
     }
 
@@ -55,10 +49,6 @@ export class NgtDropzoneFileViewerComponent {
 
     public handleClose(): void {
         this.onClose.emit();
-
-        if (this.printScreenListener) {
-            document.removeEventListener('keyup', this.printScreenListener);
-        }
     }
 
     public downloadFile(): void {
@@ -68,15 +58,5 @@ export class NgtDropzoneFileViewerComponent {
         file.href = this.url;
         file.setAttribute("download", this.fileName);
         file.click();
-    }
-
-    private disablePrintScreen(): void {
-        this.printScreenListener = (e: KeyboardEvent) => {
-            if (e.key == 'PrintScreen') {
-                navigator.clipboard.writeText('');
-            }
-        };
-
-        document.addEventListener('keyup', this.printScreenListener);
     }
 }
