@@ -77,6 +77,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     //Behavior
     @Input() public isDisabled: boolean;
     @Input() public isReadonly: boolean;
+    @Input() public showRoundedIcon: boolean;
     @Input() public type: string = 'text';
     @Input() public name: string;
     @Input() public mask: string;
@@ -442,7 +443,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 keepStatic: true
             },
             [NgtInputMaskEnum.INTERNATIONAL_PHONE]: {
-                mask: ['+99 (99) 9999-9999', '+99 (99) 99999-9999', '+999 (99) 9999-9999', '+999 (99) 99999-9999'],
+                mask: ['+999 (99) 999-999', '+99 (99) 9999-9999', '+99 (99) 99999-9999', '+999 (99) 9999-9999', '+999 (99) 99999-9999'],
                 keepStatic: true
             },
             [NgtInputMaskEnum.PLATE]: {

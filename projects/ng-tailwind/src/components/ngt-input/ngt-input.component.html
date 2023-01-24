@@ -16,7 +16,9 @@
         [attr.type]="inputProperties.htmlType" #element>
     <span *ngIf="innerLeftIcon" class="absolute self-center px-2 {{ innerLeftIconColor }} {{ onClickLeftIcon ? 'cursor-pointer' : '' }}"
           (click)="onClickLeftIcon.emit()">
-        <ngt-svg class="fill-current" [src]='innerLeftIcon'></ngt-svg>
+          
+        <ngt-svg *ngIf="!showRoundedIcon" class="fill-current" [src]='innerLeftIcon'></ngt-svg>
+        <img *ngIf="showRoundedIcon" class="rounded-full h-6" [src]='innerLeftIcon'>
     </span>
 
     <div class="flex absolute h-full justify-end right-0 w-auto">
