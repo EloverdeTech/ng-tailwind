@@ -16,7 +16,7 @@
         [attr.type]="inputProperties.htmlType" #element>
     <span *ngIf="innerLeftIcon" class="absolute self-center px-2 {{ innerLeftIconColor }} {{ onClickLeftIcon ? 'cursor-pointer' : '' }}"
           (click)="onClickLeftIcon.emit()">
-          
+
         <ngt-svg *ngIf="!showRoundedIcon" class="fill-current" [src]='innerLeftIcon'></ngt-svg>
         <img *ngIf="showRoundedIcon" class="rounded-full h-6" [src]='innerLeftIcon'>
     </span>
@@ -54,6 +54,13 @@
         </span>
     </div>
 </div>
+
+<ng-container *ngIf="showCharactersLength && maxTotalCharsCount && !shining">
+    <p class="text-xs mt-1">
+        {{ ngtTranslateService.ngtTextAreaRemainingCharacters }}:
+        <span class="font-semibold">{{ getRemainingCharacters() }}</span>
+    </p>
+</ng-container>
 
 <ng-container *ngIf='shining'>
     <div class="flex">

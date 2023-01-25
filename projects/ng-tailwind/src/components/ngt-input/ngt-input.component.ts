@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtTranslateService } from '../../public-api';
 import {
     NgtHttpFindExistingResourceInterface,
     NgtHttpFindExistingResourceResponse,
@@ -73,6 +74,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public innerRightIcon: string;
     @Input() public innerRightIconColor: string;
     @Input() public decimalMaskPrecision: number = 2;
+    @Input() public showCharactersLength: boolean = false;
 
     //Behavior
     @Input() public isDisabled: boolean;
@@ -102,6 +104,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Output() public onClickRightIcon: EventEmitter<any> = new EventEmitter<any>();
     @Output() public validatePhoneResult: EventEmitter<any> = new EventEmitter<any>();
 
+    public maxTotalCharsCount: number;
     public existingResourceId: string;
     public componentReady: boolean;
     public inputProperties: {
@@ -129,7 +132,9 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         private ngtValidationService: NgtHttpValidationService,
         @Optional() @SkipSelf()
         private ngtResourceService: NgtHttpResourceService,
-        private changeDetector: ChangeDetectorRef
+        private changeDetector: ChangeDetectorRef,
+        @Optional()
+        public ngtTranslateService: NgtTranslateService
     ) {
         super();
 
@@ -295,6 +300,18 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         this.changeDetector.detectChanges();
     }
 
+    public getRemainingCharacters() {
+        if (this.element?.nativeElement?.value?.length) {
+            if ((this.maxTotalCharsCount - this.element.nativeElement.value.length) > 0) {
+                return this.maxTotalCharsCount - this.element.nativeElement.value.length;
+            } else {
+                return 0;
+            }
+        }
+
+        return this.maxTotalCharsCount;
+    }
+
     private initComponent() {
         if (this.formContainer && this.formContainer.control && (this.formControl = this.formContainer.control.get(this.name))) {
             if (this.focus) {
@@ -328,6 +345,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 }
             });
 
+            this.maxTotalCharsCount = this.maxLength;
             this.updateValidations();
 
             if (this.match) {
