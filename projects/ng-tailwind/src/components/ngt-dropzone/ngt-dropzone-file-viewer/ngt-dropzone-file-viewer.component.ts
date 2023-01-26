@@ -45,6 +45,7 @@ export class NgtDropzoneFileViewerComponent {
 
     public close(): void {
         this.canShowViewer = false;
+        this.onClose.emit();
     }
 
     public handleClose(): void {
