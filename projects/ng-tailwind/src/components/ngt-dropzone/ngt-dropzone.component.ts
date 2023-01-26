@@ -42,6 +42,7 @@ export enum NgtDropzoneFileTypeEnum {
     DOC = 'DOC',
     PDF = 'PDF',
     XLS = 'XLS',
+    DWG = 'DWG',
     OTHER = 'OTHER'
 }
 
@@ -365,7 +366,12 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     }
 
     public isImage(resource: any) {
-        return this.previewType == 'IMAGE' || (resource.file && resource.file.type && resource.file.type.includes('image'));
+        return this.previewType == 'IMAGE'
+            || (
+                resource.file && resource.file.type
+                && resource.file.type.includes('image')
+                && !resource.file.type.includes('dwg')
+            );
     }
 
     public isVideo(resource: any) {

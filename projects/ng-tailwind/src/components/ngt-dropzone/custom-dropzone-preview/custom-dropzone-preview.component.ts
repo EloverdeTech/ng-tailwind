@@ -38,6 +38,8 @@ export class CustomDropzonePreviewComponent extends NgxDropzonePreviewComponent 
             this.fileType = NgtDropzoneFileTypeEnum.PDF;
         } else if (this.file.type.includes('.document')) {
             this.fileType = NgtDropzoneFileTypeEnum.DOC;
+        } else if (this.file.type.includes('.dwg')) {
+            this.fileType = NgtDropzoneFileTypeEnum.DWG;
         } else {
             this.fileType = NgtDropzoneFileTypeEnum.OTHER;
         }
