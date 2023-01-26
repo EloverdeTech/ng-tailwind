@@ -461,7 +461,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 keepStatic: true
             },
             [NgtInputMaskEnum.INTERNATIONAL_PHONE]: {
-                mask: ['+999 (99) 999-999', '+99 (99) 9999-9999', '+99 (99) 99999-9999', '+999 (99) 9999-9999', '+999 (99) 99999-9999'],
+                mask: ['+999 99 999-999', '+99 (99) 9999-9999', '+99 (99) 99999-9999', '+999 (99) 9999-9999', '+999 (99) 99999-9999'],
                 keepStatic: true
             },
             [NgtInputMaskEnum.PLATE]: {
