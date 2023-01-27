@@ -440,7 +440,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             [NgtInputMaskEnum.CPF]: '999.999.999-99',
             [NgtInputMaskEnum.CNPJ]: '99.999.999/9999-99',
             [NgtInputMaskEnum.CPF_CNPJ_RUT]: {
-                mask: ['999.999.999-99', '99.999.999/9999', '99.999.999/9999-99'],
+                mask: ['999.999.999-99', '999999999999', '99.999.999/9999-99'],
                 keepStatic: true
             },
             [NgtInputMaskEnum.CPF_CNPJ]: {
