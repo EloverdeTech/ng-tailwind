@@ -32,6 +32,7 @@ export class NgtThComponent implements OnChanges, OnDestroy {
 
     @Input() public reference: string;
     @Input() public sortReference: string;
+    @Input() public modalWidth: string = 'md:max-w-md';
     @Input() public sortable: boolean;
     @Input() public searchable: boolean;
     @Input() public hasCustomSearch: boolean = false;
@@ -111,6 +112,7 @@ export class NgtThComponent implements OnChanges, OnDestroy {
     public enableSearch(event: any) {
         event.stopPropagation();
 
+        this.ngtDataTable.searchModal.ngtStyle.w = this.modalWidth;
         this.ngtDataTable.setSearchModalTemplate(this.modal);
         this.ngtDataTable.openSearchModal(this.reference);
 
