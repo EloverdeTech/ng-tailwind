@@ -202,33 +202,40 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         this.filtersDescription[reference] = description;
     }
 
-    public removeFilter(reference?: string, refresh: boolean = true): void {
-        if (reference && !this.hasAppliedFilter(reference)) {
-            return;
-        }
+    public async removeFilter(reference?: string, refresh: boolean = true): Promise<void> {
+        return new Promise(resolve => {
+            if (reference && !this.hasAppliedFilter(reference)) {
+                return resolve();
+            }
 
-        this.cleaningFilter = true;
+            this.cleaningFilter = true;
 
-        if (!reference) {
-            this.currentState.filters.defaultFilters = {};
-            this.currentState.filters.silentFilters = {};
-            this.filtersTranslated = [];
-        } else {
-            delete this.currentState.filters.defaultFilters[reference];
-            delete this.currentState.filters.silentFilters[reference];
+            if (!reference) {
+                this.currentState.filters.defaultFilters = {};
+                this.currentState.filters.silentFilters = {};
+                this.filtersTranslated = [];
+            } else {
+                delete this.currentState.filters.defaultFilters[reference];
+                delete this.currentState.filters.silentFilters[reference];
 
-            this.filtersTranslated = this.filtersTranslated.filter(element => element && element.reference !== reference);
-        }
+                this.filtersTranslated = this.filtersTranslated.filter(element => element && element.reference !== reference);
+            }
 
-        this.onClearFilter.emit(reference);
+            this.onClearFilter.emit(reference);
 
-        if (this.inputSearch && (reference === 'term' || !reference)) {
-            this.inputSearch.clearInput();
-        }
+            if (this.inputSearch && (reference === 'term' || !reference)) {
+                this.inputSearch.clearInput();
+            }
 
-        if (refresh) {
-            this.apply(this.ngtPagination.getCurrentPage(), false).then(() => this.cleaningFilter = false);
-        }
+            if (refresh) {
+                this.apply(this.ngtPagination.getCurrentPage(), false)
+                    .then(() => {
+                        this.cleaningFilter = false;
+
+                        resolve();
+                    });
+            }
+        });
     }
 
     public hasAppliedFilter(filter: Object | NgtCustomFilter | string): boolean {
