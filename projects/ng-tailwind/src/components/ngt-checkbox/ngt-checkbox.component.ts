@@ -28,7 +28,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
     templateUrl: './ngt-checkbox.component.html',
     styleUrls: ['./ngt-checkbox.component.css'],
     providers: [
-        NgtMakeProvider(NgtCheckboxComponent),
+        NgtMakeProvider(NgtCheckboxComponent)
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
@@ -46,7 +46,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
             transition(':enter', [
                 animate(200)
             ])
-        ]),
+        ])
     ]
 })
 export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewInit, OnDestroy {
@@ -137,6 +137,10 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         return this.mode === NgtCheckboxMode.TOGGLE;
     }
 
+    public isSideToggleMode(): boolean {
+        return this.mode === NgtCheckboxMode.SIDE_TOGGLE;
+    }
+
     public isDefaultMode() {
         return this.mode === NgtCheckboxMode.DEFAULT;
     }
@@ -160,5 +164,6 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
 export enum NgtCheckboxMode {
     DEFAULT = 'DEFAULT',
     TOGGLE = 'TOGGLE',
-    RADIO = 'RADIO',
+    SIDE_TOGGLE = 'SIDE_TOGGLE',
+    RADIO = 'RADIO'
 }
