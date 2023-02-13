@@ -228,13 +228,15 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             }
 
             if (refresh) {
-                this.apply(this.ngtPagination.getCurrentPage(), false)
+                return this.apply(this.ngtPagination.getCurrentPage(), false)
                     .then(() => {
                         this.cleaningFilter = false;
 
                         resolve();
                     });
             }
+
+            resolve();
         });
     }
 
