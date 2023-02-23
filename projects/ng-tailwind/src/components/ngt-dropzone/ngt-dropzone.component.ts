@@ -96,6 +96,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Input() public canDownloadFile: boolean = true;
     @Input() public verticalExpandable: boolean = false;
     @Input() public acceptedFiles: string = '*' /** Mime type */;
+    @Input() public unacceptedFiles: string; /** Mime type */;
     @Input() public maxFileSize: number; /** Bytes */
     @Input() public previewType: NgtDropzonePreviewType = NgtDropzonePreviewType.DEFAULT;
     @Input() public isRequired: boolean = false;
@@ -274,14 +275,19 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
 
     public async uploadFiles(files: Array<File>) {
         if (files && files.length) {
-            let temporaryFiles = [];
-            let temporaryAttachments = [];
-            let observables = [];
+            const temporaryFiles = [];
+            const temporaryAttachments = [];
+            const observables = [];
+            const unacceptedFiles = [];
 
             this.loading = true;
             this.onFileUploadInit.emit();
 
             files.forEach(file => {
+                if (file.type.includes(this.unacceptedFiles)) {
+                    return unacceptedFiles.push(file);
+                }
+
                 observables.push(this.ngtAttachmentHttpService.upload(this.remoteResource, file).pipe(
                     map((response: any) => {
                         if (response && response.data) {
@@ -301,6 +307,12 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
                 ));
             });
 
+            if (!observables.length && unacceptedFiles.length) {
+                this.loading = false;
+
+                return this.onFileSelectError.emit(NgtDropzoneErrorType.TYPE);
+            }
+
             this.subscriptions.push(
                 forkJoin(observables).subscribe(
                     (response) => {
@@ -314,6 +326,10 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
 
                         this.onFileUploaded.emit();
                         this.loading = false;
+
+                        if (unacceptedFiles.length) {
+                            this.onFileSelectError.emit(NgtDropzoneErrorType.TYPE);
+                        }
                     },
                     (error) => {
                         this.onFileUploadFail.emit(error);
