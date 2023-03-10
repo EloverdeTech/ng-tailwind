@@ -1,4 +1,4 @@
-<ngt-dropdown class="flex w-full hover:opacity-100" [closeOnClick]="true" [autoXReverse]='true' #dropdownRef>
+<ngt-dropdown class="flex w-full hover:opacity-100" [closeOnClick]="true" [autoXReverse]="autoXReverse" #dropdownRef>
     <div class="flex rounded-full {{ iconColor ?? 'text-green-500'}} {{ ngtStyle.compile(['px', 'text']) }}" style="cursor: help;"
         host>
         <ngt-svg *ngIf="icon" [class]="iconSize" [src]="icon" style="cursor: help;"></ngt-svg>
