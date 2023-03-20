@@ -210,8 +210,11 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
         setTimeout(() => this.inputSearch.setFocus());
     }
 
-    public refresh(): void {
-        this.loadData(this.itemsPerPage, this.searchTerm);
+    public async refresh(itemsPerPage?: number, searchTerm?: string): Promise<void> {
+        this.itemsPerPage = itemsPerPage !== undefined ? itemsPerPage : this.itemsPerPage;
+        this.searchTerm = searchTerm !== undefined ? searchTerm : this.searchTerm;
+
+        return this.loadData(this.itemsPerPage, this.searchTerm);
     }
 
     public reset(): void {
@@ -238,6 +241,40 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
                         this.selectedElements = this.selectableElements;
                     }
                 });
+        }
+    }
+
+    public selectElements(elements: Array<any>): void {
+        if (!this.isDisabled) {
+            const elementIds = this.isColoquentResources() ? elements.map(element => element.getApiId()) : elements;
+
+            this.selectableElements.forEach(
+                (selectableElement: NgtSelectContainerSelectableElementInterface) => {
+                    const value = selectableElement.value;
+
+                    if (
+                        !selectableElement.isSelected
+                        && (
+                            (this.isColoquentResources() && elementIds.includes(value.getApiId()))
+                            || elementIds.includes(value)
+                        )
+                    ) {
+                        selectableElement.isSelected = true;
+
+                        this.handleElementSelection(selectableElement);
+                    }
+                }
+            );
+        }
+    }
+
+    public toggleItem(selectableElement: NgtSelectContainerSelectableElementInterface, event?: Event): void {
+        event?.stopImmediatePropagation();
+
+        if (!this.isDisabled) {
+            selectableElement.isSelected = !selectableElement.isSelected;
+
+            this.handleElementSelection(selectableElement);
         }
     }
 
@@ -275,18 +312,8 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
         }
     }
 
-    public toggleItem(event: Event, selectableElement: NgtSelectContainerSelectableElementInterface): void {
-        event.stopImmediatePropagation();
-
-        if (!this.isDisabled) {
-            selectableElement.isSelected = !selectableElement.isSelected;
-
-            this.handleElementSelection(selectableElement);
-        }
-    }
-
     public search(term: string): void {
-        if (!this.componentReady || term === undefined || term === null || term === this.previousSearchTerm) {
+        if (!this.componentReady || term === undefined || term === null || term === this.previousSearchTerm || this.loading) {
             return;
         }
 
@@ -349,7 +376,8 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
         } else if (!selectableElement.isSelected && this.isSelectedElement(selectableElement)) {
             this.selectedElements = this.selectedElements.filter(
                 selectedElement => selectedElement.uuid !== selectableElement.uuid
-            );;
+            );
+
             this.onNativeChange(selectableElement);
 
             if (this.displayOnlySelected && !this.selectedElements.length) {
@@ -361,12 +389,17 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     private async loadData(perpage: number = this.itemsPerPage, searchTerm?: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             if (this.remoteResource) {
+                if (this.loading) {
+                    return resolve();
+                }
+
                 if (perpage == this.itemsPerPage) {
                     this.containerRef?.nativeElement?.scrollTo({ top: 0 });
                 }
 
                 this.selectableElements = [];
                 this.loading = true;
+                this.itemsPerPage = perpage;
 
                 const pagination: NgtHttpPagination = { ...this.pagination, ...{ per_page: perpage } };
                 const filters = searchTerm ? { [this.bindSearch]: searchTerm } : null;
@@ -493,6 +526,10 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
 
     private isHidden(): boolean {
         return !this.containerRef?.nativeElement.offsetParent;
+    }
+
+    private isColoquentResources(): boolean {
+        return this.selectableElements?.length && typeof this.selectableElements[0].value['getApiId'] === 'function';
     }
 
     private destroySubscriptions(): void {
