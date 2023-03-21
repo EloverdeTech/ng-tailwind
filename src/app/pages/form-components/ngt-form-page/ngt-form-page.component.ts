@@ -11,7 +11,10 @@ export class NgtFormPageComponent implements OnInit {
   public codeExample = `
   <form>
     <ngt-form [customLayout]='true' message='Complete all the fields correctly' #ngtForm>
-      <ngt-form-validation-message class="block mx-5 mt-5"></ngt-form-validation-message>
+      <ngt-form-validation-message class="block mx-5 mt-5" [message]="ngtForm.message"
+        [canShowValidationMessage]="ngtForm.canShowValidationMessage()">
+      </ngt-form-validation-message>
+      
         <div class="flex flex-wrap">
           <span class="my-2 font-semibold text-left w-full block mx-5 text-sm">
             FormState: <span class="font-normal">{{ ngtForm.getFormState() }}</span>

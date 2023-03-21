@@ -13,7 +13,8 @@ import { NgtFormComponent } from './ngt-form.component';
         NgtFormValidationMessageComponent
     ],
     exports: [
-        NgtFormComponent
+        NgtFormComponent,
+        NgtFormValidationMessageComponent
     ]
 
 })
