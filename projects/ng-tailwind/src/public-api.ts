@@ -130,7 +130,6 @@ export * from './components/ngt-shining/ngt-shining.component';
 //NgtForm
 export * from './components/ngt-form/ngt-form.module';
 export * from './components/ngt-form/ngt-form.component';
-export * from './components/ngt-form/ngt-form-validation-message/ngt-form-validation-message.module';
 export * from './components/ngt-form/ngt-form-validation-message/ngt-form-validation-message.component';
 
 //NgtHttpFormService

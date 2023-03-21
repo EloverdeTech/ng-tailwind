@@ -1,5 +1,3 @@
-<ng-container *ngIf='ngtForm'>
-    <div [hidden]="!ngtForm.canShowValidationMessage()" class="mb-5 p-2 rounded bg-red-500 text-white">
-        {{ ngtForm.message || ngtTranslateService.ngtFormDefaultValidationMessage }}
-    </div>
-</ng-container>
+<div *ngIf="canShowValidationMessage" class="mb-5 p-2 rounded bg-red-500 text-white">
+    {{ message || ngtTranslateService.ngtFormDefaultValidationMessage }}
+</div>
