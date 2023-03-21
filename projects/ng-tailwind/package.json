@@ -2,24 +2,23 @@
     "name": "ng-tailwind",
     "version": "4.0.1",
     "peerDependencies": {
-        "@angular/common": ">6.0.0",
-        "@angular/core": ">6.0.0",
+        "@angular/common": "<16.0.0",
+        "@angular/core": "<16.0.0",
         "flatpickr": ">=4.6.3",
         "ng2-flatpickr": ">=9.0.0",
         "@ng-select/ng-select": ">=10.0.3",
         "ngx-dropzone": ">=2.2.2",
         "eloverde-doc-viewer": ">=1.1.0",
-        "ngx-viewer": ">=1.0.5",
-        "viewerjs": ">=1.9.0",
-        "rxjs": ">=6.6.7",
+        "viewerjs": ">=1.10.5",
+        "rxjs": ">=7.5.5",
         "angular-svg-icon": "^8.0.0"
     },
     "devDependencies": {
-        "@types/node": "^13.9.4"
+        "@types/node": "^18.10.0"
     },
     "dependencies": {
-        "moment": "^2.24.0",
-        "inputmask": "^4.0.9",
-        "tslib": "^2.0.0"
+        "moment": "^2.29.4",
+        "inputmask": "^5.0.8",
+        "tslib": "^2.4.0"
     }
 }
