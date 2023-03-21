@@ -2,15 +2,7 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/ng-tailwind",
   "lib": {
-    "entryFile": "src/public-api.ts",
-    "umdModuleIds": {
-      "ng2-flatpickr": "ng2-flatpickr",
-      "angular-svg-icon": "angular-svg-icon",
-      "eloverde-doc-viewer": "eloverde-doc-viewer",
-      "ngx-dropzone": "ngx-dropzone",
-      "viewerjs": "viewerjs",
-      "@ng-select/ng-select": "@ng-select/ng-select"
-    }
+    "entryFile": "src/public-api.ts"
   },
   "allowedNonPeerDependencies": [
     "flatpickr",
