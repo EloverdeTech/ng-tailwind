@@ -21,13 +21,13 @@ import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { NgtTranslateService } from '../../public-api';
 import {
     NgtHttpFindExistingResourceInterface,
     NgtHttpFindExistingResourceResponse,
     NgtHttpResourceService,
 } from '../../services/http/ngt-http-resource.service';
 import { NgtHttpValidationResponse, NgtHttpValidationService } from '../../services/http/ngt-http-validation.service';
+import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
