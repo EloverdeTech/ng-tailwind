@@ -21,8 +21,7 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
 
 @Component({
     selector: '[ngt-td-check]',
-    templateUrl: './ngt-td-check.component.html',
-    styleUrls: ['./ngt-td-check.component.css'],
+    templateUrl: './ngt-td-check.component.html'
 })
 export class NgtTdCheckComponent implements OnDestroy {
     @ViewChild(NgtCheckboxComponent, { static: true }) public checkbox: NgtCheckboxComponent;

@@ -5,8 +5,7 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 
 @Component({
     selector: 'ngt-portlet-body',
-    templateUrl: './ngt-portlet-body.component.html',
-    styleUrls: ['./ngt-portlet-body.component.css']
+    templateUrl: './ngt-portlet-body.component.html'
 })
 export class NgtPortletBodyComponent {
     public ngtStyle: NgtStylizableService;

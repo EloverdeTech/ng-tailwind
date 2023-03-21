@@ -6,8 +6,7 @@ import { NgtModalComponent } from '../ngt-modal.component';
 
 @Component({
     selector: 'ngt-modal-header',
-    templateUrl: './ngt-modal-header.component.html',
-    styleUrls: ['./ngt-modal-header.component.css']
+    templateUrl: './ngt-modal-header.component.html'
 })
 export class NgtModalHeaderComponent {
     @Input() public ngtModal: NgtModalComponent;
@@ -20,8 +19,8 @@ export class NgtModalHeaderComponent {
         private injector: Injector,
         @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective,
     ) {
-        if (ngtModalInstance) {
-            this.ngtModal = ngtModalInstance;
+        if (this.ngtModalInstance) {
+            this.ngtModal = this.ngtModalInstance;
         }
 
         if (this.tailStylizableDirective) {

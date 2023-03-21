@@ -1,16 +1,15 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'ngt-dropdown-page',
-    templateUrl: './ngt-dropdown-page.component.html',
-    styleUrls: ['./ngt-dropdown-page.component.css']
+  selector: 'ngt-dropdown-page',
+  templateUrl: './ngt-dropdown-page.component.html'
 })
 export class NgtDropdownPageComponent {
-    public ngModelOne: boolean = false;
-    public ngModelTwo: boolean = false;
-    public ngModelThree: boolean = true;
+  public ngModelOne: boolean = false;
+  public ngModelTwo: boolean = false;
+  public ngModelThree: boolean = true;
 
-    public codeExample = `
+  public codeExample = `
   <form class="flex w-full justify-around pb-2 border-b">
     <div class="flex items-center">
       <span class="mx-2 font-semibold text-sm">{{ ngModelOne }}</span>
@@ -33,5 +32,5 @@ export class NgtDropdownPageComponent {
   </form>
   `;
 
-    public constructor() { }
+  public constructor() { }
 }

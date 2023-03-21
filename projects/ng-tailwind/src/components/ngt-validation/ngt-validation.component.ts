@@ -1,11 +1,11 @@
 import { Component, Input, Optional } from '@angular/core';
 import { ControlContainer, UntypedFormControl } from '@angular/forms';
+
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 
 @Component({
     selector: 'ngt-validation',
-    templateUrl: './ngt-validation.component.html',
-    styleUrls: ['./ngt-validation.component.css']
+    templateUrl: './ngt-validation.component.html'
 })
 export class NgtValidationComponent {
     @Input() public control: UntypedFormControl;

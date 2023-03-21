@@ -3,8 +3,7 @@ import { NgtDropzoneErrorType, NgtDropzonePreviewType } from 'projects/ng-tailwi
 
 @Component({
     selector: 'app-ngt-dropzone-page',
-    templateUrl: './ngt-dropzone-page.component.html',
-    styleUrls: ['./ngt-dropzone-page.component.css']
+    templateUrl: './ngt-dropzone-page.component.html'
 })
 export class NgtDropzonePageComponent implements OnInit {
     public ngtDropzonePreviewTypeOne = NgtDropzonePreviewType.IMAGE;

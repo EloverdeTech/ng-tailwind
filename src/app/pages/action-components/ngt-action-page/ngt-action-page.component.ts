@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'ngt-action-page',
-    templateUrl: './ngt-action-page.component.html',
-    styleUrls: ['./ngt-action-page.component.css']
+  selector: 'ngt-action-page',
+  templateUrl: './ngt-action-page.component.html'
 })
 export class NgtActionPageComponent {
-    public codeExample = `
+  public codeExample = `
   <ngt-action title="Navigation" href='/docs/installation'
     icon="assets/images/icons/cheveron_outline_right.svg" ngt-stylizable
     color.bg='bg-none hover:bg-teal-600' color.text='text-gray-700 hover:text-white text-2xl'
@@ -29,17 +28,17 @@ export class NgtActionPageComponent {
   </ngt-action>
   `;
 
-    public constructor() { }
+  public constructor() { }
 
-    public errorClick() {
-        alert('Ngt Action Error Click!');
-    }
+  public errorClick() {
+    alert('Ngt Action Error Click!');
+  }
 
-    public successClick() {
-        alert('Ngt Action Success Click!');
-    }
+  public successClick() {
+    alert('Ngt Action Success Click!');
+  }
 
-    public informationClick() {
-        alert('Ngt Action Information Click!');
-    }
+  public informationClick() {
+    alert('Ngt Action Information Click!');
+  }
 }

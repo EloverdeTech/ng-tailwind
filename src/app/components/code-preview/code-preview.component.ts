@@ -4,8 +4,7 @@ declare let hljs: any;
 
 @Component({
     selector: 'code-preview',
-    templateUrl: './code-preview.component.html',
-    styleUrls: ['./code-preview.component.css']
+    templateUrl: './code-preview.component.html'
 })
 export class CodePreviewComponent implements AfterViewInit {
     @Input() public lang = 'html';

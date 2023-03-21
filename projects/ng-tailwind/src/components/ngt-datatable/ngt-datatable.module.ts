@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { NgtStylizableModule } from '../../directives/ngt-stylizable/ngt-stylizable.module';
+import { NgtActionModule } from '../ngt-action/ngt-action.module';
 import { NgtCheckboxModule } from '../ngt-checkbox/ngt-checkbox.module';
 import { NgtInputModule } from '../ngt-input/ngt-input.module';
 import { NgtModalModule } from '../ngt-modal/ngt-modal.module';
@@ -17,7 +18,6 @@ import { NgtThCheckComponent } from './ngt-th-check/ngt-th-check.component';
 import { NgtThComponent } from './ngt-th/ngt-th.component';
 import { NgtTheadComponent } from './ngt-thead/ngt-thead.component';
 import { NgtTrComponent } from './ngt-tr/ngt-tr.component';
-import { NgtActionModule } from '../ngt-action/ngt-action.module';
 
 @NgModule({
     declarations: [

@@ -6,8 +6,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 
 @Component({
     selector: 'ngt-pagination',
-    templateUrl: './ngt-pagination.component.html',
-    styleUrls: ['./ngt-pagination.component.css']
+    templateUrl: './ngt-pagination.component.html'
 })
 export class NgtPaginationComponent {
     @Input() public pagesInterval: number;

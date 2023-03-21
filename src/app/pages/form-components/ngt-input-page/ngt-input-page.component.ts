@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-ngt-input-page',
-    templateUrl: './ngt-input-page.component.html',
-    styleUrls: ['./ngt-input-page.component.css']
+  selector: 'app-ngt-input-page',
+  templateUrl: './ngt-input-page.component.html'
 })
 export class NgtInputPageComponent implements OnInit {
-    public allowClearInput: string;
-    public decimalInput: string;
-    public cpfCnpj: string;
-    public password: string;
-    public passwordConfirm: string;
+  public allowClearInput: string;
+  public decimalInput: string;
+  public cpfCnpj: string;
+  public password: string;
+  public passwordConfirm: string;
 
-    public codeExample = `
+  public codeExample = `
   <ngt-input class="block" [jit]='true' name='allowClearInput' 
     [(ngModel)]="allowClearInput" label='Allow Clear Input' 
     [isRequired]='true' [allowClear]='true'>
@@ -36,7 +35,7 @@ export class NgtInputPageComponent implements OnInit {
   </ngt-input>
   `;
 
-    public constructor() { }
+  public constructor() { }
 
-    public ngOnInit() { }
+  public ngOnInit() { }
 }
