@@ -24,12 +24,6 @@
       ],
       "ng-tailwind/*": [
         "dist/ng-tailwind/*"
-      ],
-      "ngt-http-coloquent": [
-        "dist/ngt-http-coloquent"
-      ],
-      "ngt-http-coloquent/*": [
-        "dist/ngt-http-coloquent/*"
       ]
     },
     "useDefineForClassFields": false

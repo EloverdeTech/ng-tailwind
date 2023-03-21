@@ -164,46 +164,6 @@
           }
         }
       }
-    },
-    "ngt-http-coloquent": {
-      "projectType": "library",
-      "root": "projects/ngt-http-coloquent",
-      "sourceRoot": "projects/ngt-http-coloquent/src",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/ngt-http-coloquent/tsconfig.lib.json",
-            "project": "projects/ngt-http-coloquent/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/ngt-http-coloquent/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/ngt-http-coloquent/src/test.ts",
-            "tsConfig": "projects/ngt-http-coloquent/tsconfig.spec.json",
-            "karmaConfig": "projects/ngt-http-coloquent/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/ngt-http-coloquent/tsconfig.lib.json",
-              "projects/ngt-http-coloquent/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
     }
   }
 }
