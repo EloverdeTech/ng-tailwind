@@ -8,7 +8,6 @@
       "angular-svg-icon": "angular-svg-icon",
       "eloverde-doc-viewer": "eloverde-doc-viewer",
       "ngx-dropzone": "ngx-dropzone",
-      "ngx-viewer": "ngx-viewer",
       "viewerjs": "viewerjs",
       "@ng-select/ng-select": "@ng-select/ng-select"
     }

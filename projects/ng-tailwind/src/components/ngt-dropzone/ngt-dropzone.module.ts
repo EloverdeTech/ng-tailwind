@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EloverdeDocViewerModule } from 'eloverde-doc-viewer';
 import { NgxDropzoneModule } from 'ngx-dropzone';
-import { NgxViewerModule } from 'ngx-viewer';
 
 import { NgtHelperModule } from '../ngt-helper/ngt-helper.module';
 import { NgtSvgModule } from '../ngt-svg/ngt-svg.module';
@@ -26,7 +25,6 @@ import { NgtDropzoneComponent } from './ngt-dropzone.component';
         FormsModule,
         NgtValidationModule,
         NgxDropzoneModule,
-        NgxViewerModule,
         NgtSvgModule,
         EloverdeDocViewerModule,
         NgtHelperModule
