@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgxDropzonePreviewComponent } from 'ngx-dropzone';
 
-import { NgtDropzoneFileTypeEnum } from '../ngt-dropzone.component';
+import { NgtDropzoneFileTypeEnum } from '../ngt-dropzone.meta';
 
 @Component({
     selector: 'custom-dropzone-preview',
