@@ -185,7 +185,7 @@ export class NgtPaginationComponent {
     }
 
     private bindDisplayedButtonSections(sectionStartPage: number, sectionEndPage: number, totalPages: number) {
-        this.displayPreviousSectionButton = sectionStartPage > 1 ? true : false;
-        this.displayNextSectionButton = sectionEndPage < totalPages ? true : false;
+        this.displayPreviousSectionButton = sectionStartPage > 1;
+        this.displayNextSectionButton = sectionEndPage < totalPages;
     }
 }

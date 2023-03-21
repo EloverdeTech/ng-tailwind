@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgtFormComponent, NgtFormState } from 'projects/ng-tailwind/src/public-api';
 
 @Component({
-  selector: 'app-ngt-form-page',
-  templateUrl: './ngt-form-page.component.html'
+    selector: 'app-ngt-form-page',
+    templateUrl: './ngt-form-page.component.html'
 })
 export class NgtFormPageComponent implements OnInit {
   @ViewChild(NgtFormComponent, { static: true }) private ngtFormComponent: NgtFormComponent;
@@ -45,14 +45,14 @@ export class NgtFormPageComponent implements OnInit {
   public ngOnInit() { }
 
   public toggleFormState() {
-    if (this.ngtFormComponent.getFormState() == NgtFormState.CREATING) {
-      return this.ngtFormComponent.setFormState(NgtFormState.EDITING);
-    }
+      if (this.ngtFormComponent.getFormState() == NgtFormState.CREATING) {
+          return this.ngtFormComponent.setFormState(NgtFormState.EDITING);
+      }
 
-    return this.ngtFormComponent.setFormState(NgtFormState.CREATING);
+      return this.ngtFormComponent.setFormState(NgtFormState.CREATING);
   }
 
   public save() {
-    this.ngtFormComponent.saveResource().subscribe(() => { });
+      this.ngtFormComponent.saveResource().subscribe(() => { });
   }
 }

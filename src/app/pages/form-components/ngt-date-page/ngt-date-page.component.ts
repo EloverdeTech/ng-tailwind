@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { NgtDateLocale, NgtDateMode } from 'projects/ng-tailwind/src/public-api';
 
 @Component({
-  selector: 'app-ngt-date-page',
-  templateUrl: './ngt-date-page.component.html'
+    selector: 'app-ngt-date-page',
+    templateUrl: './ngt-date-page.component.html'
 })
 export class NgtDatePageComponent implements OnInit {
-  public dateOne: string;
-  public dateTwo: string;
-  public dateRange: string;
-  public dateOneLocale = NgtDateLocale.BRAZIL;
-  public dateRangeType = NgtDateMode.RANGE;
+    public dateOne: string;
+    public dateTwo: string;
+    public dateRange: string;
+    public dateOneLocale = NgtDateLocale.BRAZIL;
+    public dateRangeType = NgtDateMode.RANGE;
 
-  public codeExample = `
+    public codeExample = `
   <form class="flex w-full pb-2 border-b">
     <div class="flex flex-wrap w-full justify-center">
       <div class="flex flex-col w-full md:w-3/12 pr-0 md:pr-6 mx-4">
@@ -48,7 +48,7 @@ export class NgtDatePageComponent implements OnInit {
   </form>
   `;
 
-  public constructor() { }
+    public constructor() { }
 
-  public ngOnInit() { }
+    public ngOnInit() { }
 }
