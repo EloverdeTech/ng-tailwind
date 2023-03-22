@@ -32,8 +32,6 @@ import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
-
-
 @Component({
     selector: 'ngt-input',
     templateUrl: './ngt-input.component.html',
