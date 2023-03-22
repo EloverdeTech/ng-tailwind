@@ -31,8 +31,6 @@ import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
-let Inputmask = require('inputmask');
-
 export enum NgtInputMaskEnum {
     CPF = 'cpf',
     CNPJ = 'cnpj',
@@ -46,6 +44,8 @@ export enum NgtInputMaskEnum {
     TIME = 'time',
     INTERNATIONAL_PHONE = 'international-phone'
 }
+
+declare var Inputmask: any;
 
 @Component({
     selector: 'ngt-input',
