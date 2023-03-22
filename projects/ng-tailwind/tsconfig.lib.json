@@ -5,6 +5,7 @@
     "declarationMap": true,
     "declaration": true,
     "inlineSources": true,
+    "allowSyntheticDefaultImports": true,
     "types": [
       "node"
     ],
