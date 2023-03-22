@@ -193,7 +193,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }
 
         if (!this.getNativeValue()) {
-            this.element.nativeElement.value = value;
+            this.element.nativeElement.value = value ?? '';
         }
 
         if (!value && value !== 0) {
