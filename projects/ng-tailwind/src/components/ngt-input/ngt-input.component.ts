@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { applyInputMask, InputMaskEnum, removeInputMask } from '../../helpers/input-mask/input-mask.helper';
 import {
     NgtHttpFindExistingResourceInterface,
     NgtHttpFindExistingResourceResponse,
@@ -31,21 +32,7 @@ import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
-export enum NgtInputMaskEnum {
-    CPF = 'cpf',
-    CNPJ = 'cnpj',
-    CPF_CNPJ = 'cnpj-cpf',
-    CPF_CNPJ_RUT = 'cnpj-cpf-rut',
-    DECIMAL = 'decimal',
-    CELLPHONE = 'cellphone',
-    PLATE = 'plate',
-    CEP = 'cep',
-    INTEGER = 'integer',
-    TIME = 'time',
-    INTERNATIONAL_PHONE = 'international-phone'
-}
 
-declare var Inputmask: any;
 
 @Component({
     selector: 'ngt-input',
@@ -223,7 +210,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             }
 
             if (
-                (this.mask == NgtInputMaskEnum.CELLPHONE || this.mask == NgtInputMaskEnum.INTERNATIONAL_PHONE)
+                (this.mask == InputMaskEnum.CELLPHONE || this.mask == InputMaskEnum.INTERNATIONAL_PHONE)
                 && this.allowPhoneValidation && this.value
             ) {
                 this.validatePhone();
@@ -431,23 +418,23 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     private setupMasks(previousMask?: string) {
         if (this.mask != previousMask && !this.mask) {
-            Inputmask.remove(this.element.nativeElement);
+            removeInputMask(this.element.nativeElement);
 
             return this.clearInput();
         }
 
         let masks = {
-            [NgtInputMaskEnum.CPF]: '999.999.999-99',
-            [NgtInputMaskEnum.CNPJ]: '99.999.999/9999-99',
-            [NgtInputMaskEnum.CPF_CNPJ_RUT]: {
+            [InputMaskEnum.CPF]: '999.999.999-99',
+            [InputMaskEnum.CNPJ]: '99.999.999/9999-99',
+            [InputMaskEnum.CPF_CNPJ_RUT]: {
                 mask: ['999.999.999-99', '999999999999', '99.999.999/9999-99'],
                 keepStatic: true
             },
-            [NgtInputMaskEnum.CPF_CNPJ]: {
+            [InputMaskEnum.CPF_CNPJ]: {
                 mask: ['999.999.999-99', '99.999.999/9999-99'],
                 keepStatic: true
             },
-            [NgtInputMaskEnum.DECIMAL]: {
+            [InputMaskEnum.DECIMAL]: {
                 digits: this.decimalMaskPrecision,
                 groupSeparator: '.',
                 radixPoint: ',',
@@ -456,32 +443,32 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 rightAlign: false,
                 max: this.maxValue,
             },
-            [NgtInputMaskEnum.CELLPHONE]: {
+            [InputMaskEnum.CELLPHONE]: {
                 mask: ['(99) 999-999', '(99) 9999-9999', '(99) 99999-9999'],
                 keepStatic: true
             },
-            [NgtInputMaskEnum.INTERNATIONAL_PHONE]: {
+            [InputMaskEnum.INTERNATIONAL_PHONE]: {
                 mask: ['+999 99 999-999', '+99 (99) 9999-9999', '+99 (99) 99999-9999', '+999 (99) 9999-9999', '+999 (99) 99999-9999'],
                 keepStatic: true
             },
-            [NgtInputMaskEnum.PLATE]: {
+            [InputMaskEnum.PLATE]: {
                 mask: ['AAA-9999', 'AAA9A99'],
                 keepStatic: true
             },
-            [NgtInputMaskEnum.CEP]: '99999-999',
-            [NgtInputMaskEnum.INTEGER]: {
+            [InputMaskEnum.CEP]: '99999-999',
+            [InputMaskEnum.INTEGER]: {
                 max: this.maxValue,
                 rightAlign: false
             },
-            [NgtInputMaskEnum.TIME]: '99:99',
+            [InputMaskEnum.TIME]: '99:99',
         };
 
-        if (this.mask == NgtInputMaskEnum.DECIMAL) {
-            Inputmask(NgtInputMaskEnum.DECIMAL, masks[this.mask]).mask(this.element.nativeElement);
-        } else if (this.mask == NgtInputMaskEnum.INTEGER) {
-            Inputmask(NgtInputMaskEnum.INTEGER, masks[this.mask]).mask(this.element.nativeElement);
+        if (this.mask == InputMaskEnum.DECIMAL) {
+            applyInputMask(this.element.nativeElement, InputMaskEnum.DECIMAL, masks[this.mask]);
+        } else if (this.mask == InputMaskEnum.INTEGER) {
+            applyInputMask(this.element.nativeElement, InputMaskEnum.INTEGER, masks[this.mask]);
         } else {
-            Inputmask(masks[this.mask]).mask(this.element.nativeElement);
+            applyInputMask(this.element.nativeElement, masks[this.mask]);
         }
     }
 
@@ -785,8 +772,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 .replace('-', '')
                 .replace('/', '');
         } else if (
-            this.mask == NgtInputMaskEnum.CELLPHONE
-            || this.mask == NgtInputMaskEnum.INTERNATIONAL_PHONE
+            this.mask == InputMaskEnum.CELLPHONE
+            || this.mask == InputMaskEnum.INTERNATIONAL_PHONE
         ) {
             value = (value + "")
                 .replace('(', '')
