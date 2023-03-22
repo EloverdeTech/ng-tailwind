@@ -13,6 +13,10 @@ import {
     ViewEncapsulation,
 } from '@angular/core';
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
+import { english } from 'flatpickr/dist/l10n/default.js';
+import { Portuguese } from 'flatpickr/dist/l10n/pt.js';
+import Inputmask from 'inputmask';
+import moment from 'moment';
 import { FlatpickrOptions, Ng2FlatpickrComponent } from 'ng2-flatpickr';
 import { Subscription } from 'rxjs';
 
@@ -22,12 +26,6 @@ import { getEnumFromString } from '../../helpers/enum/enum';
 import { uuid } from '../../helpers/uuid';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
-
-const Brazil = require("flatpickr/dist/l10n/pt.js").default.pt;
-const US = require("flatpickr/dist/l10n/default.js").default;
-
-let moment = require('moment');
-let Inputmask = require('inputmask');
 
 @Component({
     selector: 'ngt-date',
@@ -359,8 +357,8 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
 
     private getLocale() {
         return this.locale == NgtDateLocale.US
-            ? US
-            : Brazil;
+            ? english
+            : Portuguese;
     }
 
     private getDateMode() {
