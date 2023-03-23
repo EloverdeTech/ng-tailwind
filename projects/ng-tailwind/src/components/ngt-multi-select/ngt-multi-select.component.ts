@@ -108,6 +108,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     private searchTimeout: any;
     private previousSearchTerm: string = '';
     private becameVisible: boolean;
+    private selectableResourcesCount: number;
 
     public constructor(
         private ngtHttpService: NgtHttpService,
@@ -232,7 +233,9 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
             this.nativeValue = [];
             this.selectedElements = [];
 
-            this.loadData(this.selectAllCheckbox ? this.pagination.total : this.itemsPerPage)
+            const perpage = this.selectAllCheckbox ? this.pagination.total : this.itemsPerPage;
+
+            this.loadData(perpage, this.searchTerm)
                 .then(() => {
                     this.containerRef?.nativeElement?.scrollTo({ top: 0 });
                     this.selectableElements.forEach(element => element.isSelected = this.selectAllCheckbox);
@@ -323,6 +326,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
 
         this.searchTimeout = setTimeout(() => {
             this.previousSearchTerm = term;
+            this.selectAllCheckbox = this.selectedElements?.length == this.selectableResourcesCount;
 
             if (!term) {
                 this.inSearch = false;
@@ -410,10 +414,14 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
                     ).subscribe(
                         (response: NgtHttpResponse) => {
                             this.bindSelectableElements(response.data);
-                            this.pagination = response.meta.pagination;
 
+                            this.pagination = response.meta.pagination;
                             this.itemsTotal = this.pagination.total;
                             this.loading = false;
+
+                            if (!this.selectableResourcesCount && !searchTerm) {
+                                this.selectableResourcesCount = this.pagination.total;
+                            }
 
                             this.onDataChange.emit(this.selectableElements);
                             this.componentReady = true;
