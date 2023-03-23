@@ -36,11 +36,11 @@
 
         <ng-container *ngFor="let element of getSelectableElements(); let i = index">
             <div class="flex w-full items-center hover:bg-gray-200 {{ isDisabled ? 'cursor-not-allowed' : 'cursor-pointer' }}"
-                [class.p-2]='!customOptionTemplate' (click)='toggleItem($event, element)'>
+                [class.p-2]='!customOptionTemplate' (click)='toggleItem(element, $event)'>
                 <ng-template let-element #elementCheckboxTemplate>
                     <ngt-checkbox class="flex pr-2" [name]='element.uuid' [(ngModel)]="element.isSelected"
                         (ngModelChange)='onNativeChange(element)' [isClickDisabled]='true' [isDisabled]='isDisabled'
-                        h='h-5' w='w-5' (click)='toggleItem($event, element)' ngt-stylizable>
+                        h='h-5' w='w-5' (click)='toggleItem(element, $event)' ngt-stylizable>
                     </ngt-checkbox>
                 </ng-template>
 

@@ -20,6 +20,7 @@ export class NgtHelperComponent {
     @Input() public iconColor: string;
     @Input() public iconTitle: string;
     @Input() public tooltipSize: string = 'max-w-xs';
+    @Input() public autoXReverse: boolean = true;
 
     public ngtStyle: NgtStylizableService;
 
