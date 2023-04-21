@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgtModalBodyComponent } from './ngt-modal-body/ngt-modal-body.component';
 import { NgtModalFooterComponent } from './ngt-modal-footer/ngt-modal-footer.component';

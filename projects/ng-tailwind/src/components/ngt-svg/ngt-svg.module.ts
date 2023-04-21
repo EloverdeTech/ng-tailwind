@@ -1,8 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgtSvgComponent } from './ngt-svg.component';
 import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+
+import { NgtSvgComponent } from './ngt-svg.component';
 
 @NgModule({
     declarations: [NgtSvgComponent],
@@ -10,7 +11,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
     imports: [
         CommonModule,
         HttpClientModule,
-        AngularSvgIconModule
+        AngularSvgIconModule.forRoot()
     ]
 })
 export class NgtSvgModule { }

@@ -3,8 +3,7 @@ import { NgtDatatableComponent, NgtDatatableType } from 'projects/ng-tailwind/sr
 
 @Component({
     selector: 'app-ngt-datatable-page',
-    templateUrl: './ngt-datatable-page.component.html',
-    styleUrls: ['./ngt-datatable-page.component.css']
+    templateUrl: './ngt-datatable-page.component.html'
 })
 export class NgtDatatablePageComponent implements OnInit, AfterViewInit {
     @ViewChild('ngtDatatable') private ngtDatatable: NgtDatatableComponent;

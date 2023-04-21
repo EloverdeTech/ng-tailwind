@@ -7,7 +7,6 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 @Component({
     selector: 'ngt-modal',
     templateUrl: './ngt-modal.component.html',
-    styleUrls: ['./ngt-modal.component.css'],
     animations: [
         trigger('fade', [
             state('void', style({ opacity: 0 })),

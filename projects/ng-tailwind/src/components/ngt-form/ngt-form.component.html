@@ -1,2 +1,5 @@
-<ngt-form-validation-message *ngIf='!customLayout'></ngt-form-validation-message>
+<ngt-form-validation-message *ngIf='!customLayout' [canShowValidationMessage]="canShowValidationMessage()"
+    [message]="message">
+</ngt-form-validation-message>
+
 <ng-content></ng-content>

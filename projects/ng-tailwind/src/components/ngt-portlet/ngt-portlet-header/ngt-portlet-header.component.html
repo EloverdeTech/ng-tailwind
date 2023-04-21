@@ -1,6 +1,6 @@
 <div class='leading-loose {{ ngtStyle.compile(["h", "color.text", "color.bg", "border", "text", "fontCase"]) }}'>
-    <div class="flex flex-wrap md:flex-no-wrap h-full relative px-3 md:px-8 py-2">
-        <div *ngIf="caption || icon" class="flex md:whitespace-no-wrap items-center gap-2">
+    <div class="flex flex-wrap md:flex-nowrap h-full relative px-3 md:px-8 py-2">
+        <div *ngIf="caption || icon" class="flex md:whitespace-nowrap items-center gap-2">
             <ngt-svg [src]="icon" class="text-xl" *ngIf="icon"></ngt-svg>
             <div class="flex font-medium self-center gap-1">
                 {{ caption }}

@@ -130,7 +130,6 @@ export * from './components/ngt-shining/ngt-shining.component';
 //NgtForm
 export * from './components/ngt-form/ngt-form.module';
 export * from './components/ngt-form/ngt-form.component';
-export * from './components/ngt-form/ngt-form-validation-message/ngt-form-validation-message.module';
 export * from './components/ngt-form/ngt-form-validation-message/ngt-form-validation-message.component';
 
 //NgtHttpFormService
@@ -139,6 +138,7 @@ export * from './services/http/ngt-http-form.service';
 //NgtDropzone
 export * from './components/ngt-dropzone/ngt-dropzone.module';
 export * from './components/ngt-dropzone/ngt-dropzone.component';
+export * from './components/ngt-dropzone/ngt-dropzone.meta';
 export * from './services/http/ngt-attachment-http.service';
 
 //NgtAnimations

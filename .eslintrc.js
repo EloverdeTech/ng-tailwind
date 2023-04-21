@@ -64,6 +64,7 @@ module.exports = {
             { blankLine: "always", prev: ["*"], next: ["const", "let", "var", "for", "while", "do", "if", "switch", "try", "return"] },
             { blankLine: "any", prev: ["const", "let", "var"], next: ["const", "let", "var"] }
         ],
+        "no-unneeded-ternary": ["error", { "defaultAssignment": true }],
         "padded-blocks": ["error", "never"],
         "brace-style": [
             "error",

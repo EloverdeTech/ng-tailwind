@@ -1,29 +1,23 @@
-import { Component, Injector, Input, Optional, Self, SkipSelf } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, Optional, Output, Self } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtModalComponent } from '../ngt-modal.component';
 
 @Component({
     selector: 'ngt-modal-header',
-    templateUrl: './ngt-modal-header.component.html',
-    styleUrls: ['./ngt-modal-header.component.css']
+    templateUrl: './ngt-modal-header.component.html'
 })
 export class NgtModalHeaderComponent {
-    @Input() public ngtModal: NgtModalComponent;
+    @Input() public disableDefaultCloses: boolean;
+
+    @Output() public onClose: EventEmitter<void> = new EventEmitter();
 
     public ngtStyle: NgtStylizableService;
 
     public constructor(
-        @Optional() @SkipSelf()
-        private ngtModalInstance: NgtModalComponent,
         private injector: Injector,
         @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective,
     ) {
-        if (ngtModalInstance) {
-            this.ngtModal = ngtModalInstance;
-        }
-
         if (this.tailStylizableDirective) {
             this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
         } else {

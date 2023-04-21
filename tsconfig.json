@@ -7,10 +7,11 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
     "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2015",
+    "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -24,14 +25,9 @@
       ],
       "ng-tailwind/*": [
         "dist/ng-tailwind/*"
-      ],
-      "ngt-http-coloquent": [
-        "dist/ngt-http-coloquent"
-      ],
-      "ngt-http-coloquent/*": [
-        "dist/ngt-http-coloquent/*"
       ]
-    }
+    },
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

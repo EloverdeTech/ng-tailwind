@@ -24,7 +24,6 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 @Component({
     selector: 'ngt-textarea',
     templateUrl: './ngt-textarea.component.html',
-    styleUrls: ['./ngt-textarea.component.css'],
     providers: [
         NgtMakeProvider(NgtTextareaComponent),
     ],

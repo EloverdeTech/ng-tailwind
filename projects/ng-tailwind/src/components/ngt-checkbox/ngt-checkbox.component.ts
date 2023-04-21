@@ -26,7 +26,6 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 @Component({
     selector: 'ngt-checkbox',
     templateUrl: './ngt-checkbox.component.html',
-    styleUrls: ['./ngt-checkbox.component.css'],
     providers: [
         NgtMakeProvider(NgtCheckboxComponent)
     ],

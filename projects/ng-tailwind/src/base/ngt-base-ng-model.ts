@@ -17,10 +17,6 @@ export abstract class NgtBaseNgModel implements ControlValueAccessor {
         this.registerOnTouched(this.onTouched);
     }
 
-    public onValueChange() {
-        return this.onValueChangeEvent;
-    }
-
     public get value(): any {
         return this._value != this.ignore ? this._value : null;
     };
@@ -36,6 +32,10 @@ export abstract class NgtBaseNgModel implements ControlValueAccessor {
 
             this.change(v);
         }
+    }
+
+    public onValueChange() {
+        return this.onValueChangeEvent;
     }
 
     public writeValue(value: any) {

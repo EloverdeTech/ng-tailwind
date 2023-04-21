@@ -5,8 +5,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 
 @Component({
     selector: 'ngt-header-nav',
-    templateUrl: './ngt-header-nav.component.html',
-    styleUrls: ['./ngt-header-nav.component.css']
+    templateUrl: './ngt-header-nav.component.html'
 })
 export class NgtHeaderNavComponent {
     @ViewChild('element', { static: true }) public element: ElementRef;
