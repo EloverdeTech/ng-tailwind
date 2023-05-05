@@ -1,17 +1,16 @@
 <div class="border-2 border-dotted border-gray-400 rounded p-2 flex items-center overflow-x-auto"
-    [ngStyle]="{ 'height': ngtDropzoneComponent.dropzoneHeight }">
-    <div *ngIf="ngtDropzoneComponent.loading"
-        class="flex absolute justify-center items-center w-full h-full cursor-wait z-10">
+    [ngStyle]="{ 'height': dropzoneHeight }">
+    <div *ngIf="loading" class="flex absolute justify-center items-center w-full h-full cursor-wait z-10">
         <div class="div-loader"></div>
     </div>
 
-    <div [class]="ngtDropzoneComponent.loading ? 'hidden' : 'flex items-center'">
+    <div [class]="loading ? 'hidden' : 'flex items-center'">
         <ng-container *ngIf="images?.length">
             <div class="flex py-5">
                 <div *ngFor="let image of images; let index = index" class="w-48 mr-8">
                     <div class="flex flex-col w-48 mx-4 cursor-pointer"
-                        title="{{ image.name || '' }} ({{ ngtDropzoneComponent.getFormattedFileSize(image) }})"
-                        (click)="onImageClick(index)">
+                        title="{{ image.name || '' }} ({{ getFormattedFileSize(image) }})"
+                        (click)="handleImageClick(index)">
                         <img [src]="image.thumbnailUrl" [alt]="image.name" class="w-full h-32">
 
                         <p class="w-full truncate text-gray-500 text-center text-sm font-mono">
@@ -53,7 +52,7 @@
         <ng-container *ngIf="files?.length">
             <ng-container *ngFor="let file of files">
                 <div class="flex flex-col w-48 mr-6 cursor-pointer"
-                    (click)="ngtDropzoneComponent.onFileClick(file.previewUrl, file.name, file.fileSize)">
+                    (click)="handleFileClick(file.previewUrl, file.name, file.fileSize)">
                     <div class="w-full flex justify-center border-2 rounded py-4 text-6xl">
                         <svg *ngIf="getFileType(file) == ngtDropzoneViewFileTypeEnum.OTHER"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -88,8 +87,7 @@
         </ng-container>
     </div>
 
-    <div *ngIf="!ngtDropzoneComponent.loading && !ngtDropzoneComponent.resources?.length"
-        class="px-2 text-center w-full">
-        {{ ngtDropzoneComponent.placeholder }}
+    <div *ngIf="!loading && !resources?.length" class="px-2 text-center w-full">
+        {{ placeholder }}
     </div>
 </div>

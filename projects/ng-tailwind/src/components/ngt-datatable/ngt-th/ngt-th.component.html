@@ -26,7 +26,8 @@
 </div>
 
 <ng-template #modal>
-    <ngt-modal-header [ngtModal]='ngtDataTable.searchModal'>
+    <ngt-modal-header [disableDefaultCloses]="ngtDataTable.searchModal.disableDefaultCloses"
+        (onClose)="ngtDataTable.searchModal.close()">
         <span *ngIf="searchLabel" class="font-semibold text-gray-800 text-sm">{{ searchLabel }}</span>
 
         <ng-content select='[customSearchHeader]'></ng-content>

@@ -28,37 +28,7 @@ import { uuid } from '../../helpers/uuid';
 import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-http.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtDropzoneFileViewerComponent } from './ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
-
-export interface NgtDropzoneFile {
-    downloadUrl: string;
-    previewUrl: string;
-    thumbnailUrl: string;
-    name: string;
-    mimeType: string;
-    fileSize: any;
-};
-
-export enum NgtDropzoneFileTypeEnum {
-    DOC = 'DOC',
-    PDF = 'PDF',
-    XLS = 'XLS',
-    DWG = 'DWG',
-    OTHER = 'OTHER'
-}
-
-export enum NgtDropzonePreviewType {
-    DEFAULT = 'DEFAULT',
-    IMAGE = 'IMAGE',
-    VIDEO = 'VIDEO'
-}
-
-export enum NgtDropzoneErrorType {
-    DEFAULT = 'DEFAULT',
-    SIZE = 'SIZE',
-    NO_MULTIPLE = 'NO_MULTIPLE',
-    ITEMS_LIMIT = 'ITEMS_LIMIT',
-    TYPE = 'TYPE'
-}
+import { NgtDropzoneErrorType, NgtDropzoneFile, NgtDropzonePreviewType } from './ngt-dropzone.meta';
 
 @Component({
     selector: 'ngt-dropzone',

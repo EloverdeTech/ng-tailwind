@@ -7,7 +7,6 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 @Component({
     selector: 'ngt-portlet',
     templateUrl: './ngt-portlet.component.html',
-    styleUrls: ['./ngt-portlet.component.css'],
     animations: [
         trigger('fadeUp', [
             state('void', style({ transform: 'translateY(20px)', opacity: 0 })),

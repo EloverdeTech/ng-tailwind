@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs';
 
 export abstract class NgtHttpService {
-    abstract get(connector: any, filters: any, pagination: NgtHttpPagination, sort?: NgtHttpSort): Observable<NgtHttpResponse>;
+    public abstract get(connector: any, filters: any, pagination: NgtHttpPagination, sort?: NgtHttpSort): Observable<NgtHttpResponse>;
 
-    abstract post(data: any): Observable<any>;
+    public abstract post(data: any): Observable<any>;
 
-    abstract put(data: any): Observable<any>;
+    public abstract put(data: any): Observable<any>;
 
-    abstract delete(data: any): Observable<any>;
+    public abstract delete(data: any): Observable<any>;
 }
 
 export interface NgtHttpResponse {

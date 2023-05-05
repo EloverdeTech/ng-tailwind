@@ -20,7 +20,6 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 @Component({
     selector: 'ngt-sidenav',
     templateUrl: './ngt-sidenav.component.html',
-    styleUrls: ['./ngt-sidenav.component.css'],
     animations: [
         fadeDownAnimation('fadeDownAnimation', 600)
     ],

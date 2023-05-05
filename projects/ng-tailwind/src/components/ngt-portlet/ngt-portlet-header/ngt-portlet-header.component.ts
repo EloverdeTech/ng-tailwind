@@ -5,8 +5,7 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 
 @Component({
     selector: 'ngt-portlet-header',
-    templateUrl: './ngt-portlet-header.component.html',
-    styleUrls: ['./ngt-portlet-header.component.css']
+    templateUrl: './ngt-portlet-header.component.html'
 })
 export class NgtPortletHeaderComponent {
     @Input() public caption: string = '';

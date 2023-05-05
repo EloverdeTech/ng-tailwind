@@ -7,8 +7,7 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
 
 @Component({
     selector: '[ngt-th-check]',
-    templateUrl: './ngt-th-check.component.html',
-    styleUrls: ['./ngt-th-check.component.css'],
+    templateUrl: './ngt-th-check.component.html'
 })
 export class NgtThCheckComponent implements AfterContentInit, OnDestroy {
     public checked = false;

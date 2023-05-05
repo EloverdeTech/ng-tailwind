@@ -3,16 +3,18 @@ import { NgtFormComponent, NgtFormState } from 'projects/ng-tailwind/src/public-
 
 @Component({
     selector: 'app-ngt-form-page',
-    templateUrl: './ngt-form-page.component.html',
-    styleUrls: ['./ngt-form-page.component.css']
+    templateUrl: './ngt-form-page.component.html'
 })
 export class NgtFormPageComponent implements OnInit {
-    @ViewChild(NgtFormComponent, { static: true }) private ngtFormComponent: NgtFormComponent;
+  @ViewChild(NgtFormComponent, { static: true }) private ngtFormComponent: NgtFormComponent;
 
-    public codeExample = `
+  public codeExample = `
   <form>
     <ngt-form [customLayout]='true' message='Complete all the fields correctly' #ngtForm>
-      <ngt-form-validation-message class="block mx-5 mt-5"></ngt-form-validation-message>
+      <ngt-form-validation-message class="block mx-5 mt-5" [message]="ngtForm.message"
+        [canShowValidationMessage]="ngtForm.canShowValidationMessage()">
+      </ngt-form-validation-message>
+      
         <div class="flex flex-wrap">
           <span class="my-2 font-semibold text-left w-full block mx-5 text-sm">
             FormState: <span class="font-normal">{{ ngtForm.getFormState() }}</span>
@@ -41,19 +43,19 @@ export class NgtFormPageComponent implements OnInit {
   </form>
   `;
 
-    public constructor() { }
+  public constructor() { }
 
-    public ngOnInit() { }
+  public ngOnInit() { }
 
-    public toggleFormState() {
-        if (this.ngtFormComponent.getFormState() == NgtFormState.CREATING) {
-            return this.ngtFormComponent.setFormState(NgtFormState.EDITING);
-        }
+  public toggleFormState() {
+      if (this.ngtFormComponent.getFormState() == NgtFormState.CREATING) {
+          return this.ngtFormComponent.setFormState(NgtFormState.EDITING);
+      }
 
-        return this.ngtFormComponent.setFormState(NgtFormState.CREATING);
-    }
+      return this.ngtFormComponent.setFormState(NgtFormState.CREATING);
+  }
 
-    public save() {
-        this.ngtFormComponent.saveResource().subscribe(() => { });
-    }
+  public save() {
+      this.ngtFormComponent.saveResource().subscribe(() => { });
+  }
 }

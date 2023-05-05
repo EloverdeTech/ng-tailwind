@@ -5,8 +5,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 
 @Component({
     selector: 'ngt-action',
-    templateUrl: './ngt-action.component.html',
-    styleUrls: ['./ngt-action.component.css']
+    templateUrl: './ngt-action.component.html'
 })
 export class NgtActionComponent {
     @Input() public href: string;

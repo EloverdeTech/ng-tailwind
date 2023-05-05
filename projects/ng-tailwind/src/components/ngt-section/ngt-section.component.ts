@@ -7,7 +7,6 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 @Component({
     selector: 'ngt-section',
     templateUrl: './ngt-section.component.html',
-    styleUrls: ['./ngt-section.component.css'],
     animations: [
         trigger('enterAnimation', [
             state('void', style({ transform: 'translateY(-20px)', opacity: 0 })),

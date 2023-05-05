@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'ngt-dropdown-page',
-    templateUrl: './ngt-dropdown-page.component.html',
-    styleUrls: ['./ngt-dropdown-page.component.css']
+    templateUrl: './ngt-dropdown-page.component.html'
 })
 export class NgtDropdownPageComponent {
     public ngModelOne: boolean = false;

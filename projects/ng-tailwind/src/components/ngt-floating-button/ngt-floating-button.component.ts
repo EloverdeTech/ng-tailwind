@@ -7,7 +7,6 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 @Component({
     selector: 'ngt-floating-button',
     templateUrl: './ngt-floating-button.component.html',
-    styleUrls: ['./ngt-floating-button.component.css'],
     animations: [
         trigger('fadeY', [
             state('void', style({ opacity: 0, transform: 'translateY(10px)' })),

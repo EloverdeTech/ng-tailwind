@@ -6,8 +6,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 
 @Component({
     selector: 'ngt-pagination',
-    templateUrl: './ngt-pagination.component.html',
-    styleUrls: ['./ngt-pagination.component.css']
+    templateUrl: './ngt-pagination.component.html'
 })
 export class NgtPaginationComponent {
     @Input() public pagesInterval: number;
@@ -186,7 +185,7 @@ export class NgtPaginationComponent {
     }
 
     private bindDisplayedButtonSections(sectionStartPage: number, sectionEndPage: number, totalPages: number) {
-        this.displayPreviousSectionButton = sectionStartPage > 1 ? true : false;
-        this.displayNextSectionButton = sectionEndPage < totalPages ? true : false;
+        this.displayPreviousSectionButton = sectionStartPage > 1;
+        this.displayNextSectionButton = sectionEndPage < totalPages;
     }
 }

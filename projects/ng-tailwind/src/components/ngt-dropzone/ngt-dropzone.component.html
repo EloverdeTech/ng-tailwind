@@ -52,7 +52,11 @@
         </ngx-dropzone>
     </div>
 
-    <ngt-dropzone-view *ngIf="viewMode" [resources]="resources" class="h-full w-full"></ngt-dropzone-view>
+    <ngt-dropzone-view *ngIf="viewMode" class="h-full w-full" [resources]="resources" [loading]="loading"
+        [placeholder]="placeholder" [dropzoneHeight]="dropzoneHeight"
+        (onFileClick)="onFileClick($event.previewUrl, $event.name, $event.fileSize)"
+        (onImageClick)="onImageClick($event.div, $event.index)">
+    </ngt-dropzone-view>
 
     <ngt-dropzone-file-viewer [hidden]="!showNgtDropzoneFileViewer" (onClose)="forceDisableClick = false"
         [canDownloadFile]="canDownloadFile" [disableContent]="canDownloadFile ? 'none' : 'popout'">
