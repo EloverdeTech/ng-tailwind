@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, ChangeDetectorRef, Component, Injector, Input, Optional, Self } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Injector, Input, Optional, Output, Self } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -17,19 +18,23 @@ import { NgtModalHeaderComponent } from './ngt-modal-header/ngt-modal-header.com
         ])
     ]
 })
-export class NgtModalComponent implements AfterViewInit {
+export class NgtModalComponent {
     @Input() public customLayout: boolean = false;
     @Input() public disableDefaultCloses: boolean = false;
     @Input() public ngtStyle: NgtStylizableService;
 
+    @Output() public onCloseModal: EventEmitter<void> = new EventEmitter();
+    @Output() public onOpenModal: EventEmitter<void> = new EventEmitter();
+
     public isOpen: boolean = false;
 
     private keydownEventWasAdded: boolean = false;
+    private subscriptions: Array<Subscription> = [];
 
     public constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private injector: Injector,
-        @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective,
+        @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective
     ) {
         if (this.tailStylizableDirective) {
             this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
@@ -46,19 +51,23 @@ export class NgtModalComponent implements AfterViewInit {
         });
     }
 
-    public ngAfterViewInit(): void {
-        NgtModalHeaderComponent.closeModalByHeader.subscribe(() => this.close());
-    }
-
     public close() {
         this.isOpen = false;
         this.changeDetectorRef.detectChanges();
+
+        this.destroySubscriptions();
+
+        this.onCloseModal.emit();
     }
 
     public open() {
         this.isOpen = true;
         this.changeDetectorRef.detectChanges();
+
         this.addKeydownEventListener();
+        this.bindOnCloseModalByHeaderSubscription();
+
+        this.onOpenModal.emit();
     }
 
     private addKeydownEventListener() {
@@ -71,5 +80,17 @@ export class NgtModalComponent implements AfterViewInit {
                 }
             }, true);
         }
+    }
+
+    private bindOnCloseModalByHeaderSubscription(): void {
+        this.subscriptions.push(
+            NgtModalHeaderComponent.onCloseModalByHeader.subscribe(() => this.close())
+        );
+    }
+
+    private destroySubscriptions(): void {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+
+        this.subscriptions = [];
     }
 }
