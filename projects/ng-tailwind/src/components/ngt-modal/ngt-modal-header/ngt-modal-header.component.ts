@@ -8,7 +8,7 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
     templateUrl: './ngt-modal-header.component.html'
 })
 export class NgtModalHeaderComponent {
-    public static closeModalByHeader: EventEmitter<void> = new EventEmitter();
+    public static onCloseModalByHeader: EventEmitter<void> = new EventEmitter();
 
     @Input() public disableDefaultCloses: boolean;
 
@@ -16,7 +16,7 @@ export class NgtModalHeaderComponent {
 
     public constructor(
         private injector: Injector,
-        @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective,
+        @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective
     ) {
         if (this.tailStylizableDirective) {
             this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
@@ -30,7 +30,7 @@ export class NgtModalHeaderComponent {
         });
     }
 
-    public emitCloseModal(): void {
-        NgtModalHeaderComponent.closeModalByHeader.emit();
+    public emitOnCloseEvent(): void {
+        NgtModalHeaderComponent.onCloseModalByHeader.emit();
     }
 }
