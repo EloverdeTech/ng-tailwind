@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Injector, Input, Optional, Output, Self } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, Optional, Self } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
@@ -8,9 +8,9 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
     templateUrl: './ngt-modal-header.component.html'
 })
 export class NgtModalHeaderComponent {
-    @Input() public disableDefaultCloses: boolean;
+    public static closeModalByHeader: EventEmitter<void> = new EventEmitter();
 
-    @Output() public onClose: EventEmitter<void> = new EventEmitter();
+    @Input() public disableDefaultCloses: boolean;
 
     public ngtStyle: NgtStylizableService;
 
@@ -28,5 +28,9 @@ export class NgtModalHeaderComponent {
             pb: 'pb-3',
             color: {}
         });
+    }
+
+    public emitCloseModal(): void {
+        NgtModalHeaderComponent.closeModalByHeader.emit();
     }
 }

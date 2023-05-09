@@ -11,7 +11,7 @@
             style="max-height: 85%;">
             <div class="cursor-default text-left {{ ngtStyle.compile(['py', 'px']) }}">
                 <div *ngIf="!customLayout">
-                    <ngt-modal-header class="w-full" [disableDefaultCloses]="disableDefaultCloses" (onClose)="close()">
+                    <ngt-modal-header class="w-full" [disableDefaultCloses]="disableDefaultCloses">
                         <ng-content select='[header]'></ng-content>
                     </ngt-modal-header>
                 </div>
