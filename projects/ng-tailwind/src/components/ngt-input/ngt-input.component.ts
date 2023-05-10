@@ -450,7 +450,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 keepStatic: true
             },
             [InputMaskEnum.PLATE]: {
-                mask: ['AAA-9999', 'AAA9A99'],
+                mask: ['AAA-9&99'],
                 keepStatic: true
             },
             [InputMaskEnum.CEP]: '99999-999',
