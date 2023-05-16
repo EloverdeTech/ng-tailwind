@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
+    ChangeDetectorRef,
     Component,
     ElementRef,
     EventEmitter,
@@ -34,6 +35,7 @@ import { NgtDropdownContainerComponent } from './ngt-dropdown-container/ngt-drop
 export class NgtDropdownComponent implements OnDestroy {
     @ViewChild('container', { static: true }) public containerRef: ElementRef;
 
+    @Input() public scrollable: boolean;
     @Input() public autoXReverse: boolean;
     @Input() public autoYReverse: boolean = true;
     @Input() public reverseXPosition: boolean;
@@ -47,8 +49,8 @@ export class NgtDropdownComponent implements OnDestroy {
 
     public name: string = uuid();
     public isOpen: boolean;
-    public isYPositionReversed: boolean = false;
-    public isXPositionReversed: boolean = false;
+    public isYPositionReversed: boolean;
+    public isXPositionReversed: boolean;
     public isBindingYPosition: boolean = true;
     public isBindingXPosition: boolean = true;
 
@@ -58,7 +60,8 @@ export class NgtDropdownComponent implements OnDestroy {
 
     public constructor(
         @Optional() @SkipSelf()
-        private ngtDropdownContainer: NgtDropdownContainerComponent
+        private ngtDropdownContainer: NgtDropdownContainerComponent,
+        private changeDetector: ChangeDetectorRef
     ) {
         if (this.ngtDropdownContainer) {
             this.subscriptions.push(
@@ -82,6 +85,11 @@ export class NgtDropdownComponent implements OnDestroy {
     public open(): void {
         this.isOpen = true;
         this.ngtDropdownContainer?.setActiveDropdown(this);
+
+        this.changeDetector.detectChanges();
+
+        this.bindContainerXPosition();
+        this.bindContainerYPosition();
     }
 
     public closeOnSelectOption(): void {
@@ -143,12 +151,10 @@ export class NgtDropdownComponent implements OnDestroy {
             return this.reverseXPosition;
         }
 
-        if (this.isOpen) {
-            this.bindContainerXPosition();
-
+        if (this.isOpen && !this.isBindingXPosition) {
             this.isXPositionReversed = !(this.containerXPosition > document.documentElement.clientWidth);
 
-            return !this.isBindingXPosition && this.isXPositionReversed;
+            return this.isXPositionReversed;
         }
     }
 
@@ -157,12 +163,10 @@ export class NgtDropdownComponent implements OnDestroy {
             return this.reverseYPosition;
         }
 
-        if (this.isOpen) {
-            this.bindContainerYPosition();
-
+        if (this.isOpen && !this.isBindingYPosition) {
             this.isYPositionReversed = this.containerYPosition > (document.documentElement.clientHeight * 0.9);
 
-            return !this.isBindingYPosition && this.isYPositionReversed;
+            return this.isYPositionReversed;
         }
     }
 
@@ -175,6 +179,8 @@ export class NgtDropdownComponent implements OnDestroy {
                     + this.containerRef.nativeElement.offsetWidth;
 
                 this.isBindingXPosition = false;
+
+                this.changeDetector.detectChanges();
             });
         }
     }
@@ -188,6 +194,8 @@ export class NgtDropdownComponent implements OnDestroy {
                     + this.containerRef.nativeElement.offsetHeight;
 
                 this.isBindingYPosition = false;
+
+                this.changeDetector.detectChanges();
             });
         }
     }
