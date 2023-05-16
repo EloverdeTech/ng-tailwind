@@ -1,5 +1,6 @@
 <div class="sm:relative">
-    <div (mouseenter)="onHover(host, container)" (click)="onClick($event, host, container)" (contextmenu)="onRightClick($event)" #host>
+    <div (mouseenter)="onHover(host, container)" (click)="onClick($event, host, container)"
+        (contextmenu)="onRightClick($event)" #host>
         <ng-content select='[host]'></ng-content>
     </div>
 
@@ -8,7 +9,9 @@
         [@openClose]="isOpen ? 'open' : 'closed'" (mouseenter)="onHover(host, container)"
         (click)='closeOnSelectOption()' style="z-index: 1100 !important;" #container>
 
-        <ng-content select='[container]'></ng-content>
+        <div class="flex flex-col" [ngClass]="{ 'h-64 overflow-auto':scrollable }">
+            <ng-content select='[container]'></ng-content>
+        </div>
     </div>
 </div>
 
