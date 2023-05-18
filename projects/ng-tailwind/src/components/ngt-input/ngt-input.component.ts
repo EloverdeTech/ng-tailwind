@@ -60,6 +60,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public innerRightIconColor: string;
     @Input() public decimalMaskPrecision: number = 2;
     @Input() public showCharactersLength: boolean = false;
+    @Input() public uppercase: boolean = false;
 
     //Behavior
     @Input() public isDisabled: boolean;
