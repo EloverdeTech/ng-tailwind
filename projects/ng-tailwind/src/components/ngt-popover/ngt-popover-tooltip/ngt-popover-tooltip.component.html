@@ -1,6 +1,8 @@
-<div class="bg-white rounded-lg shadow-lg absolute" [ngClass]="positionClasses[position]"
-    style="z-index: 999999 !important;" (click)="$event.stopPropagation()" @enterAnimation>
-    <div *ngIf="!popoverTemplate; else showTemplate" class="px-2 py-1">
+<div class="bg-white rounded-lg shadow-xl border border-gray-100 absolute max-w-7xl"
+    [ngClass]="positionClasses[position]" style="z-index: 999999 !important; width: max-content !important;"
+    (click)="$event.stopPropagation()" @enterAnimation>
+
+    <div *ngIf="!popoverTemplate; else showTemplate" class="px-2 py-1 text-gray-500 whitespace-nowrap">
         {{ popover }}
     </div>
 
