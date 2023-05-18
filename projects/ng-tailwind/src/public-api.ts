@@ -151,3 +151,4 @@ export * from './components/ngt-helper/ngt-helper.component';
 // NgtPopover
 export * from './components/ngt-popover/ngt-popover.module';
 export * from './components/ngt-popover/ngt-popover.component';
+export * from './components/ngt-popover/ngt-popover.directive';
