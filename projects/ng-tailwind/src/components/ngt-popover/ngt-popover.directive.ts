@@ -17,12 +17,12 @@ import { NgtPopoverOpenMethod } from './ngt-popover.component';
     selector: '[ngt-popover]'
 })
 export class NgtPopoverDirective implements OnDestroy {
-    @Input() public popover: string;
-    @Input() public popoverTemplate: TemplateRef<any>;
+    @Input() public ngtPopoverContent: string;
+    @Input() public ngtPopoverTemplate: TemplateRef<any>;
+    @Input() public ngtPopoverPosition: NgtPopoverPosition = NgtPopoverPosition.DEFAULT;
 
     @Input() public dismissDelay: number = 150;
-    @Input() public dismissOnClick: boolean;
-    @Input() public position: NgtPopoverPosition = NgtPopoverPosition.DEFAULT;
+    @Input() public closeOnClick: boolean;
     @Input() public openMethod: 'HOVER' | 'CLICK' = NgtPopoverOpenMethod.HOVER;
 
     private componentRef: ComponentRef<NgtPopoverTooltipComponent> = null;
@@ -52,7 +52,7 @@ export class NgtPopoverDirective implements OnDestroy {
     @HostListener('document:click', ['$event.target'])
     public onDocumentClick(target: HTMLElement) {
         if (
-            this.dismissOnClick
+            this.closeOnClick
             && !this.componentRef?.location?.nativeElement?.contains(target)
             && target !== this.elementRef.nativeElement
             && target !== this.componentRef?.location?.nativeElement
@@ -63,7 +63,7 @@ export class NgtPopoverDirective implements OnDestroy {
 
     @HostListener('mouseleave')
     public onMouseLeave(): void {
-        if (this.dismissOnClick) {
+        if (this.closeOnClick) {
             return;
         }
 
@@ -105,9 +105,9 @@ export class NgtPopoverDirective implements OnDestroy {
             return;
         }
 
-        this.componentRef.instance.popover = this.popover;
-        this.componentRef.instance.popoverTemplate = this.popoverTemplate;
-        this.componentRef.instance.position = this.position;
+        this.componentRef.instance.popover = this.ngtPopoverContent;
+        this.componentRef.instance.popoverTemplate = this.ngtPopoverTemplate;
+        this.componentRef.instance.position = this.ngtPopoverPosition;
 
         const hostElement = this.elementRef.nativeElement;
         const popoverElement = this.componentRef.location.nativeElement;
