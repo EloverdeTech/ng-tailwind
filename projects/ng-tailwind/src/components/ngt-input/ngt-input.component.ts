@@ -86,7 +86,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public multipleOf: number;
     @Input() public externalServerDependency: boolean;
     @Input() public helperReverseYPosition: boolean;
-    @Input() public autoXReverse: boolean;
+    @Input() public helperAutoXReverse: boolean;
 
     @Output() public onClickLeftIcon: EventEmitter<any> = new EventEmitter<any>();
     @Output() public onClickRightIcon: EventEmitter<any> = new EventEmitter<any>();
