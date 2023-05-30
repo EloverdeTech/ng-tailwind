@@ -21,6 +21,7 @@ export class NgtHelperComponent {
     @Input() public iconTitle: string;
     @Input() public tooltipSize: string = 'max-w-xs';
     @Input() public autoXReverse: boolean = true;
+    @Input() public helperReverseYPosition: boolean;
 
     public ngtStyle: NgtStylizableService;
 

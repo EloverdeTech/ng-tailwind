@@ -69,6 +69,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public createText: string = '';
     @Input() public labelForId: string = '';
     @Input() public dropdownPanelMinHeight: NgtSelectDropdownPanelHeight = NgtSelectDropdownPanelHeight.AUTO;
+    @Input() public helperReverseYPosition: boolean;
 
     /** Behavior */
     @Input() public name: string;

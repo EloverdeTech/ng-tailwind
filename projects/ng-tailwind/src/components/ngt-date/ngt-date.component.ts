@@ -52,6 +52,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
     @Input() public dateFormat: string = 'd/m/Y H:i';
     @Input() public dateFormatNgModel = 'YYYY-MM-DD HH:mm:00';
     @Input() public showCalendarIcon: boolean = false;
+    @Input() public helperReverseYPosition: boolean;
 
     // Behavior
     @Input() public name: string;

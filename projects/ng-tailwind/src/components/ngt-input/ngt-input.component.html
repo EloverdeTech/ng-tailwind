@@ -3,7 +3,8 @@
 
     <span *ngIf="isRequired" class="text-red-500 font-bold text-md ml-1">*</span>
 
-    <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor" class="ml-1">
+    <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
+        [helperReverseYPosition]="helperReverseYPosition" [autoXReverse]="autoXReverse" class="ml-1">
         {{ helpText }}
     </ngt-helper>
 </label>
@@ -14,8 +15,9 @@
         [disabled]="isDisabled" [readonly]="isReadonly || loading" [placeholder]="placeholder" [style]="uppercase ? 'text-transform: uppercase!important':''"
         [ngClass]="{'input-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
         [attr.type]="inputProperties.htmlType" #element>
-    <span *ngIf="innerLeftIcon" class="absolute self-center px-2 {{ innerLeftIconColor }} {{ onClickLeftIcon ? 'cursor-pointer' : '' }}"
-          (click)="onClickLeftIcon.emit()">
+    <span *ngIf="innerLeftIcon"
+        class="absolute self-center px-2 {{ innerLeftIconColor }} {{ onClickLeftIcon ? 'cursor-pointer' : '' }}"
+        (click)="onClickLeftIcon.emit()">
 
         <ngt-svg *ngIf="!showRoundedIcon" class="fill-current" [src]='innerLeftIcon'></ngt-svg>
         <img *ngIf="showRoundedIcon" class="rounded-full h-6" [src]='innerLeftIcon'>
@@ -48,8 +50,9 @@
             </svg>
         </span>
 
-        <span *ngIf="innerRightIcon && type != 'password'" class="self-center px-2 {{ innerRightIconColor }}  {{ onClickRightIcon ? 'cursor-pointer' : '' }}"
-              (click)="onClickRightIcon.emit()">
+        <span *ngIf="innerRightIcon && type != 'password'"
+            class="self-center px-2 {{ innerRightIconColor }}  {{ onClickRightIcon ? 'cursor-pointer' : '' }}"
+            (click)="onClickRightIcon.emit()">
             <ngt-svg class="fill-current" [src]='innerRightIcon'></ngt-svg>
         </span>
     </div>
