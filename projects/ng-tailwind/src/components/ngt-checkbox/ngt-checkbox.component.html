@@ -6,7 +6,8 @@
     <span *ngIf="isToggleMode() && label" class="flex">
         <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} mb-2">{{ label }}</span>
 
-        <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor" class="ml-1">
+        <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
+        [autoXReverse]="helperAutoXReverse" class="ml-1">
             {{ helpText }}
         </ngt-helper>
     </span>
@@ -58,7 +59,8 @@
     <ng-container *ngIf='label && !shining && !isToggleMode()'>
         <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} ml-2">{{ label }}</span>
 
-        <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor" class="ml-1">
+        <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
+        [autoXReverse]="helperAutoXReverse" class="ml-1">
             {{ helpText }}
         </ngt-helper>
     </ng-container>
