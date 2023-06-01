@@ -60,6 +60,7 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
     @Input() public helpTitle: string;
     @Input() public helpTextColor: string = 'text-green-500';
     @Input() public helpText: string;
+    @Input() public helperAutoXReverse: boolean;
 
     public ngtStyle: NgtStylizableService;
 
