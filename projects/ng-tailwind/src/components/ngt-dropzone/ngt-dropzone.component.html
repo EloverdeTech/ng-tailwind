@@ -10,14 +10,16 @@
     </label>
 
     <div *ngIf="!viewMode" class="h-full w-full relative">
-        <div *ngIf="loading" class="flex absolute justify-center items-center w-full h-full cursor-wait z-10">
+        <div *ngIf="loading && !hideNgxDropzone"
+            class="flex absolute justify-center items-center w-full h-full cursor-wait z-10">
             <div class="div-loader"></div>
         </div>
 
         <ngx-dropzone [id]="ngxElementId" [multiple]='multipleSelection' [maxFileSize]='maxFileSize'
             (change)='onSelect($event)' [class.single-attachment]='itemsLimit == 1' [accept]='acceptedFiles'
             [disabled]='disabled || loading' [expandable]='verticalExpandable'
-            [disableClick]='disableClick || forceDisableClick' [ngStyle]="{ 'height': dropzoneHeight }" #ngxDropzone>
+            [disableClick]='disableClick || forceDisableClick' [ngStyle]="{ 'height': dropzoneHeight }"
+            [ngClass]="{ 'hidden':hideNgxDropzone }" #ngxDropzone>
             <ng-container *ngIf="!loading">
                 <ngx-dropzone-label *ngIf="!uploadedResources?.length" class="px-2">
                     {{ placeholder }}
