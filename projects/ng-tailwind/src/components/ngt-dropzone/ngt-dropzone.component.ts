@@ -65,11 +65,12 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Input() public removable: boolean = false;
     @Input() public canDownloadFile: boolean = true;
     @Input() public verticalExpandable: boolean = false;
+    @Input() public isRequired: boolean;
+    @Input() public hideNgxDropzone: boolean;
     @Input() public acceptedFiles: string = '*' /** Mime type */;
     @Input() public unacceptedFiles: string; /** Mime type */;
     @Input() public maxFileSize: number; /** Bytes */
     @Input() public previewType: NgtDropzonePreviewType = NgtDropzonePreviewType.DEFAULT;
-    @Input() public isRequired: boolean = false;
     @Input() public name: string;
     @Input() public remoteResource: any;
 
@@ -354,7 +355,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     public isImage(resource: any) {
         return this.previewType == 'IMAGE'
             || (
-                resource.file && resource.file.type
+                resource.file?.type
                 && resource.file.type.includes('image')
                 && !resource.file.type.includes('dwg')
             );
