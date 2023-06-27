@@ -152,3 +152,8 @@ export * from './components/ngt-helper/ngt-helper.component';
 export * from './components/ngt-popover/ngt-popover.module';
 export * from './components/ngt-popover/ngt-popover.component';
 export * from './components/ngt-popover/ngt-popover.directive';
+
+// NgtContextMenu
+export * from './components/ngt-context-menu/ngt-context-menu.module';
+export * from './components/ngt-context-menu/ngt-context-menu.component';
+export * from './components/ngt-context-menu/ngt-context-menu.directive';
