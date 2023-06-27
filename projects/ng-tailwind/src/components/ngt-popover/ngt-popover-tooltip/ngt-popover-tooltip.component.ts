@@ -17,10 +17,12 @@ export class NgtPopoverTooltipComponent{
     public popover: string;
     public popoverTemplate: TemplateRef<any>;
     public position: NgtPopoverPosition = NgtPopoverPosition.DEFAULT;
+    public positionX: number;
+    public positionY: number;
 
     public positionClasses: any = {
-        [NgtPopoverPosition.TOP]: 'top-0 -mt-10',
-        [NgtPopoverPosition.BOTTOM]: 'bottom-0 -mb-10',
+        [NgtPopoverPosition.TOP]: '-mt-10',
+        [NgtPopoverPosition.BOTTOM]: '-mb-10',
     };
 }
 
