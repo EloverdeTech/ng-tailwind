@@ -1,5 +1,4 @@
 import {
-    ComponentFactoryResolver,
     ComponentRef,
     Directive,
     ElementRef,
@@ -21,16 +20,17 @@ export class NgtPopoverDirective implements OnDestroy {
     @Input() public ngtPopoverTemplate: TemplateRef<any>;
     @Input() public ngtPopoverPosition: NgtPopoverPosition = NgtPopoverPosition.DEFAULT;
 
-    @Input() public dismissDelay: number = 150;
+    @Input() public dismissDelay: number = 1000;
+    @Input() public showDelay: number = 1000;
     @Input() public closeOnClick: boolean;
     @Input() public openMethod: 'HOVER' | 'CLICK' = NgtPopoverOpenMethod.HOVER;
 
     private componentRef: ComponentRef<NgtPopoverTooltipComponent> = null;
     private dismissTimeoutInstance: NodeJS.Timeout;
+    private showTimeoutInstance: NodeJS.Timeout;
 
     public constructor(
         private elementRef: ElementRef,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private viewContainerRef: ViewContainerRef
     ) { }
 
@@ -63,6 +63,10 @@ export class NgtPopoverDirective implements OnDestroy {
 
     @HostListener('mouseleave')
     public onMouseLeave(): void {
+        if (this.showTimeoutInstance) {
+            clearTimeout(this.showTimeoutInstance);
+        }
+
         if (this.closeOnClick) {
             return;
         }
@@ -80,7 +84,7 @@ export class NgtPopoverDirective implements OnDestroy {
             return;
         }
 
-        this.createPopover();
+        this.showTimeoutInstance = setTimeout(() => this.createPopover(), this.showDelay);
     }
 
     public ngOnDestroy(): void {
@@ -88,9 +92,7 @@ export class NgtPopoverDirective implements OnDestroy {
     }
 
     private createPopover(): void {
-        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(NgtPopoverTooltipComponent);
-
-        this.componentRef = this.viewContainerRef.createComponent(componentFactory);
+        this.componentRef = this.viewContainerRef.createComponent(NgtPopoverTooltipComponent);
 
         this.setupPopoverComponent();
     }
@@ -105,14 +107,17 @@ export class NgtPopoverDirective implements OnDestroy {
             return;
         }
 
+        const rect = this.elementRef.nativeElement.getBoundingClientRect();
+
+        this.componentRef.instance.positionX = rect.left;
+        this.componentRef.instance.positionY = (this.ngtPopoverPosition === NgtPopoverPosition.TOP)
+            ? rect.top
+            : rect.bottom;
+
         this.componentRef.instance.popover = this.ngtPopoverContent;
         this.componentRef.instance.popoverTemplate = this.ngtPopoverTemplate;
         this.componentRef.instance.position = this.ngtPopoverPosition;
 
-        const hostElement = this.elementRef.nativeElement;
-        const popoverElement = this.componentRef.location.nativeElement;
-
-        hostElement.classList.add('relative');
-        hostElement.appendChild(popoverElement);
+        document.body.appendChild(this.componentRef.location.nativeElement);
     }
 }

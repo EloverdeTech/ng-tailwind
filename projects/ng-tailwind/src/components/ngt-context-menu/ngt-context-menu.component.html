@@ -1,0 +1,24 @@
+<div class="absolute max-w-7xl -mr-10 -mb-10" style="z-index: 999999 !important; width: max-content !important;"
+    [style.left.px]="positionX" [style.top.px]="positionY" (click)="$event.stopPropagation()">
+
+    <ng-container *ngIf="hasOptions(); else showTemplate">
+        <ul class="cursor-pointer rounded-xl bg-white border border-gray-200 shadow-2xl ">
+            <li *ngFor="let item of menuItems; last as isLast; first as isFirst" class="flex"
+                class="flex items-center w-full px-4 py-2 gap-3 text-sm text-gray-700 hover:text-white"
+                [class.rounded-b-xl]="isLast" [class.rounded-t-xl]="isFirst"
+                [ngClass]="item.background_color || 'hover:bg-green-500'" (click)="onMenuItemClick.emit(item)">
+
+                <ngt-svg *ngIf="item.icon" class="text-lg" [src]="item.icon"></ngt-svg>
+
+                {{ item.caption }}
+            </li>
+        </ul>
+    </ng-container>
+
+    <ng-template #showTemplate>
+        <div class="block rounded-lg bg-white border border-gray-200 w-full h-auto shadow-2xl"
+            (click)="onTemplateClick.emit()">
+            <ng-container [ngTemplateOutlet]="menuTemplate"></ng-container>
+        </div>
+    </ng-template>
+</div>
