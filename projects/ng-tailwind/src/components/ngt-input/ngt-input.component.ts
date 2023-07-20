@@ -491,6 +491,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 htmlType: "text",
                 length: 300
             },
+            customText: {
+                htmlType: "text",
+                length: this.maxLength
+            },
             password: {
                 htmlType: "password",
                 length: 150
