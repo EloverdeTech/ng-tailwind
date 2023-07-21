@@ -21,6 +21,7 @@ export abstract class NgtTranslateService {
     public abstract ngtValidationMaxCharactersExceded: string;
     public abstract ngtValidationRequiredField: string;
     public abstract ngtValidationInvalidEmail: string;
+    public abstract ngtValidationInvalidPassword: string;
     public abstract ngtValidationAlreadyExists: string;
     public abstract ngtValidationInvalidCnpj: string;
     public abstract ngtValidationInvalidCpf: string;
