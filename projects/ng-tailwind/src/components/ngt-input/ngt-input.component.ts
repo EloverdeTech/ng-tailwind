@@ -76,6 +76,9 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     //Validations
     @Input() public findExistingResource: NgtHttpFindExistingResourceInterface;
     @Input() public allowPhoneValidation: boolean;
+    @Input() public validatePassword: boolean;
+    @Input() public passwordableId: string;
+    @Input() public passwordPolicyId: string;
     @Input() public isRequired: boolean;
     @Input() public uniqueResource: any;
     @Input() public minValue: number;
@@ -103,6 +106,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     public ngtStyle: NgtStylizableService;
 
     private emailValidatorTimeout: any;
+    private passwordValidatorTimeout: any;
     private phoneValidatorTimeout: any;
     private uniqueValidatorTimeout: any;
     private searchExistingResourceTimeout: any;
@@ -412,6 +416,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 asyncValidators.push(this.emailValidator());
             }
 
+            if (this.type == 'password' && this.validatePassword && this.hasPasswordValidation()) {
+                asyncValidators.push(this.passwordValidator());
+            }
+
             this.formControl.setAsyncValidators(asyncValidators);
             this.formControl.updateValueAndValidity();
         });
@@ -583,10 +591,6 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     }
 
     private emailValidator(): AsyncValidatorFn {
-        if (!this.ngtValidationService) {
-            throw new Error("In order to use email validation you must provide a implementation for NgtHttpValidationService class!");
-        }
-
         return (control: AbstractControl) => {
             if (this.emailValidatorTimeout) {
                 clearTimeout(this.emailValidatorTimeout);
@@ -597,13 +601,45 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                     this.emailValidatorTimeout = setTimeout(() => {
                         this.loading = true;
 
-                        this.ngtValidationService.emailValidation(this.value).then((response: NgtHttpValidationResponse) => {
-                            this.loading = false;
-                            resolve(response.valid ? null : { 'email': true });
-                        }).catch(() => {
-                            this.loading = false;
-                            resolve(null);
-                        });
+                        this.ngtValidationService.emailValidation(this.value)
+                            .then((response: NgtHttpValidationResponse) => {
+                                this.loading = false;
+                                resolve(response.valid ? null : { 'email': true });
+                            })
+                            .catch(() => {
+                                this.loading = false;
+                                resolve(null);
+                            });
+                    }, 500);
+                });
+            }
+
+            return Promise.resolve(null);
+        };
+    }
+
+    private passwordValidator(): AsyncValidatorFn {
+        return (control: AbstractControl) => {
+            if (this.passwordValidatorTimeout) {
+                clearTimeout(this.passwordValidatorTimeout);
+            }
+
+            if (this.value) {
+                return new Promise((resolve) => {
+                    this.passwordValidatorTimeout = setTimeout(() => {
+                        this.loading = true;
+
+                        this.ngtValidationService.passwordValidation(this.value, this.passwordableId, this.passwordPolicyId)
+                            .then((response: NgtHttpValidationResponse) => {
+                                this.loading = false;
+
+                                resolve(response.valid ? null : { 'invalid_password': true });
+                            })
+                            .catch(() => {
+                                this.loading = false;
+
+                                resolve(null);
+                            });
                     }, 500);
                 });
             }
@@ -793,7 +829,11 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     }
 
     private hasEmailServiceValidation(): boolean {
-        return typeof this.ngtValidationService.emailValidation === 'function';
+        return typeof this.ngtValidationService?.emailValidation === 'function';
+    }
+
+    private hasPasswordValidation(): boolean {
+        return typeof this.ngtValidationService?.passwordValidation === 'function';
     }
 
     private destroySubscriptions() {

@@ -14,6 +14,11 @@
     </span>
 
     <span class="help-block has-error"
+        *ngIf="control?.errors?.invalid_password && (control?.dirty || (container && container['submitted']))">
+        {{ ngtTranslateService.ngtValidationInvalidPassword }}
+    </span>
+
+    <span class="help-block has-error"
         *ngIf="control?.errors?.unique && (control?.dirty || (container && container['submitted']))">
         {{ ngtTranslateService.ngtValidationAlreadyExists }}
     </span>

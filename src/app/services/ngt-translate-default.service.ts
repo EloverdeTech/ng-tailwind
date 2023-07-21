@@ -19,6 +19,7 @@ export class NgtTranslateDefaultService extends NgtTranslateService {
     public ngtValidationMaxCharactersExceded: string = 'Número máximo de caracteres excedido';
     public ngtValidationRequiredField: string = 'Campo obrigatório';
     public ngtValidationInvalidEmail: string = 'E-mail inválido';
+    public ngtValidationInvalidPassword: string = 'Senha inválida';
     public ngtValidationAlreadyExists: string = 'Já existe';
     public ngtValidationInvalidCnpj: string = 'CNPJ inválido';
     public ngtValidationInvalidCpf: string = 'CPF inválido';

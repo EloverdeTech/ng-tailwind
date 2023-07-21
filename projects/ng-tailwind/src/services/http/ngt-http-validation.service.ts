@@ -1,6 +1,7 @@
 export interface NgtHttpValidationService {
     emailValidation(email: string): Promise<NgtHttpValidationResponse>;
     phoneValidation(phone: string): Promise<NgtHttpValidationResponse>;
+    passwordValidation(password: string, passwordableId?: string, passwordPolicyId?: string): Promise<NgtHttpValidationResponse>;
 }
 
 export abstract class NgtHttpValidationService {

@@ -5,14 +5,15 @@
 
     <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
         [helperReverseYPosition]="helperReverseYPosition" [autoXReverse]="helperAutoXReverse" class="ml-1">
-        {{ helpText }}
+        <span [innerHtml]="helpText"></span>
     </ngt-helper>
 </label>
 
 <div class="{{ shining ? 'hidden' : 'flex relative'}}">
     <input autocomplete="new-password"
         class="flex border appearance-none focus:outline-none leading-tight w-full {{ getInputPaddings() }} {{ ngtStyle.compile(['h', 'text', 'color.border', 'color.bg', 'color.text', 'rounded', 'cursor']) }}"
-        [disabled]="isDisabled" [readonly]="isReadonly || loading" [placeholder]="placeholder" [style]="uppercase ? 'text-transform: uppercase!important':''"
+        [disabled]="isDisabled" [readonly]="isReadonly || loading" [placeholder]="placeholder"
+        [style]="uppercase ? 'text-transform: uppercase!important':''"
         [ngClass]="{'input-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
         [attr.type]="inputProperties.htmlType" #element>
     <span *ngIf="innerLeftIcon"
