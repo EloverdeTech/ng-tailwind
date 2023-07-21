@@ -87,6 +87,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public minLength: number;
     @Input() public match: string;
     @Input() public multipleOf: number;
+    @Input() public validateMinValueOnMask: boolean;
     @Input() public externalServerDependency: boolean;
     @Input() public helperReverseYPosition: boolean;
     @Input() public helperAutoXReverse: boolean;
@@ -197,7 +198,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             value = parseFloat(value);
         }
 
-        if (!this.getNativeValue()) {
+        if (!this.getNativeValue() || (this.validateMinValueOnMask)) {
             this.element.nativeElement.value = value ?? '';
         }
 
@@ -467,6 +468,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             [InputMaskEnum.CEP]: '99999-999',
             [InputMaskEnum.INTEGER]: {
                 max: this.maxValue,
+                min: this.validateMinValueOnMask ? this.minValue : undefined,
                 rightAlign: false
             },
             [InputMaskEnum.TIME]: '99:99',
