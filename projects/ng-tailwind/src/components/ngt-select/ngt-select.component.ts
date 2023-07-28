@@ -96,6 +96,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public tabIndex: number;
     @Input() public typeahead: Subject<any>;
     @Input() public guessCompareWith: boolean = true;
+    @Input() public autoSelectUniqueOption: boolean = false;
     @Input() public groupValue: (groupKey: string, cildren: any[]) => Object;
     @Input() public trackBy: (item: any) => any;
 
@@ -330,6 +331,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
                             this.bindCompareWithByResponse(response);
 
                             this.ngSearchObserver.next(response.data);
+
+                            if (this.canAutoSelectUniqueOption(response)) {
+                                this.onNativeChange(response.data[0]);
+                            }
 
                             this.onLoadRemoteResource.emit(response.data);
 
@@ -566,6 +571,13 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     private destroySubscriptions() {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
+    }
+
+    private canAutoSelectUniqueOption(response: NgtHttpResponse): boolean {
+        return !this.value
+            && this.autoSelectUniqueOption
+            && Array.isArray(response.data)
+            && response.data?.length === 1;
     }
 }
 
