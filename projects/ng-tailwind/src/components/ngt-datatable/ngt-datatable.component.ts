@@ -361,7 +361,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             for (const reference in requestedFilters) {
                 const filter = requestedFilters[reference];
 
-                if (this.isValidFilter(filter)) {
+                if (this.isValidFilter(filter, reference)) {
                     if (filter instanceof NgtCustomFilter) {
                         if (filter.tagLabel) {
                             this.filtersDescription[reference] = filter.tagLabel;
@@ -446,7 +446,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     private canApplyFilters(filters: Object): boolean {
         if (!this.searching) {
             for (const reference in filters) {
-                if (this.isValidFilter(filters[reference])) {
+                if (this.isValidFilter(filters[reference], reference)) {
                     return true;
                 }
             }
@@ -455,10 +455,9 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         return false;
     }
 
-    private isValidFilter(filter: Object | NgtCustomFilter): boolean {
-        const value: string | NgtCustomFilter = Object.values(filter ?? {})[0];
-        const hasValue: boolean = !!((value instanceof NgtCustomFilter && value.term) || value);
-        const isApplied: boolean = this.hasAppliedFilter(filter);
+    private isValidFilter(filter: string | NgtCustomFilter, reference: string): boolean {
+        const hasValue: boolean = !!((filter instanceof NgtCustomFilter && filter.term) || filter);
+        const isApplied: boolean = this.hasAppliedFilter(reference);
 
         return isApplied || (!isApplied && hasValue);
     }
