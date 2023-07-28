@@ -1,4 +1,5 @@
 import {
+    ChangeDetectorRef,
     ComponentRef,
     Directive,
     EventEmitter,
@@ -26,14 +27,27 @@ export class NgtContextMenuDirective implements OnDestroy {
     private menuItemClickSubscription: Subscription;
     private templateClickSubscription: Subscription;
 
-    public constructor(private viewContainerRef: ViewContainerRef) { }
+    public constructor(
+        private viewContainerRef: ViewContainerRef,
+        private changeDetector: ChangeDetectorRef,
+    ) { }
 
     @HostListener('contextmenu', ['$event'])
     public onContextMenu(event: MouseEvent) {
         event.preventDefault();
 
+        setTimeout(() => {
+            this.destroy();
+            this.createComponent(event);
+        }, 50);
+    }
+
+    @HostListener('document:contextmenu', ['$event'])
+    public onDocumentContextMenuClick(event: MouseEvent) {
+        event.preventDefault();
+
         this.destroy();
-        this.createComponent(event);
+        this.changeDetector.detectChanges();
     }
 
     @HostListener('document:click')
