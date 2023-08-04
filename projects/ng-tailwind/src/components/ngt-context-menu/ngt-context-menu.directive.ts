@@ -19,6 +19,7 @@ import { NgtContextMenuComponent, NgtContextMenuOptionInterface } from './ngt-co
 })
 export class NgtContextMenuDirective implements OnDestroy {
     @Output() public onNgtContextMenuClick: EventEmitter<NgtContextMenuOptionInterface> = new EventEmitter();
+    @Output() public onOpenNgtContextMenu: EventEmitter<NgtContextMenuComponent> = new EventEmitter();
 
     @Input() public ngtContextMenuOptions: NgtContextMenuOptionInterface[];
     @Input() public ngtContextMenuTemplate: TemplateRef<any>;
@@ -75,6 +76,8 @@ export class NgtContextMenuDirective implements OnDestroy {
         this.bindSubscriptions();
 
         document.body.appendChild(this.componentRef.location.nativeElement);
+
+        this.onOpenNgtContextMenu.emit(this.componentRef.instance);
     }
 
     private bindSubscriptions(): void {
