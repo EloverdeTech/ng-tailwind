@@ -14,8 +14,8 @@ import { Component, EventEmitter, HostListener, Output, TemplateRef } from '@ang
     ]
 })
 export class NgtPopoverTooltipComponent{
-    @Output() public onMouseHoverEvent: EventEmitter<NgtPopoverTooltipComponent> = new EventEmitter();
-    @Output() public onMouseLeaveEvent: EventEmitter<NgtPopoverTooltipComponent> = new EventEmitter();
+    @Output() public onMouseHoverEvent: EventEmitter<void> = new EventEmitter();
+    @Output() public onMouseLeaveEvent: EventEmitter<void> = new EventEmitter();
 
     public popover: string;
     public popoverTemplate: TemplateRef<any>;
