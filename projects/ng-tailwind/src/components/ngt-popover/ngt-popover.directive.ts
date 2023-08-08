@@ -11,6 +11,7 @@ import {
 
 import { NgtPopoverPosition, NgtPopoverTooltipComponent } from './ngt-popover-tooltip/ngt-popover-tooltip.component';
 import { NgtPopoverOpenMethod } from './ngt-popover.component';
+import { Subscription } from 'rxjs';
 
 @Directive({
     selector: '[ngt-popover]'
@@ -28,6 +29,9 @@ export class NgtPopoverDirective implements OnDestroy {
     private componentRef: ComponentRef<NgtPopoverTooltipComponent> = null;
     private dismissTimeoutInstance: NodeJS.Timeout;
     private showTimeoutInstance: NodeJS.Timeout;
+
+    private toolTipMouseHoverSubscription: Subscription;
+    private toolTipMouseLeaveSubscription: Subscription;
 
     public constructor(
         private elementRef: ElementRef,
@@ -98,6 +102,8 @@ export class NgtPopoverDirective implements OnDestroy {
     }
 
     private destroy(): void {
+        this.toolTipMouseHoverSubscription?.unsubscribe();
+        this.toolTipMouseLeaveSubscription?.unsubscribe();
         this.componentRef?.destroy();
         this.componentRef = null;
     }
@@ -118,6 +124,22 @@ export class NgtPopoverDirective implements OnDestroy {
         this.componentRef.instance.popoverTemplate = this.ngtPopoverTemplate;
         this.componentRef.instance.position = this.ngtPopoverPosition;
 
+        this.bindSubscriptions();
+
         document.body.appendChild(this.componentRef.location.nativeElement);
+    }
+
+    private bindSubscriptions(): void {
+        this.toolTipMouseHoverSubscription = this.componentRef.instance
+            .onMouseHoverEvent
+            .subscribe(() => {
+                if(this.dismissTimeoutInstance){
+                    clearTimeout(this.dismissTimeoutInstance);
+                }
+            });
+
+        this.toolTipMouseLeaveSubscription = this.componentRef.instance
+            .onMouseLeaveEvent
+            .subscribe(() => this.onMouseLeave());
     }
 }
