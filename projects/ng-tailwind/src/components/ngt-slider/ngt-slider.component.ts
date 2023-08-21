@@ -33,6 +33,8 @@ export class NgtSliderComponent extends NgtBaseNgModel implements AfterViewInit,
 
     @Input() public label: string;
     @Input() public shining: boolean;
+    @Input() public isDisabled: boolean;
+    @Input() public showPercentageSymbol: boolean;
     @Input() public name: string;
     @Input() public min: string = '0';
     @Input() public max: string = '100';
