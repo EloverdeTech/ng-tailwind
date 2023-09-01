@@ -1,6 +1,6 @@
 <div class="flex h-full w-full">
     <ng-container *ngIf="visible">
-        <div class="{{ getNavSize() }} {{ ngtStyle.compile(['color.bg', 'h']) }} {{ open ? 'block' : 'hidden' }} top-auto fixed {{ isMobileView() ? '' : 'md:static md:block' }}"
+        <div class="{{ getNavSize() }} {{ ngtStyle.compile(['color.bg', 'h']) }} {{ open ? 'block' : 'hidden' }} top-auto fixed {{ isMobileView() ? '' : 'sm:static sm:block' }}"
             @fadeDownAnimation #sideMenu>
             <ng-content select='[sideMenu]'></ng-content>
         </div>
