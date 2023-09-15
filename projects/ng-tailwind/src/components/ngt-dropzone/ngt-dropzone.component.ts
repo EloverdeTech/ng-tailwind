@@ -315,18 +315,21 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
             let temporaryResource = [];
             let observables = [];
 
-            attachments.forEach(attachment => {
+            attachments.forEach((attachment: any) => {
                 if (!(attachment instanceof File) && !attachment.loaded) {
                     this.loading = true;
+
                     attachment['loaded'] = true;
-                    observables.push(this.ngtAttachmentHttpService.thumbnail(attachment).pipe(
-                        map((response: any) => {
-                            temporaryResource.push({
-                                id: response.data.getApiId(),
-                                file: response.data.getAttribute('file')
-                            });
-                        })
-                    ));
+
+                    observables.push(this.ngtAttachmentHttpService.preview(attachment)
+                        .pipe(
+                            map((response: any) => {
+                                temporaryResource.push({
+                                    id: response.data.getApiId(),
+                                    file: response.data.getAttribute('file')
+                                });
+                            })
+                        ));
                 }
             });
 
