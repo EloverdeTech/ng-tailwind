@@ -428,6 +428,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
                 this.items = [];
             }
 
+            if (this.canAutoSelectUniqueOption()) {
+                this.onNativeChange(this.items[0]);
+            }
+
             this.ngSelectItems = new Observable((observer) => {
                 this.ngSearchObserver = observer;
                 observer.next(this.items);
@@ -573,11 +577,12 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         this.subscriptions = [];
     }
 
-    private canAutoSelectUniqueOption(response: NgtHttpResponse): boolean {
-        return !this.value
-            && this.autoSelectUniqueOption
-            && Array.isArray(response.data)
-            && response.data?.length === 1;
+    private canAutoSelectUniqueOption(response?: NgtHttpResponse): boolean {
+        return !this.value && this.autoSelectUniqueOption
+            && (
+                (Array.isArray(response?.data) && response?.data?.length === 1)
+                || (!response && Array.isArray(this.items) && this.items?.length == 1)
+            );
     }
 }
 
