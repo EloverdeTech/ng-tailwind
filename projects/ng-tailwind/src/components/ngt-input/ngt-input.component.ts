@@ -471,6 +471,9 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 min: this.validateMinValueOnMask ? this.minValue : undefined,
                 rightAlign: false
             },
+            [InputMaskEnum.NUMERIC_STRING]: {
+                regex: "[0-9]*",
+            },
             [InputMaskEnum.TIME]: '99:99',
         };
 
