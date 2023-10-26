@@ -11,6 +11,7 @@ export enum InputMaskEnum {
     PLATE = 'plate',
     CEP = 'cep',
     INTEGER = 'integer',
+    NUMERIC_STRING = 'numeric-string',
     TIME = 'time',
     INTERNATIONAL_PHONE = 'international-phone',
     DATE = 'date'

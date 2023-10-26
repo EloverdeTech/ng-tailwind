@@ -1,5 +1,14 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectorRef, Component, EventEmitter, Injector, Input, Optional, Output, Self } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Component,
+    EventEmitter,
+    Injector,
+    Input,
+    Optional,
+    Output,
+    Self,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -27,6 +36,7 @@ export class NgtModalComponent {
     @Output() public onOpenModal: EventEmitter<void> = new EventEmitter();
 
     public isOpen: boolean = false;
+    public viewMode: boolean = false;
 
     private keydownEventWasAdded: boolean = false;
     private subscriptions: Array<Subscription> = [];
@@ -76,7 +86,10 @@ export class NgtModalComponent {
 
             window.addEventListener('keydown', (event: any) => {
                 if (event.keyCode == 27) {
-                    this.close();
+                    if (this.viewMode) {
+                        this.closeViewMode();
+                        event.stopPropagation();
+                    }
                 }
             }, true);
         }
@@ -92,5 +105,9 @@ export class NgtModalComponent {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
 
         this.subscriptions = [];
+    }
+
+    private closeViewMode(): void {
+        this.viewMode = false;
     }
 }

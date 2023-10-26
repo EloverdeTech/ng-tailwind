@@ -69,7 +69,7 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     @Input() public hideNgxDropzone: boolean;
     @Input() public acceptedFiles: string = '*' /** Mime type */;
     @Input() public unacceptedFiles: string; /** Mime type */;
-    @Input() public maxFileSize: number; /** Bytes */
+    @Input() public maxFileSize: number; /** Bytes */;
     @Input() public previewType: NgtDropzonePreviewType = NgtDropzonePreviewType.DEFAULT;
     @Input() public name: string;
     @Input() public remoteResource: any;
