@@ -106,8 +106,8 @@ export class NgtModalComponent {
 
         this.subscriptions = [];
     }
-    public closeViewMode() {
+
+    private closeViewMode(): void {
         this.viewMode = false;
     }
-
 }
