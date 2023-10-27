@@ -434,15 +434,23 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }
 
         let masks = {
-            [InputMaskEnum.CPF]: '999.999.999-99',
-            [InputMaskEnum.CNPJ]: '99.999.999/9999-99',
+            [InputMaskEnum.CPF]: {
+                mask: ['999.999.999-99'],
+                clearMaskOnLostFocus: false
+            },
+            [InputMaskEnum.CNPJ]: {
+                mask: ['99.999.999/9999-99'],
+                clearMaskOnLostFocus: false
+            },
             [InputMaskEnum.CPF_CNPJ_RUT]: {
                 mask: ['999.999.999-99', '999999999999', '99.999.999/9999-99'],
-                keepStatic: true
+                keepStatic: true,
+                clearMaskOnLostFocus: false
             },
             [InputMaskEnum.CPF_CNPJ]: {
                 mask: ['999.999.999-99', '99.999.999/9999-99'],
-                keepStatic: true
+                keepStatic: true,
+                clearMaskOnLostFocus: false
             },
             [InputMaskEnum.DECIMAL]: {
                 digits: this.decimalMaskPrecision,
@@ -452,27 +460,36 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 repeat: 16,
                 rightAlign: false,
                 max: this.maxValue,
+                clearMaskOnLostFocus: false
             },
             [InputMaskEnum.CELLPHONE]: {
                 mask: ['(99) 999-999', '(99) 9999-9999', '(99) 99999-9999'],
-                keepStatic: true
+                keepStatic: true,
+                clearMaskOnLostFocus: false
             },
             [InputMaskEnum.INTERNATIONAL_PHONE]: {
                 mask: ['+999 99 999-999', '+99 (99) 9999-9999', '+99 (99) 99999-9999', '+999 (99) 9999-9999', '+999 (99) 99999-9999'],
-                keepStatic: true
+                keepStatic: true,
+                clearMaskOnLostFocus: false
             },
             [InputMaskEnum.PLATE]: {
                 mask: ['AAA-9&99'],
-                keepStatic: true
+                keepStatic: true,
+                clearMaskOnLostFocus: false
             },
-            [InputMaskEnum.CEP]: '99999-999',
+            [InputMaskEnum.CEP]: {
+                mask: ['99999-999'],
+                clearMaskOnLostFocus: false
+            },
             [InputMaskEnum.INTEGER]: {
                 max: this.maxValue,
                 min: this.validateMinValueOnMask ? this.minValue : undefined,
-                rightAlign: false
+                rightAlign: false,
+                clearMaskOnLostFocus: false
             },
             [InputMaskEnum.NUMERIC_STRING]: {
                 regex: "[0-9]*",
+                clearMaskOnLostFocus: false
             },
             [InputMaskEnum.TIME]: '99:99',
         };
