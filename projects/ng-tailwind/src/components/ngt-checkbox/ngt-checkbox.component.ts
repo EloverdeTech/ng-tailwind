@@ -1,11 +1,13 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     Host,
     Injector,
     Input,
+    OnChanges,
     OnDestroy,
     Optional,
     Renderer2,
@@ -22,6 +24,7 @@ import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-styl
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 
 @Component({
     selector: 'ngt-checkbox',
@@ -48,7 +51,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
         ])
     ]
 })
-export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewInit, OnDestroy {
+export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewInit, OnChanges, OnDestroy {
     @ViewChild('element', { static: true }) public element: ElementRef;
 
     @Input() public label: string;
@@ -67,6 +70,7 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
+        private changeDetector: ChangeDetectorRef,
         private injector: Injector,
         @Optional() @Host()
         public formContainer: ControlContainer,
@@ -74,19 +78,11 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         @Self() @Optional()
         private ngtStylizableDirective: NgtStylizableDirective,
         @Optional() @SkipSelf()
-        private ngtFormComponent: NgtFormComponent,
+        private ngtForm: NgtFormComponent,
+        @Optional() @SkipSelf()
+        public ngtSection: NgtSectionComponent
     ) {
         super();
-
-        if (this.ngtFormComponent) {
-            this.shining = this.ngtFormComponent.isShining();
-
-            this.subscriptions.push(
-                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                    this.shining = shining;
-                })
-            );
-        }
 
         if (this.ngtStylizableDirective) {
             this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
@@ -107,10 +103,22 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         });
     }
 
-    public ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.renderer.listen(this.element.nativeElement, 'change', (value) => {
             this.onNativeChange(this.element.nativeElement.checked);
         });
+
+        this.bindSubscriptions();
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.mode) {
+            this.mode = getEnumFromString(changes.mode.currentValue, NgtCheckboxMode);
+        }
+
+        if (changes.isDisabled && !changes.isDisabled.currentValue) {
+            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
+        }
     }
 
     public ngOnDestroy() {
@@ -149,10 +157,34 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         return this.mode === NgtCheckboxMode.RADIO;
     }
 
-    public ngOnChanges(changes: SimpleChanges) {
-        if (changes.mode) {
-            this.mode = getEnumFromString(changes.mode.currentValue, NgtCheckboxMode);
+    private bindSubscriptions(): void {
+        this.changeDetector.detectChanges();
+
+        if (!this.isDisabled) {
+            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
         }
+
+        if (this.ngtForm) {
+            this.subscriptions.push(
+                this.ngtForm.onIsDisabledChange.subscribe((isDisabled: boolean) => {
+                    if (!this.isDisabled) {
+                        this.isDisabled = isDisabled || this.ngtSection?.isDisabled;
+                    }
+                })
+            );
+        }
+
+        if (this.ngtSection) {
+            this.subscriptions.push(
+                this.ngtSection.onIsDisabledChange.subscribe((isDisabled: boolean) => {
+                    if (!this.isDisabled) {
+                        this.isDisabled = isDisabled || this.ngtForm?.isDisabled;
+                    }
+                })
+            );
+        }
+
+        this.changeDetector.detectChanges();
     }
 
     private destroySubscriptions() {

@@ -1,14 +1,17 @@
 import {
     AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     Host,
     Injector,
     Input,
+    OnChanges,
     OnDestroy,
     Optional,
     Renderer2,
     Self,
+    SimpleChanges,
     SkipSelf,
     ViewChild,
 } from '@angular/core';
@@ -19,6 +22,7 @@ import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 import { NgtRadioButtonContainerComponent } from './ngt-radio-button-container/ngt-radio-button-container.component';
 
 @Component({
@@ -32,7 +36,7 @@ import { NgtRadioButtonContainerComponent } from './ngt-radio-button-container/n
         { provide: ControlContainer, useExisting: NgForm }
     ]
 })
-export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterViewInit, OnDestroy {
+export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterViewInit, OnChanges, OnDestroy {
     @ViewChild('element', { static: true }) public element: ElementRef;
 
     @Input() public label: string;
@@ -50,6 +54,7 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
+        private changeDetector: ChangeDetectorRef,
         private injector: Injector,
         @Optional() @Host()
         public formContainer: ControlContainer,
@@ -57,21 +62,13 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
         @Self() @Optional()
         private ngtStylizableDirective: NgtStylizableDirective,
         @Optional() @SkipSelf()
-        private ngtFormComponent: NgtFormComponent,
+        private ngtForm: NgtFormComponent,
+        @Optional() @SkipSelf()
+        public ngtSection: NgtSectionComponent,
         @Optional() @SkipSelf()
         private ngtRadioButtonContainer: NgtRadioButtonContainerComponent
     ) {
         super();
-
-        if (this.ngtFormComponent) {
-            this.shining = this.ngtFormComponent.isShining();
-
-            this.subscriptions.push(
-                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                    this.shining = shining;
-                })
-            );
-        }
 
         if (this.ngtRadioButtonContainer) {
             this.subscriptions.push(
@@ -99,6 +96,14 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
         this.renderer.listen(this.element.nativeElement, 'change', (value) => {
             this.onNativeChange(this.element.nativeElement.checked);
         });
+
+        this.bindSubscriptions();
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.isDisabled && !changes.isDisabled.currentValue) {
+            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
+        }
     }
 
     public ngOnDestroy() {
@@ -121,6 +126,36 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
         if (this.ngtRadioButtonContainer) {
             this.ngtRadioButtonContainer.setActiveRadioButton(this);
         }
+    }
+
+    private bindSubscriptions(): void {
+        this.changeDetector.detectChanges();
+
+        if (!this.isDisabled) {
+            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
+        }
+
+        if (this.ngtForm) {
+            this.subscriptions.push(
+                this.ngtForm.onIsDisabledChange.subscribe((isDisabled: boolean) => {
+                    if (!this.isDisabled) {
+                        this.isDisabled = isDisabled || this.ngtSection?.isDisabled;
+                    }
+                })
+            );
+        }
+
+        if (this.ngtSection) {
+            this.subscriptions.push(
+                this.ngtSection.onIsDisabledChange.subscribe((isDisabled: boolean) => {
+                    if (!this.isDisabled) {
+                        this.isDisabled = isDisabled || this.ngtForm?.isDisabled;
+                    }
+                })
+            );
+        }
+
+        this.changeDetector.detectChanges();
     }
 
     private destroySubscriptions() {

@@ -1,22 +1,34 @@
-import {Component, EventEmitter, Host, Input, OnDestroy, OnInit, Optional, Output} from '@angular/core';
-import {ControlContainer, NgForm} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {Observable, Subscription} from 'rxjs';
+import {
+    Component,
+    EventEmitter,
+    Host,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Optional,
+    Output,
+    SimpleChanges,
+} from '@angular/core';
+import { ControlContainer, NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
 
-import {isValidNgForm} from '../../helpers/form/form';
-import {getIdFromUri} from '../../helpers/routing/route';
-import {NgtHttpFormService} from '../../services/http/ngt-http-form.service';
+import { isValidNgForm } from '../../helpers/form/form';
+import { getIdFromUri } from '../../helpers/routing/route';
+import { NgtHttpFormService } from '../../services/http/ngt-http-form.service';
 
 @Component({
     selector: 'ngt-form',
     templateUrl: './ngt-form.component.html',
 })
-export class NgtFormComponent implements OnInit, OnDestroy {
+export class NgtFormComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public guessFormState: boolean = true;
     @Input() public message: string = '';
     @Input() public routeIdentifier: string = 'id';
     @Input() public resource: any;
     @Input() public customLayout: boolean;
+    @Input() public isDisabled: boolean;
 
     @Output() public static onSubmitInvalidForm: EventEmitter<NgForm> = new EventEmitter;
 
@@ -24,6 +36,7 @@ export class NgtFormComponent implements OnInit, OnDestroy {
     @Output() public onEditing: EventEmitter<any> = new EventEmitter;
     @Output() public onLoadingChange: EventEmitter<boolean> = new EventEmitter;
     @Output() public onShiningChange: EventEmitter<boolean> = new EventEmitter;
+    @Output() public onIsDisabledChange: EventEmitter<boolean> = new EventEmitter;
     @Output() public setupComponent: EventEmitter<any> = new EventEmitter;
     @Output() public onResourceLoadingError: EventEmitter<string> = new EventEmitter;
 
@@ -42,8 +55,7 @@ export class NgtFormComponent implements OnInit, OnDestroy {
         public router: Router,
         public route: ActivatedRoute,
         private ngtHttpFormService: NgtHttpFormService
-    ) {
-    }
+    ) { }
 
     public ngOnInit() {
         if (this.guessFormState) {
@@ -63,6 +75,12 @@ export class NgtFormComponent implements OnInit, OnDestroy {
                 }
             })
         );
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.isDisabled) {
+            this.onIsDisabledChange.emit(changes.isDisabled.currentValue);
+        }
     }
 
     public ngOnDestroy() {

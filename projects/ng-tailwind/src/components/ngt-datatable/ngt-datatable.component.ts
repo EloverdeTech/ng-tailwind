@@ -326,7 +326,10 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
                 ).subscribe(
                     (response: NgtHttpResponse) => {
                         this.proccessRemoteResponse(response.data);
-                        this.ngtPagination.proccessPagination(response.meta);
+
+                        if (response.meta) {
+                            this.ngtPagination.proccessPagination(response.meta);
+                        }
 
                         this.searching = false;
                         this.loading = false;

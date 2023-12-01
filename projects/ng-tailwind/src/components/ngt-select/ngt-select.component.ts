@@ -31,6 +31,7 @@ import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.se
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } from './ngt-select.directive';
 
 @Component({
@@ -145,23 +146,15 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         @Optional() @Host()
         public formContainer: ControlContainer,
         @Optional() @SkipSelf()
-        public ngtFormComponent: NgtFormComponent,
+        public ngtForm: NgtFormComponent,
+        @Optional() @SkipSelf()
+        public ngtSection: NgtSectionComponent,
         private ngtHttp: NgtHttpService,
         private changeDetector: ChangeDetectorRef,
         @Optional()
         public ngtTranslateService: NgtTranslateService
     ) {
         super();
-
-        if (this.ngtFormComponent) {
-            this.shining = this.ngtFormComponent.isShining();
-
-            this.subscriptions.push(
-                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                    this.shining = shining;
-                })
-            );
-        }
 
         if (this.ngtStylizableDirective) {
             this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
@@ -211,6 +204,26 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
     public ngAfterViewInit() {
         this.bindInnerInputUniqueId();
+
+        this.bindSubscriptions();
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.isRequired) {
+            this.updateValidations();
+        }
+
+        if (changes.remoteResource || changes.items) {
+            this.initNgSelectItems();
+        }
+
+        if (changes.dropdownPanelMinHeight) {
+            this.dropdownPanelMinHeight = getEnumFromString(changes.dropdownPanelMinHeight.currentValue, NgtSelectDropdownPanelHeight);
+        }
+
+        if (changes.isDisabled && !changes.isDisabled.currentValue) {
+            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
+        }
     }
 
     public ngDoCheck(): void {
@@ -255,20 +268,6 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         this.value = undefined;
         this.nativeValue = undefined;
         this.refresh();
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
-        if (changes.isRequired) {
-            this.updateValidations();
-        }
-
-        if (changes.remoteResource || changes.items) {
-            this.initNgSelectItems();
-        }
-
-        if (changes.dropdownPanelMinHeight) {
-            this.dropdownPanelMinHeight = getEnumFromString(changes.dropdownPanelMinHeight.currentValue, NgtSelectDropdownPanelHeight);
-        }
     }
 
     public setFocus() {
@@ -572,17 +571,55 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         return this.autoLoad || (!this.isDisabled && this.wasClicked);
     }
 
-    private destroySubscriptions() {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());
-        this.subscriptions = [];
-    }
-
     private canAutoSelectUniqueOption(response?: NgtHttpResponse): boolean {
         return !this.value && this.autoSelectUniqueOption
             && (
                 (Array.isArray(response?.data) && response?.data?.length === 1)
                 || (!response && Array.isArray(this.items) && this.items?.length == 1)
             );
+    }
+
+    private bindSubscriptions(): void {
+        this.changeDetector.detectChanges();
+
+        if (!this.isDisabled) {
+            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
+        }
+
+        if (this.ngtForm) {
+            this.shining = this.ngtForm.isShining();
+
+            this.subscriptions.push(
+                this.ngtForm.onShiningChange.subscribe((shining: boolean) => {
+                    this.shining = shining;
+                })
+            );
+
+            this.subscriptions.push(
+                this.ngtForm.onIsDisabledChange.subscribe((isDisabled: boolean) => {
+                    if (!this.isDisabled) {
+                        this.isDisabled = isDisabled || this.ngtSection?.isDisabled;
+                    }
+                })
+            );
+        }
+
+        if (this.ngtSection) {
+            this.subscriptions.push(
+                this.ngtSection.onIsDisabledChange.subscribe((isDisabled: boolean) => {
+                    if (!this.isDisabled) {
+                        this.isDisabled = isDisabled || this.ngtForm?.isDisabled;
+                    }
+                })
+            );
+        }
+
+        this.changeDetector.detectChanges();
+    }
+
+    private destroySubscriptions(): void {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }
 

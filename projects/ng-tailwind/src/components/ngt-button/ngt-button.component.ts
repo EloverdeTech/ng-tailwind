@@ -1,4 +1,16 @@
-import { Component, Injector, Input, OnChanges, OnDestroy, Optional, Self, SimpleChanges, SkipSelf } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    Injector,
+    Input,
+    OnChanges,
+    OnDestroy,
+    Optional,
+    Self,
+    SimpleChanges,
+    SkipSelf,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -10,7 +22,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
     templateUrl: './ngt-button.component.html',
     styleUrls: ['./ngt-button.component.css'],
 })
-export class NgtButtonComponent implements OnChanges, OnDestroy {
+export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
     @Input() public link: boolean = false;
     @Input() public href: string;
     @Input() public type: string = 'success';
@@ -23,10 +35,12 @@ export class NgtButtonComponent implements OnChanges, OnDestroy {
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
-        @Optional() @SkipSelf()
-        private ngtFormComponent: NgtFormComponent,
+        private changeDetector: ChangeDetectorRef,
         private injector: Injector,
-        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
+        @Optional() @SkipSelf()
+        private ngtForm: NgtFormComponent,
+        @Self() @Optional()
+        private ngtStylizableDirective: NgtStylizableDirective,
     ) {
         if (this.ngtStylizableDirective) {
             this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
@@ -34,13 +48,10 @@ export class NgtButtonComponent implements OnChanges, OnDestroy {
             this.ngtStyle = new NgtStylizableService();
         }
 
-        if (this.ngtFormComponent) {
-            this.subscriptions.push(
-                this.ngtFormComponent.onLoadingChange.subscribe((loading: boolean) => {
-                    this.loading = loading;
-                })
-            );
-        }
+        this.ngtStyle.load(this.injector, 'NgtButton', {
+            px: 'px-4',
+            py: 'py-2'
+        });
     }
 
     public onClick(event: Event) {
@@ -50,6 +61,10 @@ export class NgtButtonComponent implements OnChanges, OnDestroy {
         }
     }
 
+    public ngAfterViewInit(): void {
+        this.bindSubscriptions();
+    }
+
     public ngOnChanges(changes: SimpleChanges) {
         if (changes.type) {
             if (changes.type.currentValue == 'success') {
@@ -57,36 +72,28 @@ export class NgtButtonComponent implements OnChanges, OnDestroy {
                     color: {
                         bg: 'bg-green-500',
                         text: 'text-white text-sm',
-                    },
-                    px: 'px-4',
-                    py: 'py-2'
+                    }
                 });
             } else if (changes.type.currentValue == 'warning') {
                 this.ngtStyle.load(this.injector, 'NgtWarningButton', {
                     color: {
                         bg: 'bg-orange-500',
                         text: 'text-white text-sm',
-                    },
-                    px: 'px-4',
-                    py: 'py-2'
+                    }
                 });
             } else if (changes.type.currentValue == 'danger') {
                 this.ngtStyle.load(this.injector, 'NgtDangerButton', {
                     color: {
                         bg: 'bg-red-500',
                         text: 'text-white text-sm',
-                    },
-                    px: 'px-4',
-                    py: 'py-2'
+                    }
                 });
             } else {
                 this.ngtStyle.load(this.injector, 'NgtInfoButton', {
                     color: {
                         bg: 'bg-blue-500',
                         text: 'text-white text-sm',
-                    },
-                    px: 'px-4',
-                    py: 'py-2'
+                    }
                 });
             }
         }
@@ -96,7 +103,30 @@ export class NgtButtonComponent implements OnChanges, OnDestroy {
         this.destroySubscriptions();
     }
 
-    private destroySubscriptions() {
+    private bindSubscriptions(): void {
+        this.changeDetector.detectChanges();
+
+        if (this.ngtForm) {
+            this.loading = this.ngtForm.isLoading();
+            this.isDisabled = !this.isDisabled && this.ngtForm.isDisabled;
+
+            this.changeDetector.detectChanges();
+
+            this.subscriptions.push(
+                this.ngtForm.onLoadingChange.subscribe((loading: boolean) => {
+                    this.loading = loading;
+                })
+            );
+
+            this.subscriptions.push(
+                this.ngtForm.onIsDisabledChange.subscribe((isDisabled: boolean) => {
+                    this.isDisabled = !this.isDisabled && isDisabled;
+                })
+            );
+        }
+    }
+
+    private destroySubscriptions(): void {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
     }
