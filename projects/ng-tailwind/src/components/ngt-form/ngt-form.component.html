@@ -2,4 +2,6 @@
     [message]="message">
 </ngt-form-validation-message>
 
-<ng-content></ng-content>
+<fieldset [disabled]="isDisabled">
+    <ng-content></ng-content>
+</fieldset>
