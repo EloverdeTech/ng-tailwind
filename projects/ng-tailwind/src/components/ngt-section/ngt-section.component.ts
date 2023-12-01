@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Injector, Input, Optional, Output, Self } from '@angular/core';
+import { Component, EventEmitter, Injector, Input, OnChanges, Optional, Output, Self, SimpleChanges } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -16,7 +16,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
         ]),
     ]
 })
-export class NgtSectionComponent {
+export class NgtSectionComponent implements OnChanges {
     @Input() public icon: string;
     @Input() public caption: string;
     @Input() public subtitle: string;
@@ -26,9 +26,11 @@ export class NgtSectionComponent {
     @Input() public helpTitle: string;
     @Input() public helpText: string;
     @Input() public helpIconColor: string;
+    @Input() public isDisabled: boolean;
 
     @Output() public onRemove: EventEmitter<void> = new EventEmitter();
     @Output() public onToggleSection: EventEmitter<boolean> = new EventEmitter();
+    @Output() public onIsDisabledChange: EventEmitter<boolean> = new EventEmitter;
 
     public ngtSectionStyle: NgtStylizableService;
     public ngtCaptionStyle: NgtStylizableService;
@@ -80,6 +82,12 @@ export class NgtSectionComponent {
                 border: ''
             }
         });
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.isDisabled) {
+            this.onIsDisabledChange.emit(changes.isDisabled.currentValue);
+        }
     }
 
     public open(): void {
