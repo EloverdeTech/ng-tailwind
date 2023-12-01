@@ -1,4 +1,4 @@
-<label class="flex items-center {{ isDisabled ? 'cursor-not-allowed' : 'cursor-pointer' }}"
+<label class="flex items-center {{ isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer' }}"
     [class.flex-col]='isToggleMode()' style="max-width: max-content;">
     <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' [disabled]="isDisabled || isClickDisabled"
         #element>
@@ -7,15 +7,14 @@
         <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} mb-2">{{ label }}</span>
 
         <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
-        [autoXReverse]="helperAutoXReverse" class="ml-1">
+            [autoXReverse]="helperAutoXReverse" class="ml-1">
             {{ helpText }}
         </ngt-helper>
     </span>
 
     <ng-container *ngIf="isDefaultMode()">
-        <div style="transition: background-color .2s ease-out"
-            class="{{ value ? ngtStyle.compile(['color.bg']) : 'bg-white' }}  {{ ngtStyle.compile(['h', 'w']) }}
-                    shadow rounded border border-gray-400 {{ isDisabled ? 'opacity-50' : '' }} {{ !shining ? 'flex justify-center' : 'hidden' }}">
+        <div style="transition: background-color .2s ease-out" class="{{ value ? ngtStyle.compile(['color.bg']) : 'bg-white' }}  {{ ngtStyle.compile(['h', 'w']) }}
+                    shadow rounded border border-gray-400 {{ !shining ? 'flex justify-center' : 'hidden' }}">
             <svg class="fill-current self-center text-white pointer-events-none" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20">
                 <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
@@ -25,7 +24,7 @@
 
     <ng-container *ngIf="isRadioMode()">
         <div style="transition: background-color .2s ease-out"
-            class="{{ value ? ngtStyle.compile(['color.border', 'color.text']) : 'border-gray-500' }} {{ isDisabled ? 'opacity-50' : '' }}
+            class="{{ value ? ngtStyle.compile(['color.border', 'color.text']) : 'border-gray-500' }}
                     shadow w-6 h-6 rounded-full border-2 border-gray-400 {{ !shining ? 'flex justify-center' : 'hidden' }}">
             <svg *ngIf="value" class="fill-current self-center h-3" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 29.107 29.107">
@@ -37,7 +36,7 @@
 
     <ng-container *ngIf="isToggleMode() || isSideToggleMode()">
         <div class="shadow w-16 h-8 rounded-full border border-gray-400 {{ shining ? 'hidden' : 'flex' }}"
-            [class.justify-end]="value" [class.opacity-50]="isDisabled" style="padding: 1px;">
+            [class.justify-end]="value" style="padding: 1px;">
             <div *ngIf="value"
                 class="flex text-xs text-white {{ ngtStyle.compile(['color.bg']) }} pointer-events-none rounded-full px-2 py-3"
                 @slideLeftToRight>
@@ -60,7 +59,7 @@
         <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} ml-2">{{ label }}</span>
 
         <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
-        [autoXReverse]="helperAutoXReverse" class="ml-1">
+            [autoXReverse]="helperAutoXReverse" class="ml-1">
             {{ helpText }}
         </ngt-helper>
     </ng-container>
