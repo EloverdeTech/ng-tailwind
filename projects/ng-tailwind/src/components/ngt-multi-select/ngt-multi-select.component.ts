@@ -56,6 +56,8 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     @Input() public helpTitle: string;
     @Input() public helpText: string;
     @Input() public helpTextColor: string = 'text-green-500';
+    @Input() public helperReverseYPosition: boolean;
+    @Input() public helperAutoXReverse: boolean = true;
     @Input() public shining: boolean = false;
     @Input() public loading: boolean = false;
 
