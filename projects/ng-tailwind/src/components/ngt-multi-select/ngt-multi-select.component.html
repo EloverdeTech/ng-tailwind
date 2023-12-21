@@ -4,8 +4,7 @@
     <span *ngIf="isRequired" class="text-red-500 font-bold text-md ml-1">*</span>
 
     <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
-            [helperReverseYPosition]="helperReverseYPosition" [autoXReverse]="helperAutoXReverse"
-            class="ml-1">
+        [helperReverseYPosition]="helperReverseYPosition" [autoXReverse]="helperAutoXReverse" class="ml-1">
         {{ helpText }}
     </ngt-helper>
 </label>
@@ -27,8 +26,11 @@
         </ngt-input>
     </div>
 
-    <div *ngIf="loading" class="flex justify-center items-center h-full w-full cursor-wait">
-        <div class="div-loader"></div>
+    <div *ngIf="loading" class="flex flex-col gap-3 px-3 h-full w-full cursor-wait">
+        <ngt-shining class="h-10 w-full"></ngt-shining>
+        <ngt-shining class="h-10 w-full"></ngt-shining>
+        <ngt-shining class="h-10 w-full"></ngt-shining>
+        <ngt-shining class="h-10 w-full"></ngt-shining>
     </div>
 
     <div class="w-full overflow-y-auto text-sm {{ loading ? 'hidden' : 'flex flex-col' }}" (scroll)='onScroll($event)'
