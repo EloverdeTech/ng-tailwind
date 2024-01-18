@@ -54,8 +54,6 @@ export class NgtModalComponent {
 
         this.ngtStyle.load(this.injector, 'NgtModal', {
             w: 'md:max-w-md',
-            py: 'py-4',
-            px: 'px-6',
             overflow: 'overflow-visible',
             color: {}
         });
