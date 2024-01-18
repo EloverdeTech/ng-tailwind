@@ -105,8 +105,8 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public isRequired: boolean = false;
 
     @Output() public onLoadRemoteResource: EventEmitter<any> = new EventEmitter<any>();
-    @Output() public onClear: EventEmitter<void> = new EventEmitter<void>();
     @Output() public onSelectedItemRemove: EventEmitter<void> = new EventEmitter<void>();
+    @Output() public onClear: EventEmitter<void> = new EventEmitter<void>();
     @Output() public onClose: EventEmitter<void> = new EventEmitter<void>();
 
     public nativeName = uuid();
