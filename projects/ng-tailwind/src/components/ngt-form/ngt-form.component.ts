@@ -29,6 +29,7 @@ export class NgtFormComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public resource: any;
     @Input() public customLayout: boolean;
     @Input() public isDisabled: boolean;
+    @Input() public wasteMenu: false;
 
     @Output() public static onSubmitInvalidForm: EventEmitter<NgForm> = new EventEmitter;
 

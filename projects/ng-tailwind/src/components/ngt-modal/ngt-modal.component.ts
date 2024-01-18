@@ -31,6 +31,7 @@ export class NgtModalComponent {
     @Input() public customLayout: boolean = false;
     @Input() public disableDefaultCloses: boolean = false;
     @Input() public ngtStyle: NgtStylizableService;
+    @Input() public wasteMenu: false;
 
     @Output() public onCloseModal: EventEmitter<void> = new EventEmitter();
     @Output() public onOpenModal: EventEmitter<void> = new EventEmitter();
@@ -54,6 +55,8 @@ export class NgtModalComponent {
 
         this.ngtStyle.load(this.injector, 'NgtModal', {
             w: 'md:max-w-md',
+            px: 'px-6',
+            py: 'py-4',
             overflow: 'overflow-visible',
             color: {}
         });

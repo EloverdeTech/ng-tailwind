@@ -7,16 +7,17 @@
             </button>
         </ng-container>
 
-        <div class="{{ ngtStyle.compile(['w', 'overflow']) }}  border border-teal-500 bg-white w-full self-center rounded shadow-lg z-10"
+        <div class="{{ ngtStyle.compile(['w', 'overflow']) }} relative border border-teal-500 bg-white w-full self-center rounded shadow-lg z-10"
             style="max-height: 85%;">
-            <ng-container *ngIf="!customLayout">
-                <ngt-modal-header class="w-full position: absolute"
-                    [disableDefaultCloses]="disableDefaultCloses">
-                    <ng-content select='[header]'></ng-content>
-                </ngt-modal-header>
-            </ng-container>
+            <div class="cursor-default text-left {{ wasteMenu ? 'px-0, py-0' : ngtStyle.compile(['py', 'px']) }}">
+                <div *ngIf="!customLayout">
+                    <ng-container>
+                        <ngt-modal-header class="w-full" [disableDefaultCloses]="disableDefaultCloses">
+                            <ng-content select='[header]'></ng-content>
+                        </ngt-modal-header>
+                    </ng-container>
+                </div>
 
-            <div class="cursor-default text-left">
                 <ng-container *ngIf="!customLayout">
                     <ngt-modal-body>
                         <ng-content select='[body]'></ng-content>
