@@ -24,7 +24,7 @@
         [clearSearchOnAdd]="clearSearchOnAdd" [bindValue]="bindValue" [virtualScroll]="virtualScroll"
         [loadingText]="loadingText || ngtTranslateService.ngtSelectLoadingText" [maxSelectedItems]="maxSelectedItems"
         [tabIndex]="tabIndex" [items]="ngSelectItems | async" [groupValue]="groupValue" [loading]="loading"
-        [compareWith]='compareWith' [inputAttrs]="inputAttrs" (scroll)="onScroll($event)"
+        [compareWith]='compareWith' [inputAttrs]="inputAttrs" (scroll)="onScroll($event)" (close)="onClose.emit()"
         (change)="onNativeChange($event)" (clear)='onClearSelect()' (remove)='onRemoveSelectedItem($event)'
         (click)="wasClicked = true">
 
