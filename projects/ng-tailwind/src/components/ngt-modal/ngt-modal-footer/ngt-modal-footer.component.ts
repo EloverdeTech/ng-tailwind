@@ -5,5 +5,5 @@ import {Component, Input} from '@angular/core';
     templateUrl: './ngt-modal-footer.component.html'
 })
 export class NgtModalFooterComponent {
-    @Input() public wasteMenu: false;
+    @Input() public spaceChange: false;
 }

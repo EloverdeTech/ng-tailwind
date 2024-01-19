@@ -5,5 +5,5 @@ import {Component, Input} from '@angular/core';
     templateUrl: './ngt-modal-body.component.html'
 })
 export class NgtModalBodyComponent {
-    @Input() public wasteMenu: false;
+    @Input() public spaceChange: false;
 }

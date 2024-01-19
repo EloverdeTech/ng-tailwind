@@ -31,7 +31,6 @@ export class NgtModalComponent {
     @Input() public customLayout: boolean = false;
     @Input() public disableDefaultCloses: boolean = false;
     @Input() public ngtStyle: NgtStylizableService;
-    @Input() public wasteMenu: false;
 
     @Output() public onCloseModal: EventEmitter<void> = new EventEmitter();
     @Output() public onOpenModal: EventEmitter<void> = new EventEmitter();
