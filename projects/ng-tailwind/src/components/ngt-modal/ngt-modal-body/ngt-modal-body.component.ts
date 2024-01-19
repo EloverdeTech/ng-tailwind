@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
     selector: 'ngt-modal-body',
     templateUrl: './ngt-modal-body.component.html'
 })
-export class NgtModalBodyComponent { }
+export class NgtModalBodyComponent {
+    @Input() public wasteMenu: false;
+}
