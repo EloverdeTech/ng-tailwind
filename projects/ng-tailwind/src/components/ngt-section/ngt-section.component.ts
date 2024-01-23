@@ -1,8 +1,9 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Injector, Input, OnChanges, Optional, Output, Self, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Injector, Input, Optional, Output, Self } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtAbilityValidationService } from '../../services/validation/ngt-ability-validation.service';;
 
 @Component({
     selector: 'ngt-section',
@@ -16,7 +17,8 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
         ]),
     ]
 })
-export class NgtSectionComponent implements OnChanges {
+export class NgtSectionComponent implements AfterViewInit {
+    @Input() public name: string;
     @Input() public icon: string;
     @Input() public caption: string;
     @Input() public subtitle: string;
@@ -30,15 +32,22 @@ export class NgtSectionComponent implements OnChanges {
 
     @Output() public onRemove: EventEmitter<void> = new EventEmitter();
     @Output() public onToggleSection: EventEmitter<boolean> = new EventEmitter();
-    @Output() public onIsDisabledChange: EventEmitter<boolean> = new EventEmitter;
 
     public ngtSectionStyle: NgtStylizableService;
     public ngtCaptionStyle: NgtStylizableService;
     public ngtSubtitleStyle: NgtStylizableService;
 
+    public canDisplay: boolean;
+
     public constructor(
         private injector: Injector,
-        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective
+        private changeDetector: ChangeDetectorRef,
+
+        @Self() @Optional()
+        private ngtStylizableDirective: NgtStylizableDirective,
+
+        @Optional()
+        private ngtAbilityValidationService: NgtAbilityValidationService
     ) {
         this.ngtCaptionStyle = new NgtStylizableService();
         this.ngtSubtitleStyle = new NgtStylizableService();
@@ -84,10 +93,22 @@ export class NgtSectionComponent implements OnChanges {
         });
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes.isDisabled) {
-            this.onIsDisabledChange.emit(changes.isDisabled.currentValue);
+    public async ngAfterViewInit(): Promise<void> {
+        if (!this.ngtAbilityValidationService || !this.name) {
+            this.canDisplay = true;
+
+            this.changeDetector.detectChanges();
         }
+
+        if (this.ngtAbilityValidationService && this.name) {
+            if (this.isDisabled === undefined) {
+                this.isDisabled = !(await this.ngtAbilityValidationService.isSectionEnabled(this.name));
+            }
+
+            this.canDisplay = !(await this.ngtAbilityValidationService.isSectionHidden(this.name));
+        }
+
+        this.changeDetector.detectChanges();
     }
 
     public open(): void {
