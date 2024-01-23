@@ -29,6 +29,9 @@ import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-htt
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtDropzoneFileViewerComponent } from './ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
 import { NgtDropzoneErrorType, NgtDropzoneFile, NgtDropzonePreviewType } from './ngt-dropzone.meta';
+import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
+import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 
 @Component({
     selector: 'ngt-dropzone',
@@ -109,10 +112,21 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
     public constructor(
         @Optional() @Host()
         public formContainer: ControlContainer,
-        @Optional() @SkipSelf()
-        private ngtAttachmentHttpService: NgtAttachmentHttpService,
+
         private injector: Injector,
         private changeDetector: ChangeDetectorRef,
+
+        @Optional() @SkipSelf()
+        private ngtAttachmentHttpService: NgtAttachmentHttpService,
+
+        @Optional() @SkipSelf()
+        private ngtForm: NgtFormComponent,
+
+        @Optional() @SkipSelf()
+        private ngtSection: NgtSectionComponent,
+
+        @Optional() @SkipSelf()
+        private ngtModal: NgtModalComponent
     ) {
         super();
 
@@ -434,6 +448,10 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         document.getElementById(this.ngxElementId).click();
     }
 
+    public isDisabled(): boolean {
+        return this.disabled || this.isDisabledByParent();
+    }
+
     private initComponent() {
         if (this.viewMode) {
             this.previewType = NgtDropzonePreviewType.DEFAULT;
@@ -482,6 +500,12 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
             this.formControl.setValidators(syncValidators);
             this.formControl.updateValueAndValidity();
         });
+    }
+
+    private isDisabledByParent(): boolean {
+        return this.ngtForm?.isDisabled
+            || this.ngtSection?.isDisabled
+            || this.ngtModal?.isDisabled;
     }
 
     private destroySubscriptions() {
