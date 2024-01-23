@@ -100,6 +100,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public autoSelectUniqueOption: boolean = false;
     @Input() public groupValue: (groupKey: string, cildren: any[]) => Object;
     @Input() public trackBy: (item: any) => any;
+    @Input() public sortSelectedItemsFn: (a: any, b: any) => any;
 
     /** Validation */
     @Input() public isRequired: boolean = false;
@@ -358,19 +359,19 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         }, 500);
     }
 
-    public onNativeChange(value) {
+    public onNativeChange(value): void {
         if (this.hasChangesBetweenModels(this.value, value)) {
-            this.value = value;
+            this.value = this.sortSelectedItems(value);
         }
     }
 
-    public change(value) {
+    public change(value): void {
         if (this.hasChangesBetweenModels(value, this.nativeValue)) {
             if (Array.isArray(value)) {
                 value = value.map((val) => val);
             }
 
-            this.nativeValue = value;
+            this.nativeValue = this.sortSelectedItems(value);
 
             if (!value) {
                 this.markAsPristine();
@@ -450,6 +451,14 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
             this.markAsPristine();
             this.updateValidations();
         }
+    }
+
+    private sortSelectedItems(value: any): any {
+        if (this.sortSelectedItemsFn && value instanceof Array && value.length > 1) {
+            return value.sort((a, b) => this.sortSelectedItemsFn(a, b));
+        }
+
+        return value;
     }
 
     private getElementTitle(): string {
