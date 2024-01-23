@@ -10,7 +10,7 @@
     </ngt-helper>
 </label>
 
-<div class="relative" [hidden]='shining || isDisabled || isReadonly'>
+<div class="relative" [hidden]='shining || disabled() || isReadonly'>
     <div
         class="overflow-hidden {{ ngtStyle.compile(['h', 'color.text']) }} {{ hasErrors() ? 'border-error' : 'border-normal' }}">
         <ng2-flatpickr class="block h-full" [config]='dateConfig' disabled='true' placeholder="{{ placeholder }}"
@@ -42,9 +42,9 @@
     </div>
 </ng-container>
 
-<ng-container *ngIf='isDisabled || isReadonly'>
+<ng-container *ngIf='disabled() || isReadonly'>
     <div
-        class="{{isDisabled ? 'disabledDiv' : ''}} {{ngtStyle.compile(['h'])}} w-full px-4 rounded appearance-none flex items-center border border-gray-400">
+        class="{{disabled() ? 'disabledDiv' : ''}} {{ngtStyle.compile(['h'])}} w-full px-4 rounded appearance-none flex items-center border border-gray-400">
         {{ getFormattedNativeValue() }}
     </div>
 </ng-container>
