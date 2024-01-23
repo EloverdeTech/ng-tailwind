@@ -2,11 +2,11 @@
     <ng-content></ng-content>
 </ng-template>
 
-<div class="h-full w-full" (click)='onClick($event)'>
+<div class="relative h-full w-full" (click)='onClick($event)'>
     <ng-container *ngIf='!link'>
-        <button [ngClass]="{ 'disabled-button': isDisabled, 'loading-button': loading }" [disabled]="isDisabled"
-            [type]="(loading || isDisabled || noSubmit) ? 'button' : 'submit'"
-            class="flex justify-center items-center h-full w-full focus:outline-none rounded cursor-pointer {{ ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border']) }}">
+        <button [ngClass]="{ 'disabled-button': disabled(), 'loading-button': loading }" [disabled]="disabled()"
+            [type]="(loading || disabled() || noSubmit) ? 'button' : 'submit'"
+            class="flex justify-center items-center h-full w-full focus:outline-none rounded cursor-pointer {{ ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border', 'text']) }}">
             <ng-container *ngTemplateOutlet="content"></ng-container>
 
             <span *ngIf="loading" class="ml-2">
@@ -16,8 +16,8 @@
     </ng-container>
 
     <ng-container *ngIf='link'>
-        <a [routerLink]='href ? href : null' [ngClass]="{ 'disabled-button': isDisabled, 'loading-button': loading }"
-            class="flex justify-center items-center h-full w-full focus:outline-none rounded cursor-pointer {{ ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border']) }}">
+        <a [routerLink]='href ? href : null' [ngClass]="{ 'disabled-button': disabled(), 'loading-button': loading }"
+            class="flex justify-center items-center h-full w-full focus:outline-none rounded cursor-pointer {{ ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border', 'text']) }}">
             <span class="w-full">
                 <ng-container *ngTemplateOutlet="content"></ng-container>
             </span>
@@ -27,4 +27,8 @@
             </span>
         </a>
     </ng-container>
+
+    <legend *ngIf="forceEnable" class="absolute top-0 h-full w-full cursor-pointer hover:opacity-25 hover:bg-gray-100"
+        (click)='onClick($event)'>
+    </legend>
 </div>

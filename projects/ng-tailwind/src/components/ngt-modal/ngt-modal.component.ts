@@ -1,5 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
+    AfterViewInit,
     ChangeDetectorRef,
     Component,
     EventEmitter,
@@ -14,6 +15,7 @@ import { Subscription } from 'rxjs';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtModalHeaderComponent } from './ngt-modal-header/ngt-modal-header.component';
+import { NgtAbilityValidationService } from '../../services/validation/ngt-ability-validation.service';
 
 @Component({
     selector: 'ngt-modal',
@@ -27,9 +29,10 @@ import { NgtModalHeaderComponent } from './ngt-modal-header/ngt-modal-header.com
         ])
     ]
 })
-export class NgtModalComponent {
+export class NgtModalComponent implements AfterViewInit {
     @Input() public customLayout: boolean = false;
     @Input() public disableDefaultCloses: boolean = false;
+    @Input() public isDisabled: boolean;
     @Input() public ngtStyle: NgtStylizableService;
 
     @Output() public onCloseModal: EventEmitter<void> = new EventEmitter();
@@ -44,7 +47,12 @@ export class NgtModalComponent {
     public constructor(
         private changeDetectorRef: ChangeDetectorRef,
         private injector: Injector,
-        @Self() @Optional() private tailStylizableDirective: NgtStylizableDirective
+
+        @Self() @Optional()
+        private tailStylizableDirective: NgtStylizableDirective,
+
+        @Optional()
+        private ngtAbilityValidationService: NgtAbilityValidationService
     ) {
         if (this.tailStylizableDirective) {
             this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
@@ -59,6 +67,14 @@ export class NgtModalComponent {
             overflow: 'overflow-visible',
             color: {}
         });
+    }
+
+    public async ngAfterViewInit(): Promise<void> {
+        if (this.isDisabled === undefined && this.ngtAbilityValidationService) {
+            this.isDisabled = !(await this.ngtAbilityValidationService.hasManagePermission());
+
+            this.changeDetectorRef.detectChanges();
+        }
     }
 
     public close() {

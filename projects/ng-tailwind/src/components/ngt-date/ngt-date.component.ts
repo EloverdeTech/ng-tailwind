@@ -26,6 +26,8 @@ import { applyInputMask, InputMaskEnum } from '../../helpers/input-mask/input-ma
 import { uuid } from '../../helpers/uuid';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
+import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 
 @Component({
     selector: 'ngt-date',
@@ -87,20 +89,30 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
     private lastInputedDateString: string;
 
     public constructor(
-        private injector: Injector,
-        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
         @Optional() @Host()
         public formContainer: ControlContainer,
+
+        private injector: Injector,
+
+        @Self() @Optional()
+        private ngtStylizableDirective: NgtStylizableDirective,
+
         @Optional() @SkipSelf()
-        private ngtFormComponent: NgtFormComponent
+        private ngtForm: NgtFormComponent,
+
+        @Optional() @SkipSelf()
+        private ngtSection: NgtSectionComponent,
+
+        @Optional() @SkipSelf()
+        private ngtModal: NgtModalComponent
     ) {
         super();
 
-        if (this.ngtFormComponent) {
-            this.shining = this.ngtFormComponent.isShining();
+        if (this.ngtForm) {
+            this.shining = this.ngtForm.isShining();
 
             this.subscriptions.push(
-                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+                this.ngtForm.onShiningChange.subscribe((shining: boolean) => {
                     this.shining = shining;
                 })
             );
@@ -309,6 +321,10 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         return this.formControl?.errors && (this.formControl?.dirty || (this.formContainer && this.formContainer['submitted']));
     }
 
+    public disabled(): boolean {
+        return this.isDisabled || this.isDisabledByParent();
+    }
+
     private initComponent() {
         if (this.formContainer && this.formContainer.control && (this.formControl = this.formContainer.control.get(this.name))) {
             if (this.defaultDate && !this.value) {
@@ -425,6 +441,12 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         const splittedDate: Array<string> = dateTimeString.split('/');
 
         return `${splittedDate[2]}-${splittedDate[1]}-${splittedDate[0]}`;
+    }
+
+    private isDisabledByParent(): boolean {
+        return this.ngtForm?.isDisabled
+            || this.ngtSection?.isDisabled
+            || this.ngtModal?.isDisabled;
     }
 
     private destroySubscriptions() {

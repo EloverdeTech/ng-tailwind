@@ -14,6 +14,9 @@ export * from './services/http/ngt-http-validation.service';
 //NgtHttpResourceService
 export * from './services/http/ngt-http-resource.service';
 
+//NgtAbilityValidationService
+export * from './services/validation/ngt-ability-validation.service';
+
 //NgtDatatable
 export * from './components/ngt-datatable/ngt-datatable.module';
 export * from './components/ngt-datatable/ngt-datatable.component';

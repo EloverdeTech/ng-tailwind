@@ -1,6 +1,6 @@
 <label
-    class="inline-flex items-center {{ isDisabled || !isSelectable ? 'cursor-not-allowed opacity-50' : 'cursor-pointer' }}">
-    <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' [disabled]='isDisabled || !isSelectable'
+    class="inline-flex items-center {{ disabled() || !isSelectable ? 'cursor-not-allowed opacity-50' : 'cursor-pointer' }}">
+    <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' [disabled]='disabled() || !isSelectable'
         #element>
 
     <div class="{{ value ? ngtStyle.compile(['color.border', 'color.text']) : 'border-gray-500' }}

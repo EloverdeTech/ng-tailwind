@@ -15,7 +15,7 @@
 
     <ng-container *ngIf='searchable'>
         <div (click)='enableSearch($event)' class="float-right ml-2" title="Filtrar">
-            <ngt-action class="text-lg" h='h-6' w='w-6' ngt-stylizable>
+            <ngt-action class="text-lg" h='h-6' w='w-6' [forceEnable]="true" ngt-stylizable>
                 <svg class="fill-current self-center" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
                     <path
                         d="M1595 295q17 41-14 70l-493 493v742q0 42-39 59-13 5-25 5-27 0-45-19l-256-256q-19-19-19-45V858L211 365q-31-29-14-70 17-39 59-39h1280q42 0 59 39z" />
@@ -33,7 +33,7 @@
         <ng-content select='[customSearchHeader]'></ng-content>
     </ngt-modal-header>
 
-    <ngt-modal-body>
+    <ngt-modal-body [isDisabled]="false">
         <ngt-input *ngIf="!hasCustomSearch" jit='true' [(ngModel)]='searchTerm' (ngModelChange)='search($event)'
             placeholder='Pesquisar...' name='{{ reference }}_filter' #searchInput>
         </ngt-input>

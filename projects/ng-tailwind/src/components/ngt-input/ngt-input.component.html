@@ -12,7 +12,7 @@
 <div class="{{ shining ? 'hidden' : 'flex relative'}}">
     <input autocomplete="new-password"
         class="flex border appearance-none focus:outline-none leading-tight w-full {{ getInputPaddings() }} {{ ngtStyle.compile(['h', 'text', 'color.border', 'color.bg', 'color.text', 'rounded', 'cursor']) }}"
-        [disabled]="isDisabled" [readonly]="isReadonly || loading" [placeholder]="placeholder"
+        [disabled]="disabled()" [readonly]="isReadonly || loading" [placeholder]="placeholder"
         [style]="uppercase ? 'text-transform: uppercase!important':''"
         [ngClass]="{'input-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
         [attr.type]="inputProperties.htmlType" #element>
@@ -25,8 +25,8 @@
     </span>
 
     <div class="flex absolute h-full justify-end right-0 w-auto">
-        <span *ngIf="allowClear && value && !loading" class="self-center right-0 px-2 text-red-400 cursor-pointer"
-            (click)='clearInput($event)'>
+        <span *ngIf="!disabled() && allowClear && value && !loading"
+            class="self-center right-0 px-2 text-red-400 cursor-pointer" (click)='clearInput($event)'>
             <svg class="fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path
                     d="M19.1 17.2l-5.3-5.3 5.3-5.3-1.8-1.8-5.3 5.4-5.3-5.3-1.8 1.7 5.3 5.3-5.3 5.3L6.7 19l5.3-5.3 5.3 5.3 1.8-1.8z" />

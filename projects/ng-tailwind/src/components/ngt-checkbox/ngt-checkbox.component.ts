@@ -1,7 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
-    ChangeDetectorRef,
     Component,
     ElementRef,
     Host,
@@ -25,6 +24,7 @@ import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
+import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 
 @Component({
     selector: 'ngt-checkbox',
@@ -70,17 +70,23 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
-        private changeDetector: ChangeDetectorRef,
         private injector: Injector,
+        private renderer: Renderer2,
+
         @Optional() @Host()
         public formContainer: ControlContainer,
-        private renderer: Renderer2,
+
         @Self() @Optional()
         private ngtStylizableDirective: NgtStylizableDirective,
+
         @Optional() @SkipSelf()
         private ngtForm: NgtFormComponent,
+
         @Optional() @SkipSelf()
-        public ngtSection: NgtSectionComponent
+        private ngtSection: NgtSectionComponent,
+
+        @Optional() @SkipSelf()
+        private ngtModal: NgtModalComponent
     ) {
         super();
 
@@ -107,17 +113,11 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         this.renderer.listen(this.element.nativeElement, 'change', (value) => {
             this.onNativeChange(this.element.nativeElement.checked);
         });
-
-        this.bindSubscriptions();
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes.mode) {
             this.mode = getEnumFromString(changes.mode.currentValue, NgtCheckboxMode);
-        }
-
-        if (changes.isDisabled && !changes.isDisabled.currentValue) {
-            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
         }
     }
 
@@ -157,34 +157,14 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         return this.mode === NgtCheckboxMode.RADIO;
     }
 
-    private bindSubscriptions(): void {
-        this.changeDetector.detectChanges();
+    public disabled(): boolean {
+        return this.isDisabled || this.isDisabledByParent();
+    }
 
-        if (!this.isDisabled) {
-            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
-        }
-
-        if (this.ngtForm) {
-            this.subscriptions.push(
-                this.ngtForm.onIsDisabledChange.subscribe((isDisabled: boolean) => {
-                    if (!this.isDisabled) {
-                        this.isDisabled = isDisabled || this.ngtSection?.isDisabled;
-                    }
-                })
-            );
-        }
-
-        if (this.ngtSection) {
-            this.subscriptions.push(
-                this.ngtSection.onIsDisabledChange.subscribe((isDisabled: boolean) => {
-                    if (!this.isDisabled) {
-                        this.isDisabled = isDisabled || this.ngtForm?.isDisabled;
-                    }
-                })
-            );
-        }
-
-        this.changeDetector.detectChanges();
+    private isDisabledByParent(): boolean {
+        return this.ngtForm?.isDisabled
+            || this.ngtSection?.isDisabled
+            || this.ngtModal?.isDisabled;
     }
 
     private destroySubscriptions() {

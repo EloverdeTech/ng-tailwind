@@ -2,7 +2,7 @@
     <ul class="flex justify-start">
         <!-- FIRST -->
         <li (click)='goToFirstPage()' class="mr-2">
-            <ngt-action [ngtStyle]='ngtPaginationFirstLastButtonStyle'>
+            <ngt-action [ngtStyle]='ngtPaginationFirstLastButtonStyle' [forceEnable]="true">
                 <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                     aria-hidden="true" focusable="false"
                     style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
@@ -15,7 +15,7 @@
 
         <!-- PREVIOUS -->
         <li (click)='goToPreviousPage()' class="mr-2">
-            <ngt-action [ngtStyle]='ngtPaginationNextPreviousButtonStyle'>
+            <ngt-action [ngtStyle]='ngtPaginationNextPreviousButtonStyle' [forceEnable]="true">
                 <svg class="fill-current" xmlns="http://www.w3.org/2000/svg"
                     style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
                     preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
@@ -26,7 +26,7 @@
 
         <!-- PREVIOUS SECTION -->
         <li *ngIf="displayPreviousSectionButton" (click)='goToPreviousSection()' class="mr-2">
-            <ngt-action [ngtStyle]='ngtPaginationNextPreviousSectionButtonStyle'>
+            <ngt-action [ngtStyle]='ngtPaginationNextPreviousSectionButtonStyle' [forceEnable]="true">
                 <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                     <path
                         d="M4 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
@@ -37,7 +37,7 @@
         <ng-container *ngFor='let page of pages'>
             <ng-container *ngIf='page == pagination.page'>
                 <li class="mr-2">
-                    <ngt-action [ngtStyle]='ngtPaginationActivePageButtonStyle'>
+                    <ngt-action [ngtStyle]='ngtPaginationActivePageButtonStyle' [forceEnable]="true">
                         {{ page }}
                     </ngt-action>
                 </li>
@@ -45,7 +45,7 @@
 
             <ng-container *ngIf='page !== pagination.page'>
                 <li (click)='goToPage(page)' class="mr-2">
-                    <ngt-action [ngtStyle]='ngtPaginationPageButtonStyle'>
+                    <ngt-action [ngtStyle]='ngtPaginationPageButtonStyle' [forceEnable]="true">
                         {{ page }}
                     </ngt-action>
                 </li>
@@ -55,7 +55,7 @@
 
         <!-- NEXT SECTION -->
         <li *ngIf="displayNextSectionButton" (click)='goToNextSection()' class="mr-2">
-            <ngt-action [ngtStyle]='ngtPaginationNextPreviousSectionButtonStyle'>
+            <ngt-action [ngtStyle]='ngtPaginationNextPreviousSectionButtonStyle' [forceEnable]="true">
                 <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                     <path
                         d="M4 12a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
@@ -65,7 +65,7 @@
 
         <!-- NEXT -->
         <li (click)='goToNextPage()' class="mr-2">
-            <ngt-action [ngtStyle]='ngtPaginationNextPreviousButtonStyle'>
+            <ngt-action [ngtStyle]='ngtPaginationNextPreviousButtonStyle' [forceEnable]="true">
                 <svg class="fill-current" xmlns="http://www.w3.org/2000/svg"
                     style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
                     preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
@@ -76,7 +76,7 @@
 
         <!-- LAST -->
         <li (click)='goToLastPage()' class="mr-2">
-            <ngt-action [ngtStyle]='ngtPaginationFirstLastButtonStyle'>
+            <ngt-action [ngtStyle]='ngtPaginationFirstLastButtonStyle' [forceEnable]="true">
                 <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                     aria-hidden="true" focusable="false"
                     style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"

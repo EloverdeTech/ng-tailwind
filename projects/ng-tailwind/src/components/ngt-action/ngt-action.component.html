@@ -1,5 +1,5 @@
 <a *ngIf="href"
-    [class]="isDisabled ? 'block rounded-full cursor-not-allowed text-gray-600 bg-gray-400 hover:bg-gray-400 opacity-50' : 'cursor-pointer'"
+    [class]="disabled() ? 'block rounded-full cursor-not-allowed text-gray-600 bg-gray-400 hover:bg-gray-400 opacity-50' : 'cursor-pointer'"
     [routerLink]="href" (click)='onClick($event)'>
     <div
         class="flex justify-center rounded-full {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py', 'shadow', 'text']) }}">
@@ -12,7 +12,7 @@
 </a>
 
 <a *ngIf="!href"
-    [class]="isDisabled ? 'block rounded-full cursor-not-allowed text-gray-600 bg-gray-400 hover:bg-gray-400 opacity-50' : 'cursor-pointer'"
+    [class]="disabled() ? 'block rounded-full cursor-not-allowed text-gray-600 bg-gray-400 hover:bg-gray-400 opacity-50' : 'cursor-pointer'"
     (click)='onClick($event)'>
     <div
         class="flex justify-center rounded-full {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py', 'shadow', 'text', 'border', 'color.border']) }}">
