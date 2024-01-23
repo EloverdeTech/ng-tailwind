@@ -17,9 +17,11 @@
                 </div>
 
                 <ng-container *ngIf="!customLayout">
-                    <ngt-modal-body>
-                        <ng-content select='[body]'></ng-content>
-                    </ngt-modal-body>
+                    <fieldset class="w-full" [disabled]="isDisabled">
+                        <ngt-modal-body [isDisabled]="isDisabled">
+                            <ng-content select='[body]'></ng-content>
+                        </ngt-modal-body>
+                    </fieldset>
                 </ng-container>
 
                 <!--Footer-->
