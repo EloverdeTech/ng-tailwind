@@ -20,7 +20,6 @@ import {
     ViewEncapsulation,
 } from '@angular/core';
 import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
-import { element } from 'protractor';
 import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
@@ -31,6 +30,8 @@ import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtInputComponent } from '../ngt-input/ngt-input.component';
+import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
+import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 
 @Component({
     selector: 'ngt-multi-select',
@@ -117,25 +118,31 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
         private injector: Injector,
         private changeDetector: ChangeDetectorRef,
 
+        @Optional() @SkipSelf()
+        private ngtForm: NgtFormComponent,
+
+        @Optional() @SkipSelf()
+        private ngtSection: NgtSectionComponent,
+
+        @Optional() @SkipSelf()
+        private ngtModal: NgtModalComponent,
+
         @Optional() @Self()
-        public ngtStylizableDirective: NgtStylizableDirective,
+        private ngtStylizableDirective: NgtStylizableDirective,
 
         @Optional() @Host()
         public formContainer: ControlContainer,
-
-        @Optional() @SkipSelf()
-        public ngtFormComponent: NgtFormComponent,
 
         @Optional()
         public ngtTranslateService: NgtTranslateService
     ) {
         super();
 
-        if (this.ngtFormComponent) {
-            this.shining = this.ngtFormComponent.isShining();
+        if (this.ngtForm) {
+            this.shining = this.ngtForm.isShining();
 
             this.subscriptions.push(
-                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+                this.ngtForm.onShiningChange.subscribe((shining: boolean) => {
                     this.shining = shining;
                 })
             );
@@ -188,7 +195,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
         }
 
         if (changes.isDisabled) {
-            this.displayOnlySelected = changes.isDisabled.currentValue;
+            this.displayOnlySelected = this.disabled();
         }
 
         if (changes.items) {
@@ -228,7 +235,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     }
 
     public selectAll(): void {
-        if (!this.loading && !this.isDisabled) {
+        if (!this.loading && !this.disabled()) {
             this.selectAllCheckbox = !this.selectAllCheckbox;
 
             this.value = [];
@@ -250,7 +257,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     }
 
     public selectElements(elements: Array<any>): void {
-        if (!this.isDisabled) {
+        if (!this.disabled()) {
             const elementIds = this.isColoquentResources() ? elements.map(element => element.getApiId()) : elements;
 
             this.selectableElements.forEach(
@@ -276,7 +283,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     public toggleItem(selectableElement: NgtSelectContainerSelectableElementInterface, event?: Event): void {
         event?.stopImmediatePropagation();
 
-        if (!this.isDisabled) {
+        if (!this.disabled()) {
             selectableElement.isSelected = !selectableElement.isSelected;
 
             this.handleElementSelection(selectableElement);
@@ -376,6 +383,10 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
         );
     }
 
+    public disabled(): boolean {
+        return this.isDisabled || this.isDisabledByParent();
+    }
+
     private handleElementSelection(selectableElement: NgtSelectContainerSelectableElementInterface): void {
         if (selectableElement.isSelected && !this.isSelectedElement(selectableElement)) {
             this.selectedElements.push(selectableElement);
@@ -429,7 +440,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
                             this.componentReady = true;
                             this.changeDetector.detectChanges();
 
-                            setTimeout(() => this.displayOnlySelected = this.isDisabled);
+                            setTimeout(() => this.displayOnlySelected = this.disabled());
 
                             resolve();
                         },
@@ -540,6 +551,12 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
 
     private isColoquentResources(): boolean {
         return this.selectableElements?.length && typeof this.selectableElements[0].value['getApiId'] === 'function';
+    }
+
+    private isDisabledByParent(): boolean {
+        return this.ngtForm?.isDisabled
+            || this.ngtSection?.isDisabled
+            || this.ngtModal?.isDisabled;
     }
 
     private destroySubscriptions(): void {
