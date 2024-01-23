@@ -31,6 +31,8 @@ import { NgtHttpValidationResponse, NgtHttpValidationService } from '../../servi
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
+import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 
 @Component({
     selector: 'ngt-input',
@@ -115,17 +117,33 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     public constructor(
         private injector: Injector,
-        @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
+        private renderer: Renderer2,
+        private changeDetector: ChangeDetectorRef,
+
+        @Self() @Optional()
+        private ngtStylizableDirective: NgtStylizableDirective,
+
         @Optional() @Host()
         public formContainer: ControlContainer,
+
         @Optional() @SkipSelf()
         private ngtFormComponent: NgtFormComponent,
-        private renderer: Renderer2,
+
         @Optional() @SkipSelf()
         private ngtValidationService: NgtHttpValidationService,
+
         @Optional() @SkipSelf()
         private ngtResourceService: NgtHttpResourceService,
-        private changeDetector: ChangeDetectorRef,
+
+        @Optional() @SkipSelf()
+        private ngtForm: NgtFormComponent,
+
+        @Optional() @SkipSelf()
+        private ngtSection: NgtSectionComponent,
+
+        @Optional() @SkipSelf()
+        private ngtModal: NgtModalComponent,
+
         @Optional()
         public ngtTranslateService: NgtTranslateService
     ) {
@@ -303,6 +321,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }
 
         return this.maxTotalCharsCount;
+    }
+
+    public disabled(): boolean {
+        return this.isDisabled || this.isDisabledByParent();
     }
 
     private initComponent() {
@@ -856,6 +878,12 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     private hasPasswordValidation(): boolean {
         return typeof this.ngtValidationService?.passwordValidation === 'function';
+    }
+
+    private isDisabledByParent(): boolean {
+        return this.ngtForm?.isDisabled
+            || this.ngtSection?.isDisabled
+            || this.ngtModal?.isDisabled;
     }
 
     private destroySubscriptions() {
