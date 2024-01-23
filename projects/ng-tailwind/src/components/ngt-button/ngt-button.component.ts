@@ -16,19 +16,22 @@ import { Subscription } from 'rxjs';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
+import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 
 @Component({
     selector: 'ngt-button',
     templateUrl: './ngt-button.component.html',
-    styleUrls: ['./ngt-button.component.css'],
+    styleUrls: ['./ngt-button.component.css']
 })
 export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
-    @Input() public link: boolean = false;
     @Input() public href: string;
     @Input() public type: string = 'success';
-    @Input() public loading: boolean = false;
-    @Input() public isDisabled: boolean = false;
-    @Input() public noSubmit: boolean = false;
+    @Input() public link: boolean;
+    @Input() public loading: boolean;
+    @Input() public isDisabled: boolean;
+    @Input() public forceEnable: boolean;
+    @Input() public noSubmit: boolean;
 
     public ngtStyle: NgtStylizableService;
 
@@ -37,8 +40,16 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
     public constructor(
         private changeDetector: ChangeDetectorRef,
         private injector: Injector,
+
         @Optional() @SkipSelf()
         private ngtForm: NgtFormComponent,
+
+        @Optional() @SkipSelf()
+        private ngtSection: NgtSectionComponent,
+
+        @Optional() @SkipSelf()
+        private ngtModal: NgtModalComponent,
+
         @Self() @Optional()
         private ngtStylizableDirective: NgtStylizableDirective,
     ) {
@@ -50,12 +61,13 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
 
         this.ngtStyle.load(this.injector, 'NgtButton', {
             px: 'px-4',
-            py: 'py-2'
+            py: 'py-2',
+            text: 'text-sm'
         });
     }
 
-    public onClick(event: Event) {
-        if (this.isDisabled || this.loading) {
+    public onClick(event: Event): void {
+        if (this.disabled() || this.loading) {
             event.preventDefault();
             event.stopPropagation();
         }
@@ -99,16 +111,17 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
         }
     }
 
-    public ngOnDestroy() {
+    public disabled(): boolean {
+        return !this.forceEnable && (this.isDisabled || this.isDisabledByParent());
+    }
+
+    public ngOnDestroy(): void {
         this.destroySubscriptions();
     }
 
     private bindSubscriptions(): void {
-        this.changeDetector.detectChanges();
-
         if (this.ngtForm) {
             this.loading = this.ngtForm.isLoading();
-            this.isDisabled = !this.isDisabled && this.ngtForm.isDisabled;
 
             this.changeDetector.detectChanges();
 
@@ -117,13 +130,13 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
                     this.loading = loading;
                 })
             );
-
-            this.subscriptions.push(
-                this.ngtForm.onIsDisabledChange.subscribe((isDisabled: boolean) => {
-                    this.isDisabled = !this.isDisabled && isDisabled;
-                })
-            );
         }
+    }
+
+    private isDisabledByParent(): boolean {
+        return this.ngtForm?.isDisabled
+            || this.ngtSection?.isDisabled
+            || this.ngtModal?.isDisabled;
     }
 
     private destroySubscriptions(): void {
