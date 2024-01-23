@@ -1,14 +1,14 @@
 import {
+    AfterViewInit,
+    ChangeDetectorRef,
     Component,
     EventEmitter,
     Host,
     Input,
-    OnChanges,
     OnDestroy,
     OnInit,
     Optional,
     Output,
-    SimpleChanges,
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,12 +17,13 @@ import { Observable, Subscription } from 'rxjs';
 import { isValidNgForm } from '../../helpers/form/form';
 import { getIdFromUri } from '../../helpers/routing/route';
 import { NgtHttpFormService } from '../../services/http/ngt-http-form.service';
+import { NgtAbilityValidationService } from '../../services/validation/ngt-ability-validation.service';;
 
 @Component({
     selector: 'ngt-form',
     templateUrl: './ngt-form.component.html',
 })
-export class NgtFormComponent implements OnInit, OnDestroy, OnChanges {
+export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public guessFormState: boolean = true;
     @Input() public message: string = '';
     @Input() public routeIdentifier: string = 'id';
@@ -36,7 +37,6 @@ export class NgtFormComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public onEditing: EventEmitter<any> = new EventEmitter;
     @Output() public onLoadingChange: EventEmitter<boolean> = new EventEmitter;
     @Output() public onShiningChange: EventEmitter<boolean> = new EventEmitter;
-    @Output() public onIsDisabledChange: EventEmitter<boolean> = new EventEmitter;
     @Output() public setupComponent: EventEmitter<any> = new EventEmitter;
     @Output() public onResourceLoadingError: EventEmitter<string> = new EventEmitter;
 
@@ -48,13 +48,20 @@ export class NgtFormComponent implements OnInit, OnDestroy, OnChanges {
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
-        @Optional() @Host()
-        public formContainer: ControlContainer,
-        @Optional() @Host()
-        public ngForm: NgForm,
         public router: Router,
         public route: ActivatedRoute,
-        private ngtHttpFormService: NgtHttpFormService
+
+        @Optional() @Host()
+        public formContainer: ControlContainer,
+
+        @Optional() @Host()
+        public ngForm: NgForm,
+
+        private changeDetector: ChangeDetectorRef,
+        private ngtHttpFormService: NgtHttpFormService,
+
+        @Optional()
+        private ngtAbilityValidationService: NgtAbilityValidationService
     ) { }
 
     public ngOnInit() {
@@ -77,9 +84,11 @@ export class NgtFormComponent implements OnInit, OnDestroy, OnChanges {
         );
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes.isDisabled) {
-            this.onIsDisabledChange.emit(changes.isDisabled.currentValue);
+    public async ngAfterViewInit(): Promise<void> {
+        if (this.isDisabled === undefined && this.ngtAbilityValidationService) {
+            this.isDisabled = !(await this.ngtAbilityValidationService.hasManagePermission());
+
+            this.changeDetector.detectChanges();
         }
     }
 
