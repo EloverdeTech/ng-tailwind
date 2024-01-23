@@ -1,17 +1,14 @@
 import {
     AfterViewInit,
-    ChangeDetectorRef,
     Component,
     ElementRef,
     Host,
     Injector,
     Input,
-    OnChanges,
     OnDestroy,
     Optional,
     Renderer2,
     Self,
-    SimpleChanges,
     SkipSelf,
     ViewChild,
 } from '@angular/core';
@@ -24,6 +21,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 import { NgtRadioButtonContainerComponent } from './ngt-radio-button-container/ngt-radio-button-container.component';
+import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 
 @Component({
     selector: 'ngt-radio-button',
@@ -36,7 +34,7 @@ import { NgtRadioButtonContainerComponent } from './ngt-radio-button-container/n
         { provide: ControlContainer, useExisting: NgForm }
     ]
 })
-export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterViewInit, OnChanges, OnDestroy {
+export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterViewInit, OnDestroy {
     @ViewChild('element', { static: true }) public element: ElementRef;
 
     @Input() public label: string;
@@ -54,19 +52,26 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
-        private changeDetector: ChangeDetectorRef,
         private injector: Injector,
-        @Optional() @Host()
-        public formContainer: ControlContainer,
         private renderer: Renderer2,
+
         @Self() @Optional()
         private ngtStylizableDirective: NgtStylizableDirective,
+
         @Optional() @SkipSelf()
         private ngtForm: NgtFormComponent,
+
         @Optional() @SkipSelf()
-        public ngtSection: NgtSectionComponent,
+        private ngtSection: NgtSectionComponent,
+
         @Optional() @SkipSelf()
-        private ngtRadioButtonContainer: NgtRadioButtonContainerComponent
+        private ngtModal: NgtModalComponent,
+
+        @Optional() @SkipSelf()
+        private ngtRadioButtonContainer: NgtRadioButtonContainerComponent,
+
+        @Optional() @Host()
+        public formContainer: ControlContainer
     ) {
         super();
 
@@ -96,14 +101,6 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
         this.renderer.listen(this.element.nativeElement, 'change', (value) => {
             this.onNativeChange(this.element.nativeElement.checked);
         });
-
-        this.bindSubscriptions();
-    }
-
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes.isDisabled && !changes.isDisabled.currentValue) {
-            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
-        }
     }
 
     public ngOnDestroy() {
@@ -128,34 +125,14 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
         }
     }
 
-    private bindSubscriptions(): void {
-        this.changeDetector.detectChanges();
+    public disabled(): boolean {
+        return this.isDisabled || this.isDisabledByParent();
+    }
 
-        if (!this.isDisabled) {
-            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
-        }
-
-        if (this.ngtForm) {
-            this.subscriptions.push(
-                this.ngtForm.onIsDisabledChange.subscribe((isDisabled: boolean) => {
-                    if (!this.isDisabled) {
-                        this.isDisabled = isDisabled || this.ngtSection?.isDisabled;
-                    }
-                })
-            );
-        }
-
-        if (this.ngtSection) {
-            this.subscriptions.push(
-                this.ngtSection.onIsDisabledChange.subscribe((isDisabled: boolean) => {
-                    if (!this.isDisabled) {
-                        this.isDisabled = isDisabled || this.ngtForm?.isDisabled;
-                    }
-                })
-            );
-        }
-
-        this.changeDetector.detectChanges();
+    private isDisabledByParent(): boolean {
+        return this.ngtForm?.isDisabled
+            || this.ngtSection?.isDisabled
+            || this.ngtModal?.isDisabled;
     }
 
     private destroySubscriptions() {
