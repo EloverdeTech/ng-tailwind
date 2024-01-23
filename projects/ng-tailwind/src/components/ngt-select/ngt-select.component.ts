@@ -33,6 +33,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } from './ngt-select.directive';
+import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 
 @Component({
     selector: 'ngt-select',
@@ -145,17 +146,25 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     public constructor(
         @Optional() @Self()
         public ngtStylizableDirective: NgtStylizableDirective,
-        private injector: Injector,
+
         @Optional() @Host()
         public formContainer: ControlContainer,
-        @Optional() @SkipSelf()
-        public ngtForm: NgtFormComponent,
-        @Optional() @SkipSelf()
-        public ngtSection: NgtSectionComponent,
+
+        @Optional()
+        public ngtTranslateService: NgtTranslateService,
+
+        private injector: Injector,
         private ngtHttp: NgtHttpService,
         private changeDetector: ChangeDetectorRef,
-        @Optional()
-        public ngtTranslateService: NgtTranslateService
+
+        @Optional() @SkipSelf()
+        private ngtForm: NgtFormComponent,
+
+        @Optional() @SkipSelf()
+        private ngtSection: NgtSectionComponent,
+
+        @Optional() @SkipSelf()
+        private ngtModal: NgtModalComponent
     ) {
         super();
 
@@ -222,10 +231,6 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
         if (changes.dropdownPanelMinHeight) {
             this.dropdownPanelMinHeight = getEnumFromString(changes.dropdownPanelMinHeight.currentValue, NgtSelectDropdownPanelHeight);
-        }
-
-        if (changes.isDisabled && !changes.isDisabled.currentValue) {
-            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
         }
     }
 
@@ -396,7 +401,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     public getSelectClass() {
         let selectClass = this.dropdownPanelMinHeight ? 'ng-select-dropdown-panel-' + this.dropdownPanelMinHeight : 'ng-select-dropdown-panel-auto';
 
-        if (this.isDisabled) {
+        if (this.disabled()) {
             selectClass += ' select-border-disabled';
         } else if (this.formControl && this.formControl.errors && (this.formControl.dirty || (this.formContainer && this.formContainer['submitted']))) {
             selectClass += ' select-border-error';
@@ -411,6 +416,10 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         }
 
         return selectClass;
+    }
+
+    public disabled(): boolean {
+        return this.isDisabled || this.isDisabledByParent();
     }
 
     private initNgSelectItems() {
@@ -583,7 +592,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     }
 
     private canLoadItems(): boolean {
-        return this.autoLoad || (!this.isDisabled && this.wasClicked);
+        return this.autoLoad || (!this.disabled() && this.wasClicked);
     }
 
     private canAutoSelectUniqueOption(response?: NgtHttpResponse): boolean {
@@ -595,12 +604,6 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     }
 
     private bindSubscriptions(): void {
-        this.changeDetector.detectChanges();
-
-        if (!this.isDisabled) {
-            this.isDisabled = this.ngtForm?.isDisabled || this.ngtSection?.isDisabled;
-        }
-
         if (this.ngtForm) {
             this.shining = this.ngtForm.isShining();
 
@@ -609,27 +612,15 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
                     this.shining = shining;
                 })
             );
-
-            this.subscriptions.push(
-                this.ngtForm.onIsDisabledChange.subscribe((isDisabled: boolean) => {
-                    if (!this.isDisabled) {
-                        this.isDisabled = isDisabled || this.ngtSection?.isDisabled;
-                    }
-                })
-            );
-        }
-
-        if (this.ngtSection) {
-            this.subscriptions.push(
-                this.ngtSection.onIsDisabledChange.subscribe((isDisabled: boolean) => {
-                    if (!this.isDisabled) {
-                        this.isDisabled = isDisabled || this.ngtForm?.isDisabled;
-                    }
-                })
-            );
         }
 
         this.changeDetector.detectChanges();
+    }
+
+    private isDisabledByParent(): boolean {
+        return this.ngtForm?.isDisabled
+            || this.ngtSection?.isDisabled
+            || this.ngtModal?.isDisabled;
     }
 
     private destroySubscriptions(): void {
