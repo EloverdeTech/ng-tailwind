@@ -178,25 +178,25 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         });
     }
 
-    public setFocus() {
-        setTimeout(() => {
-            this.element.nativeElement.focus();
-        }, 200);
-    }
-
-    public hasFocus(): boolean {
-        return document.activeElement === this.element.nativeElement;
-    }
-
-    public clearInput(event?: Event) {
-        if (event) {
-            event.stopPropagation();
+    public ngOnInit() {
+        if (!this.formContainer) {
+            console.error("The element must be inside a <form #form='ngForm'> tag!", this.element.nativeElement);
         }
 
-        this.element.nativeElement.value = '';
-        this.value = '';
+        if (!this.name) {
+            console.error("The element must contain a name attribute!", this.element.nativeElement);
+        } else {
+            setTimeout(() => {
+                this.componentReady = true;
+                setTimeout(() => {
+                    this.initComponent();
 
-        this.markAsPristine();
+                    if (!this.getElementTitle() || this.getElementTitle() === 'null') {
+                        this.element.nativeElement.parentElement.parentElement.title = '';
+                    }
+                });
+            }, 500);
+        }
     }
 
     public ngOnChanges(changes: SimpleChanges) {
@@ -260,25 +260,35 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }
     }
 
-    public ngOnInit() {
-        if (!this.formContainer) {
-            console.error("The element must be inside a <form #form='ngForm'> tag!", this.element.nativeElement);
+    public setFocus() {
+        setTimeout(() => {
+            this.element.nativeElement.focus();
+        }, 200);
+    }
+
+    public clearInput(event?: Event) {
+        if (event) {
+            event.stopPropagation();
         }
 
-        if (!this.name) {
-            console.error("The element must contain a name attribute!", this.element.nativeElement);
-        } else {
-            setTimeout(() => {
-                this.componentReady = true;
-                setTimeout(() => {
-                    this.initComponent();
+        this.element.nativeElement.value = '';
+        this.value = '';
 
-                    if (!this.getElementTitle() || this.getElementTitle() === 'null') {
-                        this.element.nativeElement.parentElement.parentElement.title = '';
-                    }
-                });
-            }, 500);
-        }
+        this.markAsPristine();
+    }
+
+    public restorePlaceholder(): void {
+        setTimeout(() => this.element.nativeElement.placeholder = this.placeholder);
+    }
+
+    public showPassword() {
+        this.element.nativeElement.type = 'text';
+        this.changeDetector.detectChanges();
+    }
+
+    public hidePassword() {
+        this.element.nativeElement.type = 'password';
+        this.changeDetector.detectChanges();
     }
 
     public getInputPaddings() {
@@ -301,16 +311,6 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         return paddingClass;
     }
 
-    public showPassword() {
-        this.element.nativeElement.type = 'text';
-        this.changeDetector.detectChanges();
-    }
-
-    public hidePassword() {
-        this.element.nativeElement.type = 'password';
-        this.changeDetector.detectChanges();
-    }
-
     public getRemainingCharacters() {
         if (this.element?.nativeElement?.value?.length) {
             if ((this.maxTotalCharsCount - this.element.nativeElement.value.length) > 0) {
@@ -321,6 +321,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }
 
         return this.maxTotalCharsCount;
+    }
+
+    public hasFocus(): boolean {
+        return document.activeElement === this.element.nativeElement;
     }
 
     public disabled(): boolean {
@@ -458,21 +462,21 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         let masks = {
             [InputMaskEnum.CPF]: {
                 mask: ['999.999.999-99'],
-                clearMaskOnLostFocus: false
+                showMaskOnHover: false
             },
             [InputMaskEnum.CNPJ]: {
                 mask: ['99.999.999/9999-99'],
-                clearMaskOnLostFocus: false
+                showMaskOnHover: false
             },
             [InputMaskEnum.CPF_CNPJ_RUT]: {
                 mask: ['999.999.999-99', '999999999999', '99.999.999/9999-99'],
                 keepStatic: true,
-                clearMaskOnLostFocus: false
+                showMaskOnHover: false
             },
             [InputMaskEnum.CPF_CNPJ]: {
                 mask: ['999.999.999-99', '99.999.999/9999-99'],
                 keepStatic: true,
-                clearMaskOnLostFocus: false
+                showMaskOnHover: false
             },
             [InputMaskEnum.DECIMAL]: {
                 digits: this.decimalMaskPrecision,
@@ -482,36 +486,36 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 repeat: 16,
                 rightAlign: false,
                 max: this.maxValue,
-                clearMaskOnLostFocus: false
+                showMaskOnHover: false
             },
             [InputMaskEnum.CELLPHONE]: {
                 mask: ['(99) 999-999', '(99) 9999-9999', '(99) 99999-9999'],
                 keepStatic: true,
-                clearMaskOnLostFocus: false
+                showMaskOnHover: false
             },
             [InputMaskEnum.INTERNATIONAL_PHONE]: {
                 mask: ['+999 99 999-999', '+99 (99) 9999-9999', '+99 (99) 99999-9999', '+999 (99) 9999-9999', '+999 (99) 99999-9999'],
                 keepStatic: true,
-                clearMaskOnLostFocus: false
+                showMaskOnHover: false
             },
             [InputMaskEnum.PLATE]: {
                 mask: ['AAA-9&99'],
                 keepStatic: true,
-                clearMaskOnLostFocus: false
+                showMaskOnHover: false
             },
             [InputMaskEnum.CEP]: {
                 mask: ['99999-999'],
-                clearMaskOnLostFocus: false
+                showMaskOnHover: false
             },
             [InputMaskEnum.INTEGER]: {
                 max: this.maxValue,
                 min: this.validateMinValueOnMask ? this.minValue : undefined,
                 rightAlign: false,
-                clearMaskOnLostFocus: false
+                showMaskOnHover: false
             },
             [InputMaskEnum.NUMERIC_STRING]: {
                 regex: "[0-9]*",
-                clearMaskOnLostFocus: false
+                showMaskOnHover: false
             },
             [InputMaskEnum.TIME]: '99:99',
         };
