@@ -11,6 +11,7 @@ export class NgtModalHeaderComponent {
     public static onCloseModalByHeader: EventEmitter<void> = new EventEmitter();
 
     @Input() public disableDefaultCloses: boolean;
+    @Input() public spaceChange: boolean = false;
 
     public ngtStyle: NgtStylizableService;
 
