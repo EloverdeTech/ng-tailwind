@@ -14,6 +14,7 @@ import {
     Self,
     SimpleChanges,
     SkipSelf,
+    TemplateRef,
     ViewChild,
 } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, Validators } from '@angular/forms';
@@ -63,6 +64,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public decimalMaskPrecision: number = 2;
     @Input() public showCharactersLength: boolean = false;
     @Input() public uppercase: boolean = false;
+    @Input() public customInnerContentTemplate: TemplateRef<any>;
 
     //Behavior
     @Input() public isDisabled: boolean;
@@ -294,8 +296,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     public getInputPaddings() {
         let paddingClass: string = '';
 
-        if (this.innerLeftIcon) {
-            paddingClass += 'pl-8 pr-4 ';
+        if (this.innerLeftIcon || this.customInnerContentTemplate) {
+            paddingClass += 'pl-10 pr-4 ';
         } else {
             paddingClass += 'px-4 ';
         }
@@ -467,6 +469,14 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             [InputMaskEnum.CNPJ]: {
                 mask: ['99.999.999/9999-99'],
                 showMaskOnHover: false
+            },
+            [InputMaskEnum.CUIT]: {
+                mask: ['99-99999999-9'],
+                clearMaskOnLostFocus: false
+            },
+            [InputMaskEnum.RUT]: {
+                mask: ['999999999999'],
+                clearMaskOnLostFocus: false
             },
             [InputMaskEnum.CPF_CNPJ_RUT]: {
                 mask: ['999.999.999-99', '999999999999', '99.999.999/9999-99'],
@@ -854,12 +864,9 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             value = (value + "")
                 .replace(/\./g, '')
                 .replace(',', '.');
-        } else if (this.mask == "cnpj-cpf" || this.mask == "cpf" || this.mask == "cnpj" || this.mask == "cnpj-cpf-rut") {
+        } else if (this.mask == "cnpj-cpf" || this.mask == "cpf" || this.mask == "cnpj" || this.mask == "cnpj-cpf-rut" || this.mask == "cuit") {
             value = (value + "")
-                .replace('.', '')
-                .replace('.', '')
-                .replace('-', '')
-                .replace('/', '');
+                .replace(/[^\d]/g, '');
         } else if (
             this.mask == InputMaskEnum.CELLPHONE
             || this.mask == InputMaskEnum.INTERNATIONAL_PHONE
