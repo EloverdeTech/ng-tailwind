@@ -4,6 +4,8 @@ import Inputmask from 'inputmask/dist/inputmask.es6.js';
 export enum InputMaskEnum {
     CPF = 'cpf',
     CNPJ = 'cnpj',
+    CUIT = 'cuit',
+    RUT = 'rut',
     CPF_CNPJ = 'cnpj-cpf',
     CPF_CNPJ_RUT = 'cnpj-cpf-rut',
     DECIMAL = 'decimal',

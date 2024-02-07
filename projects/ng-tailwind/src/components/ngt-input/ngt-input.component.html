@@ -25,6 +25,10 @@
         <img *ngIf="showRoundedIcon" class="rounded-full h-6" [src]='innerLeftIcon'>
     </span>
 
+    <div *ngIf="customInnerContentTemplate" class="absolute self-center px-2">
+        <ng-container [ngTemplateOutlet]="customInnerContentTemplate"></ng-container>
+    </div>
+
     <div class="flex absolute h-full justify-end right-0 w-auto">
         <span *ngIf="!disabled() && allowClear && value && !loading"
             class="self-center right-0 px-2 text-red-400 cursor-pointer" (click)='clearInput($event)'>

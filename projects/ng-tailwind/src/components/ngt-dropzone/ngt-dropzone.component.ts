@@ -315,10 +315,14 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
                         if (unacceptedFiles.length) {
                             this.onFileSelectError.emit(NgtDropzoneErrorType.TYPE);
                         }
+
+                        setTimeout(() => this.changeDetector.detectChanges(), 500);
                     },
                     (error) => {
                         this.onFileUploadFail.emit(error);
                         this.loading = false;
+
+                        setTimeout(() => this.changeDetector.detectChanges(), 500);
                     })
             );
         }
@@ -354,6 +358,8 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
                         this.onNativeChange(attachments);
                         this.onFilePreviewLoaded.emit();
                         this.loading = false;
+
+                        setTimeout(() => this.changeDetector.detectChanges(), 500);
                     },
                     (error) => {
                         this.loading = false;
