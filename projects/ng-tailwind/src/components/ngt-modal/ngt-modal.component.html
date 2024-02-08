@@ -17,7 +17,7 @@
                 </div>
 
                 <ng-container *ngIf="!customLayout">
-                    <fieldset class="w-full" [disabled]="isDisabled">
+                    <fieldset [disabled]="isDisabled" style="min-inline-size: 100% !important">
                         <ngt-modal-body [isDisabled]="isDisabled">
                             <ng-content select='[body]'></ng-content>
                         </ngt-modal-body>
