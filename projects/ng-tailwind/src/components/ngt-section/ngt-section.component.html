@@ -64,7 +64,7 @@
         </ng-container>
 
         <div *ngIf='showSection' class="{{ ngtSectionStyle.compile(['px']) }}" [@enterAnimation]='!showSection'>
-            <fieldset class="w-full" [disabled]="isDisabled">
+            <fieldset [disabled]="isDisabled" style="min-inline-size: 100% !important">
                 <ng-content></ng-content>
             </fieldset>
         </div>
