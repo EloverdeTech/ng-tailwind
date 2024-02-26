@@ -63,7 +63,7 @@
             </div>
         </ng-container>
 
-        <div *ngIf='showSection' class="{{ ngtSectionStyle.compile(['px']) }}" [@enterAnimation]='!showSection'>
+        <div *ngIf='showSection' class="{{ ngtSectionStyle.compile(['px', 'pl']) }}" [@enterAnimation]='!showSection'>
             <fieldset [disabled]="isDisabled" style="min-inline-size: 100% !important">
                 <ng-content></ng-content>
             </fieldset>
