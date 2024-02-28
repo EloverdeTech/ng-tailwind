@@ -43,8 +43,9 @@
                 [class.p-2]='!customOptionTemplate' (click)='toggleItem(element, $event)'>
                 <ng-template let-element #elementCheckboxTemplate>
                     <ngt-checkbox class="flex pr-2" [name]='element.uuid' [(ngModel)]="element.isSelected"
-                        (ngModelChange)='onNativeChange(element)' [isClickDisabled]='true' [isDisabled]='disabled()'
-                        h='h-5' w='w-5' (click)='toggleItem(element, $event)' ngt-stylizable>
+                        (ngModelChange)='onNativeChange(element)' [isClickDisabled]='true'
+                        [isDisabled]='!canSelectItem(element)' h='h-5' w='w-5' (click)='toggleItem(element, $event)'
+                        ngt-stylizable>
                     </ngt-checkbox>
                 </ng-template>
 
@@ -74,7 +75,7 @@
     </span>
 
     <ngt-checkbox class="flex" label="Visualizar selecionados" [name]='displayOnlySelectedName'
-        [(ngModel)]="displayOnlySelected" [isDisabled]='loading' h='h-5' w='w-5' ngt-stylizable>
+        [(ngModel)]="displayOnlySelected" [isDisabled]='loading || disabled()' h='h-5' w='w-5' ngt-stylizable>
     </ngt-checkbox>
 </div>
 
