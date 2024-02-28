@@ -70,6 +70,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     @Input() public remoteResource: any;
     @Input() public items: Array<any> = [];
     @Input() public searchable: boolean = true;
+    @Input() public allowOriginalItemsUnselect: boolean = true;
 
     /** Validation */
     @Input() public isRequired: boolean;
@@ -112,6 +113,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     private previousSearchTerm: string = '';
     private becameVisible: boolean;
     private selectableResourcesCount: number;
+    private originalItems: Array<NgtSelectContainerSelectableElementInterface>;
 
     public constructor(
         private ngtHttpService: NgtHttpService,
@@ -185,7 +187,11 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
         if (!this.becameVisible && !this.isHidden()) {
             this.becameVisible = true;
 
-            this.loadData().then(() => this.initComponentValidation());
+            this.loadData().then(() => {
+                this.initComponentValidation();
+
+                this.originalItems = [...this.selectedElements];
+            });
         }
     }
 
@@ -240,14 +246,17 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
 
             this.value = [];
             this.nativeValue = [];
-            this.selectedElements = [];
+            this.selectedElements = this.allowOriginalItemsUnselect ? [] : [...this.originalItems];
 
             const perpage = this.selectAllCheckbox ? this.pagination.total : this.itemsPerPage;
 
             this.loadData(perpage, this.searchTerm)
                 .then(() => {
                     this.containerRef?.nativeElement?.scrollTo({ top: 0 });
-                    this.selectableElements.forEach(element => element.isSelected = this.selectAllCheckbox);
+
+                    this.selectableElements.forEach(
+                        element => element.isSelected = this.selectAllCheckbox || this.isSelectedElement(element)
+                    );
 
                     if (this.selectAllCheckbox) {
                         this.selectedElements = this.selectableElements;
@@ -283,7 +292,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     public toggleItem(selectableElement: NgtSelectContainerSelectableElementInterface, event?: Event): void {
         event?.stopImmediatePropagation();
 
-        if (!this.disabled()) {
+        if (!this.disabled() && this.canSelectItem(selectableElement)) {
             selectableElement.isSelected = !selectableElement.isSelected;
 
             this.handleElementSelection(selectableElement);
@@ -381,6 +390,14 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
         return this.formControl?.errors && (
             this.formControl.dirty || (this.formContainer && this.formContainer['submitted'])
         );
+    }
+
+    public canSelectItem(item: NgtSelectContainerSelectableElementInterface): boolean {
+        return !this.disabled()
+            && (
+                this.allowOriginalItemsUnselect
+                || !this.originalItems?.some(originalItem => originalItem.uuid == item.uuid)
+            );
     }
 
     public disabled(): boolean {
