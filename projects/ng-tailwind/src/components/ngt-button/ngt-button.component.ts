@@ -62,7 +62,10 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
         this.ngtStyle.load(this.injector, 'NgtButton', {
             px: 'px-4',
             py: 'py-2',
-            text: 'text-sm'
+            text: 'text-sm',
+            font: 'font-normal',
+            w:  'w-full',
+            h: 'h-full',
         });
     }
 
