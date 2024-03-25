@@ -23,6 +23,7 @@ export class NgtTranslateDefaultService extends NgtTranslateService {
     public ngtValidationAlreadyExists: string = 'Já existe';
     public ngtValidationInvalidCnpj: string = 'CNPJ inválido';
     public ngtValidationInvalidCpf: string = 'CPF inválido';
+    public ngtValidationLogin: string = 'Login Inválido';
     public ngtValidationPasswordRequiredMinCharacters: string = 'O Campo deve ter no minimo 8 caracteres';
     public ngtValidationFieldsNotMatch: string = 'Os campos não coincidem';
     public ngtValidationInvalidDate: string = 'Data inválida';
