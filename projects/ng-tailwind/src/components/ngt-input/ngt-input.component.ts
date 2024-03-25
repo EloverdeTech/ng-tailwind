@@ -445,6 +445,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 asyncValidators.push(this.emailValidator());
             }
 
+            if (this.type == 'login' && this.hasEmailServiceValidation()) {
+                asyncValidators.push(this.emailValidator(true));
+            }
+
             if (this.type == 'password' && this.validatePassword && this.hasPasswordValidation()) {
                 asyncValidators.push(this.passwordValidator());
             }
@@ -648,7 +652,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         };
     }
 
-    private emailValidator(): AsyncValidatorFn {
+    private emailValidator(isLoginValidation: boolean = false): AsyncValidatorFn {
         return (control: AbstractControl) => {
             if (this.emailValidatorTimeout) {
                 clearTimeout(this.emailValidatorTimeout);
@@ -662,6 +666,11 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                         this.ngtValidationService.emailValidation(this.value)
                             .then((response: NgtHttpValidationResponse) => {
                                 this.loading = false;
+
+                                if(isLoginValidation){
+                                    resolve(response.valid ? { 'login': true } : null);
+                                }
+
                                 resolve(response.valid ? null : { 'email': true });
                             })
                             .catch(() => {
