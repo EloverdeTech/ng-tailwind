@@ -21,7 +21,7 @@ export class NgtDropzoneFileViewerComponent {
 
     public canShowViewer: boolean;
     public loading: boolean;
-    public maxFileSize: number = 30000000; /** 10 MB */
+    public maxFileSize: number = 30000000; /** 30 MB */
 
     public constructor(
         public ngtTranslateService: NgtTranslateService
