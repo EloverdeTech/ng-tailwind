@@ -171,7 +171,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             h: 'h-12',
             rounded: 'rounded',
             text: 'text-sm',
-            fontCase: '',
+            font: 'font-normal',
             color: {
                 border: 'border-gray-400 focus:border-gray-700',
                 bg: 'bg-bg-white focus:bg-white',

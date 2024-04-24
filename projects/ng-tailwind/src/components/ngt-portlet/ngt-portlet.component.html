@@ -1,44 +1,43 @@
-<section class='flex'>
-    <div class="w-full {{ ngtStyle.compile(['h', 'color.bg', 'color.text', 'p', 'px', 'py', 'pl', 'pr', 'pt', 'pb', 'm', 'mx', 'my', 'ml', 'mr', 'mt', 'mb', 'shadow']) }}"
-        @fadeUp>
-        <!--Header-->
-        <div *ngIf="!customLayout">
-            <ngt-portlet-header [icon]='icon' [caption]='caption' [helperText]="helpText" [helperTitle]="helpTitle"
-                [helperIconColor]="helpIconColor">
-                <div right-header>
-                    <ng-content select='[right-header]'></ng-content>
-                </div>
-                <div left-header>
-                    <ng-content select='[left-header]'></ng-content>
-                </div>
-                <div header>
-                    <ng-content select='[header]'></ng-content>
-                </div>
-            </ngt-portlet-header>
-        </div>
+<div class="w-full {{ ngtStyle.compile(['h', 'color.bg', 'color.text', 'p', 'px', 'py', 'pl', 'pr', 'pt', 'pb', 'm', 'mx', 'my', 'ml', 'mr', 'mt', 'mb', 'shadow']) }}"
+    @fadeUp>
+    <div *ngIf="!customLayout">
+        <ngt-portlet-header [icon]='icon' [caption]='caption' [helperText]="helpText" [helperTitle]="helpTitle"
+            [helperIconColor]="helpIconColor">
+            <div right-header>
+                <ng-content select='[right-header]'></ng-content>
+            </div>
 
-        <!--Body-->
-        <ng-container *ngIf="!customLayout && withBody">
-            <ngt-portlet-body>
-                <ng-content select='[body]'></ng-content>
-            </ngt-portlet-body>
-        </ng-container>
+            <div left-header>
+                <ng-content select='[left-header]'></ng-content>
+            </div>
 
-        <!--Footer-->
-        <ng-container *ngIf="!customLayout && withFooter">
-            <ngt-portlet-footer>
-                <div right-footer>
-                    <ng-content select='[right-footer]'></ng-content>
-                </div>
-                <div left-footer>
-                    <ng-content select='[left-footer]'></ng-content>
-                </div>
-                <div footer>
-                    <ng-content select='[footer]'></ng-content>
-                </div>
-            </ngt-portlet-footer>
-        </ng-container>
-
-        <ng-content></ng-content>
+            <div header>
+                <ng-content select='[header]'></ng-content>
+            </div>
+        </ngt-portlet-header>
     </div>
-</section>
+
+    <ng-container *ngIf="!customLayout && withBody">
+        <ngt-portlet-body>
+            <ng-content select='[body]'></ng-content>
+        </ngt-portlet-body>
+    </ng-container>
+
+    <ng-container *ngIf="!customLayout && withFooter">
+        <ngt-portlet-footer>
+            <div right-footer>
+                <ng-content select='[right-footer]'></ng-content>
+            </div>
+
+            <div left-footer>
+                <ng-content select='[left-footer]'></ng-content>
+            </div>
+
+            <div footer>
+                <ng-content select='[footer]'></ng-content>
+            </div>
+        </ngt-portlet-footer>
+    </ng-container>
+
+    <ng-content></ng-content>
+</div>

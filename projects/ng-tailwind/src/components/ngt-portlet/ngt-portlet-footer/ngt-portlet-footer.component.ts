@@ -21,6 +21,8 @@ export class NgtPortletFooterComponent {
         }
 
         this.ngtStyle.load(this.injector, 'NgtPortletFooter', {
+            px: 'px-6',
+            py: 'py-3',
             color: {
                 bg: 'bg-gray-200',
                 text: 'text-black'

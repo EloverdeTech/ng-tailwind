@@ -1,13 +1,13 @@
-<div class="{{ ngtStyle.compile(['color.text', 'color.bg']) }}">
-    <div class="clearfix w-full px-6 py-3">
-        <div class="md:float-left w-full">
-            <ng-content></ng-content>
-        </div>
-        <div class="md:float-left w-full md:w-auto">
-            <ng-content select="[left-footer]"></ng-content>
-        </div>
-        <div class="md:float-right w-full md:w-auto">
-            <ng-content select="[right-footer]"></ng-content>
-        </div>
+<div class="block w-full {{ ngtStyle.compile(['color.text', 'color.bg', 'px', 'py', 'pb']) }}">
+    <div class="block w-full">
+        <ng-content></ng-content>
+    </div>
+
+    <div class="block md:float-left w-full md:w-auto">
+        <ng-content select="[left-footer]"></ng-content>
+    </div>
+
+    <div class="block md:float-right w-full md:w-auto">
+        <ng-content select="[right-footer]"></ng-content>
     </div>
 </div>

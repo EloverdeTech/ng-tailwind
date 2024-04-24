@@ -10,6 +10,7 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 export class NgtPortletHeaderComponent {
     @Input() public caption: string = '';
     @Input() public icon: string = '';
+    @Input() public iconSize: string = 'text-xl';
     @Input() public helperTitle: string = '';
     @Input() public helperText: string = '';
     @Input() public helperIconColor: string = '';
@@ -30,7 +31,7 @@ export class NgtPortletHeaderComponent {
             h: 'h-auto',
             w: 'w-auto',
             text: 'text-xl',
-            fontCase: '',
+            font: 'font-medium',
             border: 'border-b',
             color: {}
         }, ['NgtPortletStyle']);
