@@ -16,7 +16,7 @@
         [style]="uppercase ? 'text-transform: uppercase!important':''"
         [ngClass]="{'input-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
         [attr.type]="inputProperties.htmlType" (mouseleave)="restorePlaceholder()" (focusout)="restorePlaceholder()"
-        #element>
+        (change)="onNativeChange()" #element>
     <span *ngIf="innerLeftIcon"
         class="absolute self-center px-2 {{ innerLeftIconColor }} {{ onClickLeftIcon ? 'cursor-pointer' : '' }}"
         (click)="onClickLeftIcon.emit()">
