@@ -190,12 +190,17 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         } else {
             setTimeout(() => {
                 this.componentReady = true;
+                this.changeDetector.detectChanges();
+
                 setTimeout(() => {
                     this.initComponent();
+                    this.changeDetector.detectChanges();
 
                     if (!this.getElementTitle() || this.getElementTitle() === 'null') {
                         this.element.nativeElement.parentElement.parentElement.title = '';
                     }
+
+                    this.changeDetector.detectChanges();
                 });
             }, 500);
         }
@@ -211,6 +216,12 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     public ngOnDestroy() {
         this.destroySubscriptions();
+    }
+
+    public onNativeChange() {
+        if (this.hasChangesBetweenModels()) {
+            this.value = this.getNativeValue();
+        }
     }
 
     public change(value: any) {
@@ -667,7 +678,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                             .then((response: NgtHttpValidationResponse) => {
                                 this.loading = false;
 
-                                if(isLoginValidation){
+                                if (isLoginValidation) {
                                     resolve(response.valid ? { 'login': true } : null);
                                 }
 
@@ -904,6 +915,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         return this.ngtForm?.isDisabled
             || this.ngtSection?.isDisabled
             || this.ngtModal?.isDisabled;
+    }
+
+    private hasChangesBetweenModels(): boolean {
+        return this.getNativeValue() !== this.value;
     }
 
     private destroySubscriptions() {
