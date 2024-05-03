@@ -220,7 +220,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
     public onNativeChange() {
         if (this.hasChangesBetweenModels()) {
-            this.value = this.getNativeValue();
+            this.value = this.removeMasks(this.getNativeValue());
         }
     }
 
@@ -918,7 +918,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     }
 
     private hasChangesBetweenModels(): boolean {
-        return this.getNativeValue() !== this.value;
+        return this.removeMasks(this.getNativeValue()) !== this.value;
     }
 
     private destroySubscriptions() {
