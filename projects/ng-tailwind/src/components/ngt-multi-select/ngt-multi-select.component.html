@@ -1,7 +1,7 @@
-<label *ngIf="label && !shining" class="flex text-sm" [class.mb-2]='!hasValidationErrors()'>
+<label *ngIf="label && !shining" class="flex text-xs" [class.mb-2]='!hasValidationErrors()'>
     {{ label }}:
 
-    <span *ngIf="isRequired" class="text-red-500 font-bold text-md ml-1">*</span>
+    <span *ngIf="isRequired" class="text-red-500 font-bold text-xs ml-1">*</span>
 
     <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
         [helperReverseYPosition]="helperReverseYPosition" [autoXReverse]="helperAutoXReverse" class="ml-1">
@@ -13,11 +13,11 @@
 </ngt-validation>
 
 <div class="{{ shining ? 'hidden' : 'flex flex-col' }} border w-full rounded {{ ngtStyle.compile(['h']) }}"
-    style="min-height: 16rem;" [class.border-red-500]='hasValidationErrors()' [class.disabled-background]='disabled()'>
+    style="min-height: 13rem;" [class.border-red-500]='hasValidationErrors()' [class.disabled-background]='disabled()'>
     <div class="flex items-center w-full p-2 border-b">
         <ngt-checkbox class="flex" title="Selecionar todos" [label]="!searchable ? 'Selecionar todos' : ''"
             [(ngModel)]="selectAllCheckbox" [name]="selectAllCheckboxName" [isClickDisabled]='true'
-            [isDisabled]='loading || disabled()' h='h-5' w='w-5' (click)='selectAll()' ngt-stylizable>
+            [isDisabled]='loading || disabled()' h='h-4' w='w-4' (click)='selectAll()' ngt-stylizable>
         </ngt-checkbox>
 
         <ngt-input *ngIf="searchable" class="block w-full pl-2" [name]='searchInputName' [(ngModel)]='searchTerm'
