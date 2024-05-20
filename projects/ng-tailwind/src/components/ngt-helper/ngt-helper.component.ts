@@ -39,7 +39,7 @@ export class NgtHelperComponent {
         }
 
         this.ngtStyle.load(this.injector, 'NgtHelper', {
-            text: 'text-sm',
+            text: 'text-xs',
             fontCase: '',
             px: 'px-2',
             color: {
