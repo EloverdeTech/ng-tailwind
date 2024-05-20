@@ -61,7 +61,7 @@ export class NgtActionComponent implements OnDestroy {
                 text: 'text-white',
                 border: '',
             },
-            text: 'text-xl',
+            text: 'text-sm',
             border: 'border-0',
         });
     }
