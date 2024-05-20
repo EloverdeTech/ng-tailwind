@@ -27,7 +27,7 @@ export class NgtTdComponent {
 
         this.ngtStyle.load(this.injector, 'NgtTd', {
             py: 'py-4',
-            px: 'px-6',
+            px: 'px-5',
             border: 'border-b',
             break: 'break-words',
             color: {
