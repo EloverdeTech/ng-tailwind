@@ -308,14 +308,14 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         let paddingClass: string = '';
 
         if (this.innerLeftIcon || this.customInnerContentTemplate) {
-            paddingClass += 'pl-10 pr-4 ';
+            paddingClass += 'pl-7 pr-3 ';
         } else {
             paddingClass += 'px-4 ';
         }
 
         if (this.innerRightIcon || this.allowClear || this.type == 'password') {
             if (this.allowClear && this.value && (this.innerRightIcon || this.type == 'password')) {
-                paddingClass += 'pr-16 ';
+                paddingClass += 'pr-10 ';
             } else {
                 paddingClass += 'pr-8 ';
             }

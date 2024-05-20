@@ -21,7 +21,7 @@
         class="absolute self-center px-2 {{ innerLeftIconColor }} {{ onClickLeftIcon ? 'cursor-pointer' : '' }}"
         (click)="onClickLeftIcon.emit()">
 
-        <ngt-svg *ngIf="!showRoundedIcon" class="fill-current" [src]='innerLeftIcon'></ngt-svg>
+        <ngt-svg *ngIf="!showRoundedIcon" class="text-xxs fill-current" [src]='innerLeftIcon'></ngt-svg>
         <img *ngIf="showRoundedIcon" class="rounded-full h-6" [src]='innerLeftIcon'>
     </span>
 
@@ -59,7 +59,7 @@
         <span *ngIf="innerRightIcon && type != 'password'"
             class="self-center px-2 {{ innerRightIconColor }}  {{ onClickRightIcon ? 'cursor-pointer' : '' }}"
             (click)="onClickRightIcon.emit()">
-            <ngt-svg class="fill-current" [src]='innerRightIcon'></ngt-svg>
+            <ngt-svg class="text-xxs fill-current" [src]='innerRightIcon'></ngt-svg>
         </span>
     </div>
 </div>
