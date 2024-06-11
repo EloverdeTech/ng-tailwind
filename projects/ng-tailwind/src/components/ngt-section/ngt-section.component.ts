@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Injector, Input, Optional, Output, Self } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, Input, Optional, Output, Self, ViewChild } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -18,6 +18,8 @@ import { NgtAbilityValidationService } from '../../services/validation/ngt-abili
     ]
 })
 export class NgtSectionComponent implements AfterViewInit {
+    @ViewChild('elementRef') public elementRef: ElementRef;
+
     @Input() public name: string;
     @Input() public icon: string;
     @Input() public caption: string;
@@ -127,6 +129,10 @@ export class NgtSectionComponent implements AfterViewInit {
         this.showSection = !this.showSection;
 
         this.onToggleSection.emit(this.showSection);
+    }
+
+    public scrollTo(): void {
+        this.elementRef.nativeElement.scrollIntoView({ behavior: "smooth" });
     }
 
     public remove(event: Event): void {
