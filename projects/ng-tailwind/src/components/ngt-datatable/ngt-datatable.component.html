@@ -52,6 +52,6 @@
     </ngt-pagination>
 </div>
 
-<ngt-modal #searchModal [customLayout]='true' [isDisabled]="false">
+<ngt-modal [customLayout]='true' [isDisabled]="false" overflow="overflow-auto" ngt-stylizable #searchModal>
     <ng-container *ngTemplateOutlet="searchModalTemplate"></ng-container>
 </ngt-modal>
