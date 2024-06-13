@@ -102,6 +102,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     @Input() public groupValue: (groupKey: string, cildren: any[]) => Object;
     @Input() public trackBy: (item: any) => any;
     @Input() public sortSelectedItemsFn: (a: any, b: any) => any;
+    @Input() public isAllowedToRemoveFn: (a: any) => boolean;
 
     /** Validation */
     @Input() public isRequired: boolean = false;
@@ -295,7 +296,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     }
 
     public onRemoveSelectedItem(item: NgOption) {
-        if (!this.allowOriginalItemsUnselect && this.hadPreviousSelection(item.value)) {
+        if (this.cantRemoveItem(item.value)) {
             setTimeout(() => this.ngSelectComponent.select(item));
 
             return;
@@ -396,6 +397,11 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
     public hasSelectedValue() {
         return this.value && JSON.stringify(this.value);
+    }
+
+    public cantRemoveItem(itemValue: any): boolean {
+        return (!this.allowOriginalItemsUnselect && this.hadPreviousSelection(itemValue))
+            || (this.isAllowedToRemoveFn && !this.isAllowedToRemoveFn(itemValue));
     }
 
     public getSelectClass() {
