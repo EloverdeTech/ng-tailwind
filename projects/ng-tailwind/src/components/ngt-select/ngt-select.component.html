@@ -35,7 +35,7 @@
 
         <ng-template ng-label-tmp let-item="item">
             <div class="flex w-full items-center pr-1">
-                <ng-container *ngIf="multiple">
+                <ng-container *ngIf="multiple && !cantRemoveItem(item)">
                     <div class="ng-value-icon px-1 h-full border-r mr-2 {{ ngtStyle.compile(['color.text', 'text']) }} cursor-pointer"
                         (click)='removeItem($event, item)'>
                         <svg class="ng-value-icon fill-current self-center" xmlns="http://www.w3.org/2000/svg"
