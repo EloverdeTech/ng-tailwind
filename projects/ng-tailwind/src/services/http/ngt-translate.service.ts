@@ -2,6 +2,8 @@ export abstract class NgtTranslateService {
     public abstract ngtFormDefaultValidationMessage: string;
 
     public abstract ngtDatatableNoDataFound: string;
+    public abstract ngtDatatableSelectAllRegisters: string;
+    public abstract ngtDatatableClearSelection: string;
     public abstract ngtMultiSelectNoDataFound: string;
 
     public abstract ngtSelectLoadingText: string;
