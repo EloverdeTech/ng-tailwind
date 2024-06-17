@@ -71,6 +71,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     @Input() public items: Array<any> = [];
     @Input() public searchable: boolean = true;
     @Input() public allowOriginalItemsUnselect: boolean = true;
+    @Input() public autoSelectUniqueOption: boolean;
 
     /** Validation */
     @Input() public isRequired: boolean;
@@ -190,6 +191,12 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
             this.loadData().then(() => {
                 this.initComponentValidation();
 
+                if (this.canAutoSelectUniqueOption()) {
+                    this.selectableElements[0].isSelected = true;
+
+                    this.onNativeChange(this.selectableElements[0]);
+                }
+
                 this.originalItems = [...this.selectedElements];
             });
         }
@@ -206,11 +213,26 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
 
         if (changes.items) {
             this.bindSelectableElements(changes.items.currentValue);
+
             this.componentReady = true;
+
+            if (this.canAutoSelectUniqueOption()) {
+                this.selectableElements[0].isSelected = true;
+
+                this.onNativeChange(this.selectableElements[0]);
+            }
         }
 
         if (changes.remoteResource && this.becameVisible) {
-            this.loadData().then(() => this.initComponentValidation());
+            this.loadData().then(() => {
+                this.initComponentValidation();
+
+                if (this.canAutoSelectUniqueOption()) {
+                    this.selectableElements[0].isSelected = true;
+
+                    this.onNativeChange(this.selectableElements[0]);
+                }
+            });
         }
 
         if (changes.itemsPerPage) {
@@ -560,6 +582,12 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
 
     private isSelectedElement(selectableElement: NgtSelectContainerSelectableElementInterface): boolean {
         return !!this.selectedElements.find(selectedElement => selectedElement.uuid === selectableElement.uuid);
+    }
+
+    private canAutoSelectUniqueOption(): boolean {
+        return this.autoSelectUniqueOption
+            && (!this.value || !this.value?.length)
+            && this.selectableElements?.length == 1;
     }
 
     private isHidden(): boolean {
