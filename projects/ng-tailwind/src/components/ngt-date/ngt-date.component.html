@@ -13,7 +13,7 @@
 <div class="relative" [hidden]='shining || disabled() || isReadonly'>
     <div
         class="overflow-hidden {{ ngtStyle.compile(['h', 'color.text']) }} {{ hasErrors() ? 'border-error' : 'border-normal' }}">
-        <ng2-flatpickr class="block h-full" [config]='dateConfig' disabled='true' placeholder="{{ placeholder }}"
+        <ng2-flatpickr *ngIf="componentReady" class="block h-full" [config]='dateConfig' disabled='true' placeholder="{{ placeholder }}"
             #ng2FlatpickrComponent>
         </ng2-flatpickr>
 
