@@ -308,7 +308,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         let paddingClass: string = '';
 
         if (this.innerLeftIcon || this.customInnerContentTemplate) {
-            paddingClass += 'pl-9 pr-4 ';
+            paddingClass += 'pl-10 pr-4 ';
         } else {
             paddingClass += 'px-4 ';
         }
