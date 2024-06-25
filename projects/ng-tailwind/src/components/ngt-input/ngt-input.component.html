@@ -21,7 +21,7 @@
         class="absolute self-center px-2 {{ innerLeftIconColor }} {{ onClickLeftIcon ? 'cursor-pointer' : '' }}"
         (click)="onClickLeftIcon.emit()">
 
-        <ngt-svg *ngIf="!showRoundedIcon" class="text-xxs fill-current" [src]='innerLeftIcon'></ngt-svg>
+        <ngt-svg *ngIf="!showRoundedIcon" class="text-xs fill-current" [src]='innerLeftIcon'></ngt-svg>
         <img *ngIf="showRoundedIcon" class="rounded-full h-4" [src]='innerLeftIcon'>
     </span>
 
