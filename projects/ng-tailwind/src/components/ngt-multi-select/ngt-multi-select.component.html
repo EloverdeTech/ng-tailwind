@@ -33,7 +33,7 @@
         <ngt-shining class="h-10 w-full"></ngt-shining>
     </div>
 
-    <div class="w-full overflow-y-auto text-sm {{ loading ? 'hidden' : 'flex flex-col' }}" (scroll)='onScroll($event)'
+    <div class="w-full overflow-y-auto text-xs {{ loading ? 'hidden' : 'flex flex-col' }}" (scroll)='onScroll($event)'
         #containerRef>
         <ng-container *ngIf="customHeaderTemplate" [ngTemplateOutlet]="customHeaderTemplate">
         </ng-container>
@@ -70,7 +70,7 @@
 </div>
 
 <div class="{{ shining ? 'hidden' : 'flex' }} w-full items-center mt-2">
-    <span class="text-sm mr-4">
+    <span class="text-xs mr-4">
         {{ selectedElements?.length || 0 }} / {{ itemsTotal || 0 }}
     </span>
 
