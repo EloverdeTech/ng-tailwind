@@ -6,6 +6,8 @@ export class NgtTranslateDefaultService extends NgtTranslateService {
     public ngtFileTooLargeForPreview: string = 'O arquivo é muito grande e não pôde ser pré-visualizado';
     public ngtFileTooLargeForPreviewNoDownloadPermission: string = 'O arquivo é muito grande e não pôde ser pré-visualizado. Você não tem permisão para realizar o download.';
     public ngtMultiSelectNoDataFound: string = 'Nenhum registro encontrado';
+    public ngtDatatableSelectAllRegisters: string = 'Clique para selecionar todos os registros';
+    public ngtDatatableClearSelection: string = 'Clique para limpar a seleção';
     public ngtFormDefaultValidationMessage: string = 'Preencha corretamente todos os campos';
     public ngtDatatableNoDataFound: string = 'Nenhum registro encontrado';
     public ngtSelectLoadingText: string = 'Carregando resultados';

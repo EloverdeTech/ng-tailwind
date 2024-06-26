@@ -43,6 +43,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     @Input() public searchTermOnEnter: boolean = true;
     @Input() public defaultFilters: any = {};
     @Input() public filtersDescription = {};
+    @Input() public canSelectAllRegisters: boolean = false;
 
     @Output() public onDataChange: EventEmitter<any> = new EventEmitter();
     @Output() public onClearFilter: EventEmitter<any> = new EventEmitter();
@@ -50,6 +51,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     @Output() public onSelectedElementsChange: EventEmitter<Array<NgtCheckedElement>> = new EventEmitter();
     @Output() public onToogleAllCheckboxes: EventEmitter<any> = new EventEmitter();
     @Output() public onToogleCheckbox: EventEmitter<NgtCheckedElement> = new EventEmitter();
+    @Output() public onSelectAllRegisters: EventEmitter<void> = new EventEmitter();
     @Output() public onOpenSearchModal: EventEmitter<string> = new EventEmitter();
     @Output() public onSearch: EventEmitter<any> = new EventEmitter();
 
@@ -61,6 +63,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     public filtersTranslated = [];
     public emptyStateVisible: boolean;
     public columnCount = [];
+    public hasSelectedAllElements: boolean;
     public selectedElements: Array<NgtCheckedElement> = [];
 
     private searching: boolean;
@@ -443,6 +446,10 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
 
                 this.onSelectedElementsChange.emit(this.selectedElements);
             })
+        );
+
+        this.subscriptions.push(
+            this.onSelectAllRegisters.subscribe(() => this.hasSelectedAllElements = !this.hasSelectedAllElements)
         );
     }
 
