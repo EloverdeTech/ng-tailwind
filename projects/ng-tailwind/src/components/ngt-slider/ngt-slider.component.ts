@@ -64,10 +64,6 @@ export class NgtSliderComponent extends NgtBaseNgModel implements AfterViewInit,
     }
 
     public ngAfterViewInit() {
-        setTimeout(() => {
-            this.display.nativeElement.innerHTML = this.value;
-        }, 500);
-
         this.renderer.listen(this.element.nativeElement, 'change', () => {
             this.onNativeChange(this.element.nativeElement.value);
         });
