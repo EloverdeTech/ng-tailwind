@@ -181,11 +181,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
     }
 
     public ngOnDestroy() {
-        const flatpickrElement = document.getElementsByClassName('flatpickr-calendar');
-
-        if (flatpickrElement?.length) {
-            flatpickrElement[flatpickrElement.length - 1].remove();
-        }
+        this.ng2FlatpickrComponent.flatpickr['calendarContainer']?.remove();
 
         this.destroySubscriptions();
     }
