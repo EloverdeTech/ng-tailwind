@@ -9,7 +9,7 @@
         [@openClose]="isOpen ? 'open' : 'closed'" (mouseenter)="onHover(host, container)"
         (click)='closeOnSelectOption()' style="z-index: 1100 !important;" #container>
 
-        <div class="flex flex-col" [ngClass]="{ 'h-64 overflow-auto':scrollable }">
+        <div class="flex flex-col" [ngClass]="{ 'h-52 overflow-auto':scrollable }">
             <ng-content select='[container]'></ng-content>
         </div>
     </div>
