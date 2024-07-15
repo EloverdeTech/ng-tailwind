@@ -1,6 +1,6 @@
 {
     "name": "ng-tailwind",
-    "version": "5.0.12",
+    "version": "5.0.13",
     "peerDependencies": {
         "@angular/common": "<16.0.0",
         "@angular/core": "<16.0.0",
