@@ -125,8 +125,8 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         }
 
         this.ngtStyle.load(this.injector, 'NgtDate', {
-            h: 'h-12',
-            text: 'text-sm',
+            h: 'h-10',
+            text: 'text-xs',
             fontCase: '',
             color: {
                 text: 'text-gray-800'

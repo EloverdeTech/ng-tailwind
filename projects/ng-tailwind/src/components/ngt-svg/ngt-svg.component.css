@@ -2,33 +2,37 @@ svg {
     height: 1rem;
 }
 
+.text-xxs svg{
+    height: .6rem;
+}
+
 .text-xs svg {
     height:  .75rem;
 }
 .text-sm svg {
     height: .875rem;
-}	
+}
 .text-base svg {
     height: 1rem;
-}	
+}
 .text-lg svg {
     height: 1.125rem;
-}	
+}
 .text-xl svg {
     height: 1.25rem;
-}	
+}
 .text-2xl svg {
     height: 1.5rem;
-}	
+}
 .text-3xl svg {
     height: 1.875rem;
-}	
+}
 .text-4xl svg {
     height: 2.25rem;
-}	
+}
 .text-5xl svg {
     height: 3rem;
-}	
+}
 .text-6xl svg {
     height: 4rem;
-}	
+}

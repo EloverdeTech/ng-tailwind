@@ -60,9 +60,9 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
         }
 
         this.ngtStyle.load(this.injector, 'NgtButton', {
-            px: 'px-4',
-            py: 'py-2',
-            text: 'text-sm',
+            px: 'px-2',
+            py: 'py-1',
+            text: 'text-xs',
             font: 'font-normal',
             w:  'w-full',
             h: 'h-full',
@@ -86,28 +86,28 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
                 this.ngtStyle.load(this.injector, 'NgtSuccessButton', {
                     color: {
                         bg: 'bg-green-500',
-                        text: 'text-white text-sm',
+                        text: 'text-white text-xs',
                     }
                 });
             } else if (changes.type.currentValue == 'warning') {
                 this.ngtStyle.load(this.injector, 'NgtWarningButton', {
                     color: {
                         bg: 'bg-orange-500',
-                        text: 'text-white text-sm',
+                        text: 'text-white text-xs',
                     }
                 });
             } else if (changes.type.currentValue == 'danger') {
                 this.ngtStyle.load(this.injector, 'NgtDangerButton', {
                     color: {
                         bg: 'bg-red-500',
-                        text: 'text-white text-sm',
+                        text: 'text-white text-xs',
                     }
                 });
             } else {
                 this.ngtStyle.load(this.injector, 'NgtInfoButton', {
                     color: {
                         bg: 'bg-blue-500',
-                        text: 'text-white text-sm',
+                        text: 'text-white text-xs',
                     }
                 });
             }

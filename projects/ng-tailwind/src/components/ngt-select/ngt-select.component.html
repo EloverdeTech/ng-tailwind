@@ -11,7 +11,8 @@
     </ngt-helper>
 </label>
 
-<div [hidden]='shining' class="{{ getSelectClass() }} normal-case" style="min-height: 3rem;">
+<div [hidden]='shining' class="{{ ngtStyle.compile(['text']) }} {{ getSelectClass() }} normal-case"
+    style="min-height: 2.5rem;">
     <ng-select class="custom" [(ngModel)]='nativeValue' [name]='nativeName' [addTag]='allowCreate'
         [addTagText]="createText || ngtTranslateService.ngtSelectCreateText" [bindLabel]="bindLabel"
         [multiple]="multiple" [hideSelected]="hideSelected" [typeahead]="typeahead"

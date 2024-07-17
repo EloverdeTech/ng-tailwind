@@ -37,7 +37,7 @@
         <ng-container *ngFor='let page of pages'>
             <ng-container *ngIf='page == pagination.page'>
                 <li class="mr-2">
-                    <ngt-action [ngtStyle]='ngtPaginationActivePageButtonStyle' [forceEnable]="true">
+                    <ngt-action class="text-xs" [ngtStyle]='ngtPaginationActivePageButtonStyle' [forceEnable]="true">
                         {{ page }}
                     </ngt-action>
                 </li>
@@ -45,7 +45,7 @@
 
             <ng-container *ngIf='page !== pagination.page'>
                 <li (click)='goToPage(page)' class="mr-2">
-                    <ngt-action [ngtStyle]='ngtPaginationPageButtonStyle' [forceEnable]="true">
+                    <ngt-action class="text-xs" [ngtStyle]='ngtPaginationPageButtonStyle' [forceEnable]="true">
                         {{ page }}
                     </ngt-action>
                 </li>
@@ -98,7 +98,7 @@
             </ng-template>
         </ngt-select>
 
-        <P class="ml-2">
+        <P class="text-xs ml-2">
             {{ ngtTranslateService.ngtPagination(pagination.from, pagination.to, pagination.total) }}
         </P>
     </div>

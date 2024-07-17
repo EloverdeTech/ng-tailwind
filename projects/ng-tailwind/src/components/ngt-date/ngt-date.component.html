@@ -2,7 +2,7 @@
     [hidden]='shining'>
     {{ label }}:
 
-    <span class="text-red-500 font-bold text-md ml-1" *ngIf="isRequired">*</span>
+    <span class="text-red-500 font-bold text-xxs ml-1" *ngIf="isRequired">*</span>
 
     <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
         [helperReverseYPosition]="helperReverseYPosition" class="ml-1">
@@ -18,7 +18,7 @@
         </ng2-flatpickr>
 
         <div *ngIf="allowClear && value"
-            class="flex h-full absolute items-center right-0 top-0 w-auto cursor-pointer {{showCalendarIcon ? 'mr-6' : 'mr-2'}}"
+            class="flex h-full absolute items-center right-0 top-0 w-auto cursor-pointer {{showCalendarIcon ? 'mr-5' : 'mr-2'}}"
             (click)='clearInput(true)'>
             <svg class="fill-current text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path
@@ -28,7 +28,7 @@
 
         <div *ngIf="showCalendarIcon"
             class="flex h-full absolute items-center right-0 top-0 w-auto cursor-pointer mr-2">
-            <svg class="fill-current text-lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <svg class="fill-current text-sm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path
                     d="M19,4H17V3a1,1,0,0,0-2,0V4H9V3A1,1,0,0,0,7,3V4H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4Zm1,15a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V12H20Zm0-9H4V7A1,1,0,0,1,5,6H7V7A1,1,0,0,0,9,7V6h6V7a1,1,0,0,0,2,0V6h2a1,1,0,0,1,1,1Z" />
             </svg>
@@ -44,7 +44,7 @@
 
 <ng-container *ngIf='disabled() || isReadonly'>
     <div
-        class="{{disabled() ? 'disabledDiv' : ''}} {{ngtStyle.compile(['h'])}} w-full px-4 rounded appearance-none flex items-center border border-gray-400">
+        class="{{disabled() ? 'disabledDiv' : ''}} {{ngtStyle.compile(['h'])}} w-full text-xs px-4 rounded appearance-none flex items-center border border-gray-400">
         {{ getFormattedNativeValue() }}
     </div>
 </ng-container>
