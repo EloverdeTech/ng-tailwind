@@ -1,10 +1,10 @@
 <button type="button"
-    class="rounded-full w-full cursor-pointer font-semibold focus:outline-none block px-4 text-sm {{ ngtStyle.compile(['color.bg', 'color.text']) }}">
+    class="rounded-full w-full cursor-pointer font-semibold focus:outline-none block px-4 text-xs {{ ngtStyle.compile(['color.bg', 'color.text']) }}">
     <span class="flex items-center justify-center">
         <ng-content></ng-content>
         <ngt-svg *ngIf="icon" [src]='icon' class="fill-current self-center pl-1"></ngt-svg>
 
-        <span *ngIf="!icon" class="text-lg">
+        <span *ngIf="!icon" class="text-sm">
             <svg class="fill-current self-center pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
                 <path
                     d="M15 3C8.373 3 3 8.373 3 15s5.373 12 12 12 12-5.373 12-12S21.627 3 15 3zm4.707 15.293a.999.999 0 11-1.414 1.414L15 16.414l-3.293 3.293a.997.997 0 01-1.414 0 .999.999 0 010-1.414L13.586 15l-3.293-3.293a.999.999 0 111.414-1.414L15 13.586l3.293-3.293a.999.999 0 111.414 1.414L16.414 15l3.293 3.293z" />

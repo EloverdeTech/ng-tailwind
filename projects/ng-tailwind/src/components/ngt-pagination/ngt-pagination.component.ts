@@ -57,8 +57,8 @@ export class NgtPaginationComponent {
         this.ngtPaginationPageButtonStyle = new NgtStylizableService();
 
         this.ngtPaginationNextPreviousButtonStyle.load(this.injector, 'NgtPaginationNextPreviousButton', {
-            h: 'h-8',
-            w: 'w-8',
+            h: 'h-6',
+            w: 'w-6',
             color: {
                 text: 'text-white',
                 bg: 'bg-gray-700'
@@ -66,8 +66,8 @@ export class NgtPaginationComponent {
         });
 
         this.ngtPaginationNextPreviousSectionButtonStyle.load(this.injector, 'NgtPaginationNextPreviousButton', {
-            h: 'h-8',
-            w: 'w-8',
+            h: 'h-6',
+            w: 'w-6',
             color: {
                 text: 'text-white',
                 bg: 'bg-gray-300'
@@ -75,8 +75,8 @@ export class NgtPaginationComponent {
         });
 
         this.ngtPaginationFirstLastButtonStyle.load(this.injector, 'NgtPaginationFirstLastButton', {
-            h: 'h-8',
-            w: 'w-8',
+            h: 'h-6',
+            w: 'w-6',
             color: {
                 text: 'text-white',
                 bg: 'bg-gray-900'
@@ -84,8 +84,8 @@ export class NgtPaginationComponent {
         });
 
         this.ngtPaginationActivePageButtonStyle.load(this.injector, 'NgtPaginationActivePageButton', {
-            h: 'h-8',
-            w: 'w-8',
+            h: 'h-6',
+            w: 'w-6',
             color: {
                 text: 'text-white',
                 bg: 'bg-gray-500'
@@ -93,8 +93,8 @@ export class NgtPaginationComponent {
         });
 
         this.ngtPaginationPageButtonStyle.load(this.injector, 'NgtPaginationPageButton', {
-            h: 'h-8',
-            w: 'w-8',
+            h: 'h-6',
+            w: 'w-6',
             color: {
                 text: 'text-white',
                 bg: 'bg-gray-300'

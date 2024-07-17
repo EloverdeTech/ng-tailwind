@@ -21,8 +21,8 @@
         class="absolute self-center px-2 {{ innerLeftIconColor }} {{ onClickLeftIcon ? 'cursor-pointer' : '' }}"
         (click)="onClickLeftIcon.emit()">
 
-        <ngt-svg *ngIf="!showRoundedIcon" class="fill-current" [src]='innerLeftIcon'></ngt-svg>
-        <img *ngIf="showRoundedIcon" class="rounded-full h-6" [src]='innerLeftIcon'>
+        <ngt-svg *ngIf="!showRoundedIcon" class="text-xs fill-current" [src]='innerLeftIcon'></ngt-svg>
+        <img *ngIf="showRoundedIcon" class="rounded-full h-4" [src]='innerLeftIcon'>
     </span>
 
     <div *ngIf="customInnerContentTemplate" class="absolute self-center px-2">
@@ -59,13 +59,13 @@
         <span *ngIf="innerRightIcon && type != 'password'"
             class="self-center px-2 {{ innerRightIconColor }}  {{ onClickRightIcon ? 'cursor-pointer' : '' }}"
             (click)="onClickRightIcon.emit()">
-            <ngt-svg class="fill-current" [src]='innerRightIcon'></ngt-svg>
+            <ngt-svg class="text-xxs fill-current" [src]='innerRightIcon'></ngt-svg>
         </span>
     </div>
 </div>
 
 <ng-container *ngIf="showCharactersLength && maxTotalCharsCount && !shining">
-    <p class="text-xs mt-1">
+    <p class="text-xxs mt-1">
         {{ ngtTranslateService.ngtTextAreaRemainingCharacters }}:
         <span class="font-semibold">{{ getRemainingCharacters() }}</span>
     </p>

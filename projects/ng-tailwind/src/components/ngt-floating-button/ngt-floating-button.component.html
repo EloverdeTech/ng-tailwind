@@ -8,14 +8,14 @@
                 (click)='menu.externalLink ? openExternalLink(menu.url) : toggleMenu()' title="{{ menu.tooltip }}"
                 class="{{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text']) }} flex items-center justify-center rounded-full hover:opacity-75">
                 <span *ngIf="menu.name"
-                    class="text-sm font-semibold {{ menu.icon ? 'pr-2' : '' }}">{{ menu.name }}</span>
+                    class="text-xs font-semibold {{ menu.icon ? 'pr-2' : '' }}">{{ menu.name }}</span>
                 <ngt-svg *ngIf="menu.icon" [src]='menu.icon' class="fill-current"></ngt-svg>
             </a>
 
             <div *ngIf="isTypeAction(menu)" title="{{ menu.tooltip }}" (click)='onClick($event, menu)'
                 class="{{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text']) }} flex items-center justify-center rounded-full hover:opacity-75 cursor-pointer">
                 <span *ngIf="menu.name"
-                    class="text-sm font-semibold {{ menu.icon ? 'pr-2' : '' }}">{{ menu.name }}</span>
+                    class="text-xs font-semibold {{ menu.icon ? 'pr-2' : '' }}">{{ menu.name }}</span>
                 <ngt-svg *ngIf="menu.icon" [src]='menu.icon' class="fill-current"></ngt-svg>
             </div>
         </div>
@@ -26,7 +26,7 @@
 <div (click)="toggleMenu()"
     class="flex z-20 justify-center {{ ngtStyle.compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py']) }} focus:outline-none hover:opacity-75 cursor-pointer rounded-full outline-none">
     <span *ngIf="label"
-        class="{{ icon ? 'pr-2' : '' }} self-center text-center text-sm font-semibold w-full">{{ label }}</span>
+        class="{{ icon ? 'pr-2' : '' }} self-center text-center text-xs font-semibold w-full">{{ label }}</span>
     <ngt-svg *ngIf="icon" [@openClose]="withAnimation ? isOpen ? 'open' : 'closed' : ''" [src]='icon'
         class="fill-current"></ngt-svg>
 </div>

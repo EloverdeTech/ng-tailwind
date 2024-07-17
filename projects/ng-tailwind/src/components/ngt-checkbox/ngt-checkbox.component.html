@@ -35,10 +35,10 @@
     </ng-container>
 
     <ng-container *ngIf="isToggleMode() || isSideToggleMode()">
-        <div class="shadow w-16 h-8 rounded-full border border-gray-400 {{ shining ? 'hidden' : 'flex' }}"
+        <div class="shadow w-14 h-7 rounded-full border border-gray-400 {{ shining ? 'hidden' : 'flex' }}"
             [class.justify-end]="value" style="padding: 1px;">
             <div *ngIf="value"
-                class="flex text-xs text-white {{ ngtStyle.compile(['color.bg']) }} pointer-events-none rounded-full px-2 py-3"
+                class="flex text-sm text-white {{ ngtStyle.compile(['color.bg']) }} pointer-events-none rounded-full px-1.5 py-2"
                 @slideLeftToRight>
                 <svg class="fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                     <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
