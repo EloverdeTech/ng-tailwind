@@ -76,6 +76,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public focus: boolean;
     @Input() public allowClear: boolean;
     @Input() public jit: boolean;
+    @Input() public useInputEvent: boolean;
 
     //Validations
     @Input() public findExistingResource: NgtHttpFindExistingResourceInterface;
