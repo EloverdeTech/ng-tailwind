@@ -3,11 +3,10 @@
 
     <div class="{{ shining ? 'hidden' : 'flex' }} items-center">
         <input class="block w-full cursor-pointer overflow-hidden appearance-none bg-gray-400 {{color}}"
-            [class.cursor-not-allowed]="isDisabled" type="range" [name]='name' ([ngModel])='value'
-            oninput="display.innerHTML=value" onchange="display.innerHTML=value" [min]='min' [max]='max' [step]='step'
-            [disabled]="isDisabled" #element>
+            [class.cursor-not-allowed]="isDisabled" type="range" [name]='name' ([ngModel])='value' [min]='min'
+            [max]='max' [step]='step' [disabled]="isDisabled" #element>
 
-        <span id='display' class="text-xs ml-2 font-semibold" #display></span>
+        <span id='display' class="text-xs ml-2 font-semibold" #display>{{ value }}</span>
         <span *ngIf="showPercentageSymbol" class="text-xs font-semibold">%</span>
     </div>
 </div>

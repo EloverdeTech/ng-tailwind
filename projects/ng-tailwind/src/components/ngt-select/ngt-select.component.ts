@@ -318,6 +318,32 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         }
     }
 
+    public itemSearchFn = (term: string, item: any) => {
+        if (this.remoteResource) {
+            return null;
+        }
+
+        let formattedValue;
+
+        if (typeof item == 'string') {
+            formattedValue = item;
+        }
+
+        if (!this.bindLabel) {
+            return null;
+        }
+
+        if (typeof item['getAttribute'] == 'function') {
+            formattedValue = item.getAttribute([this.bindLabel]);
+        } else if (typeof item == 'object') {
+            formattedValue = item[this.bindLabel];
+        }
+
+        return formattedValue
+            ? formattedValue.toLocaleLowerCase().includes(term.toLocaleLowerCase())
+            : null;
+    };
+
     public search(filters: any) {
         this.currentState.filters = { ...this.currentState.filters, ...filters };
 
