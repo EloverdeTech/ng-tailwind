@@ -134,7 +134,7 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
         let baseStyle = 'width: 20px; height: 20px;';
 
         if (this.selectedHexColor) {
-            baseStyle += ' color: '+ this.selectedHexColor;
+            baseStyle += ` color: ${this.selectedHexColor}`;
         }
 
         return baseStyle;
