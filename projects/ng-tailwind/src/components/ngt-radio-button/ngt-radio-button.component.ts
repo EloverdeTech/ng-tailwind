@@ -42,6 +42,7 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
     @Input() public shining: boolean;
     @Input() public isSelectable: boolean = true;
     @Input() public isDisabled: boolean;
+    @Input() public selectedHexColor: string;
 
     @Input() public helpTitle: string;
     @Input() public helpTextColor: string = 'text-green-500';
@@ -127,6 +128,16 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
 
     public disabled(): boolean {
         return this.isDisabled || this.isDisabledByParent();
+    }
+
+    public getStyle(): string {
+        let baseStyle = 'width: 20px; height: 20px;';
+
+        if (this.selectedHexColor) {
+            baseStyle += ` color: ${this.selectedHexColor}`;
+        }
+
+        return baseStyle;
     }
 
     private isDisabledByParent(): boolean {
