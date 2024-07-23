@@ -17,9 +17,9 @@
         [addTagText]="createText || ngtTranslateService.ngtSelectCreateText" [bindLabel]="bindLabel"
         [multiple]="multiple" [hideSelected]="hideSelected" [typeahead]="typeahead"
         [notFoundText]="notFoundText || ngtTranslateService.ngtSelectNotFoundText" [searchable]="searchable"
-        [searchFn]="itemSearchFn" [disabled]='disabled() || isReadonly'
-        [clearable]="clearable && hasSelectedValue()" [closeOnSelect]="closeOnSelect" [trackByFn]="trackBy"
-        [labelForId]="labelForId" [typeToSearchText]="typeToSearchText || ngtTranslateService.ngtSelectTypeToSearchText"
+        [searchFn]="itemSearchFn" [disabled]='disabled() || isReadonly' [clearable]="clearable && hasSelectedValue()"
+        [closeOnSelect]="closeOnSelect" [trackByFn]="trackBy" [labelForId]="labelForId"
+        [typeToSearchText]="typeToSearchText || ngtTranslateService.ngtSelectTypeToSearchText"
         [placeholder]="placeholder || ngtTranslateService.ngtSelectPlaceholder" [dropdownPosition]="dropdownPosition"
         [groupBy]="groupBy" [clearAllText]="clearAllTooltip || ngtTranslateService.ngtSelectClearAllTooltip"
         [clearSearchOnAdd]="clearSearchOnAdd" [bindValue]="bindValue" [virtualScroll]="virtualScroll"
@@ -27,7 +27,7 @@
         [tabIndex]="tabIndex" [items]="ngSelectItems | async" [groupValue]="groupValue" [loading]="loading"
         [compareWith]='compareWith' [inputAttrs]="inputAttrs" (scroll)="onScroll($event)" (close)="onClose.emit()"
         (change)="onNativeChange($event)" (clear)='onClearSelect()' (remove)='onRemoveSelectedItem($event)'
-        (click)="wasClicked = true">
+        (open)="onOpen()" (click)="wasClicked = true">
 
         <ng-template *ngIf='ngtSelectHeaderTemplate' ng-header-tmp>
             <ng-template [ngTemplateOutlet]="ngtSelectHeaderTemplate">
