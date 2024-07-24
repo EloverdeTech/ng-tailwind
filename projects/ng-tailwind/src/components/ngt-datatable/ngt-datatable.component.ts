@@ -312,6 +312,28 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         });
     }
 
+    public getTagFilterValue(filter: any): string {
+        const filtersTag = this.getFiltersTagArray(filter);
+
+        return filtersTag.length > 1
+            ? filtersTag[0] + " +"
+            : filtersTag[0];
+    }
+
+    public getTitle(filter: any): string {
+        const filtersTag = this.getFiltersTagArray(filter);
+
+        return filtersTag.length > 1
+            ? filtersTag.slice(1).join(",")
+            : '';
+    }
+
+    private getFiltersTagArray(filter: any): string[] {
+        const tag = filter?.value?.tagValue ? filter.value.tagValue : filter.value;
+
+        return tag.split(",");
+    }
+
     private loadData(page: number) {
         return new Promise<void>((resolve, reject) => {
             const pagination: NgtHttpPagination = { ...this.ngtPagination.getPagination(), ...{ page: page } };

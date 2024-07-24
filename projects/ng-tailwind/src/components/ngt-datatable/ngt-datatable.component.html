@@ -8,8 +8,9 @@
         <ng-container *ngIf="hasAppliedFilters()">
             <ng-container *ngFor="let filter of filtersTranslated">
                 <ngt-tag class="w-full sm:w-auto {{ filterTagMargin }}" [class.sm:mr-4]="filterTagMargin == 'mb-4'"
-                    [color.bg]="filterTagBgColor" (click)="removeFilter(filter.reference)" ngt-stylizable>
-                    {{ filter.translation + ': ' + (filter?.value?.tagValue ? filter.value.tagValue : filter.value)}}
+                    [color.bg]="filterTagBgColor" (click)="removeFilter(filter.reference)" ngt-stylizable
+                    [title]="getTitle(filter)">
+                    {{ filter.translation + ': ' + getTagFilterValue(filter) }}
                 </ngt-tag>
             </ng-container>
         </ng-container>
@@ -19,7 +20,7 @@
         <ng-content></ng-content>
     </table>
 
-    <p *ngIf="emptyStateVisible" class="mt-8 mx-auto self-center text-center text-sm">
+    <p *ngIf="emptyStateVisible" class="mt-8 mx-auto self-center text-center text-xl">
         {{ ngtTranslateService.ngtDatatableNoDataFound }}
     </p>
 
