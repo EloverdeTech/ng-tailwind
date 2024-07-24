@@ -20,7 +20,7 @@ import {
     ViewEncapsulation,
 } from '@angular/core';
 import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
-import { NgOption, NgSelectComponent } from '@ng-select/ng-select';
+import { DropdownPosition, NgOption, NgSelectComponent } from '@ng-select/ng-select';
 import { Observable, Observer, Subject, Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
@@ -261,6 +261,14 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         this.destroySubscriptions();
     }
 
+    public onOpen(): void {
+        const parentElement = document.getElementById('ngtSelectParentContainer');
+
+        if (this.dropdownPosition == 'auto' && parentElement) {
+            this.calculateDropdownPosition(parentElement);
+        }
+    }
+
     public removeItem(event: Event, item: any) {
         event.preventDefault();
         event.stopPropagation();
@@ -452,6 +460,30 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
     public disabled(): boolean {
         return this.isDisabled || this.isDisabledByParent();
+    }
+
+    private calculateDropdownPosition(parentElement: Element): void {
+        setTimeout(() => {
+            const ngSelectElement = this.ngSelectComponent.element;
+            const ngSelectHeight = ngSelectElement.offsetHeight;
+            const ngSelectYPosition = ngSelectElement.getBoundingClientRect().y;
+
+            const dropdownHeight = this.ngSelectComponent.dropdownPanel.contentElementRef.nativeElement.offsetHeight;
+            const openedSelectHeight = ngSelectHeight + dropdownHeight;
+
+            const parentYPosition = parentElement.getBoundingClientRect().y;
+            const ngSelectYPositionInsideParent = ngSelectYPosition - parentYPosition;
+
+            const openedSelectTotalHeight = openedSelectHeight + ngSelectYPositionInsideParent;
+
+            const dropdownPosition: DropdownPosition = openedSelectTotalHeight > parentElement.clientHeight
+                ? 'top'
+                : 'bottom';
+
+            (<any>this.ngSelectComponent.dropdownPanel['_currentPosition']) = dropdownPosition;
+
+            this.ngSelectComponent.dropdownPanel['_updateDropdownClass'](dropdownPosition);
+        });
     }
 
     private initNgSelectItems() {
