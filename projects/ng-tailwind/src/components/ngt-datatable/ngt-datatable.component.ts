@@ -449,7 +449,13 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         );
 
         this.subscriptions.push(
-            this.onSelectAllRegisters.subscribe(() => this.hasSelectedAllElements = !this.hasSelectedAllElements)
+            this.onSelectAllRegisters.subscribe(() => {
+                this.hasSelectedAllElements = !this.hasSelectedAllElements;
+
+                if (!this.hasSelectedAllElements) {
+                    this.selectedElements = [];
+                }
+            })
         );
     }
 
