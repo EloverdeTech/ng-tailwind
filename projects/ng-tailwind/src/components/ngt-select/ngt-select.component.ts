@@ -34,6 +34,7 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } from './ngt-select.directive';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
+import { delay } from '../../helpers/promise/promise-helper';
 
 @Component({
     selector: 'ngt-select',
@@ -114,7 +115,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
     public nativeName = uuid();
     public ngtStyle: NgtStylizableService;
-    public ngSelectItems: any = [];
+    public ngSelectItems: any;
     public nativeValue: any;
     public componentReady: boolean = false;
     public wasClicked: boolean;
@@ -462,7 +463,17 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         return this.isDisabled || this.isDisabledByParent();
     }
 
-    private calculateDropdownPosition(parentElement: Element): void {
+    private async calculateDropdownPosition(parentElement: Element): Promise<void> {
+        while (!this.componentReady || this.loading || this.ngSelectComponent.showNoItemsFound()) {
+            await delay(200);
+
+            if (this.ngSelectComponent.showNoItemsFound() && !this.loading && this.componentReady) {
+                break;
+            }
+        }
+
+        this.changeDetector.detectChanges();
+
         setTimeout(() => {
             const ngSelectElement = this.ngSelectComponent.element;
             const ngSelectHeight = ngSelectElement.offsetHeight;
@@ -476,7 +487,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
 
             const openedSelectTotalHeight = openedSelectHeight + ngSelectYPositionInsideParent;
 
-            const dropdownPosition: DropdownPosition = openedSelectTotalHeight > parentElement.clientHeight
+            const dropdownPosition: DropdownPosition = openedSelectTotalHeight > (parentElement.clientHeight * 0.9)
                 ? 'top'
                 : 'bottom';
 
