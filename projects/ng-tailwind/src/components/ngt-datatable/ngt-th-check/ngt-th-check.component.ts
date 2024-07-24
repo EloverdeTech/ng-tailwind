@@ -87,9 +87,11 @@ export class NgtThCheckComponent implements AfterContentInit, OnDestroy {
         if (this.ngtDataTable) {
             this.ngtDataTable.onToogleAllCheckboxes.emit(checked);
             this.hasSelectedAllCheckboxes = checked;
+            this.checked = checked;
 
             if (!checked && this.hasSelectedAllElements()) {
-                this.ngtDataTable?.onSelectAllRegisters.emit();
+                this.hasSelectedAllCheckboxes = true;
+                this.checked = true;
             }
         }
     }
