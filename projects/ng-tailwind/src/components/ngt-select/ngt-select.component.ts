@@ -263,10 +263,12 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
     }
 
     public onOpen(): void {
-        const parentElement = document.getElementById('ngtSelectParentContainer');
+        const parentElements = document.querySelectorAll('#ngtSelectParentContainer');
 
-        if (this.dropdownPosition == 'auto' && parentElement) {
-            this.calculateDropdownPosition(parentElement);
+        if (this.dropdownPosition == 'auto' && parentElements?.length) {
+            const parentContainer = parentElements[parentElements.length - 1];
+
+            this.calculateDropdownPosition(parentContainer);
         }
     }
 
@@ -463,7 +465,7 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         return this.isDisabled || this.isDisabledByParent();
     }
 
-    private async calculateDropdownPosition(parentElement: Element): Promise<void> {
+    private async calculateDropdownPosition(parentContainer: Element): Promise<void> {
         while (!this.componentReady || this.loading || this.ngSelectComponent.showNoItemsFound()) {
             await delay(200);
 
@@ -482,12 +484,16 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
             const dropdownHeight = this.ngSelectComponent.dropdownPanel.contentElementRef.nativeElement.offsetHeight;
             const openedSelectHeight = ngSelectHeight + dropdownHeight;
 
-            const parentYPosition = parentElement.getBoundingClientRect().y;
+            const parentYPosition = parentContainer.getBoundingClientRect().y;
             const ngSelectYPositionInsideParent = ngSelectYPosition - parentYPosition;
 
             const openedSelectTotalHeight = openedSelectHeight + ngSelectYPositionInsideParent;
+            const parentContainerHeight = parentContainer.clientHeight;
 
-            const dropdownPosition: DropdownPosition = openedSelectTotalHeight > (parentElement.clientHeight * 0.9)
+            const fitsOnTop = openedSelectHeight < ngSelectYPositionInsideParent;
+            const fitsOnBottom = openedSelectTotalHeight < parentContainerHeight;
+
+            const dropdownPosition: DropdownPosition = !fitsOnBottom && fitsOnTop
                 ? 'top'
                 : 'bottom';
 
