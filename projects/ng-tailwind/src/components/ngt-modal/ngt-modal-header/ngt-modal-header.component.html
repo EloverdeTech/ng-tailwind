@@ -1,6 +1,7 @@
 <div
     class="flex w-full items-center {{ ngtStyle.compile(['px', 'py', 'pb', 'pt', 'pl', 'pr', 'mx', 'my', 'mb', 'mt', 'ml', 'mr']) }}">
     <ng-content></ng-content>
+    
     <ng-container *ngIf="!disableDefaultCloses">
         <div class="cursor-pointer z-50 absolute right-0 top-0 m-2" (click)='emitOnCloseEvent()'>
             <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
