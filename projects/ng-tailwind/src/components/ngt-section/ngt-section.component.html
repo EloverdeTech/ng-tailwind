@@ -4,7 +4,7 @@
     </ngt-svg>
 
     <div
-        class="w-full pb-4 md:pb-0 border-b-4 md:border-b-0 border-dashed md:border-solid md:border-l {{ accordion && !showSection ? 'flex' : '' }}">
+        class="w-full pb-4 md:pb-0 {{ accordion && !showSection ? 'flex' : '' }} {{ ngtSectionStyle.compile(['border']) }}">
         <div *ngIf="!accordion && caption" class="flex">
             <span class="pl-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
                 {{ caption }}
@@ -22,7 +22,7 @@
         </div>
 
         <ng-container *ngIf="accordion">
-            <div class="flex flex-wrap items-center px-5 cursor-pointer {{ helpText ? '' : 'hover:opacity-75' }} {{ accordion && showSection ? ngtCaptionStyle.compile(['pb']) : ngtCaptionStyle.compile(['py']) }}"
+            <div class="flex flex-wrap items-center cursor-pointer {{ helpText ? '' : 'hover:opacity-75' }} {{ accordion && showSection ? ngtCaptionStyle.compile(['pb', 'px']) : ngtCaptionStyle.compile(['py', 'px']) }}"
                 (click)='toggle()' style="max-width: fit-content;">
                 <div *ngIf="!showSection"
                     class="flex {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">

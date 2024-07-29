@@ -66,6 +66,7 @@ export class NgtSectionComponent implements AfterViewInit {
             my: 'my-1',
             pr: 'pr-1',
             px: 'md:px-5',
+            border: 'border-b-4 md:border-b-0 border-dashed md:border-solid md:border-l',
             color: {
                 text: 'text-gray-800'
             }
@@ -77,6 +78,7 @@ export class NgtSectionComponent implements AfterViewInit {
             ml: 'ml-2',
             pb: 'pb-2',
             border: 'border-none',
+            px: 'px-5',
             color: {
                 text: 'text-gray-800',
                 border: ''
