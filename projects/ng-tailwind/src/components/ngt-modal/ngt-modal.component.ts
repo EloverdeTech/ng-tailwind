@@ -64,6 +64,7 @@ export class NgtModalComponent implements AfterViewInit {
             w: 'md:max-w-md',
             py: 'py-4',
             px: 'px-6',
+            border: 'border border-teal-500',
             overflow: 'overflow-visible',
             color: {}
         });
