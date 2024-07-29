@@ -6,7 +6,7 @@
     <ng-container *ngIf='!link'>
         <button [ngClass]="{ 'disabled-button': disabled(), 'loading-button': loading }" [disabled]="disabled()"
             [type]="(loading || disabled() || noSubmit) ? 'button' : 'submit'"
-            class="flex justify-center items-center focus:outline-none rounded cursor-pointer {{ ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border', 'text', 'font', 'w', 'h']) }}">
+            class="flex justify-center items-center focus:outline-none cursor-pointer {{ ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border', 'text', 'font', 'w', 'h', 'rounded']) }}">
             <ng-container *ngTemplateOutlet="content"></ng-container>
 
             <span *ngIf="loading" class="ml-2">
@@ -17,7 +17,7 @@
 
     <ng-container *ngIf='link'>
         <a [routerLink]='href ? href : null' [ngClass]="{ 'disabled-button': disabled(), 'loading-button': loading }"
-            class="flex justify-center items-center focus:outline-none rounded cursor-pointer {{ ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border', 'text', 'font','w', 'h']) }}">
+            class="flex justify-center items-center focus:outline-none cursor-pointer {{ ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border', 'text', 'font','w', 'h', 'rounded']) }}">
             <span class="w-full">
                 <ng-container *ngTemplateOutlet="content"></ng-container>
             </span>

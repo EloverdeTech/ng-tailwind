@@ -66,6 +66,7 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
             font: 'font-normal',
             w:  'w-full',
             h: 'h-full',
+            rounded: 'rounded'
         });
     }
 
