@@ -47,6 +47,8 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
     @Input() public helpTitle: string;
     @Input() public helpTextColor: string = 'text-green-500';
     @Input() public helpText: string;
+    @Input() public helperReverseYPosition: boolean;
+    @Input() public helperAutoXReverse: boolean = true;
 
     public ngtStyle: NgtStylizableService;
 
