@@ -72,4 +72,9 @@
         *ngIf="control?.errors?.minlength && (control?.dirty || (container && container['submitted']))">
         {{ ngtTranslateService.ngtValidationMinLengthField(minLength) }}
     </span>
+
+    <span class="help-block has-error"
+        *ngIf="control?.errors?.invalid_custom_validator && (control?.dirty || (container && container['submitted']))">
+        {{ control.errors.invalid_custom_validator }}
+    </span>
 </div>
