@@ -65,6 +65,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public showCharactersLength: boolean = false;
     @Input() public uppercase: boolean = false;
     @Input() public customInnerContentTemplate: TemplateRef<any>;
+    @Input() public helperReverseYPosition: boolean;
+    @Input() public helperAutoXReverse: boolean = true;
 
     //Behavior
     @Input() public isDisabled: boolean;
@@ -94,8 +96,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     @Input() public multipleOf: number;
     @Input() public validateMinValueOnMask: boolean;
     @Input() public externalServerDependency: boolean;
-    @Input() public helperReverseYPosition: boolean;
-    @Input() public helperAutoXReverse: boolean = true;
+    @Input() public customValidator: () => AsyncValidatorFn;
 
     @Output() public onClickLeftIcon: EventEmitter<any> = new EventEmitter<any>();
     @Output() public onClickRightIcon: EventEmitter<any> = new EventEmitter<any>();
@@ -463,6 +464,10 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
             if (this.type == 'password' && this.validatePassword && this.hasPasswordValidation()) {
                 asyncValidators.push(this.passwordValidator());
+            }
+
+            if (this.customValidator) {
+                asyncValidators.push(this.customValidator());
             }
 
             this.formControl.setAsyncValidators(asyncValidators);
