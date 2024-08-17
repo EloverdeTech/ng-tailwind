@@ -33,6 +33,7 @@ export class NgtPortletHeaderComponent {
             text: 'text-xl',
             font: 'font-medium',
             border: 'border-b',
+            px: 'px-4',
             color: {}
         }, ['NgtPortletStyle']);
     }
