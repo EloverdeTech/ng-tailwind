@@ -1,4 +1,4 @@
-<div *ngIf="canDisplay" class="flex mb-6" #elementRef>
+<div *ngIf="canDisplay" class="flex {{ ngtSectionStyle.compile(['mb']) }}" #elementRef>
     <ngt-svg *ngIf="icon" [src]='icon'
         class="hidden md:block {{ ngtSectionStyle.compile(['color.text', 'h', 'w', 'my', 'pr']) }}">
     </ngt-svg>
@@ -53,7 +53,7 @@
                 </ngt-helper>
 
                 <div *ngIf="removable"
-                    class="flex items-center justify-center h-8 w-8 ml-2 rounded-full hover:bg-red-500 hover:text-white text-gray-600 text-xl"
+                    class="flex items-center justify-center h-6 w-6 ml-2 rounded-full hover:bg-red-500 hover:text-white text-gray-600 text-sm"
                     (click)='remove($event)'>
                     <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path

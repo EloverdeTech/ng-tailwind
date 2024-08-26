@@ -64,6 +64,7 @@ export class NgtSectionComponent implements AfterViewInit {
             h: 'h-12',
             w: 'w-12',
             my: 'my-1',
+            mb: 'mb-6',
             pr: 'pr-1',
             px: 'md:px-5',
             border: 'border-b-4 md:border-b-0 border-dashed md:border-solid md:border-l',
