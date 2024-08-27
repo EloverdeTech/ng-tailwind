@@ -27,13 +27,24 @@
 
 <ng-template #modal>
     <ngt-modal-header [disableDefaultCloses]="ngtDataTable.searchModal.disableDefaultCloses"
-        (onClose)="ngtDataTable.searchModal.close()">
-        <span *ngIf="searchLabel" class="font-semibold text-gray-800 text-sm">{{ searchLabel }}</span>
+        [ngtStyle]="filterModalHeaderStyle" (onClose)="ngtDataTable.searchModal.close()">
+        <ngt-svg *ngIf="searchIcon" [src]="searchIcon" class="text-sm">
+        </ngt-svg>
+
+        <svg *ngIf="!searchIcon" class="fill-current self-center text-sm" viewBox="0 0 12 12"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M7.0042 6.84417L11.8042 2.04417V-0.355835H-0.195801V2.04417L4.6042 6.84417V11.6442L7.0042 9.24417V6.84417Z" />
+        </svg>
+
+        <span *ngIf="searchLabel" class="font-semibold text-sm ml-2">
+            {{ searchLabel }}
+        </span>
 
         <ng-content select='[customSearchHeader]'></ng-content>
     </ngt-modal-header>
 
-    <ngt-modal-body [isDisabled]="false">
+    <ngt-modal-body [isDisabled]="false" [ngtStyle]="filterModalBodyStyle">
         <ngt-input *ngIf="!hasCustomSearch" jit='true' [(ngModel)]='searchTerm' (ngModelChange)='search($event)'
             placeholder='Pesquisar...' name='{{ reference }}_filter' #searchInput>
         </ngt-input>
