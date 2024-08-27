@@ -37,6 +37,7 @@ export class NgtThComponent implements OnChanges, OnDestroy {
     @Input() public searchable: boolean;
     @Input() public hasCustomSearch: boolean = false;
     @Input() public searchLabel: string;
+    @Input() public searchIcon: string;
     @Input() public sortableTooltip: NgtSortableTooltip = {
         ascending: 'Ordenar de Z a A',
         descending: 'Limpar ordenação',
@@ -50,7 +51,10 @@ export class NgtThComponent implements OnChanges, OnDestroy {
     public sortDirection = '';
     public searchTerm: any;
     public customSearchTerm: any;
+
     public ngtStyle: NgtStylizableService;
+    public filterModalHeaderStyle: NgtStylizableService = new NgtStylizableService();
+    public filterModalBodyStyle: NgtStylizableService = new NgtStylizableService();
 
     private subscriptions: Array<Subscription> = [];
 
@@ -231,6 +235,16 @@ export class NgtThComponent implements OnChanges, OnDestroy {
             'text',
             'font',
         ]);
+
+        this.filterModalHeaderStyle.load(this.injector, 'FilterModalHeader', {
+            pb: 'pb-3',
+            color: {}
+        });
+
+        this.filterModalBodyStyle.load(this.injector, 'FilterModalBody', {
+            px: 'px-0',
+            py: 'py-0'
+        });
     }
 
     private destroySubscriptions() {

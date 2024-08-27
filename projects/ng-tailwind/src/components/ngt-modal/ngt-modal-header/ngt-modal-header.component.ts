@@ -11,8 +11,7 @@ export class NgtModalHeaderComponent {
     public static onCloseModalByHeader: EventEmitter<void> = new EventEmitter();
 
     @Input() public disableDefaultCloses: boolean;
-
-    public ngtStyle: NgtStylizableService;
+    @Input() public ngtStyle: NgtStylizableService;
 
     public constructor(
         private injector: Injector,
@@ -20,7 +19,7 @@ export class NgtModalHeaderComponent {
     ) {
         if (this.tailStylizableDirective) {
             this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
-        } else {
+        } else if (!this.ngtStyle) {
             this.ngtStyle = new NgtStylizableService();
         }
 

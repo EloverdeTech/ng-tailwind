@@ -53,6 +53,6 @@
     </ngt-pagination>
 </div>
 
-<ngt-modal [customLayout]='true' [isDisabled]="false" #searchModal>
+<ngt-modal [customLayout]="true" [isDisabled]="false" [ngtStyle]="filterModalStyle" #searchModal>
     <ng-container *ngTemplateOutlet="searchModalTemplate"></ng-container>
 </ngt-modal>

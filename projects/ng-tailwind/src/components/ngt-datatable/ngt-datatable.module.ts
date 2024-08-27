@@ -18,6 +18,7 @@ import { NgtThCheckComponent } from './ngt-th-check/ngt-th-check.component';
 import { NgtThComponent } from './ngt-th/ngt-th.component';
 import { NgtTheadComponent } from './ngt-thead/ngt-thead.component';
 import { NgtTrComponent } from './ngt-tr/ngt-tr.component';
+import { NgtSvgModule } from '../ngt-svg/ngt-svg.module';
 
 @NgModule({
     declarations: [
@@ -50,7 +51,8 @@ import { NgtTrComponent } from './ngt-tr/ngt-tr.component';
         NgtModalModule,
         NgtTagModule,
         NgtActionModule,
-        NgtStylizableModule
+        NgtStylizableModule,
+        NgtSvgModule
     ]
 })
 export class NgtDatatableModule { }

@@ -56,7 +56,7 @@ export class NgtModalComponent implements AfterViewInit {
     ) {
         if (this.tailStylizableDirective) {
             this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
-        } else {
+        } else if (!this.ngtStyle) {
             this.ngtStyle = new NgtStylizableService();
         }
 

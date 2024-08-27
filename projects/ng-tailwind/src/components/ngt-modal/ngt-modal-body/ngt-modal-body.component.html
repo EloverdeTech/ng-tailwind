@@ -1,3 +1,5 @@
-<fieldset [disabled]="isDisabled" style="min-inline-size: 100% !important">
-    <ng-content></ng-content>
-</fieldset>
+<div class="flex flex-col w-full {{ ngtStyle.compile(['px', 'py']) }}">
+    <fieldset [disabled]="isDisabled" style="min-inline-size: 100% !important">
+        <ng-content></ng-content>
+    </fieldset>
+</div>
