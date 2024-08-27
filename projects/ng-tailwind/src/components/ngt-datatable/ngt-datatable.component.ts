@@ -21,6 +21,7 @@ import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtInputComponent } from '../ngt-input/ngt-input.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 import { NgtPaginationComponent } from '../ngt-pagination/ngt-pagination.component';
+import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Component({
     selector: 'ngt-datatable',
@@ -66,6 +67,8 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     public hasSelectedAllElements: boolean;
     public selectedElements: Array<NgtCheckedElement> = [];
 
+    public filterModalStyle: NgtStylizableService = new NgtStylizableService();
+
     private searching: boolean;
     private searchTimeout: any;
     private subscriptions: Array<Subscription> = [];
@@ -87,7 +90,16 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         private changeDetector: ChangeDetectorRef,
         @Optional()
         public ngtTranslateService: NgtTranslateService
-    ) { }
+    ) {
+        this.filterModalStyle.load(this.injector, 'FilterModal', {
+            w: 'md:max-w-md',
+            py: 'py-4',
+            px: 'px-6',
+            border: 'border border-teal-500',
+            overflow: 'overflow-visible',
+            color: {}
+        });
+    }
 
     public ngOnInit() {
         if (this.table && this.table.nativeElement && this.table.nativeElement.rows
