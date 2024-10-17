@@ -1,6 +1,6 @@
 {
     "name": "ng-tailwind",
-    "version": "5.2.2",
+    "version": "5.2.3",
     "peerDependencies": {
         "@angular/common": "<16.0.0",
         "@angular/core": "<16.0.0",
@@ -8,7 +8,7 @@
         "ng2-flatpickr": ">=9.0.0",
         "@ng-select/ng-select": ">=10.0.3",
         "ngx-dropzone": ">=2.2.2",
-        "eloverde-doc-viewer": ">=1.1.0",
+        "eloverde-doc-viewer": ">=1.1.3",
         "viewerjs": ">=1.10.5",
         "rxjs": ">=7.5.5",
         "angular-svg-icon": "^8.0.0"

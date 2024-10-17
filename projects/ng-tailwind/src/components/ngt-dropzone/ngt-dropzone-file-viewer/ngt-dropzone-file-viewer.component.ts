@@ -41,10 +41,6 @@ export class NgtDropzoneFileViewerComponent {
             this.loading = true;
             this.canShowViewer = true;
         }
-
-        setTimeout(() => {
-            this.loading = false;
-        }, 5000);
     }
 
     public close(): void {
