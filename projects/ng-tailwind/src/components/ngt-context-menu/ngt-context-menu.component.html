@@ -2,14 +2,15 @@
     [style.left.px]="positionX" [style.top.px]="positionY" (click)="$event.stopPropagation()">
 
     <ng-container *ngIf="hasOptions(); else showTemplate">
-        <ul class="cursor-pointer rounded-xl bg-white border border-gray-200 shadow-2xl ">
-            <li *ngFor="let item of menuItems; last as isLast; first as isFirst" class="flex"
-                class="flex items-center w-full px-4 py-2 gap-3 text-sm text-gray-700 hover:text-white"
+        <ul class="cursor-pointer rounded-xl bg-white border border-gray-200 shadow-2xl">
+            <li *ngFor="let item of menuItems; last as isLast; first as isFirst"
+                class="flex items-center w-full px-4 py-2 gap-3 text-sm" [class.text-gray-700]="!item.disabled"
+                [class.text-gray-400]="item.disabled" [class.cursor-not-allowed]="item.disabled"
                 [class.rounded-b-xl]="isLast" [class.rounded-t-xl]="isFirst"
-                [ngClass]="item.background_color || 'hover:bg-green-500'" (click)="onMenuItemClick.emit(item)">
+                [ngClass]="item.disabled ? '' : (item.background_color || 'hover:bg-green-500')"
+                (click)="!item.disabled && onMenuItemClick.emit(item)">
 
                 <ngt-svg *ngIf="item.icon" class="text-lg" [src]="item.icon"></ngt-svg>
-
                 {{ item.caption }}
             </li>
         </ul>
