@@ -25,4 +25,5 @@ export interface NgtContextMenuOptionInterface {
     background_color?: string;
     icon?: string;
     value: string;
+    disabled?: boolean;
 }
