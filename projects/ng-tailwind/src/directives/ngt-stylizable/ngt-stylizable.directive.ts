@@ -80,6 +80,10 @@ export class NgtStylizableDirective {
         return this.ngtStylizableService.ml;
     }
 
+    public get gap(): string {
+        return this.ngtStylizableService.gap;
+    }
+
     public get border(): string {
         return this.ngtStylizableService.border;
     }
@@ -222,6 +226,11 @@ export class NgtStylizableDirective {
     @Input('ml')
     public set ml(ml: string) {
         this.ngtStylizableService.ml = ml;
+    }
+
+    @Input('gap')
+    public set gap(gap: string) {
+        this.ngtStylizableService.gap = gap;
     }
 
     @Input('border')

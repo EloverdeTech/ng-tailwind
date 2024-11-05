@@ -18,6 +18,7 @@ export class NgtStylizableService {
     private _mr: string;
     private _mb: string;
     private _ml: string;
+    private _gap: string;
     private _border: string;
     private _shadow: string;
     private _rounded: string;
@@ -96,6 +97,10 @@ export class NgtStylizableService {
 
     public get ml(): string {
         return this._ml;
+    }
+
+    public get gap(): string {
+        return this._gap;
     }
 
     public get border(): string {
@@ -235,6 +240,10 @@ export class NgtStylizableService {
 
     public set ml(ml: string) {
         this._ml = this.getQualifiedValue('ml-', ml);
+    }
+
+    public set gap(gap: string) {
+        this._gap = this.getQualifiedValue('gap-', gap);
     }
 
     public set border(border: string) {
