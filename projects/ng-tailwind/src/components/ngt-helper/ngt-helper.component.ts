@@ -42,6 +42,7 @@ export class NgtHelperComponent {
             text: 'text-xs',
             fontCase: '',
             px: 'px-2',
+            gap: '',
             color: {
                 text: 'text-black',
                 bg: 'bg-gray-200'
