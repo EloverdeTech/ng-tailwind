@@ -28,6 +28,8 @@ export class NgtPopoverTooltipComponent{
         [NgtPopoverPosition.BOTTOM]: '-mb-10',
     };
 
+    public popoverTemplateStyle: string = 'text-xxs';
+
     @HostListener('mouseleave')
     public onMouseLeave(): void {
         this.onMouseLeaveEvent.emit();

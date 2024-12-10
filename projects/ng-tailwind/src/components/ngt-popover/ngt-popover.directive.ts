@@ -20,6 +20,7 @@ export class NgtPopoverDirective implements OnDestroy {
     @Input() public ngtPopoverContent: string;
     @Input() public ngtPopoverTemplate: TemplateRef<any>;
     @Input() public ngtPopoverPosition: NgtPopoverPosition = NgtPopoverPosition.DEFAULT;
+    @Input() public ngtPopoverTemplateStyle: string;
 
     @Input() public dismissDelay: number = 1000;
     @Input() public showDelay: number = 1000;
@@ -123,6 +124,7 @@ export class NgtPopoverDirective implements OnDestroy {
         this.componentRef.instance.popover = this.ngtPopoverContent;
         this.componentRef.instance.popoverTemplate = this.ngtPopoverTemplate;
         this.componentRef.instance.position = this.ngtPopoverPosition;
+        this.componentRef.instance.popoverTemplateStyle = this.ngtPopoverTemplateStyle;
 
         this.bindSubscriptions();
 
