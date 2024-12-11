@@ -20,7 +20,7 @@ export class NgtPopoverDirective implements OnDestroy {
     @Input() public ngtPopoverContent: string;
     @Input() public ngtPopoverTemplate: TemplateRef<any>;
     @Input() public ngtPopoverPosition: NgtPopoverPosition = NgtPopoverPosition.DEFAULT;
-    @Input() public ngtPopoverTemplateStyle: string;
+    @Input() public ngtPopoverTemplateStyle: string = 'text-xxs';
 
     @Input() public dismissDelay: number = 1000;
     @Input() public showDelay: number = 1000;
