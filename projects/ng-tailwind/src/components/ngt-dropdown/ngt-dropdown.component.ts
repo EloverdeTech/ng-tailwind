@@ -90,6 +90,8 @@ export class NgtDropdownComponent implements OnDestroy {
 
         this.bindContainerXPosition();
         this.bindContainerYPosition();
+
+        this.onToggle.emit(this.isOpen);
     }
 
     public closeOnSelectOption(): void {
@@ -102,6 +104,8 @@ export class NgtDropdownComponent implements OnDestroy {
         this.isOpen = false;
         this.containerXPosition = null;
         this.containerYPosition = null;
+
+        this.onToggle.emit(this.isOpen);
     }
 
     public toggle(): void {
@@ -111,8 +115,6 @@ export class NgtDropdownComponent implements OnDestroy {
             } else {
                 this.open();
             }
-
-            this.onToggle.emit(this.isOpen);
         });
     }
 
