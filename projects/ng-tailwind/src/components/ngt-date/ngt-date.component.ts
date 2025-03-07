@@ -16,7 +16,8 @@ import { ControlContainer, NgForm, Validators } from '@angular/forms';
 import { english } from 'flatpickr/dist/l10n/default.js';
 import { Portuguese } from 'flatpickr/dist/l10n/pt.js';
 import moment from 'moment';
-import { FlatpickrOptions, Ng2FlatpickrComponent } from 'ng2-flatpickr';
+import { FlatpickrOptions } from 'ev-date-picker';
+import { EvDatePickerComponent } from 'ev-date-picker/ev-date-picker.component';
 import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
@@ -42,11 +43,11 @@ import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
     ]
 })
 export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
-    @ViewChild("ng2FlatpickrComponent", { static: true }) public ng2FlatpickrComponent: Ng2FlatpickrComponent;
+    @ViewChild('evDatePicker', { static: true }) public evDatePicker: EvDatePickerComponent;
 
     // Visual
-    @Input() public label: string = "";
-    @Input() public placeholder: string = "dd/mm/yyyy";
+    @Input() public label: string = '';
+    @Input() public placeholder: string = 'dd/mm/yyyy';
     @Input() public helpTitle: string;
     @Input() public helpText: string;
     @Input() public helpTextColor: string = 'text-green-500';
@@ -127,6 +128,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         this.ngtStyle.load(this.injector, 'NgtDate', {
             h: 'h-10',
             text: 'text-xs',
+            px: 'px-4',
             fontCase: '',
             color: {
                 text: 'text-gray-800'
@@ -181,7 +183,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
     }
 
     public ngOnDestroy() {
-        this.ng2FlatpickrComponent.flatpickr['calendarContainer']?.remove();
+        this.evDatePicker.flatpickr['calendarContainer']?.remove();
 
         this.destroySubscriptions();
     }
@@ -190,8 +192,8 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         this.value = '';
         this.nativeValue = '';
 
-        if (this.ng2FlatpickrComponent && clearInstance) {
-            this.ng2FlatpickrComponent.setDateFromInput('');
+        if (this.evDatePicker && clearInstance) {
+            this.evDatePicker.setDateFromInput('');
         }
     }
 
@@ -216,7 +218,7 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
                     let secondValue = moment(value[1]);
 
                     if (firstValue.isValid() && secondValue.isValid()) {
-                        return (<any>this.ng2FlatpickrComponent.flatpickr).setDate([
+                        return (<any>this.evDatePicker.flatpickr).setDate([
                             firstValue.format(this.getMomentDateFormat()),
                             secondValue.format(this.getMomentDateFormat())
                         ], true, this.dateFormat);
@@ -225,10 +227,10 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
             }
 
             if (firstValue.isValid()) {
-                return (<any>this.ng2FlatpickrComponent.flatpickr).setDate(firstValue.format(this.getMomentDateFormat()), true, this.dateFormat);
+                return (<any>this.evDatePicker.flatpickr).setDate(firstValue.format(this.getMomentDateFormat()), true, this.dateFormat);
             }
 
-            this.ng2FlatpickrComponent.setDateFromInput('');
+            this.evDatePicker.setDateFromInput('');
             this.clearInput();
         }
     }
@@ -343,11 +345,11 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
 
     private setupDateInputMask(): void {
         if (this.locale == NgtDateLocale.BRAZIL) {
-            return applyInputMask(this.ng2FlatpickrComponent.flatpickr['input'], InputMaskEnum.DATE, { mask: '99/99/9999' });
+            return applyInputMask(this.evDatePicker.flatpickr['input'], InputMaskEnum.DATE, { mask: '99/99/9999' });
         }
 
         if (this.locale == NgtDateLocale.US) {
-            return applyInputMask(this.ng2FlatpickrComponent.flatpickr['input'], InputMaskEnum.DATE, { mask: '9999-99-99' });
+            return applyInputMask(this.evDatePicker.flatpickr['input'], InputMaskEnum.DATE, { mask: '9999-99-99' });
         }
     }
 

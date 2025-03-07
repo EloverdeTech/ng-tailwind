@@ -26,6 +26,7 @@
     "@ng-select/ng-select": "^11.0.0",
     "angular-svg-icon": "^16.1.0",
     "eloverde-doc-viewer": "2.0.0",
+    "ev-date-picker": "^1.1.0",
     "inputmask": "^5.0.8",
     "moment": "^2.29.4",
     "ngx-dropzone": "^3.1.0",
