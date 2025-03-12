@@ -28,8 +28,8 @@ export class NgtPopoverDirective implements OnDestroy {
     @Input() public openMethod: 'HOVER' | 'CLICK' = NgtPopoverOpenMethod.HOVER;
 
     private componentRef: ComponentRef<NgtPopoverTooltipComponent> = null;
-    private dismissTimeoutInstance: NodeJS.Timeout;
-    private showTimeoutInstance: NodeJS.Timeout;
+    private dismissTimeoutInstance: any;
+    private showTimeoutInstance: any;
 
     private toolTipMouseHoverSubscription: Subscription;
     private toolTipMouseLeaveSubscription: Subscription;
@@ -135,7 +135,7 @@ export class NgtPopoverDirective implements OnDestroy {
         this.toolTipMouseHoverSubscription = this.componentRef.instance
             .onMouseHoverEvent
             .subscribe(() => {
-                if(this.dismissTimeoutInstance){
+                if (this.dismissTimeoutInstance) {
                     clearTimeout(this.dismissTimeoutInstance);
                 }
             });

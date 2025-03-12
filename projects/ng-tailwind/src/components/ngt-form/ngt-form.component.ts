@@ -24,14 +24,14 @@ import { NgtAbilityValidationService } from '../../services/validation/ngt-abili
     templateUrl: './ngt-form.component.html',
 })
 export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
+    public static onSubmitInvalidForm: EventEmitter<NgForm> = new EventEmitter;
+
     @Input() public guessFormState: boolean = true;
     @Input() public message: string = '';
     @Input() public routeIdentifier: string = 'id';
     @Input() public resource: any;
     @Input() public customLayout: boolean;
     @Input() public isDisabled: boolean;
-
-    @Output() public static onSubmitInvalidForm: EventEmitter<NgForm> = new EventEmitter;
 
     @Output() public onCreating: EventEmitter<any> = new EventEmitter;
     @Output() public onEditing: EventEmitter<any> = new EventEmitter;
@@ -219,7 +219,7 @@ export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.setFormState(NgtFormState.CREATING);
                     }
 
-                    observer.next();
+                    observer.next(null);
                 })
             );
         });

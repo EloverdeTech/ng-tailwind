@@ -67,18 +67,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ng-tailwind-documentation:build"
+            "buildTarget": "ng-tailwind-documentation:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ng-tailwind-documentation:build:production"
+              "buildTarget": "ng-tailwind-documentation:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ng-tailwind-documentation:build"
+            "buildTarget": "ng-tailwind-documentation:build"
           }
         },
         "lint": {
