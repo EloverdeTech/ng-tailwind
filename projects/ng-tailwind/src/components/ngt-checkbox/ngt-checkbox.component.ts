@@ -26,6 +26,13 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 
+export enum NgtCheckboxMode {
+    DEFAULT = 'DEFAULT',
+    TOGGLE = 'TOGGLE',
+    SIDE_TOGGLE = 'SIDE_TOGGLE',
+    RADIO = 'RADIO'
+}
+
 @Component({
     selector: 'ngt-checkbox',
     templateUrl: './ngt-checkbox.component.html',
@@ -171,11 +178,4 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
     }
-}
-
-export enum NgtCheckboxMode {
-    DEFAULT = 'DEFAULT',
-    TOGGLE = 'TOGGLE',
-    SIDE_TOGGLE = 'SIDE_TOGGLE',
-    RADIO = 'RADIO'
 }

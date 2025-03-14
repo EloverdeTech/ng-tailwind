@@ -16,6 +16,13 @@ import { Subscription } from 'rxjs';
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
+export enum NgtSliderColorSchemeEnum {
+    PRIMARY = 'primary',
+    SUCCESS = 'success',
+    WARNING = 'warning',
+    DANGER = 'danger'
+};
+
 @Component({
     selector: 'ngt-slider',
     templateUrl: './ngt-slider.component.html',
@@ -86,10 +93,3 @@ export class NgtSliderComponent extends NgtBaseNgModel implements AfterViewInit,
         this.subscriptions = [];
     }
 }
-
-export enum NgtSliderColorSchemeEnum {
-    PRIMARY = 'primary',
-    SUCCESS = 'success',
-    WARNING = 'warning',
-    DANGER = 'danger'
-};

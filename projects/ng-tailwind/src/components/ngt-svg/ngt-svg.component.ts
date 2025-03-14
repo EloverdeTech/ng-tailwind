@@ -49,7 +49,7 @@ export class NgtSvgComponent implements AfterViewChecked, OnChanges {
                     svgElement.classList.add('fill-current');
                     svgElement.classList.add('self-center');
 
-                    new String(this.class).trim().split(' ').forEach(className => {
+                    `${this.class}`.trim().split(' ').forEach(className => {
                         if (className) {
                             svgElement.classList.add(className);
                         }

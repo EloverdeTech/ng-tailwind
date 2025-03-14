@@ -30,6 +30,16 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 
+export enum NgtDateLocale {
+    BRAZIL = 'BRAZIL',
+    US = 'US'
+}
+
+export enum NgtDateMode {
+    SINGLE = 'SINGLE',
+    RANGE = 'RANGE'
+}
+
 @Component({
     selector: 'ngt-date',
     templateUrl: './ngt-date.component.html',
@@ -213,8 +223,6 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
                 firstValue = moment(value[0]);
 
                 if (value.length == 2) {
-                    firstValue = firstValue;
-
                     let secondValue = moment(value[1]);
 
                     if (firstValue.isValid() && secondValue.isValid()) {
@@ -451,14 +459,4 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
     }
-}
-
-export enum NgtDateLocale {
-    BRAZIL = 'BRAZIL',
-    US = 'US'
-}
-
-export enum NgtDateMode {
-    SINGLE = 'SINGLE',
-    RANGE = 'RANGE'
 }

@@ -1,8 +1,17 @@
-import { Component, ElementRef, EventEmitter, Injector, Input, Optional, Output, Self, ViewChild } from '@angular/core';
+import {
+    Component, ElementRef, EventEmitter, Injector, Input, Optional, Output, Self, ViewChild
+} from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+
+export enum NgtPopoverOpenMethod {
+    CLICK = 'CLICK',
+    POPOVER_CLICK = 'POPOVER_CLICK',
+    RIGHT_CLICK = 'RIGHT_CLICK',
+    HOVER = 'HOVER'
+}
 
 @Component({
     selector: 'ngt-popover',
@@ -63,7 +72,7 @@ export class NgtPopoverComponent {
         this.clickTimeout = setTimeout(() => {
             this.onClick.emit();
 
-            const event = new MouseEvent('click', {bubbles: true});
+            const event = new MouseEvent('click', { bubbles: true });
 
             event.preventDefault();
             event.stopPropagation();
@@ -71,11 +80,4 @@ export class NgtPopoverComponent {
             this.hostDiv.nativeElement.dispatchEvent(event);
         }, 500);
     }
-}
-
-export enum NgtPopoverOpenMethod {
-    CLICK = 'CLICK',
-    POPOVER_CLICK = 'POPOVER_CLICK',
-    RIGHT_CLICK = 'RIGHT_CLICK',
-    HOVER = 'HOVER'
 }

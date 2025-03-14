@@ -1,4 +1,6 @@
-import { Component, ElementRef, Injector, Input, Optional, Self, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+    Component, ElementRef, Injector, Input, Optional, Self, ViewChild, ViewEncapsulation
+} from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';

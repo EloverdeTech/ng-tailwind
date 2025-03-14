@@ -9,9 +9,9 @@ import {
     ViewContainerRef,
 } from '@angular/core';
 
+import { Subscription } from 'rxjs';
 import { NgtPopoverPosition, NgtPopoverTooltipComponent } from './ngt-popover-tooltip/ngt-popover-tooltip.component';
 import { NgtPopoverOpenMethod } from './ngt-popover.component';
-import { Subscription } from 'rxjs';
 
 @Directive({
     selector: '[ngt-popover]'

@@ -19,6 +19,11 @@ import { getIdFromUri } from '../../helpers/routing/route';
 import { NgtHttpFormService } from '../../services/http/ngt-http-form.service';
 import { NgtAbilityValidationService } from '../../services/validation/ngt-ability-validation.service';;
 
+export enum NgtFormState {
+    CREATING = 'CREATING',
+    EDITING = 'EDITING'
+};
+
 @Component({
     selector: 'ngt-form',
     templateUrl: './ngt-form.component.html',
@@ -230,8 +235,3 @@ export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.subscriptions = [];
     }
 }
-
-export enum NgtFormState {
-    CREATING = 'CREATING',
-    EDITING = 'EDITING'
-};

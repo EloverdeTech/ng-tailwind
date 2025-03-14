@@ -3,6 +3,13 @@ import { Component, Injector, Input, Optional, Self } from '@angular/core';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
+export enum NgtShiningWidth {
+    xs = 'xs',
+    sm = 'sm',
+    lg = 'lg',
+    xl = 'xl',
+}
+
 @Component({
     selector: 'ngt-shining',
     templateUrl: './ngt-shining.component.html',
@@ -27,11 +34,4 @@ export class NgtShiningComponent {
             rounded: 'rounded-none',
         });
     }
-}
-
-export enum NgtShiningWidth {
-    xs = 'xs',
-    sm = 'sm',
-    lg = 'lg',
-    xl = 'xl',
 }
