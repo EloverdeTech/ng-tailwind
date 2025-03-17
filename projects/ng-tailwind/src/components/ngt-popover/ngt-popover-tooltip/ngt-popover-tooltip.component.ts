@@ -17,7 +17,8 @@ export enum NgtPopoverPosition {
                 animate(200)
             ])
         ]),
-    ]
+    ],
+    standalone: false
 })
 export class NgtPopoverTooltipComponent {
     @Output() public onMouseHoverEvent: EventEmitter<void> = new EventEmitter();

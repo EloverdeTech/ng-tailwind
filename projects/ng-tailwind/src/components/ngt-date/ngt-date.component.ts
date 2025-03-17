@@ -50,7 +50,8 @@ export enum NgtDateMode {
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
-    ]
+    ],
+    standalone: false
 })
 export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
     @ViewChild('evDatePicker', { static: true }) public evDatePicker: EvDatePickerComponent;

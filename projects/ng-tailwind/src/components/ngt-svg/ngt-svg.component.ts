@@ -17,7 +17,8 @@ import { SvgIconComponent } from 'angular-svg-icon';
     host: {
         class: 'flex justify-center'
     },
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class NgtSvgComponent implements AfterViewChecked, OnChanges {
     @Input() public src: string;

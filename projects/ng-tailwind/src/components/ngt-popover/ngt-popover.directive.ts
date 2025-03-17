@@ -14,7 +14,8 @@ import { NgtPopoverPosition, NgtPopoverTooltipComponent } from './ngt-popover-to
 import { NgtPopoverOpenMethod } from './ngt-popover.component';
 
 @Directive({
-    selector: '[ngt-popover]'
+    selector: '[ngt-popover]',
+    standalone: false
 })
 export class NgtPopoverDirective implements OnDestroy {
     @Input() public ngtPopoverContent: string;

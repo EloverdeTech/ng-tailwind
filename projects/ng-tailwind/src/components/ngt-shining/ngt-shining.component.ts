@@ -13,7 +13,8 @@ export enum NgtShiningWidth {
 @Component({
     selector: 'ngt-shining',
     templateUrl: './ngt-shining.component.html',
-    styleUrls: ['./ngt-shining.component.css']
+    styleUrls: ['./ngt-shining.component.css'],
+    standalone: false
 })
 export class NgtShiningComponent {
     @Input() public shiningWidth: NgtShiningWidth = NgtShiningWidth.xs;

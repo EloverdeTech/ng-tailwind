@@ -55,7 +55,8 @@ export enum NgtSelectDropdownPanelHeight {
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnDestroy, OnInit, DoCheck {
     @ViewChild(NgSelectComponent, { static: true }) public ngSelectComponent: NgSelectComponent;

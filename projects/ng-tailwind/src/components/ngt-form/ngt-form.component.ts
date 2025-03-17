@@ -27,6 +27,7 @@ export enum NgtFormState {
 @Component({
     selector: 'ngt-form',
     templateUrl: './ngt-form.component.html',
+    standalone: false
 })
 export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
     public static onSubmitInvalidForm: EventEmitter<NgForm> = new EventEmitter;

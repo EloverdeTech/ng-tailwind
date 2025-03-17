@@ -15,7 +15,8 @@ export enum NgtPopoverOpenMethod {
 
 @Component({
     selector: 'ngt-popover',
-    templateUrl: './ngt-popover.component.html'
+    templateUrl: './ngt-popover.component.html',
+    standalone: false
 })
 
 export class NgtPopoverComponent {

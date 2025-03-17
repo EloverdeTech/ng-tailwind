@@ -9,7 +9,8 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 @Component({
     selector: 'ngt-helper',
     templateUrl: './ngt-helper.component.html',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class NgtHelperComponent {
     @ViewChild('dropdownRef', { static: true }) public dropdownRef: ElementRef;

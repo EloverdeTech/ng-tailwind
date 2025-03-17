@@ -4,7 +4,8 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 
 @Component({
     selector: 'ngt-modal-footer',
-    templateUrl: './ngt-modal-footer.component.html'
+    templateUrl: './ngt-modal-footer.component.html',
+    standalone: false
 })
 export class NgtModalFooterComponent {
     @Input() public ngtStyle: NgtStylizableService;

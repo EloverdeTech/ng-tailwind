@@ -44,7 +44,8 @@ import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
-    ]
+    ],
+    standalone: false
 })
 export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
     @ViewChild("element", { static: true }) public element: ElementRef;

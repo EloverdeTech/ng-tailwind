@@ -2,7 +2,8 @@ import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'ngt-stylizable-template',
-    templateUrl: './ngt-stylizable-template.component.html'
+    templateUrl: './ngt-stylizable-template.component.html',
+    standalone: false
 })
 export class NgtStylizableTemplateComponent {
   @Input() public tagName: string;

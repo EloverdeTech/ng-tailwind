@@ -5,7 +5,8 @@ import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 
 @Component({
     selector: 'ngt-validation',
-    templateUrl: './ngt-validation.component.html'
+    templateUrl: './ngt-validation.component.html',
+    standalone: false
 })
 export class NgtValidationComponent {
     @Input() public control: UntypedFormControl;

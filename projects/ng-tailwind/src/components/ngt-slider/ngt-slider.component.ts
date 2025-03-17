@@ -32,7 +32,8 @@ export enum NgtSliderColorSchemeEnum {
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
-    ]
+    ],
+    standalone: false
 })
 export class NgtSliderComponent extends NgtBaseNgModel implements AfterViewInit, OnDestroy {
     @ViewChild('element', { static: true }) public element: ElementRef;

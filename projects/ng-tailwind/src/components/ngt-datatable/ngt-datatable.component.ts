@@ -55,7 +55,8 @@ export class NgtCustomFilter {
 @Component({
     selector: 'ngt-datatable',
     templateUrl: './ngt-datatable.component.html',
-    styleUrls: ['./ngt-datatable.component.css']
+    styleUrls: ['./ngt-datatable.component.css'],
+    standalone: false
 })
 export class NgtDatatableComponent implements OnInit, OnDestroy {
     @ViewChild('table', { static: true }) public table: ElementRef;

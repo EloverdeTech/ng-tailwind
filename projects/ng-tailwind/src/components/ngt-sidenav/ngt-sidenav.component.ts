@@ -23,6 +23,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
     animations: [
         fadeDownAnimation('fadeDownAnimation', 600)
     ],
+    standalone: false
 })
 
 export class NgtSidenavComponent implements AfterViewInit {

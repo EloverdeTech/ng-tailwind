@@ -17,7 +17,8 @@ import { NgtAbilityValidationService } from '../../services/validation/ngt-abili
                 animate(400)
             ])
         ]),
-    ]
+    ],
+    standalone: false
 })
 export class NgtSectionComponent implements AfterViewInit {
     @ViewChild('elementRef') public elementRef: ElementRef;

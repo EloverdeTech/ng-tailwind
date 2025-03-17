@@ -49,14 +49,14 @@ export enum NgtCheckboxMode {
                 animate(200)
             ])
         ]),
-
         trigger('slideRightToLeft', [
             state('void', style({ transform: 'translateX(4px) rotate(45deg)', opacity: 0 })),
             transition(':enter', [
                 animate(200)
             ])
         ])
-    ]
+    ],
+    standalone: false
 })
 export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewInit, OnChanges, OnDestroy {
     @ViewChild('element', { static: true }) public element: ElementRef;

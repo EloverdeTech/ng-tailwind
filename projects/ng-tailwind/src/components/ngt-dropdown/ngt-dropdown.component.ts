@@ -37,7 +37,8 @@ export enum NgtDropdownOpenMethod {
                 animate(300)
             ]),
         ]),
-    ]
+    ],
+    standalone: false
 })
 export class NgtDropdownComponent implements OnDestroy {
     @ViewChild('container', { static: true }) public containerRef: ElementRef;

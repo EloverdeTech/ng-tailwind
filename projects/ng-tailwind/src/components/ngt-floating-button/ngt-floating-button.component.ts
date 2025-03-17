@@ -29,7 +29,6 @@ export enum NgtFloatingButtonType {
                 animate(300)
             ])
         ]),
-
         trigger('openClose', [
             state('open', style({
                 transform: 'rotate(180deg)'
@@ -44,7 +43,8 @@ export enum NgtFloatingButtonType {
                 animate('0.5s ease-in')
             ]),
         ]),
-    ]
+    ],
+    standalone: false
 })
 export class NgtFloatingButtonComponent {
     @Input() public menus: Array<NgtFloatingButtonMenu>;
