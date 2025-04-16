@@ -71,6 +71,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     @Input() public items: Array<any> = [];
     @Input() public searchable: boolean = true;
     @Input() public allowOriginalItemsUnselect: boolean = true;
+    @Input() public allowSelectAll: boolean = true;
     @Input() public autoSelectUniqueOption: boolean;
 
     /** Validation */
@@ -263,7 +264,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     }
 
     public selectAll(): void {
-        if (!this.loading && !this.disabled()) {
+        if (this.allowSelectAll && !this.loading && !this.disabled()) {
             this.selectAllCheckbox = !this.selectAllCheckbox;
 
             this.value = [];
