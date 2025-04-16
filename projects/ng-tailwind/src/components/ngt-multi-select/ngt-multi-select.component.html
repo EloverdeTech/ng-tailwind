@@ -15,14 +15,15 @@
 <div class="{{ shining ? 'hidden' : 'flex flex-col' }} border w-full rounded {{ ngtStyle.compile(['h']) }}"
     style="min-height: 13rem;" [class.border-red-500]='hasValidationErrors()' [class.disabled-background]='disabled()'>
     <div class="flex items-center w-full p-2 border-b">
-        <ngt-checkbox class="flex" title="Selecionar todos" [label]="!searchable ? 'Selecionar todos' : ''"
-            [(ngModel)]="selectAllCheckbox" [name]="selectAllCheckboxName" [isClickDisabled]='true'
-            [isDisabled]='loading || disabled()' h='h-4' w='w-4' (click)='selectAll()' ngt-stylizable>
+        <ngt-checkbox *ngIf="allowSelectAll" class="flex" title="Selecionar todos" [isDisabled]='loading || disabled()'
+            [label]="!searchable ? 'Selecionar todos' : ''" [(ngModel)]="selectAllCheckbox"
+            [name]="selectAllCheckboxName" [isClickDisabled]='true' h='h-4' w='w-4' (click)='selectAll()'
+            ngt-stylizable>
         </ngt-checkbox>
 
-        <ngt-input *ngIf="searchable" class="block w-full pl-2" [name]='searchInputName' [(ngModel)]='searchTerm'
-            placeholder='Buscar...' [allowClear]='true' [jit]='true' h='h-10' (ngModelChange)='search($event)'
-            [loading]='loading' [isDisabled]='disabled()' ngt-stylizable #inputSearch>
+        <ngt-input *ngIf="searchable" class="block w-full" [class.pl-2]="allowSelectAll" [name]='searchInputName'
+            [(ngModel)]='searchTerm' placeholder='Buscar...' [allowClear]='true' [jit]='true' h='h-10'
+            (ngModelChange)='search($event)' [loading]='loading' [isDisabled]='disabled()' ngt-stylizable #inputSearch>
         </ngt-input>
     </div>
 
