@@ -1,5 +1,7 @@
 <label *ngIf="label && !shining" class="flex text-xs" [class.mb-2]='!hasValidationErrors()'>
-    {{ label }}:
+    <span class="truncate" [title]="label">
+        {{ label }}:
+    </span>
 
     <span *ngIf="isRequired" class="text-red-500 font-bold text-xs ml-1">*</span>
 
