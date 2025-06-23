@@ -1,6 +1,8 @@
 <label class="{{ shining ? '' : 'block' }} mb-2 flex {{ ngtStyle.compile(['text', 'font', 'color.text']) }}"
     *ngIf="label" [hidden]='shining'>
-    {{ label }}:
+    <span class="truncate" [title]="label">
+        {{ label }}:
+    </span>
 
     <span class="text-red-500 font-bold text-md ml-1" *ngIf="isRequired">*</span>
 
