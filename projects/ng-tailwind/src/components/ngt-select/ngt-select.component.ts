@@ -36,6 +36,15 @@ import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } fr
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 import { delay } from '../../helpers/promise/promise-helper';
 
+export enum NgtSelectDropdownPanelHeight {
+    AUTO = 'auto',
+    XS = 'xs',
+    MD = 'md',
+    SM = 'sm',
+    LG = 'lg',
+    XL = 'xl'
+}
+
 @Component({
     selector: 'ngt-select',
     templateUrl: './ngt-select.component.html',
@@ -46,7 +55,8 @@ import { delay } from '../../helpers/promise/promise-helper';
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnDestroy, OnInit, DoCheck {
     @ViewChild(NgSelectComponent, { static: true }) public ngSelectComponent: NgSelectComponent;
@@ -708,13 +718,4 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
     }
-}
-
-export enum NgtSelectDropdownPanelHeight {
-    AUTO = 'auto',
-    XS = 'xs',
-    MD = 'md',
-    SM = 'sm',
-    LG = 'lg',
-    XL = 'xl'
 }

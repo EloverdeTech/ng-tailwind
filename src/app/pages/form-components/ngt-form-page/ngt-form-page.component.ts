@@ -3,7 +3,8 @@ import { NgtFormComponent, NgtFormState } from 'projects/ng-tailwind/src/public-
 
 @Component({
     selector: 'app-ngt-form-page',
-    templateUrl: './ngt-form-page.component.html'
+    templateUrl: './ngt-form-page.component.html',
+    standalone: false
 })
 export class NgtFormPageComponent implements OnInit {
   @ViewChild(NgtFormComponent, { static: true }) private ngtFormComponent: NgtFormComponent;

@@ -5,6 +5,7 @@ import { NgtRadioButtonComponent } from '../ngt-radio-button.component';
 @Component({
     selector: '[ngt-radio-button-container]',
     templateUrl: './ngt-radio-button-container.component.html',
+    standalone: false
 })
 export class NgtRadioButtonContainerComponent {
     @Output() public onActiveRadioButtonChange = new EventEmitter();

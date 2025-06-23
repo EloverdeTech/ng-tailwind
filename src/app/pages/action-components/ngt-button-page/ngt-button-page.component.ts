@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'app-ngt-button-page',
-    templateUrl: './ngt-button-page.component.html'
+    templateUrl: './ngt-button-page.component.html',
+    standalone: false
 })
 export class NgtButtonPageComponent {
     public codeExample = `

@@ -1,6 +1,12 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, EventEmitter, HostListener, Output, TemplateRef } from '@angular/core';
 
+export enum NgtPopoverPosition {
+    DEFAULT = 'TOP',
+    TOP = 'TOP',
+    BOTTOM = 'BOTTOM',
+}
+
 @Component({
     selector: 'ngt-popover-tooltip',
     templateUrl: './ngt-popover-tooltip.component.html',
@@ -11,9 +17,10 @@ import { Component, EventEmitter, HostListener, Output, TemplateRef } from '@ang
                 animate(200)
             ])
         ]),
-    ]
+    ],
+    standalone: false
 })
-export class NgtPopoverTooltipComponent{
+export class NgtPopoverTooltipComponent {
     @Output() public onMouseHoverEvent: EventEmitter<void> = new EventEmitter();
     @Output() public onMouseLeaveEvent: EventEmitter<void> = new EventEmitter();
 
@@ -39,10 +46,4 @@ export class NgtPopoverTooltipComponent{
     public onMouseEnter(): void {
         this.onMouseHoverEvent.emit();
     }
-}
-
-export enum NgtPopoverPosition {
-    DEFAULT = 'TOP',
-    TOP = 'TOP',
-    BOTTOM = 'BOTTOM',
 }

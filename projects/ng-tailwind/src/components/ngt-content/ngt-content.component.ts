@@ -5,7 +5,8 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 
 @Component({
     selector: 'ngt-content',
-    templateUrl: './ngt-content.component.html'
+    templateUrl: './ngt-content.component.html',
+    standalone: false
 })
 export class NgtContentComponent {
     @Input() public ngtStyle: NgtStylizableService;

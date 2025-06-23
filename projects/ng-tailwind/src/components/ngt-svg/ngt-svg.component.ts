@@ -17,7 +17,8 @@ import { SvgIconComponent } from 'angular-svg-icon';
     host: {
         class: 'flex justify-center'
     },
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class NgtSvgComponent implements AfterViewChecked, OnChanges {
     @Input() public src: string;
@@ -49,7 +50,7 @@ export class NgtSvgComponent implements AfterViewChecked, OnChanges {
                     svgElement.classList.add('fill-current');
                     svgElement.classList.add('self-center');
 
-                    new String(this.class).trim().split(' ').forEach(className => {
+                    `${this.class}`.trim().split(' ').forEach(className => {
                         if (className) {
                             svgElement.classList.add(className);
                         }

@@ -15,7 +15,8 @@ import { Subscription } from 'rxjs';
 import { NgtContextMenuComponent, NgtContextMenuOptionInterface } from './ngt-context-menu.component';
 
 @Directive({
-    selector: '[ngt-contextmenu]'
+    selector: '[ngt-contextmenu]',
+    standalone: false
 })
 export class NgtContextMenuDirective implements OnDestroy {
     @Output() public onNgtContextMenuClick: EventEmitter<NgtContextMenuOptionInterface> = new EventEmitter();

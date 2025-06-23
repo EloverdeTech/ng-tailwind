@@ -23,10 +23,40 @@ import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 import { NgtPaginationComponent } from '../ngt-pagination/ngt-pagination.component';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
+export enum NgtDatatableType {
+    REMOTE = 'REMOTE',
+    FIXED = 'FIXED'
+}
+
+export enum NgtDatatableSearchType {
+    DEFAULT = 'DEFAULT',
+    SILENT = 'SILENT',
+}
+
+export enum NgtDatatableParam {
+    STAY_IN_PAGE = 1,
+    RESET_PAGE = 0,
+    ENABLE_LOADER = 1,
+    DISABLE_LOADER = 0
+}
+
+export class NgtCheckedElement {
+    public id: string;
+    public checked: boolean;
+    public reference: any;
+}
+
+export class NgtCustomFilter {
+    public term: string;
+    public tagValue: string;
+    public tagLabel?: string;
+}
+
 @Component({
     selector: 'ngt-datatable',
     templateUrl: './ngt-datatable.component.html',
-    styleUrls: ['./ngt-datatable.component.css']
+    styleUrls: ['./ngt-datatable.component.css'],
+    standalone: false
 })
 export class NgtDatatableComponent implements OnInit, OnDestroy {
     @ViewChild('table', { static: true }) public table: ElementRef;
@@ -399,18 +429,20 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
 
         if (requestedFilters) {
             for (const reference in requestedFilters) {
-                const filter = requestedFilters[reference];
+                if (Object.prototype.hasOwnProperty.call(requestedFilters, reference)) {
+                    const filter = requestedFilters[reference];
 
-                if (this.isValidFilter(filter, reference)) {
-                    if (filter instanceof NgtCustomFilter) {
-                        if (filter.tagLabel) {
-                            this.filtersDescription[reference] = filter.tagLabel;
-                            this.applyFiltersDescription();
+                    if (this.isValidFilter(filter, reference)) {
+                        if (filter instanceof NgtCustomFilter) {
+                            if (filter.tagLabel) {
+                                this.filtersDescription[reference] = filter.tagLabel;
+                                this.applyFiltersDescription();
+                            }
+
+                            qualifiedFilters[reference] = filter.term;
+                        } else {
+                            qualifiedFilters[reference] = filter;
                         }
-
-                        qualifiedFilters[reference] = filter.term;
-                    } else {
-                        qualifiedFilters[reference] = filter;
                     }
                 }
             }
@@ -516,33 +548,4 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
     }
-}
-
-export enum NgtDatatableType {
-    REMOTE = 'REMOTE',
-    FIXED = 'FIXED'
-}
-
-export enum NgtDatatableSearchType {
-    DEFAULT = 'DEFAULT',
-    SILENT = 'SILENT',
-}
-
-export enum NgtDatatableParam {
-    STAY_IN_PAGE = 1,
-    RESET_PAGE = 0,
-    ENABLE_LOADER = 1,
-    DISABLE_LOADER = 0
-}
-
-export class NgtCheckedElement {
-    public id: string;
-    public checked: boolean;
-    public reference: any;
-}
-
-export class NgtCustomFilter {
-    public term: string;
-    public tagValue: string;
-    public tagLabel?: string;
 }

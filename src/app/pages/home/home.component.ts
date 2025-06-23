@@ -5,7 +5,8 @@ import { sidenavMenuMetadata } from '../../resources/meta/sidenav-menu.meta';
 
 @Component({
     selector: 'app-home',
-    templateUrl: './home.component.html'
+    templateUrl: './home.component.html',
+    standalone: false
 })
 export class HomeComponent {
     public sidenavMenuMetadata = sidenavMenuMetadata;

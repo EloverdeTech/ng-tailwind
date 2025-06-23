@@ -43,7 +43,8 @@ import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
-    ]
+    ],
+    standalone: false
 })
 export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDestroy, AfterContentChecked {
     @ViewChild('container') public container: ElementRef;

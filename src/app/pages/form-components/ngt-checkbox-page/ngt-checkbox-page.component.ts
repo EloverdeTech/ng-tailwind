@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'ngt-checkbox-page',
-    templateUrl: './ngt-checkbox-page.component.html'
+    templateUrl: './ngt-checkbox-page.component.html',
+    standalone: false
 })
 export class NgtCheckboxPageComponent {
     public ngModelOne: boolean = false;

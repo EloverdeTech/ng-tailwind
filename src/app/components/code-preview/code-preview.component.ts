@@ -4,7 +4,8 @@ declare let hljs: any;
 
 @Component({
     selector: 'code-preview',
-    templateUrl: './code-preview.component.html'
+    templateUrl: './code-preview.component.html',
+    standalone: false
 })
 export class CodePreviewComponent implements AfterViewInit {
     @Input() public lang = 'html';

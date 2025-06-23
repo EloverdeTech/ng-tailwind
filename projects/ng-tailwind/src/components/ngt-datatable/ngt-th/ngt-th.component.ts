@@ -23,7 +23,8 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
 
 @Component({
     selector: '[ngt-th]',
-    templateUrl: './ngt-th.component.html'
+    templateUrl: './ngt-th.component.html',
+    standalone: false
 })
 export class NgtThComponent implements OnChanges, OnDestroy {
     @ViewChild('searchInput') public searchInput: NgtInputComponent;

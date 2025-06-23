@@ -1,4 +1,6 @@
-import { Component, ElementRef, Injector, Input, Optional, Self, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+    Component, ElementRef, Injector, Input, Optional, Self, ViewChild, ViewEncapsulation
+} from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
@@ -7,7 +9,8 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 @Component({
     selector: 'ngt-helper',
     templateUrl: './ngt-helper.component.html',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class NgtHelperComponent {
     @ViewChild('dropdownRef', { static: true }) public dropdownRef: ElementRef;

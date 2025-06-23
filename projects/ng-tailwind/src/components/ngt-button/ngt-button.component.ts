@@ -22,7 +22,8 @@ import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 @Component({
     selector: 'ngt-button',
     templateUrl: './ngt-button.component.html',
-    styleUrls: ['./ngt-button.component.css']
+    styleUrls: ['./ngt-button.component.css'],
+    standalone: false
 })
 export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
     @Input() public href: string;

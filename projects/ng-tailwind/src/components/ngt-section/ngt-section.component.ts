@@ -1,5 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, Input, Optional, Output, Self, ViewChild } from '@angular/core';
+import {
+    AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, Input, Optional, Output, Self, ViewChild
+} from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -15,7 +17,8 @@ import { NgtAbilityValidationService } from '../../services/validation/ngt-abili
                 animate(400)
             ])
         ]),
-    ]
+    ],
+    standalone: false
 })
 export class NgtSectionComponent implements AfterViewInit {
     @ViewChild('elementRef') public elementRef: ElementRef;

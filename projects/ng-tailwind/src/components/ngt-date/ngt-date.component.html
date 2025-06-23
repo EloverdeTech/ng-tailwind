@@ -1,28 +1,27 @@
-<label class="{{ shining ? '' : 'block' }} mb-2 {{ngtStyle.compile(['text', 'fontCase'])}} flex" *ngIf="label"
+<label *ngIf="label" class="{{ shining ? '' : 'block' }} mb-2 {{ngtStyle.compile(['text', 'fontCase'])}} flex"
     [hidden]='shining'>
-
     <span class="truncate" [title]="label">
         {{ label }}:
     </span>
 
-    <span class="text-red-500 font-bold text-xxs ml-1" *ngIf="isRequired">*</span>
+    <span *ngIf="isRequired" class="text-red-500 font-bold text-xxs ml-1">*</span>
 
-    <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
-        [helperReverseYPosition]="helperReverseYPosition" class="ml-1">
+    <ngt-helper *ngIf="helpText" class="ml-1" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
+        [helperReverseYPosition]="helperReverseYPosition">
         {{ helpText }}
     </ngt-helper>
 </label>
 
-<div class="relative" [hidden]='shining || disabled() || isReadonly'>
-    <div
-        class="overflow-hidden {{ ngtStyle.compile(['h', 'color.text']) }} {{ hasErrors() ? 'border-error' : 'border-normal' }}">
-        <ng2-flatpickr class="block h-full" [config]='dateConfig' disabled='true' placeholder="{{ placeholder }}"
-            #ng2FlatpickrComponent>
-        </ng2-flatpickr>
+<div [hidden]="shining || disabled() || isReadonly" class="relative">
+    <div class="overflow-hidden border {{ ngtStyle.compile(['h', 'color.text', 'px', 'py', 'text', 'rounded', 'color.text', 'color.bg', 'color.border']) }}"
+        [class.border-error]="hasErrors()">
+        <ev-date-picker class="block h-full w-full" [config]="dateConfig" disabled="true" [placeholder]="placeholder"
+            #evDatePicker>
+        </ev-date-picker>
 
         <div *ngIf="allowClear && value"
-            class="flex h-full absolute items-center right-0 top-0 w-auto cursor-pointer {{showCalendarIcon ? 'mr-5' : 'mr-2'}}"
-            (click)='clearInput(true)'>
+            class="flex h-full absolute items-center right-0 top-0 w-auto cursor-pointer {{ showCalendarIcon ? 'mr-5' : 'mr-2' }}"
+            (click)="clearInput(true)">
             <svg class="fill-current text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path
                     d="M19.1 17.2l-5.3-5.3 5.3-5.3-1.8-1.8-5.3 5.4-5.3-5.3-1.8 1.7 5.3 5.3-5.3 5.3L6.7 19l5.3-5.3 5.3 5.3 1.8-1.8z" />
@@ -39,20 +38,20 @@
     </div>
 </div>
 
-<ng-container *ngIf='shining'>
+<ng-container *ngIf="shining">
     <div class="flex">
         <ngt-shining class="h-10 w-full"></ngt-shining>
     </div>
 </ng-container>
 
-<ng-container *ngIf='disabled() || isReadonly'>
+<ng-container *ngIf="disabled() || isReadonly">
     <div
         class="{{disabled() ? 'disabledDiv' : ''}} {{ngtStyle.compile(['h'])}} w-full text-xs px-4 rounded appearance-none flex items-center border border-gray-400">
         {{ getFormattedNativeValue() }}
     </div>
 </ng-container>
 
-<input *ngIf='componentReady' type="hidden" [ngModel]="value" [name]="name" [value]="value">
+<input *ngIf="componentReady" type="hidden" [ngModel]="value" [name]="name" [value]="value">
 
 <ng-content></ng-content>
 <ngt-validation [control]="formControl" [container]="formContainer"></ngt-validation>

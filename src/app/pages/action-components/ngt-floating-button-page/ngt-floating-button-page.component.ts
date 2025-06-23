@@ -3,7 +3,8 @@ import { NgtFloatingButtonMenu, NgtFloatingButtonType } from 'projects/ng-tailwi
 
 @Component({
     selector: 'app-ngt-floating-button-page',
-    templateUrl: './ngt-floating-button-page.component.html'
+    templateUrl: './ngt-floating-button-page.component.html',
+    standalone: false
 })
 export class NgtFloatingButtonPageComponent {
     public codeExample = `

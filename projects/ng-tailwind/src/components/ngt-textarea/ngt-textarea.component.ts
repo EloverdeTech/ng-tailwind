@@ -29,7 +29,8 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
-    ]
+    ],
+    standalone: false
 })
 export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
     @ViewChild("element", { static: true }) public element: ElementRef;

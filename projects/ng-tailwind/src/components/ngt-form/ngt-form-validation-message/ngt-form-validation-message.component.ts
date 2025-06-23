@@ -5,6 +5,7 @@ import { NgtTranslateService } from '../../../services/http/ngt-translate.servic
 @Component({
     selector: 'ngt-form-validation-message',
     templateUrl: './ngt-form-validation-message.component.html',
+    standalone: false
 })
 export class NgtFormValidationMessageComponent {
     @Input() public canShowValidationMessage: boolean;

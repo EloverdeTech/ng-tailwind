@@ -5,7 +5,8 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 
 @Component({
     selector: '[ngt-tbody]',
-    templateUrl: './ngt-tbody.component.html'
+    templateUrl: './ngt-tbody.component.html',
+    standalone: false
 })
 export class NgtTbodyComponent {
     public ngtStyle: NgtStylizableService;
