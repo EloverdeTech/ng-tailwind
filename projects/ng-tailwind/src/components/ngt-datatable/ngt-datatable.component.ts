@@ -182,7 +182,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             stayInPage ? this.ngtPagination.getCurrentPage() : 1,
             false,
             loader
-        ).then(() => !this.data?.length ? this.apply(1, false) : null);
+        ).then(() => !this.data?.length && stayInPage ? this.apply(1, false) : null);
     }
 
     public getData() {
