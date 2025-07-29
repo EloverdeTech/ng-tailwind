@@ -745,7 +745,7 @@ span.flatpickr-weekday {
     text-align: center;
     outline: 0;
     display: block;
-    height: 0;
+    height: 30px;
     line-height: 30px;
     max-height: 40px;
     -webkit-box-sizing: border-box;
@@ -755,6 +755,7 @@ span.flatpickr-weekday {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+    border-top: 1px solid #e6e6e6;
 }
 
 .flatpickr-time:after {
