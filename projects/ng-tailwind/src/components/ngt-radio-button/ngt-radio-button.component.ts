@@ -32,7 +32,8 @@ import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
-    ]
+    ],
+    standalone: false
 })
 export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterViewInit, OnDestroy {
     @ViewChild('element', { static: true }) public element: ElementRef;

@@ -2,7 +2,8 @@ import { Component, EventEmitter, Output, TemplateRef } from '@angular/core';
 
 @Component({
     selector: 'ngt-context-menu',
-    templateUrl: './ngt-context-menu.component.html'
+    templateUrl: './ngt-context-menu.component.html',
+    standalone: false
 })
 
 export class NgtContextMenuComponent {

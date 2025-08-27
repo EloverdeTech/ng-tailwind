@@ -27,7 +27,8 @@ import { NgtAbilityValidationService } from '../../services/validation/ngt-abili
                 animate(300)
             ])
         ])
-    ]
+    ],
+    standalone: false
 })
 export class NgtModalComponent implements AfterViewInit {
     @Input() public customLayout: boolean = false;

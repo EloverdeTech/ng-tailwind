@@ -43,7 +43,8 @@ import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
-    ]
+    ],
+    standalone: false
 })
 export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, OnDestroy, OnChanges {
     @ViewChild('containerRef') public containerRef: ElementRef;

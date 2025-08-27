@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
     selector: 'ngt-action-page',
-    templateUrl: './ngt-action-page.component.html'
+    templateUrl: './ngt-action-page.component.html',
+    standalone: false
 })
 export class NgtActionPageComponent {
     public codeExample = `

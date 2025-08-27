@@ -12,7 +12,8 @@ import { NgtDropzoneFileTypeEnum } from '../ngt-dropzone.meta';
             provide: NgxDropzonePreviewComponent,
             useExisting: CustomDropzonePreviewComponent
         }
-    ]
+    ],
+    standalone: false
 })
 export class CustomDropzonePreviewComponent extends NgxDropzonePreviewComponent implements OnInit {
     public fileType: NgtDropzoneFileTypeEnum;

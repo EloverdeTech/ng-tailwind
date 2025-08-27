@@ -5,7 +5,8 @@ import { NgtDropzoneFile, NgtDropzoneFileTypeEnum } from '../ngt-dropzone.meta';
 @Component({
     selector: 'ngt-dropzone-view',
     templateUrl: './ngt-dropzone-view.component.html',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class NgtDropzoneViewComponent {
     @Input() public resources: Array<any>;

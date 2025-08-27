@@ -1,6 +1,8 @@
-import { AfterContentInit, Component, ElementRef, Injector, OnDestroy, Optional, Self, SkipSelf, ViewChild } from '@angular/core';
-import { NgtTranslateService } from '../../../services/http/ngt-translate.service';
+import {
+    AfterContentInit, Component, ElementRef, Injector, OnDestroy, Optional, Self, SkipSelf, ViewChild
+} from '@angular/core';
 import { Subscription } from 'rxjs';
+import { NgtTranslateService } from '../../../services/http/ngt-translate.service';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
@@ -9,7 +11,8 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
 
 @Component({
     selector: '[ngt-th-check]',
-    templateUrl: './ngt-th-check.component.html'
+    templateUrl: './ngt-th-check.component.html',
+    standalone: false
 })
 export class NgtThCheckComponent implements AfterContentInit, OnDestroy {
     @ViewChild(NgtCheckboxComponent) public ngtCheckbox: NgtCheckboxComponent;

@@ -4,6 +4,21 @@ import { Component, Injector, Input, Optional, Self } from '@angular/core';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
+export interface NgtFloatingButtonMenu {
+    name?: string;
+    type: NgtFloatingButtonType;
+    icon?: string;
+    tooltip?: string;
+    externalLink?: boolean;
+    url?: string;
+    action?: Function;
+}
+
+export enum NgtFloatingButtonType {
+    NAVIGATION = 'NAVIGATION',
+    ACTION = 'ACTION'
+}
+
 @Component({
     selector: 'ngt-floating-button',
     templateUrl: './ngt-floating-button.component.html',
@@ -14,7 +29,6 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
                 animate(300)
             ])
         ]),
-
         trigger('openClose', [
             state('open', style({
                 transform: 'rotate(180deg)'
@@ -29,7 +43,8 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
                 animate('0.5s ease-in')
             ]),
         ]),
-    ]
+    ],
+    standalone: false
 })
 export class NgtFloatingButtonComponent {
     @Input() public menus: Array<NgtFloatingButtonMenu>;
@@ -89,19 +104,4 @@ export class NgtFloatingButtonComponent {
     public isTypeNavigation(menu: NgtFloatingButtonMenu) {
         return menu.type == NgtFloatingButtonType.NAVIGATION;
     }
-}
-
-export interface NgtFloatingButtonMenu {
-    name?: string;
-    type: NgtFloatingButtonType;
-    icon?: string;
-    tooltip?: string;
-    externalLink?: boolean;
-    url?: string;
-    action?: Function;
-}
-
-export enum NgtFloatingButtonType {
-    NAVIGATION = 'NAVIGATION',
-    ACTION = 'ACTION'
 }

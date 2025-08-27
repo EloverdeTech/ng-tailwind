@@ -5,7 +5,8 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 
 @Component({
     selector: 'ngt-modal-body',
-    templateUrl: './ngt-modal-body.component.html'
+    templateUrl: './ngt-modal-body.component.html',
+    standalone: false
 })
 export class NgtModalBodyComponent implements AfterViewInit {
     @Input() public ngtStyle: NgtStylizableService;

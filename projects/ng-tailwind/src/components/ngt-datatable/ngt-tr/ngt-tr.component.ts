@@ -19,7 +19,8 @@ import { NgtTheadComponent } from '../ngt-thead/ngt-thead.component';
     selector: '[ngt-tr]',
     templateUrl: './ngt-tr.component.html',
     styleUrls: ['./ngt-tr.component.css'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class NgtTrComponent {
     @HostBinding('class.evenStripped') @Input() public evenStripped: boolean;

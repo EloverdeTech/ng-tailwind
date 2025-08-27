@@ -3,7 +3,8 @@ import { Directive, Input } from '@angular/core';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 
 @Directive({
-    selector: '[ngt-stylizable]'
+    selector: '[ngt-stylizable]',
+    standalone: false
 })
 export class NgtStylizableDirective {
     private ngtStylizableService: NgtStylizableService;

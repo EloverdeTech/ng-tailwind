@@ -5,7 +5,8 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 
 @Component({
     selector: 'ngt-tag',
-    templateUrl: './ngt-tag.component.html'
+    templateUrl: './ngt-tag.component.html',
+    standalone: false
 })
 export class NgtTagComponent {
     @Input() public icon: string;
