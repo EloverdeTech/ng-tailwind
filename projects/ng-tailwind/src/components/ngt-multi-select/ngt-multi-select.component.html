@@ -72,14 +72,13 @@
     </div>
 </div>
 
-<div class="{{ shining ? 'hidden' : 'flex' }} w-full items-center mt-2">
+<div *ngIf="allowDisplayOnlySelected" class="{{ shining ? 'hidden' : 'flex' }} w-full items-center mt-2">
     <span class="text-xs mr-4">
         {{ selectedElements?.length || 0 }} / {{ itemsTotal || 0 }}
     </span>
 
-    <ngt-checkbox *ngIf="allowDisplayOnlySelected" class="flex" label="Visualizar selecionados"
-        [name]='displayOnlySelectedName' [(ngModel)]="displayOnlySelected" [isDisabled]='loading || disabled()' h='h-5'
-        w='w-5' ngt-stylizable>
+    <ngt-checkbox class="flex" label="Visualizar selecionados" [name]='displayOnlySelectedName'
+        [(ngModel)]="displayOnlySelected" [isDisabled]='loading || disabled()' h='h-5' w='w-5' ngt-stylizable>
     </ngt-checkbox>
 </div>
 
