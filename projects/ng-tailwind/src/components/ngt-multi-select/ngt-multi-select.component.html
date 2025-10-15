@@ -77,8 +77,9 @@
         {{ selectedElements?.length || 0 }} / {{ itemsTotal || 0 }}
     </span>
 
-    <ngt-checkbox class="flex" label="Visualizar selecionados" [name]='displayOnlySelectedName'
-        [(ngModel)]="displayOnlySelected" [isDisabled]='loading || disabled()' h='h-5' w='w-5' ngt-stylizable>
+    <ngt-checkbox *ngIf="allowDisplayOnlySelected" class="flex" label="Visualizar selecionados"
+        [name]='displayOnlySelectedName' [(ngModel)]="displayOnlySelected" [isDisabled]='loading || disabled()' h='h-5'
+        w='w-5' ngt-stylizable>
     </ngt-checkbox>
 </div>
 

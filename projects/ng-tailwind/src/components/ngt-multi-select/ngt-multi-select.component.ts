@@ -73,6 +73,7 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
     @Input() public searchable: boolean = true;
     @Input() public allowOriginalItemsUnselect: boolean = true;
     @Input() public allowSelectAll: boolean = true;
+    @Input() public allowDisplayOnlySelected: boolean = true;
     @Input() public autoSelectUniqueOption: boolean;
 
     /** Validation */
