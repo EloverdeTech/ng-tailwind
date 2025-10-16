@@ -382,9 +382,13 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
             this.inSearch = true;
 
             if (this.items?.length) {
-                this.selectableElementsOnSearch = this.selectableElements.filter(
-                    item => this.getSelectableElementValue(item).includes(term)
-                );
+                const normalizedTerm = term.toLowerCase().trim();
+
+                this.selectableElementsOnSearch = this.selectableElements.filter(item => {
+                    const value = String(this.getSelectableElementValue(item) ?? '').toLowerCase();
+
+                    return value.includes(normalizedTerm);
+                });
             } else {
                 this.loadData(this.itemsPerPage, term);
             }
