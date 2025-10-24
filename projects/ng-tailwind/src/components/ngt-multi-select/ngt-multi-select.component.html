@@ -72,7 +72,7 @@
     </div>
 </div>
 
-<div class="{{ shining ? 'hidden' : 'flex' }} w-full items-center mt-2">
+<div *ngIf="allowDisplayOnlySelected" class="{{ shining ? 'hidden' : 'flex' }} w-full items-center mt-2">
     <span class="text-xs mr-4">
         {{ selectedElements?.length || 0 }} / {{ itemsTotal || 0 }}
     </span>
