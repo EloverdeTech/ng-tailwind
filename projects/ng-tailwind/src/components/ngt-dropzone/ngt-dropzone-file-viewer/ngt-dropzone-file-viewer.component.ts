@@ -6,7 +6,8 @@ import { NgtTranslateService } from '../../../services/http/ngt-translate.servic
 @Component({
     selector: 'ngt-dropzone-file-viewer',
     styleUrls: ['./ngt-dropzone-file-viewer.component.css'],
-    templateUrl: './ngt-dropzone-file-viewer.component.html'
+    templateUrl: './ngt-dropzone-file-viewer.component.html',
+    standalone: false
 })
 export class NgtDropzoneFileViewerComponent {
     @ViewChild(EloverdeDocViewerComponent) public eloverdeDocViewer: EloverdeDocViewerComponent;

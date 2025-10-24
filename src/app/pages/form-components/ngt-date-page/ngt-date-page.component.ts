@@ -3,7 +3,8 @@ import { NgtDateLocale, NgtDateMode } from 'projects/ng-tailwind/src/public-api'
 
 @Component({
     selector: 'app-ngt-date-page',
-    templateUrl: './ngt-date-page.component.html'
+    templateUrl: './ngt-date-page.component.html',
+    standalone: false
 })
 export class NgtDatePageComponent implements OnInit {
     public dateOne: string;

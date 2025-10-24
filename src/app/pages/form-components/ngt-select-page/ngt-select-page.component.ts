@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-ngt-select-page',
-    templateUrl: './ngt-select-page.component.html'
+    templateUrl: './ngt-select-page.component.html',
+    standalone: false
 })
 export class NgtSelectPageComponent implements OnInit {
     public exampleItems = [

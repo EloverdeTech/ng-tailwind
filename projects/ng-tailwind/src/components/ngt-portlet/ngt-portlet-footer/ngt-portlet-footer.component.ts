@@ -5,7 +5,8 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 
 @Component({
     selector: 'ngt-portlet-footer',
-    templateUrl: './ngt-portlet-footer.component.html'
+    templateUrl: './ngt-portlet-footer.component.html',
+    standalone: false
 })
 export class NgtPortletFooterComponent {
     public ngtStyle: NgtStylizableService;

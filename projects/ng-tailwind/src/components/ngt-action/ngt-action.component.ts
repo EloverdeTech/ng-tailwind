@@ -18,7 +18,8 @@ import { NgtModalBodyComponent } from '../ngt-modal/ngt-modal-body/ngt-modal-bod
 
 @Component({
     selector: 'ngt-action',
-    templateUrl: './ngt-action.component.html'
+    templateUrl: './ngt-action.component.html',
+    standalone: false
 })
 export class NgtActionComponent implements OnDestroy {
     @Input() public href: string;

@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-ngt-textarea-page',
-    templateUrl: './ngt-textarea-page.component.html'
+    templateUrl: './ngt-textarea-page.component.html',
+    standalone: false
 })
 export class NgtTextareaPageComponent implements OnInit {
     public ngtTextarea: string;

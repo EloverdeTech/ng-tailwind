@@ -6,7 +6,8 @@ import {
 
 @Component({
     selector: 'app-ngt-dropzone-page',
-    templateUrl: './ngt-dropzone-page.component.html'
+    templateUrl: './ngt-dropzone-page.component.html',
+    standalone: false
 })
 export class NgtDropzonePageComponent implements OnInit {
     public ngtDropzonePreviewTypeOne = NgtDropzonePreviewType.IMAGE;

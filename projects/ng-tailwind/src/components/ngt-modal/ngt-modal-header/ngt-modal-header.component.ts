@@ -5,7 +5,8 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 
 @Component({
     selector: 'ngt-modal-header',
-    templateUrl: './ngt-modal-header.component.html'
+    templateUrl: './ngt-modal-header.component.html',
+    standalone: false
 })
 export class NgtModalHeaderComponent {
     public static onCloseModalByHeader: EventEmitter<void> = new EventEmitter();

@@ -22,4 +22,4 @@ module.exports = {
     content: [
         './dist/ng-tailwind/**/*.js'
     ]
-}
+};

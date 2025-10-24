@@ -19,19 +19,25 @@ import { getIdFromUri } from '../../helpers/routing/route';
 import { NgtHttpFormService } from '../../services/http/ngt-http-form.service';
 import { NgtAbilityValidationService } from '../../services/validation/ngt-ability-validation.service';;
 
+export enum NgtFormState {
+    CREATING = 'CREATING',
+    EDITING = 'EDITING'
+};
+
 @Component({
     selector: 'ngt-form',
     templateUrl: './ngt-form.component.html',
+    standalone: false
 })
 export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
+    public static onSubmitInvalidForm: EventEmitter<NgForm> = new EventEmitter;
+
     @Input() public guessFormState: boolean = true;
     @Input() public message: string = '';
     @Input() public routeIdentifier: string = 'id';
     @Input() public resource: any;
     @Input() public customLayout: boolean;
     @Input() public isDisabled: boolean;
-
-    @Output() public static onSubmitInvalidForm: EventEmitter<NgForm> = new EventEmitter;
 
     @Output() public onCreating: EventEmitter<any> = new EventEmitter;
     @Output() public onEditing: EventEmitter<any> = new EventEmitter;
@@ -219,7 +225,7 @@ export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.setFormState(NgtFormState.CREATING);
                     }
 
-                    observer.next();
+                    observer.next(null);
                 })
             );
         });
@@ -230,8 +236,3 @@ export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
         this.subscriptions = [];
     }
 }
-
-export enum NgtFormState {
-    CREATING = 'CREATING',
-    EDITING = 'EDITING'
-};

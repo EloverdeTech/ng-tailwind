@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-ngt-input-page',
-    templateUrl: './ngt-input-page.component.html'
+    templateUrl: './ngt-input-page.component.html',
+    standalone: false
 })
 export class NgtInputPageComponent implements OnInit {
     public allowClearInput: string;

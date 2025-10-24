@@ -9,12 +9,13 @@ import {
     ViewContainerRef,
 } from '@angular/core';
 
+import { Subscription } from 'rxjs';
 import { NgtPopoverPosition, NgtPopoverTooltipComponent } from './ngt-popover-tooltip/ngt-popover-tooltip.component';
 import { NgtPopoverOpenMethod } from './ngt-popover.component';
-import { Subscription } from 'rxjs';
 
 @Directive({
-    selector: '[ngt-popover]'
+    selector: '[ngt-popover]',
+    standalone: false
 })
 export class NgtPopoverDirective implements OnDestroy {
     @Input() public ngtPopoverContent: string;
@@ -28,8 +29,8 @@ export class NgtPopoverDirective implements OnDestroy {
     @Input() public openMethod: 'HOVER' | 'CLICK' = NgtPopoverOpenMethod.HOVER;
 
     private componentRef: ComponentRef<NgtPopoverTooltipComponent> = null;
-    private dismissTimeoutInstance: NodeJS.Timeout;
-    private showTimeoutInstance: NodeJS.Timeout;
+    private dismissTimeoutInstance: any;
+    private showTimeoutInstance: any;
 
     private toolTipMouseHoverSubscription: Subscription;
     private toolTipMouseLeaveSubscription: Subscription;
@@ -135,7 +136,7 @@ export class NgtPopoverDirective implements OnDestroy {
         this.toolTipMouseHoverSubscription = this.componentRef.instance
             .onMouseHoverEvent
             .subscribe(() => {
-                if(this.dismissTimeoutInstance){
+                if (this.dismissTimeoutInstance) {
                     clearTimeout(this.dismissTimeoutInstance);
                 }
             });

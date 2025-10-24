@@ -18,6 +18,13 @@ import { getEnumFromString } from '../../helpers/enum/enum';
 import { uuid } from '../../helpers/uuid';
 import { NgtDropdownContainerComponent } from './ngt-dropdown-container/ngt-dropdown-container.component';
 
+export enum NgtDropdownOpenMethod {
+    CLICK = 'CLICK',
+    POPOVER_CLICK = 'POPOVER_CLICK',
+    RIGHT_CLICK = 'RIGHT_CLICK',
+    HOVER = 'HOVER'
+}
+
 @Component({
     selector: 'ngt-dropdown',
     templateUrl: './ngt-dropdown.component.html',
@@ -30,7 +37,8 @@ import { NgtDropdownContainerComponent } from './ngt-dropdown-container/ngt-drop
                 animate(300)
             ]),
         ]),
-    ]
+    ],
+    standalone: false
 })
 export class NgtDropdownComponent implements OnDestroy {
     @ViewChild('container', { static: true }) public containerRef: ElementRef;
@@ -225,11 +233,4 @@ export class NgtDropdownComponent implements OnDestroy {
         return this.openMethod == NgtDropdownOpenMethod.CLICK
             || this.openMethod == NgtDropdownOpenMethod.POPOVER_CLICK;
     }
-}
-
-export enum NgtDropdownOpenMethod {
-    CLICK = 'CLICK',
-    POPOVER_CLICK = 'POPOVER_CLICK',
-    RIGHT_CLICK = 'RIGHT_CLICK',
-    HOVER = 'HOVER'
 }

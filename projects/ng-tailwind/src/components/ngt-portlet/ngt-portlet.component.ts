@@ -14,7 +14,8 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
                 animate(500)
             ])
         ])
-    ]
+    ],
+    standalone: false
 })
 export class NgtPortletComponent {
     @Input() public caption: string;
