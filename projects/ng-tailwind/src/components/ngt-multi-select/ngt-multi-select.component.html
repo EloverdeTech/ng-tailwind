@@ -16,7 +16,7 @@
 
 <div class="{{ shining ? 'hidden' : 'flex flex-col' }} border w-full rounded {{ ngtStyle.compile(['h']) }}"
     style="min-height: 13rem;" [class.border-red-500]='hasValidationErrors()' [class.disabled-background]='disabled()'>
-    <div class="flex items-center w-full p-2 border-b">
+    <div *ngIf="allowSelectAll || searchable" class="flex items-center w-full p-2 border-b">
         <ngt-checkbox *ngIf="allowSelectAll" class="flex" title="Selecionar todos" [isDisabled]='loading || disabled()'
             [label]="!searchable ? 'Selecionar todos' : ''" [(ngModel)]="selectAllCheckbox"
             [name]="selectAllCheckboxName" [isClickDisabled]='true' h='h-4' w='w-4' (click)='selectAll()'

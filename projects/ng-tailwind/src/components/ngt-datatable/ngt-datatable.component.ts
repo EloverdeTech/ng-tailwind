@@ -75,6 +75,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     @Input() public defaultFilters: any = {};
     @Input() public filtersDescription = {};
     @Input() public canSelectAllRegisters: boolean = false;
+    @Input() public headBgColor: string;
 
     @Output() public onDataChange: EventEmitter<any> = new EventEmitter();
     @Output() public onClearFilter: EventEmitter<any> = new EventEmitter();

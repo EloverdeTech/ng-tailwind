@@ -1,4 +1,5 @@
 import {
+    AfterViewInit,
     Component,
     ElementRef,
     EventEmitter,
@@ -26,7 +27,7 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
     templateUrl: './ngt-th.component.html',
     standalone: false
 })
-export class NgtThComponent implements OnChanges, OnDestroy {
+export class NgtThComponent implements OnChanges, OnDestroy, AfterViewInit {
     @ViewChild('searchInput') public searchInput: NgtInputComponent;
     @ViewChild('modal', { static: true }) public modal: TemplateRef<any>;
 
@@ -94,6 +95,10 @@ export class NgtThComponent implements OnChanges, OnDestroy {
         if (changes.searchLabel && this.checkDataTable) {
             this.ngtDataTable.setFilterDescription(this.reference, this.searchLabel);
         }
+    }
+
+    public ngAfterViewInit(): void {
+        this.applyHeadBgColor();
     }
 
     public ngOnDestroy() {
@@ -246,6 +251,22 @@ export class NgtThComponent implements OnChanges, OnDestroy {
             px: 'px-0',
             py: 'py-0'
         });
+    }
+
+    private applyHeadBgColor(): void {
+        const headBgColor = (this.ngtDataTable && this.ngtDataTable.headBgColor);
+
+        if (headBgColor) {
+            const element = this.hostElement.nativeElement;
+
+            Array.from(element.classList).forEach((cls: string) => {
+                if (cls.startsWith('bg-')) {
+                    element.classList.remove(cls);
+                }
+            });
+
+            element.classList.add(headBgColor);
+        }
     }
 
     private destroySubscriptions() {
