@@ -1,0 +1,101 @@
+@if (label()) {
+    <label class="mb-2 flex {{ ngtStyle.compile(['color.text', 'text', 'font']) }}" [hidden]='isShining()'>
+        <span class="truncate" [title]="label()">
+            {{ label() }}:
+        </span>
+
+        @if (isRequired()) {
+            <span class="text-red-500 font-bold text-md ml-1">*</span>
+        }
+
+        <!-- TODO: Review ngt-helper for onPush -->
+        
+        <!-- @if (helpText()) {
+        <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpTextColor()" [helperReverseYPosition]="helperReverseYPosition()"
+            [autoXReverse]="helperAutoXReverse()" class="ml-1">
+            <span [innerHtml]="helpText()"></span>
+        </ngt-helper>
+        } -->
+    </label>
+}
+
+<div [class]="isShining() ? 'hidden' : 'flex relative w-full'">
+    <input [class]="inputClasses()" [disabled]="isDisabledState()" [readonly]="isReadonly() || isLoading()"
+        [placeholder]="placeholder()" [style]="uppercase() ? 'text-transform: uppercase!important':''"
+        autocomplete="new-password" [attr.type]="inputHtmlType()" (input)="onNativeChange()" (blur)="onTouched()"
+        (mouseleave)="restorePlaceholder()" (focusout)="restorePlaceholder()" #inputElement>
+
+    @if (innerLeftIcon()) {
+        <span class="absolute self-center px-2 {{ innerLeftIconColor() }}" [class.cursor-pointer]="onClickLeftIcon"
+            (click)="onClickLeftIcon.emit()">
+
+            @if (roundedInnerIcon()) {
+                <img class="rounded-full h-4" [src]='innerLeftIcon()'>
+            } @else {
+                <ngt-svg class="text-xs fill-current" [src]='innerLeftIcon()'></ngt-svg>
+            }
+        </span>
+    }
+
+    @if (customInnerContentTemplate()) {
+        <div class="absolute self-center px-2">
+            <ng-container [ngTemplateOutlet]="customInnerContentTemplate()"></ng-container>
+        </div>
+    }
+
+    <div class="flex absolute h-full justify-end right-0 w-auto">
+        @if (shouldShowClearButton()) {
+            <span class="self-center right-0 px-2 text-red-400 cursor-pointer" (click)='clearInput($event)'>
+                <svg class="fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                        d="M19.1 17.2l-5.3-5.3 5.3-5.3-1.8-1.8-5.3 5.4-5.3-5.3-1.8 1.7 5.3 5.3-5.3 5.3L6.7 19l5.3-5.3 5.3 5.3 1.8-1.8z" />
+                </svg>
+            </span>
+        }
+
+        @if (isLoading()) {
+            <span class="self-center right-0 px-2 text-gray-500">
+                <div class="div-loader"></div>
+            </span>
+        }
+
+        @if (shouldShowPasswordIcon()) {
+            <span class="self-center px-2 cursor-pointer">
+                @if (inputElement.type == 'password') {
+                    <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" (click)='showPassword()'>
+                        <path
+                            d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
+                    </svg>
+                } @else {
+                    <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" (click)='hidePassword()'>
+                        <path
+                            d="M12.81 4.36l-1.77 1.78a4 4 0 0 0-4.9 4.9l-2.76 2.75C2.06 12.79.96 11.49.2 10a11 11 0 0 1 12.6-5.64zm3.8 1.85c1.33 1 2.43 2.3 3.2 3.79a11 11 0 0 1-12.62 5.64l1.77-1.78a4 4 0 0 0 4.9-4.9l2.76-2.75zm-.25-3.99l1.42 1.42L3.64 17.78l-1.42-1.42L16.36 2.22z" />
+                    </svg>
+                }
+            </span>
+        }
+
+        @if (shouldShowRightIcon()) {
+            <span class="self-center px-2 {{ innerRightIconColor() }}" [class.cursor-pointer]="onClickRightIcon"
+                (click)="onClickRightIcon.emit()">
+                <ngt-svg class="text-xxs fill-current" [src]='innerRightIcon()'></ngt-svg>
+            </span>
+        }
+    </div>
+</div>
+
+@if (remainingCharacters() !== null) {
+    <p class="text-xxs mt-1">
+        {{ getTranslation('ngtTextAreaRemainingCharacters') }}:
+        <span class="font-semibold">{{ remainingCharacters() }}</span>
+    </p>
+}
+
+@if (isShining()) {
+    <ngt-shining class="block w-full {{ ngtStyle.compile(['h']) }}"></ngt-shining>
+}
+
+<ng-content></ng-content>
+
+<ngt-validation [control]="formControl" [minValue]='minValue()' [minLength]='minLength()'>
+</ngt-validation>
