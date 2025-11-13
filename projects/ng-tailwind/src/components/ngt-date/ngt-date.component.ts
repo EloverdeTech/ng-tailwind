@@ -20,7 +20,7 @@ import { FlatpickrOptions } from 'ev-date-picker';
 import { EvDatePickerComponent } from 'ev-date-picker/ev-date-picker.component';
 import { Subscription } from 'rxjs';
 
-import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { applyInputMask, InputMaskEnum } from '../../helpers/input-mask/input-mask.helper';
@@ -46,14 +46,14 @@ export enum NgtDateMode {
     styleUrls: ['./ngt-date.component.css'],
     encapsulation: ViewEncapsulation.None,
     providers: [
-        NgtMakeProvider(NgtDateComponent),
+        NgtValueAccessorProvider(NgtDateComponent),
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     standalone: false
 })
-export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
+export class NgtDateComponent extends NgtControlValueAccessor implements OnInit, OnDestroy {
     @ViewChild('evDatePicker', { static: true }) public evDatePicker: EvDatePickerComponent;
 
     // Visual
@@ -104,8 +104,6 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         @Optional() @Host()
         public formContainer: ControlContainer,
 
-        private injector: Injector,
-
         @Self() @Optional()
         private ngtStylizableDirective: NgtStylizableDirective,
 
@@ -116,7 +114,9 @@ export class NgtDateComponent extends NgtBaseNgModel implements OnInit, OnDestro
         private ngtSection: NgtSectionComponent,
 
         @Optional() @SkipSelf()
-        private ngtModal: NgtModalComponent
+        private ngtModal: NgtModalComponent,
+
+        protected override injector: Injector,
     ) {
         super();
 

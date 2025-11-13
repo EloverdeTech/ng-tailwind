@@ -13,7 +13,7 @@ import {
 import { ControlContainer, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 export enum NgtSliderColorSchemeEnum {
@@ -28,14 +28,14 @@ export enum NgtSliderColorSchemeEnum {
     templateUrl: './ngt-slider.component.html',
     styleUrls: ['./ngt-slider.component.css'],
     providers: [
-        NgtMakeProvider(NgtSliderComponent),
+        NgtValueAccessorProvider(NgtSliderComponent),
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     standalone: false
 })
-export class NgtSliderComponent extends NgtBaseNgModel implements AfterViewInit, OnDestroy {
+export class NgtSliderComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {
     @ViewChild('element', { static: true }) public element: ElementRef;
     @ViewChild('display', { static: true }) public display: ElementRef;
 

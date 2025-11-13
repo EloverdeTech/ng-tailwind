@@ -18,7 +18,7 @@ import {
 import { ControlContainer, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -37,7 +37,7 @@ export enum NgtCheckboxMode {
     selector: 'ngt-checkbox',
     templateUrl: './ngt-checkbox.component.html',
     providers: [
-        NgtMakeProvider(NgtCheckboxComponent)
+        NgtValueAccessorProvider(NgtCheckboxComponent)
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
@@ -58,7 +58,7 @@ export enum NgtCheckboxMode {
     ],
     standalone: false
 })
-export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewInit, OnChanges, OnDestroy {
+export class NgtCheckboxComponent extends NgtControlValueAccessor implements AfterViewInit, OnChanges, OnDestroy {
     @ViewChild('element', { static: true }) public element: ElementRef;
 
     @Input() public label: string;
@@ -77,7 +77,6 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
-        private injector: Injector,
         private renderer: Renderer2,
 
         @Optional() @Host()
@@ -93,7 +92,9 @@ export class NgtCheckboxComponent extends NgtBaseNgModel implements AfterViewIni
         private ngtSection: NgtSectionComponent,
 
         @Optional() @SkipSelf()
-        private ngtModal: NgtModalComponent
+        private ngtModal: NgtModalComponent,
+
+        protected override injector: Injector,
     ) {
         super();
 

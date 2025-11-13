@@ -22,7 +22,7 @@ import {
 import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { uuid } from '../../helpers/uuid';
 import { NgtHttpPagination, NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
@@ -39,14 +39,14 @@ import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
     encapsulation: ViewEncapsulation.None,
     styleUrls: ['./ngt-multi-select.component.css'],
     providers: [
-        NgtMakeProvider(NgtMultiSelectComponent)
+        NgtValueAccessorProvider(NgtMultiSelectComponent)
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     standalone: false
 })
-export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, OnDestroy, OnChanges {
+export class NgtMultiSelectComponent extends NgtControlValueAccessor implements OnInit, OnDestroy, OnChanges {
     @ViewChild('containerRef') public containerRef: ElementRef;
     @ViewChild('inputSearch') public inputSearch: NgtInputComponent;
     @ViewChild('elementCheckboxTemplate') public elementCheckboxTemplate: TemplateRef<any>;
@@ -121,7 +121,6 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
 
     public constructor(
         private ngtHttpService: NgtHttpService,
-        private injector: Injector,
         private changeDetector: ChangeDetectorRef,
 
         @Optional() @SkipSelf()
@@ -135,6 +134,8 @@ export class NgtMultiSelectComponent extends NgtBaseNgModel implements OnInit, O
 
         @Optional() @Self()
         private ngtStylizableDirective: NgtStylizableDirective,
+
+        protected override injector: Injector,
 
         @Optional() @Host()
         public formContainer: ControlContainer,

@@ -22,7 +22,7 @@ import { forkJoin, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import Viewer from 'viewerjs';
 
-import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { uuid } from '../../helpers/uuid';
 import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-http.service';
@@ -39,14 +39,14 @@ import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
     styleUrls: ['./ngt-dropzone.component.css'],
     encapsulation: ViewEncapsulation.None,
     providers: [
-        NgtMakeProvider(NgtDropzoneComponent),
+        NgtValueAccessorProvider(NgtDropzoneComponent),
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     standalone: false
 })
-export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDestroy, AfterContentChecked {
+export class NgtDropzoneComponent extends NgtControlValueAccessor implements OnInit, OnDestroy, AfterContentChecked {
     @ViewChild('container') public container: ElementRef;
     @ViewChild(NgxDropzoneComponent, { static: true }) public ngxDropzone: NgxDropzoneComponent;
     @ViewChild(NgtDropzoneFileViewerComponent, { static: true }) public ngtDropzoneFileViewer: NgtDropzoneFileViewerComponent;
@@ -114,7 +114,6 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         @Optional() @Host()
         public formContainer: ControlContainer,
 
-        private injector: Injector,
         private changeDetector: ChangeDetectorRef,
 
         @Optional() @SkipSelf()
@@ -127,7 +126,9 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         private ngtSection: NgtSectionComponent,
 
         @Optional() @SkipSelf()
-        private ngtModal: NgtModalComponent
+        private ngtModal: NgtModalComponent,
+
+        protected override injector: Injector,
     ) {
         super();
 

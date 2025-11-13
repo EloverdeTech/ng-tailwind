@@ -23,7 +23,7 @@ import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
 import { DropdownPosition, NgOption, NgSelectComponent } from '@ng-select/ng-select';
 import { Observable, Observer, Subject, Subscription } from 'rxjs';
 
-import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { uuid } from '../../helpers/uuid';
@@ -50,7 +50,7 @@ export enum NgtSelectDropdownPanelHeight {
     templateUrl: './ngt-select.component.html',
     styleUrls: ['./ngt-select.component.css'],
     providers: [
-        NgtMakeProvider(NgtSelectComponent)
+        NgtValueAccessorProvider(NgtSelectComponent)
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
@@ -58,7 +58,7 @@ export enum NgtSelectDropdownPanelHeight {
     encapsulation: ViewEncapsulation.None,
     standalone: false
 })
-export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnDestroy, OnInit, DoCheck {
+export class NgtSelectComponent extends NgtControlValueAccessor implements OnChanges, OnDestroy, OnInit, DoCheck {
     @ViewChild(NgSelectComponent, { static: true }) public ngSelectComponent: NgSelectComponent;
     @ContentChild(NgtSelectOptionTmp, { read: TemplateRef }) public ngtOptionTemplate: TemplateRef<any>;
     @ContentChild(NgtSelectOptionSelectedTmp, { read: TemplateRef }) public ngtOptionSelectedTemplate: TemplateRef<any>;
@@ -165,7 +165,6 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         @Optional()
         public ngtTranslateService: NgtTranslateService,
 
-        private injector: Injector,
         private ngtHttp: NgtHttpService,
         private changeDetector: ChangeDetectorRef,
 
@@ -176,7 +175,9 @@ export class NgtSelectComponent extends NgtBaseNgModel implements OnChanges, OnD
         private ngtSection: NgtSectionComponent,
 
         @Optional() @SkipSelf()
-        private ngtModal: NgtModalComponent
+        private ngtModal: NgtModalComponent,
+
+        protected override injector: Injector,
     ) {
         super();
 

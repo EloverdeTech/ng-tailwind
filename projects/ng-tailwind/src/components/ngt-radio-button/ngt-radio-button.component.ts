@@ -15,7 +15,7 @@ import {
 import { ControlContainer, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
@@ -28,14 +28,14 @@ import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
     templateUrl: './ngt-radio-button.component.html',
     styleUrls: ['./ngt-radio-button.component.css'],
     providers: [
-        NgtMakeProvider(NgtRadioButtonComponent),
+        NgtValueAccessorProvider(NgtRadioButtonComponent),
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     standalone: false
 })
-export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterViewInit, OnDestroy {
+export class NgtRadioButtonComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {
     @ViewChild('element', { static: true }) public element: ElementRef;
 
     @Input() public label: string;
@@ -56,7 +56,6 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
-        private injector: Injector,
         private renderer: Renderer2,
 
         @Self() @Optional()
@@ -73,6 +72,8 @@ export class NgtRadioButtonComponent extends NgtBaseNgModel implements AfterView
 
         @Optional() @SkipSelf()
         private ngtRadioButtonContainer: NgtRadioButtonContainerComponent,
+
+        protected override injector: Injector,
 
         @Optional() @Host()
         public formContainer: ControlContainer

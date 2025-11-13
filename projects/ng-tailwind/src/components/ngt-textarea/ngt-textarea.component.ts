@@ -15,7 +15,7 @@ import {
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -25,14 +25,14 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
     selector: 'ngt-textarea',
     templateUrl: './ngt-textarea.component.html',
     providers: [
-        NgtMakeProvider(NgtTextareaComponent),
+        NgtValueAccessorProvider(NgtTextareaComponent),
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     standalone: false
 })
-export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
+export class NgtTextareaComponent extends NgtControlValueAccessor implements OnInit, OnDestroy {
     @ViewChild("element", { static: true }) public element: ElementRef;
 
     // Visual
@@ -62,13 +62,15 @@ export class NgtTextareaComponent extends NgtBaseNgModel implements OnInit, OnDe
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
-        private injector: Injector,
         @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
         @Optional() @Host()
         public formContainer: ControlContainer,
         @Optional() @SkipSelf()
         private ngtFormComponent: NgtFormComponent,
         private renderer: Renderer2,
+
+        protected override injector: Injector,
+
         @Optional()
         public ngtTranslateService: NgtTranslateService
     ) {
