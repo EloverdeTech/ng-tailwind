@@ -1,80 +1,97 @@
 <div type="hidden" class="text-xxs text-red-700 font-bold">
-    <span class="help-block has-error" *ngIf="control?.errors?.maxlength">
-        {{ ngtTranslateService.ngtValidationMaxCharactersExceded }}
-    </span>
+    @if (shouldShowError('maxlength')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationMaxCharactersExceded }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.required && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationRequiredField }}
-    </span>
+    @if (shouldShowError('required')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationRequiredField }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.email && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationInvalidEmail }}
-    </span>
+    @if (shouldShowError('email')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationInvalidEmail }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.login && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationLogin }}
-    </span>
+    @if (shouldShowError('login')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationLogin }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.invalid_password && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationInvalidPassword }}
-    </span>
+    @if (shouldShowError('invalid_password')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationInvalidPassword }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.unique && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationAlreadyExists }}
-    </span>
+    @if (shouldShowError('unique')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationAlreadyExists }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.cnpj && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationInvalidCnpj }}
-    </span>
+    @if (shouldShowError('cnpj')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationInvalidCnpj }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.cpf && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationInvalidCpf }}
-    </span>
+    @if (shouldShowError('cpf')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationInvalidCpf }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.password && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationPasswordRequiredMinCharacters }}
-    </span>
+    @if (shouldShowError('password')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationPasswordRequiredMinCharacters }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.match && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationFieldsNotMatch }}
-    </span>
+    @if (shouldShowError('match')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationFieldsNotMatch }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.invalidDate && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationInvalidDate }}
-    </span>
+    @if (shouldShowError('invalidDate')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationInvalidDate }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.time && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationInvalidPrevision }}
-    </span>
+    @if (shouldShowError('time')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationInvalidPrevision }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.externalServerDependency && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationExternalServerUnavailable }}
-    </span>
+    @if (shouldShowError('externalServerDependency')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationExternalServerUnavailable }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.minValue && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationValueMustBeGreaterThan(minValue) }}
-    </span>
+    @if (shouldShowError('minValue')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationValueMustBeGreaterThan(minValue) }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.minlength && (control?.dirty || (container && container['submitted']))">
-        {{ ngtTranslateService.ngtValidationMinLengthField(minLength) }}
-    </span>
+    @if (shouldShowError('minlength')) {
+        <span class="help-block has-error">
+            {{ ngtTranslateService.ngtValidationMinLengthField(minLength) }}
+        </span>
+    }
 
-    <span class="help-block has-error"
-        *ngIf="control?.errors?.invalid_custom_validator && (control?.dirty || (container && container['submitted']))">
-        {{ control.errors.invalid_custom_validator }}
-    </span>
+    @if (shouldShowError('invalid_custom_validator')) {
+        <span class="help-block has-error">
+            {{ control.errors.invalid_custom_validator }}
+        </span>
+    }
 </div>
