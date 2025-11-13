@@ -20,7 +20,7 @@ import {
 import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { applyInputMask, InputMaskEnum, removeInputMask } from '../../helpers/input-mask/input-mask.helper';
 import {
@@ -34,20 +34,21 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
+import { validateCNPJ, validateCPF } from '../../helpers/validators/validation.helper';
 
 @Component({
     selector: 'ngt-input',
     templateUrl: './ngt-input.component.html',
     styleUrls: ['./ngt-input.component.css'],
     providers: [
-        NgtMakeProvider(NgtInputComponent),
+        NgtValueAccessorProvider(NgtInputComponent),
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     standalone: false
 })
-export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestroy {
+export class NgtInputComponent extends NgtControlValueAccessor implements OnInit, OnDestroy {
     @ViewChild("element", { static: true }) public element: ElementRef;
 
     // Visual
@@ -121,7 +122,6 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
-        private injector: Injector,
         private renderer: Renderer2,
         private changeDetector: ChangeDetectorRef,
 
@@ -148,6 +148,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
         @Optional() @SkipSelf()
         private ngtModal: NgtModalComponent,
+
+        protected override injector: Injector,
 
         @Optional()
         public ngtTranslateService: NgtTranslateService
@@ -643,7 +645,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             }
 
             if (control.value && control.value.length <= 11) {
-                if (this.validatorCPF(control.value)) {
+                if (validateCPF(control.value)) {
                     return null;
                 } else {
                     return { 'cpf': true };
@@ -651,7 +653,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             } else if (control.value && control.value.length == 12) {
                 return null;
             } else {
-                if (control.value && this.validatorCNPJ(control.value)) {
+                if (control.value && validateCNPJ(control.value)) {
                     return null;
                 } else {
                     return { 'cnpj': true };
@@ -792,90 +794,6 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
             return Promise.resolve(null);
         };
-    }
-
-    private validatorCNPJ(value) {
-        let b = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
-
-        if ((value = value.replace(/[^\d]/g, "")).length != 14) {
-            return false;
-        }
-
-        if (/0{14}/.test(value)) {
-            return false;
-        }
-
-        let n = 0;
-
-        for (let i = 0; i < 12; n += value[i] * b[++i]) {
-            ;
-        }
-
-        if (value[12] != (((n %= 11) < 2) ? 0 : 11 - n)) {
-            return false;
-        }
-
-        n = 0;
-
-        for (let i = 0; i <= 12; n += value[i] * b[i++]) {
-            ;
-        }
-
-        if (value[13] != (((n %= 11) < 2) ? 0 : 11 - n)) {
-            return false;
-        }
-
-        return true;
-    };
-
-    private validatorCPF(value) {
-        let numeros, digitos, soma, i, resultado, digitos_iguais;
-
-        digitos_iguais = 1;
-
-        if (value.length < 11) {
-            return false;
-        }
-
-        for (i = 0; i < value.length - 1; i++) {
-            if (value.charAt(i) != value.charAt(i + 1)) {
-                digitos_iguais = 0;
-                break;
-            }
-        }
-
-        if (!digitos_iguais) {
-            numeros = value.substring(0, 9);
-            digitos = value.substring(9);
-            soma = 0;
-
-            for (i = 10; i > 1; i--) {
-                soma += numeros.charAt(10 - i) * i;
-            }
-
-            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-
-            if (resultado != digitos.charAt(0)) {
-                return false;
-            }
-
-            numeros = value.substring(0, 10);
-            soma = 0;
-
-            for (i = 11; i > 1; i--) {
-                soma += numeros.charAt(11 - i) * i;
-            }
-
-            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-
-            if (resultado != digitos.charAt(1)) {
-                return false;
-            }
-
-            return true;
-        } else {
-            return false;
-        }
     }
 
     private getNativeValue() {
