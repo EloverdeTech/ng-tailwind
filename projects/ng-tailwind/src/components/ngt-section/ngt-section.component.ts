@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
-    AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, Input, Optional, Output, Self, ViewChild
+    AfterViewInit, ChangeDetectorRef, Component, computed, ElementRef, EventEmitter, Injector, input, Input, Optional, Output, Self, signal, ViewChild,
+    WritableSignal
 } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -33,16 +34,20 @@ export class NgtSectionComponent implements AfterViewInit {
     @Input() public helpTitle: string;
     @Input() public helpText: string;
     @Input() public helpIconColor: string;
-    @Input() public isDisabled: boolean;
 
     @Output() public onRemove: EventEmitter<void> = new EventEmitter();
+
     @Output() public onToggleSection: EventEmitter<boolean> = new EventEmitter();
+    public readonly isDisabled = input<boolean>();
+    public readonly isDisabledState = computed(() => this.isDisabled() || this.internalDisabledState());
 
     public ngtSectionStyle: NgtStylizableService;
     public ngtCaptionStyle: NgtStylizableService;
     public ngtSubtitleStyle: NgtStylizableService;
 
     public canDisplay: boolean;
+
+    private readonly internalDisabledState: WritableSignal<boolean> = signal(false);
 
     public constructor(
         private injector: Injector,
@@ -110,7 +115,9 @@ export class NgtSectionComponent implements AfterViewInit {
 
         if (this.ngtAbilityValidationService && this.name) {
             if (this.isDisabled === undefined) {
-                this.isDisabled = !(await this.ngtAbilityValidationService.isSectionEnabled(this.name));
+                this.internalDisabledState.set(
+                    !(await this.ngtAbilityValidationService.isSectionEnabled(this.name))
+                );
             }
 
             this.canDisplay = !(await this.ngtAbilityValidationService.isSectionHidden(this.name));
