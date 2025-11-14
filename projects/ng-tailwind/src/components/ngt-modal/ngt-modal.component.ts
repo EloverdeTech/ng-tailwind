@@ -3,12 +3,16 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Component,
+    computed,
     EventEmitter,
     Injector,
+    input,
     Input,
     Optional,
     Output,
     Self,
+    signal,
+    WritableSignal,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -33,14 +37,18 @@ import { NgtAbilityValidationService } from '../../services/validation/ngt-abili
 export class NgtModalComponent implements AfterViewInit {
     @Input() public customLayout: boolean = false;
     @Input() public disableDefaultCloses: boolean = false;
-    @Input() public isDisabled: boolean;
     @Input() public ngtStyle: NgtStylizableService;
 
     @Output() public onCloseModal: EventEmitter<void> = new EventEmitter();
     @Output() public onOpenModal: EventEmitter<void> = new EventEmitter();
 
+    public readonly isDisabled = input<boolean>();
+    public readonly isDisabledState = computed(() => this.isDisabled() || this.internalDisabledState());
+
     public isOpen: boolean = false;
     public viewMode: boolean = false;
+
+    private readonly internalDisabledState: WritableSignal<boolean> = signal(false);
 
     private keydownEventWasAdded: boolean = false;
     private subscriptions: Array<Subscription> = [];
@@ -73,7 +81,9 @@ export class NgtModalComponent implements AfterViewInit {
 
     public async ngAfterViewInit(): Promise<void> {
         if (this.isDisabled === undefined && this.ngtAbilityValidationService) {
-            this.isDisabled = !(await this.ngtAbilityValidationService.hasManagePermission());
+            this.internalDisabledState.set(
+                !(await this.ngtAbilityValidationService.hasManagePermission())
+            );
 
             this.changeDetectorRef.detectChanges();
         }
