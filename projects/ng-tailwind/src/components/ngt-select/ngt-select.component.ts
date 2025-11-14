@@ -711,8 +711,8 @@ export class NgtSelectComponent extends NgtControlValueAccessor implements OnCha
 
     private isDisabledByParent(): boolean {
         return this.ngtForm?.isDisabled
-            || this.ngtSection?.isDisabled
-            || this.ngtModal?.isDisabled;
+            || this.ngtSection?.isDisabledState()
+            || this.ngtModal?.isDisabledState();
     }
 
     private destroySubscriptions(): void {

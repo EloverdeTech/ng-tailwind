@@ -65,7 +65,7 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
             py: 'py-1',
             text: 'text-xs',
             font: 'font-normal',
-            w:  'w-full',
+            w: 'w-full',
             h: 'h-full',
             rounded: 'rounded'
         });
@@ -140,8 +140,8 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     private isDisabledByParent(): boolean {
         return this.ngtForm?.isDisabled
-            || this.ngtSection?.isDisabled
-            || this.ngtModal?.isDisabled;
+            || this.ngtSection?.isDisabledState()
+            || this.ngtModal?.isDisabledState();
     }
 
     private destroySubscriptions(): void {
