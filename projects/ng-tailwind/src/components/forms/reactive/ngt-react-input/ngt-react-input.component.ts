@@ -13,6 +13,7 @@ import {
     output,
     Renderer2,
     Self,
+    Signal,
     signal,
     SkipSelf,
     TemplateRef,
@@ -33,7 +34,7 @@ import {
 } from '../../../../services/http/ngt-http-resource.service';
 import { NgtTranslateService } from '../../../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtFormComponent } from '../../../ngt-form/ngt-form.component';
+import { NgtReactFormComponent } from '../../../forms/reactive/ngt-react-form/ngt-react-form.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
@@ -131,15 +132,25 @@ export class NgtReactInputComponent extends NgtControlValueAccessor implements A
 
     /** Computed Signals */
 
-    public readonly isShining = computed(() => this.shining() || this.loaderService.shining());
+    public readonly isShining: Signal<boolean> = computed(
+        () => this.shining() || this.loaderService.shining() || this.ngtForm.shining()
+    );
 
-    public readonly isLoading = computed(() => this.loading() || this.loaderService.loading());
+    public readonly isLoading: Signal<boolean> = computed(
+        () => this.loading() || this.loaderService.loading()
+    );
 
-    public readonly isDisabledState = computed(() => this.isDisabled() || this.isDisabledByParent());
+    public readonly isDisabledByParent: Signal<boolean> = computed(
+        () => this.ngtForm?.isDisabledState() || this.ngtSection?.isDisabledState() || this.ngtModal?.isDisabledState()
+    );
 
-    public readonly currentValue = computed(() => this.value);
+    public readonly isDisabledState: Signal<boolean> = computed(
+        () => this.isDisabled() || this.isDisabledByParent()
+    );
 
-    public readonly inputPaddingClass = computed(() => {
+    public readonly currentValue: Signal<any> = computed(() => this.value);
+
+    public readonly inputPaddingClass: Signal<string> = computed(() => {
         let padding = '';
 
         if (this.innerLeftIcon() || this.customInnerContentTemplate()) {
@@ -159,18 +170,22 @@ export class NgtReactInputComponent extends NgtControlValueAccessor implements A
         return padding.trim();
     });
 
-    public readonly shouldShowClearButton = computed(() =>
+    public readonly shouldShowClearButton: Signal<boolean> = computed(() =>
         !this.isDisabledState()
         && this.allowClear()
         && this.currentValue()
         && !this.isLoading()
     );
 
-    public readonly shouldShowPasswordIcon = computed(() => this.type() === 'password' && this.currentValue());
+    public readonly shouldShowPasswordIcon: Signal<boolean> = computed(
+        () => this.type() === 'password' && this.currentValue()
+    );
 
-    public readonly shouldShowRightIcon = computed(() => this.innerRightIcon() && this.type() !== 'password');
+    public readonly shouldShowRightIcon: Signal<boolean> = computed(
+        () => this.innerRightIcon() && this.type() !== 'password'
+    );
 
-    public readonly remainingCharacters = computed(() => {
+    public readonly remainingCharacters: Signal<number> = computed(() => {
         if (!this.showCharactersLength() || !this.maxLength()) {
             return null;
         }
@@ -181,7 +196,7 @@ export class NgtReactInputComponent extends NgtControlValueAccessor implements A
         return remaining > 0 ? remaining : 0;
     });
 
-    public readonly inputClasses = computed(() => {
+    public readonly inputClasses: Signal<string> = computed(() => {
         const classes: string[] = [
             'flex border appearance-none focus:outline-none leading-tight w-full',
             this.inputPaddingClass(),
@@ -201,15 +216,15 @@ export class NgtReactInputComponent extends NgtControlValueAccessor implements A
 
     /** Internal Control */
 
-    public inputHtmlType: WritableSignal<string> = signal('');
-    public maxLengthByHtmlType: WritableSignal<string> = signal('');
+    public readonly inputHtmlType: WritableSignal<string> = signal('');
+    public readonly maxLengthByHtmlType: WritableSignal<string> = signal('');
     public ngtStyle: NgtStylizableService;
 
     private phoneValidatorTimeout: NodeJS.Timeout;
     private searchExistingResourceTimeout: NodeJS.Timeout;
 
-    private formControlHasErrors: WritableSignal<boolean> = signal(false);
-    private formControlIsDirty: WritableSignal<boolean> = signal(false);
+    private readonly formControlHasErrors: WritableSignal<boolean> = signal(false);
+    private readonly formControlIsDirty: WritableSignal<boolean> = signal(false);
 
     private subscriptions: Subscription[] = [];
     private listeners: Array<() => void> = [];
@@ -225,7 +240,7 @@ export class NgtReactInputComponent extends NgtControlValueAccessor implements A
         private translateService: NgtTranslateService,
 
         @Optional() @SkipSelf()
-        private ngtForm: NgtFormComponent,
+        private ngtForm: NgtReactFormComponent,
 
         @Optional() @SkipSelf()
         private ngtSection: NgtSectionComponent,
@@ -391,18 +406,6 @@ export class NgtReactInputComponent extends NgtControlValueAccessor implements A
         });
 
         this.listeners.push(unlistenKeydown);
-
-        // TODO: Convert shining of NgtForm to Signal and make a computed signal here
-
-        // if (this.ngtFormComponent) {
-        //     this.internalShining.set(this.ngtFormComponent.isShining());
-
-        //     this.subscriptions.push(
-        //         this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-        //             this.internalShining.set(shining);
-        //         })
-        //     );
-        // }
     }
 
     private registerEffects(): void {
@@ -573,13 +576,6 @@ export class NgtReactInputComponent extends NgtControlValueAccessor implements A
 
     private getElementTitle(): string {
         return this.inputElement.nativeElement.parentElement.parentElement.title;
-    }
-
-    private isDisabledByParent(): boolean {
-        // TODO: convert to computed signal
-        return this.ngtForm?.isDisabled
-            || this.ngtSection?.isDisabled
-            || this.ngtModal?.isDisabled;
     }
 
     private hasChangesBetweenModels(): boolean {
