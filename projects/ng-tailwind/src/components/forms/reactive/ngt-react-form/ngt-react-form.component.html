@@ -1,0 +1,12 @@
+<form [formGroup]="form()" (ngSubmit)="onSubmit()">
+    @if (!customLayout()) {
+        <ngt-form-validation-message [canShowValidationMessage]="canShowInvalidFormMessage()"
+            [message]="invalidFormMessage()">
+        </ngt-form-validation-message>
+    }
+    
+    <fieldset [disabled]="isDisabledState()" style="min-inline-size: 100% !important">
+        <ng-content></ng-content>
+    </fieldset>
+</form>
+
