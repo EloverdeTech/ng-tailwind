@@ -1,13 +1,14 @@
 import { ActivatedRoute } from '@angular/router';
-import { Observable, zip } from 'rxjs';
+import { Observable, Observer, zip } from 'rxjs';
 
 export function getIdFromUri(route: ActivatedRoute, routeIdentifier: string) {
-    return Observable.create((observer) => {
+    return new Observable((observer: Observer<any>) => {
         zip(route.parent.params, route.params)
             .subscribe((results) => {
                 let params = { ...results[0], ...results[1] };
 
                 observer.next(params[routeIdentifier]);
+                observer.complete();
             });
     });
 }
