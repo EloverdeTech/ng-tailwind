@@ -96,6 +96,23 @@ export class NgtReactInputValidationService {
             .then((result: any) => result);
     }
 
+    public clearTimeouts(): void {
+        if (this.emailValidatorTimeout) {
+            clearTimeout(this.emailValidatorTimeout);
+            this.emailValidatorTimeout = null;
+        }
+
+        if (this.passwordValidatorTimeout) {
+            clearTimeout(this.passwordValidatorTimeout);
+            this.passwordValidatorTimeout = null;
+        }
+
+        if (this.uniqueValidatorTimeout) {
+            clearTimeout(this.uniqueValidatorTimeout);
+            this.uniqueValidatorTimeout = null;
+        }
+    }
+
     private timeValidator(): ValidatorFn {
         const regexExp = new RegExp('^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$');
 

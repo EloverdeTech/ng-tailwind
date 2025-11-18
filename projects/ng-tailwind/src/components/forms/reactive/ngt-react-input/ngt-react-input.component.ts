@@ -274,6 +274,10 @@ export class NgtReactInputComponent extends NgtControlValueAccessor implements A
     }
 
     public ngOnDestroy(): void {
+        this.clearTimeouts();
+
+        this.validationService.clearTimeouts();
+
         this.destroySubscriptions();
 
         this.destroyListeners();
@@ -590,5 +594,17 @@ export class NgtReactInputComponent extends NgtControlValueAccessor implements A
     private destroyListeners(): void {
         this.listeners.forEach(unlisten => unlisten());
         this.listeners = [];
+    }
+
+    private clearTimeouts(): void {
+        if (this.phoneValidatorTimeout) {
+            clearTimeout(this.phoneValidatorTimeout);
+            this.phoneValidatorTimeout = null;
+        }
+
+        if (this.searchExistingResourceTimeout) {
+            clearTimeout(this.searchExistingResourceTimeout);
+            this.searchExistingResourceTimeout = null;
+        }
     }
 }
