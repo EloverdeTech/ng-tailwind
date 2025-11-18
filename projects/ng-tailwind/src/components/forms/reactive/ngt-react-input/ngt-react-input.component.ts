@@ -34,7 +34,7 @@ import {
 } from '../../../../services/http/ngt-http-resource.service';
 import { NgtTranslateService } from '../../../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtReactFormComponent } from '../../../forms/reactive/ngt-react-form/ngt-react-form.component';
+import { NgtReactiveFormComponent } from '../ngt-reactive-form/ngt-reactive-form.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
@@ -240,7 +240,7 @@ export class NgtReactInputComponent extends NgtControlValueAccessor implements A
         private translateService: NgtTranslateService,
 
         @Optional() @SkipSelf()
-        private ngtForm: NgtReactFormComponent,
+        private ngtForm: NgtReactiveFormComponent,
 
         @Optional() @SkipSelf()
         private ngtSection: NgtSectionComponent,

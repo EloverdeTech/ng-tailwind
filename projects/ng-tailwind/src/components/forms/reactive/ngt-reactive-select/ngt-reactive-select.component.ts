@@ -26,7 +26,7 @@ import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../b
 import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtTranslateService } from '../../../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtReactFormComponent } from '../ngt-react-form/ngt-react-form.component';
+import { NgtReactiveFormComponent } from '../ngt-reactive-form/ngt-reactive-form.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtReactiveSelectHeaderTmp, NgtReactiveSelectOptionSelectedTmp, NgtReactiveSelectOptionTmp } from './ngt-reactive-select.directive';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
@@ -202,7 +202,7 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
         public ngtTranslateService: NgtTranslateService,
 
         @Optional() @SkipSelf()
-        private ngtReactForm: NgtReactFormComponent,
+        private ngtReactForm: NgtReactiveFormComponent,
 
         @Optional() @SkipSelf()
         private ngtSection: NgtSectionComponent,

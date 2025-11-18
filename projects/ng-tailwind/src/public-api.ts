@@ -175,7 +175,7 @@ export * from './services/http/ngt-attachment-http.service';
 /** Reactive Form Components */
 
 // NgtReactForm
-export * from './components/forms/reactive/ngt-react-form/ngt-react-form.component';
+export * from './components/forms/reactive/ngt-reactive-form/ngt-reactive-form.component';
 
 // NgtReactInput
 export * from './components/forms/reactive/ngt-react-input/ngt-react-input.component';

@@ -27,8 +27,8 @@ export enum NgtReactFormState {
 }
 
 @Component({
-    selector: 'ngt-react-form',
-    templateUrl: './ngt-react-form.component.html',
+    selector: 'ngt-reactive-form',
+    templateUrl: './ngt-reactive-form.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
@@ -37,7 +37,7 @@ export enum NgtReactFormState {
         NgtFormValidationMessageComponent,
     ]
 })
-export class NgtReactFormComponent implements OnInit, OnDestroy {
+export class NgtReactiveFormComponent implements OnInit, OnDestroy {
     public static onSubmitInvalidForm: EventEmitter<FormGroup> = new EventEmitter();
 
     /** Inputs */
@@ -178,7 +178,7 @@ export class NgtReactFormComponent implements OnInit, OnDestroy {
     private subcribeFormGroupStatusChanges(): Subscription {
         return this.form().statusChanges.subscribe(() => {
             if (!this.form().valid && this.isSubmitted) {
-                NgtReactFormComponent.onSubmitInvalidForm.emit(this.form());
+                NgtReactiveFormComponent.onSubmitInvalidForm.emit(this.form());
 
                 this.canShowInvalidFormMessage.set(!this.isDisabledState());
             } else if (this.canShowInvalidFormMessage()) {
