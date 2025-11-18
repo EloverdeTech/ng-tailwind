@@ -180,6 +180,10 @@ export * from './components/forms/reactive/ngt-react-form/ngt-react-form.compone
 // NgtReactInput
 export * from './components/forms/reactive/ngt-react-input/ngt-react-input.component';
 
+// NgtReactSelect
+export * from './components/forms/reactive/ngt-reactive-select/ngt-reactive-select.component';
+export * from './components/forms/reactive/ngt-reactive-select/ngt-reactive-select.directive';
+
 /** Helpers */
 
 //NgtAnimations
