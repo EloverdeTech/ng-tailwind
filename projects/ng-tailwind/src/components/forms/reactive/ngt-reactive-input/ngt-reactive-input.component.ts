@@ -38,23 +38,23 @@ import { NgtReactiveFormComponent } from '../ngt-reactive-form/ngt-reactive-form
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
-import { NgtReactInputMaskService } from './services/ngt-react-input-mask.service';
-import { NgtReactInputValidationConfig, NgtReactInputValidationService } from './services/ngt-react-input-validation.service';
-import { NgtReactInputLoaderService } from './services/ngt-react-input-loader.service';
+import { NgtReactiveInputMaskService } from './services/ngt-reactive-input-mask.service';
+import { NgtReactInputValidationConfig, NgtReactiveInputValidationService } from './services/ngt-reactive-input-validation.service';
+import { NgtReactiveInputLoaderService } from './services/ngt-reactive-input-loader.service';
 import { NgtValidationModule } from '../../../ngt-validation/ngt-validation.module';
 
 @Component({
-    selector: 'ngt-react-input',
-    templateUrl: './ngt-react-input.component.html',
-    styleUrls: ['./ngt-react-input.component.css'],
+    selector: 'ngt-reactive-input',
+    templateUrl: './ngt-reactive-input.component.html',
+    styleUrls: ['./ngt-reactive-input.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     providers: [
-        NgtValueAccessorProvider(NgtReactInputComponent),
+        NgtValueAccessorProvider(NgtReactiveInputComponent),
 
-        NgtReactInputMaskService,
-        NgtReactInputValidationService,
-        NgtReactInputLoaderService,
+        NgtReactiveInputMaskService,
+        NgtReactiveInputValidationService,
+        NgtReactiveInputLoaderService,
     ],
     imports: [
         CommonModule,
@@ -64,7 +64,7 @@ import { NgtValidationModule } from '../../../ngt-validation/ngt-validation.modu
         NgtValidationModule,
     ],
 })
-export class NgtReactInputComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {
+export class NgtReactiveInputComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {
     @ViewChild('inputElement', { static: true }) public inputElement: ElementRef;
 
     /** Visual Inputs */
@@ -248,9 +248,9 @@ export class NgtReactInputComponent extends NgtControlValueAccessor implements A
         @Optional() @SkipSelf()
         private ngtModal: NgtModalComponent,
 
-        private validationService: NgtReactInputValidationService,
-        private maskService: NgtReactInputMaskService,
-        private loaderService: NgtReactInputLoaderService,
+        private validationService: NgtReactiveInputValidationService,
+        private maskService: NgtReactiveInputMaskService,
+        private loaderService: NgtReactiveInputLoaderService,
 
         private renderer: Renderer2,
         private changeDetector: ChangeDetectorRef,

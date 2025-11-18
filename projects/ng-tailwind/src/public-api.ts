@@ -178,7 +178,7 @@ export * from './services/http/ngt-attachment-http.service';
 export * from './components/forms/reactive/ngt-reactive-form/ngt-reactive-form.component';
 
 // NgtReactInput
-export * from './components/forms/reactive/ngt-react-input/ngt-react-input.component';
+export * from './components/forms/reactive/ngt-reactive-input/ngt-reactive-input.component';
 
 // NgtReactSelect
 export * from './components/forms/reactive/ngt-reactive-select/ngt-reactive-select.component';

@@ -67,7 +67,7 @@ const MASKS: {} = {
 };
 
 @Injectable({ providedIn: null })
-export class NgtReactInputMaskService {
+export class NgtReactiveInputMaskService {
     private appliedMask: InputMaskEnum;
 
     public applyMask(

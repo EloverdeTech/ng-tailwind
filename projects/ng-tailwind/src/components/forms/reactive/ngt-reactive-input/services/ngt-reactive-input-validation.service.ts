@@ -2,7 +2,7 @@ import { Injectable, Optional } from "@angular/core";
 import { AbstractControl, AsyncValidatorFn, ValidatorFn, Validators } from "@angular/forms";
 import { validateCNPJ, validateCPF } from "../../../../../helpers/validators/validation.helper";
 import { NgtHttpValidationResponse, NgtHttpValidationService } from "../../../../../services/http/ngt-http-validation.service";
-import { NgtReactInputLoaderService } from "./ngt-react-input-loader.service";
+import { NgtReactiveInputLoaderService } from "./ngt-reactive-input-loader.service";
 import { NgtReactiveFormValidationService } from "../../../../../services/validation/ngt-reactive-form-validation.service";
 import { InputMaskEnum } from "../../../../../helpers/input-mask/input-mask.helper";
 
@@ -24,7 +24,7 @@ export interface NgtReactInputValidationConfig {
 }
 
 @Injectable({ providedIn: null })
-export class NgtReactInputValidationService {
+export class NgtReactiveInputValidationService {
     private emailValidatorTimeout: NodeJS.Timeout;
     private passwordValidatorTimeout: NodeJS.Timeout;
     private uniqueValidatorTimeout: NodeJS.Timeout;
@@ -32,7 +32,7 @@ export class NgtReactInputValidationService {
     public constructor(
         @Optional() private httpValidationService: NgtHttpValidationService,
         private reactiveFormValidationService: NgtReactiveFormValidationService,
-        private loaderService: NgtReactInputLoaderService,
+        private loaderService: NgtReactiveInputLoaderService,
     ) { }
 
     public getSyncValidators(config: NgtReactInputValidationConfig): ValidatorFn[] {
