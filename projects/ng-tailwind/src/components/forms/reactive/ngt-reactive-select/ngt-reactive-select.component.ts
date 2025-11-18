@@ -28,7 +28,7 @@ import { NgtTranslateService } from '../../../../services/http/ngt-translate.ser
 import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtReactiveFormComponent } from '../ngt-reactive-form/ngt-reactive-form.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
-import { NgtReactiveSelectHeaderTmp, NgtReactiveSelectOptionSelectedTmp, NgtReactiveSelectOptionTmp } from './ngt-reactive-select.directive';
+import { NgtReactiveSelectHeaderTemplate, NgtReactiveSelectOptionSelectedTemplate, NgtReactiveSelectOptionTemplate } from './ngt-reactive-select.directive';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 import { NgtValidationModule } from '../../../ngt-validation/ngt-validation.module';
 import { NgtShiningModule } from '../../../ngt-shining/ngt-shining.module';
@@ -74,16 +74,16 @@ export enum NgtReactSelectDropdownPanelHeight {
         NgtSvgModule,
 
         /** Directives */
-        NgtReactiveSelectOptionTmp,
-        NgtReactiveSelectOptionSelectedTmp,
-        NgtReactiveSelectHeaderTmp,
+        NgtReactiveSelectOptionTemplate,
+        NgtReactiveSelectOptionSelectedTemplate,
+        NgtReactiveSelectHeaderTemplate,
     ],
 })
 export class NgtReactiveSelectComponent extends NgtControlValueAccessor implements OnDestroy {
     @ViewChild(NgSelectComponent, { static: true }) public ngSelectComponent: NgSelectComponent;
-    @ContentChild(NgtReactiveSelectOptionTmp, { read: TemplateRef }) public ngtOptionTemplate: TemplateRef<any>;
-    @ContentChild(NgtReactiveSelectOptionSelectedTmp, { read: TemplateRef }) public ngtOptionSelectedTemplate: TemplateRef<any>;
-    @ContentChild(NgtReactiveSelectHeaderTmp, { read: TemplateRef }) public ngtSelectHeaderTemplate: TemplateRef<any>;
+    @ContentChild(NgtReactiveSelectOptionTemplate, { read: TemplateRef }) public ngtOptionTemplate: TemplateRef<any>;
+    @ContentChild(NgtReactiveSelectOptionSelectedTemplate, { read: TemplateRef }) public ngtOptionSelectedTemplate: TemplateRef<any>;
+    @ContentChild(NgtReactiveSelectHeaderTemplate, { read: TemplateRef }) public ngtSelectHeaderTemplate: TemplateRef<any>;
 
     /** Visual Inputs */
 

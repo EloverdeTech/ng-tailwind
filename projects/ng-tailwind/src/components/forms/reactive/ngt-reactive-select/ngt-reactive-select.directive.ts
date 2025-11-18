@@ -4,7 +4,7 @@ import { Directive, TemplateRef } from '@angular/core';
     selector: '[ngt-reactive-select-option]',
     standalone: true,
 })
-export class NgtReactiveSelectOptionTmp {
+export class NgtReactiveSelectOptionTemplate {
     public constructor(public template: TemplateRef<any>) { }
 }
 
@@ -12,7 +12,7 @@ export class NgtReactiveSelectOptionTmp {
     selector: '[ngt-reactive-select-option-selected]',
     standalone: true,
 })
-export class NgtReactiveSelectOptionSelectedTmp {
+export class NgtReactiveSelectOptionSelectedTemplate {
     public constructor(public template: TemplateRef<any>) { }
 }
 
@@ -20,6 +20,6 @@ export class NgtReactiveSelectOptionSelectedTmp {
     selector: '[ngt-reactive-select-header]',
     standalone: true,
 })
-export class NgtReactiveSelectHeaderTmp {
+export class NgtReactiveSelectHeaderTemplate {
     public constructor(public template: TemplateRef<any>) { }
 }
