@@ -5,7 +5,7 @@ export abstract class NgtAttachmentHttpService {
 
     public abstract download(attachment: any): Observable<any>;
 
-    public abstract upload(remoteResource: any, file: any): Observable<any>;
+    public abstract upload(file: any, remoteResource?: any): Observable<any>;
 }
 
 export interface NgtAttachmentHttpResponse {
