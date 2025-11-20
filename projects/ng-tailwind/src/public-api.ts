@@ -190,6 +190,9 @@ export * from './components/forms/reactive/ngt-reactive-select/ngt-reactive-sele
 // NgtReactiveDropzone
 export * from './components/forms/reactive/ngt-reactive-dropzone/ngt-reactive-dropzone.component';
 
+// NgtReactiveSlider
+export * from './components/forms/reactive/ngt-reactive-slider/ngt-reactive-slider.component';
+
 /** Helpers */
 
 //NgtAnimations
