@@ -180,6 +180,9 @@ export * from './components/forms/reactive/ngt-reactive-form/ngt-reactive-form.c
 // NgtReactiveInput
 export * from './components/forms/reactive/ngt-reactive-input/ngt-reactive-input.component';
 
+// NgtReactiveTextarea
+export * from './components/forms/reactive/ngt-reactive-textarea/ngt-reactive-textarea.component';
+
 // NgtReactiveSelect
 export * from './components/forms/reactive/ngt-reactive-select/ngt-reactive-select.component';
 export * from './components/forms/reactive/ngt-reactive-select/ngt-reactive-select.directive';
