@@ -294,9 +294,7 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
     }
 
     public onNativeChange(value: any): void {
-        // console.log('onNativeChange', value);
-
-        if (this.hasChangesBetweenModels(this.value, value)) {
+        if (this.hasChangesBetweenValues(this.value, value)) {
             value = this.sortSelectedItems(value);
 
             this.nativeValue = value;
@@ -305,18 +303,14 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
     }
 
     public change(value: any): void {
-        // console.log('change', value);
-
         if (
             this.formControl
-            && this.hasChangesBetweenModels(value, this.formControl.value)
+            && this.hasChangesBetweenValues(value, this.formControl.value)
         ) {
             this.formControl.setValue(value);
         }
 
-        if (this.hasChangesBetweenModels(value, this.nativeValue)) {
-            // console.log(this.ngSelectComponent);
-
+        if (this.hasChangesBetweenValues(value, this.nativeValue)) {
             this.nativeValue = this.sortSelectedItems(value);
 
             this.changeDetector.detectChanges();
@@ -542,8 +536,8 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
         return this.ngSelectComponent.element.parentElement.parentElement.parentElement.title;
     }
 
-    private hasChangesBetweenModels(value: any, nativeValue: any): boolean {
-        return JSON.stringify(value) !== JSON.stringify(nativeValue);
+    private hasChangesBetweenValues(a: any, b: any): boolean {
+        return JSON.stringify(a) !== JSON.stringify(b);
     }
 
     private hadPreviousSelection(item: any): boolean {

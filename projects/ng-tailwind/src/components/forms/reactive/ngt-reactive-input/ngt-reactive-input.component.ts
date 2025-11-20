@@ -284,7 +284,7 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
     }
 
     public onNativeChange(): void {
-        if (this.hasChangesBetweenModels()) {
+        if (this.hasChangesBetweenValues()) {
             this.value = this.maskService.removeMask(this.getNativeValue());
         }
     }
@@ -582,7 +582,7 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
         return this.inputElement.nativeElement.parentElement.parentElement.title;
     }
 
-    private hasChangesBetweenModels(): boolean {
+    private hasChangesBetweenValues(): boolean {
         return this.maskService.removeMask(this.getNativeValue()) !== this.value;
     }
 
