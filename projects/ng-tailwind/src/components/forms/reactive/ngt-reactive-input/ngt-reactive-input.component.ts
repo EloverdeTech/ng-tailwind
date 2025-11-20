@@ -150,31 +150,12 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
 
     public readonly currentValue: Signal<any> = computed(() => this.value);
 
-    public readonly inputPaddingClass: Signal<string> = computed(() => {
-        let padding = '';
-
-        if (this.innerLeftIcon() || this.customInnerContentTemplate()) {
-            padding += 'pl-10 ';
-        } else {
-            padding += 'px-4 ';
-        }
-
-        if (this.innerRightIcon() || this.allowClear() || this.type() === 'password') {
-            if (this.allowClear() && this.currentValue() && (this.innerRightIcon() || this.type() === 'password')) {
-                padding += 'pr-10';
-            } else {
-                padding += 'pr-8';
-            }
-        }
-
-        return padding.trim();
-    });
+    public readonly inputPaddingClass: Signal<string> = computed(() =>
+        this.getInputPaddingClass()
+    );
 
     public readonly shouldShowClearButton: Signal<boolean> = computed(() =>
-        !this.isDisabledState()
-        && this.allowClear()
-        && this.currentValue()
-        && !this.isLoading()
+        this.getShouldShowClearButton()
     );
 
     public readonly shouldShowPasswordIcon: Signal<boolean> = computed(
@@ -185,30 +166,13 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
         () => this.innerRightIcon() && this.type() !== 'password'
     );
 
-    public readonly remainingCharacters: Signal<number> = computed(() => {
-        if (!this.showCharactersLength() || !this.maxLength()) {
-            return null;
-        }
+    public readonly remainingCharacters: Signal<number> = computed(() =>
+        this.getRemainingCharacters()
+    );
 
-        const currentLength = this.currentValue()?.length || 0;
-        const remaining = this.maxLength() - currentLength;
-
-        return remaining > 0 ? remaining : 0;
-    });
-
-    public readonly inputClasses: Signal<string> = computed(() => {
-        const classes: string[] = [
-            'flex border appearance-none focus:outline-none leading-tight w-full',
-            this.inputPaddingClass(),
-            this.ngtStyle.compile(['h', 'text', 'color.border', 'color.bg', 'color.text', 'rounded', 'cursor'])
-        ];
-
-        if (this.formControlHasErrors() && this.formControlIsDirty()) {
-            classes.push('input-has-error border-red-700');
-        }
-
-        return classes.join(' ');
-    });
+    public readonly inputClasses: Signal<string> = computed(() =>
+        this.getInputClasses()
+    );
 
     /** Other */
 
@@ -584,6 +548,58 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
 
     private hasChangesBetweenValues(): boolean {
         return this.maskService.removeMask(this.getNativeValue()) !== this.value;
+    }
+
+    private getInputPaddingClass(): string {
+        let padding = '';
+
+        if (this.innerLeftIcon() || this.customInnerContentTemplate()) {
+            padding += 'pl-10 ';
+        } else {
+            padding += 'px-4 ';
+        }
+
+        if (this.innerRightIcon() || this.allowClear() || this.type() === 'password') {
+            if (this.allowClear() && this.currentValue() && (this.innerRightIcon() || this.type() === 'password')) {
+                padding += 'pr-10';
+            } else {
+                padding += 'pr-8';
+            }
+        }
+
+        return padding.trim();
+    }
+
+    private getShouldShowClearButton(): boolean {
+        return !this.isDisabledState()
+            && this.allowClear()
+            && this.currentValue()
+            && !this.isLoading();
+    }
+
+    private getRemainingCharacters(): number {
+        if (!this.showCharactersLength() || !this.maxLength()) {
+            return null;
+        }
+
+        const currentLength = this.currentValue()?.length || 0;
+        const remaining = this.maxLength() - currentLength;
+
+        return remaining > 0 ? remaining : 0;
+    }
+
+    private getInputClasses(): string {
+        const classes: string[] = [
+            'flex border appearance-none focus:outline-none leading-tight w-full',
+            this.inputPaddingClass(),
+            this.ngtStyle.compile(['h', 'text', 'color.border', 'color.bg', 'color.text', 'rounded', 'cursor'])
+        ];
+
+        if (this.formControlHasErrors() && this.formControlIsDirty()) {
+            classes.push('input-has-error border-red-700');
+        }
+
+        return classes.join(' ');
     }
 
     private destroySubscriptions(): void {
