@@ -169,20 +169,23 @@ export * from './components/ngt-form/ngt-form-validation-message/ngt-form-valida
 // NgtDropzone
 export * from './components/ngt-dropzone/ngt-dropzone.module';
 export * from './components/ngt-dropzone/ngt-dropzone.component';
-export * from './components/ngt-dropzone/ngt-dropzone.meta';
+export * from './meta/ngt-dropzone.meta';
 export * from './services/http/ngt-attachment-http.service';
 
 /** Reactive Form Components */
 
-// NgtReactForm
+// NgtReactiveForm
 export * from './components/forms/reactive/ngt-reactive-form/ngt-reactive-form.component';
 
-// NgtReactInput
+// NgtReactiveInput
 export * from './components/forms/reactive/ngt-reactive-input/ngt-reactive-input.component';
 
-// NgtReactSelect
+// NgtReactiveSelect
 export * from './components/forms/reactive/ngt-reactive-select/ngt-reactive-select.component';
 export * from './components/forms/reactive/ngt-reactive-select/ngt-reactive-select.directive';
+
+// NgtReactiveDropzone
+export * from './components/forms/reactive/ngt-reactive-dropzone/ngt-reactive-dropzone.component';
 
 /** Helpers */
 

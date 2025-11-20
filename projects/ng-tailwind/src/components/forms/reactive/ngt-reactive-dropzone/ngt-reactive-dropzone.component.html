@@ -1,0 +1,90 @@
+<div class="flex flex-col h-full w-full" #container>
+    @if (label()) {
+        <label class="flex mb-2 text-sm">
+            {{ label() }}:
+
+            @if (isRequired()) {
+                <span class="text-red-500 font-bold text-md ml-1">*</span>
+            }
+
+            <!-- TODO: Review ngt-helper for onPush -->
+            
+            <!-- @if (helpText()) {
+                <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpTextColor()" class="ml-1">
+                    {{ helpText() }}
+                </ngt-helper>
+            } -->
+        </label>
+    }
+
+    @if (!viewMode()) {
+        <div class="h-full w-full relative">
+            @if (isLoading() && !hideNgxDropzone()) {
+                <div class="flex absolute justify-center items-center w-full h-full cursor-wait z-10">
+                    <div class="div-loader"></div>
+                </div>
+            }
+
+            <ngx-dropzone [id]="ngxElementId" [class.single-attachment]="itemsLimit() == 1"
+                [ngStyle]="{ 'height': dropzoneHeight }" [ngClass]="{ 'hidden': hideNgxDropzone() }"
+                [multiple]="multipleSelection()" [maxFileSize]="maxFileSize()" [accept]="acceptedFiles()"
+                [disabled]="isDisabledState() || isLoading()" [expandable]="verticalExpandable()"
+                [disableClick]="shouldDisableClick()" (change)="onSelectFiles($event)" #ngxDropzone>
+                @if (!isLoading()) {
+                    @if (!uploadedResources.length) {
+                        <ngx-dropzone-label class="px-2">
+                            {{ placeholder() }}
+                        </ngx-dropzone-label>
+                    }
+
+                    @for (resource of uploadedResources; track resource.id; let index = $index) {
+                        <div class="flex flex-col w-48 mx-4"
+                            [title]="(resource?.file?.name || '') + ' (' + getFormattedFileSize(resource) + ')'">
+                            @if (previewType() == 'DEFAULT' && isFile(resource)) {
+                                <custom-dropzone-preview [file]="resource.file" [removable]="removable()" (removed)="onRemove(resource)"
+                                    (click)="onFileClick(resource.file.url, resource.file.name, resource.file.size)"
+                                    ngProjectAs="ngx-dropzone-preview">
+                                </custom-dropzone-preview>
+                            }
+
+                            @if (isImage(resource)) {
+                                <div class="cursor-pointer" (click)="imagePreview(index)">
+                                    <ngx-dropzone-image-preview class="image-preview-default-class" [file]="resource.file"
+                                        [removable]="removable()" (removed)="onRemove(resource)">
+                                    </ngx-dropzone-image-preview>
+                                </div>
+                            }
+
+                            @if (isVideo(resource) || isAudio(resource)) {
+                                <ngx-dropzone-video-preview [file]="resource.file" [removable]="removable()"
+                                    (removed)="onRemove(resource)">
+                                </ngx-dropzone-video-preview>
+                            }
+
+                            @if (showFileName()) {
+                                <p class="w-full truncate text-gray-500 text-center text-sm font-mono mt-2">
+                                    {{ resource?.file?.name || '' }}
+                                </p>
+                            }
+                        </div>
+                    }
+                }
+            </ngx-dropzone>
+        </div>
+    }
+
+    @if (viewMode()) {
+        <ngt-dropzone-view class="h-full w-full" [resources]="resources()" [loading]="isLoading()"
+            [placeholder]="placeholder()" [dropzoneHeight]="dropzoneHeight"
+            (onFileClick)="onFileClick($event.previewUrl, $event.name, $event.fileSize)"
+            (onImageClick)="onImageClick($event.div, $event.index)">
+        </ngt-dropzone-view>
+    }
+
+    <ngt-dropzone-file-viewer [hidden]="!showFileViewer()" [url]="fileViewerUrl()" [fileName]="fileViewerFileName()"
+        [fileSize]="fileViewerFileSize()" (onClose)="onCloseFileViewer()" [canDownloadFile]="canDownloadFile()"
+        [disableContent]="canDownloadFile() ? 'none' : 'popout'">
+    </ngt-dropzone-file-viewer>
+
+    <ngt-validation [control]="formControl"></ngt-validation>
+</div>
