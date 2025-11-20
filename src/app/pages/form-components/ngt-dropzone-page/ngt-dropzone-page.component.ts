@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {
     NgtDropzoneErrorType,
     NgtDropzonePreviewType,
-} from 'projects/ng-tailwind/src/components/ngt-dropzone/ngt-dropzone.meta';
+} from 'projects/ng-tailwind/src/meta/ngt-dropzone.meta';
 
 @Component({
     selector: 'app-ngt-dropzone-page',

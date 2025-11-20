@@ -11,10 +11,12 @@ import {
     OnInit,
     Optional,
     Output,
+    signal,
     SimpleChanges,
     SkipSelf,
     ViewChild,
     ViewEncapsulation,
+    WritableSignal,
 } from '@angular/core';
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
 import { NgxDropzoneChangeEvent, NgxDropzoneComponent } from 'ngx-dropzone';
@@ -27,8 +29,8 @@ import { getEnumFromString } from '../../helpers/enum/enum';
 import { uuid } from '../../helpers/uuid';
 import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-http.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtDropzoneFileViewerComponent } from './ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
-import { NgtDropzoneErrorType, NgtDropzoneFile, NgtDropzonePreviewType } from './ngt-dropzone.meta';
+import { NgtDropzoneFileViewerComponent } from '../shared/ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
+import { NgtDropzoneErrorType, NgtDropzoneFile, NgtDropzonePreviewType } from '../../meta/ngt-dropzone.meta';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
@@ -107,6 +109,10 @@ export class NgtDropzoneComponent extends NgtControlValueAccessor implements OnI
             next: true,
         }
     };
+
+    public fileViewerUrl: WritableSignal<string> = signal('');
+    public fileViewerFileName: WritableSignal<string> = signal('');
+    public fileViewerFileSize: WritableSignal<number> = signal(0);
 
     private subscriptions: Array<Subscription> = [];
 
@@ -211,15 +217,17 @@ export class NgtDropzoneComponent extends NgtControlValueAccessor implements OnI
     public onFileClick(url: string, name: string, size: number) {
         this.forceDisableClick = true;
         this.showNgtDropzoneFileViewer = true;
-        this.ngtDropzoneFileViewer.url = url;
-        this.ngtDropzoneFileViewer.fileName = name;
-        this.ngtDropzoneFileViewer.fileSize = size;
-        this.ngtDropzoneFileViewer.init();
 
-        this.subscriptions.push(this.ngtDropzoneFileViewer.onClose.subscribe(() => {
-            this.showNgtDropzoneFileViewer = false;
-            this.forceDisableClick = false;
-        }));
+        this.fileViewerUrl.set(url);
+        this.fileViewerFileName.set(name);
+        this.fileViewerFileSize.set(size);
+
+        this.ngtDropzoneFileViewer.init();
+    }
+
+    public onCloseFileViewer(): void {
+        this.showNgtDropzoneFileViewer = false;
+        this.forceDisableClick = false;
     }
 
     public async onSelect(event: NgxDropzoneChangeEvent) {
@@ -275,7 +283,7 @@ export class NgtDropzoneComponent extends NgtControlValueAccessor implements OnI
                     return unacceptedFiles.push(file);
                 }
 
-                observables.push(this.ngtAttachmentHttpService.upload(this.remoteResource, file).pipe(
+                observables.push(this.ngtAttachmentHttpService.upload(file, this.remoteResource).pipe(
                     map((response: any) => {
                         if (response && response.data) {
                             if (response.data.attributes && response.data.attributes.data) {

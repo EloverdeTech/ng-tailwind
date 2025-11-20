@@ -60,7 +60,8 @@
         (onImageClick)="onImageClick($event.div, $event.index)">
     </ngt-dropzone-view>
 
-    <ngt-dropzone-file-viewer [hidden]="!showNgtDropzoneFileViewer" (onClose)="forceDisableClick = false"
+    <ngt-dropzone-file-viewer [hidden]="!showNgtDropzoneFileViewer" [url]="fileViewerUrl()"
+        [fileName]="fileViewerFileName()" [fileSize]="fileViewerFileSize()" (onClose)="onCloseFileViewer()"
         [canDownloadFile]="canDownloadFile" [disableContent]="canDownloadFile ? 'none' : 'popout'">
     </ngt-dropzone-file-viewer>
 
