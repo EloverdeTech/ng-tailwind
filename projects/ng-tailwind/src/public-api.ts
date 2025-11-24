@@ -190,6 +190,9 @@ export * from './components/forms/reactive/ngt-reactive-select/ngt-reactive-sele
 // NgtReactiveDate
 export * from './components/forms/reactive/ngt-reactive-date/ngt-reactive-date.component';
 
+// NgtReactiveCheckbox
+export * from './components/forms/reactive/ngt-reactive-checkbox/ngt-reactive-checkbox.component';
+
 // NgtReactiveDropzone
 export * from './components/forms/reactive/ngt-reactive-dropzone/ngt-reactive-dropzone.component';
 
