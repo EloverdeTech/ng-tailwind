@@ -187,6 +187,9 @@ export * from './components/forms/reactive/ngt-reactive-textarea/ngt-reactive-te
 export * from './components/forms/reactive/ngt-reactive-select/ngt-reactive-select.component';
 export * from './components/forms/reactive/ngt-reactive-select/ngt-reactive-select.directive';
 
+// NgtReactiveDate
+export * from './components/forms/reactive/ngt-reactive-date/ngt-reactive-date.component';
+
 // NgtReactiveDropzone
 export * from './components/forms/reactive/ngt-reactive-dropzone/ngt-reactive-dropzone.component';
 
