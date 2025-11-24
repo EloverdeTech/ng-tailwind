@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../forms/template-driven/ngt-form/ngt-form.component';
+import { NgtReactiveFormComponent } from '../forms/reactive/ngt-reactive-form/ngt-reactive-form.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 import { NgtModalBodyComponent } from '../ngt-modal/ngt-modal-body/ngt-modal-body.component';
@@ -38,6 +39,9 @@ export class NgtActionComponent implements OnDestroy {
 
         @Optional() @SkipSelf()
         public ngtForm: NgtFormComponent,
+
+        @Optional() @SkipSelf()
+        private ngtReactiveForm: NgtReactiveFormComponent,
 
         @Optional() @SkipSelf()
         public ngtSection: NgtSectionComponent,
@@ -83,6 +87,7 @@ export class NgtActionComponent implements OnDestroy {
 
     private isDisabledByParent(): boolean {
         return this.ngtForm?.isDisabled
+            || this.ngtReactiveForm?.isDisabledState()
             || this.ngtSection?.isDisabledState()
             || this.ngtModal?.isDisabledState();
     }
