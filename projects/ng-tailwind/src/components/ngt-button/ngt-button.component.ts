@@ -2,6 +2,7 @@ import {
     AfterViewInit,
     ChangeDetectorRef,
     Component,
+    effect,
     Injector,
     Input,
     OnChanges,
@@ -16,6 +17,7 @@ import { Subscription } from 'rxjs';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../forms/template-driven/ngt-form/ngt-form.component';
+import { NgtReactiveFormComponent } from '../forms/reactive/ngt-reactive-form/ngt-reactive-form.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 
@@ -46,6 +48,9 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
         private ngtForm: NgtFormComponent,
 
         @Optional() @SkipSelf()
+        private ngtReactiveForm: NgtReactiveFormComponent,
+
+        @Optional() @SkipSelf()
         private ngtSection: NgtSectionComponent,
 
         @Optional() @SkipSelf()
@@ -68,6 +73,12 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
             w: 'w-full',
             h: 'h-full',
             rounded: 'rounded'
+        });
+
+        effect(() => {
+            if (this.ngtReactiveForm) {
+                this.loading = this.ngtReactiveForm.loading();
+            }
         });
     }
 
@@ -140,6 +151,7 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     private isDisabledByParent(): boolean {
         return this.ngtForm?.isDisabled
+            || this.ngtReactiveForm?.isDisabledState()
             || this.ngtSection?.isDisabledState()
             || this.ngtModal?.isDisabledState();
     }
