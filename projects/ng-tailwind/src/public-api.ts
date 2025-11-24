@@ -193,6 +193,10 @@ export * from './components/forms/reactive/ngt-reactive-date/ngt-reactive-date.c
 // NgtReactiveCheckbox
 export * from './components/forms/reactive/ngt-reactive-checkbox/ngt-reactive-checkbox.component';
 
+// NgtReactiveRadioButton
+export * from './components/forms/reactive/ngt-reactive-radio-button/ngt-reactive-radio-button.component';
+export * from './components/forms/reactive/ngt-reactive-radio-button/ngt-reactive-radio-button-container/ngt-reactive-radio-button-container.component';
+
 // NgtReactiveDropzone
 export * from './components/forms/reactive/ngt-reactive-dropzone/ngt-reactive-dropzone.component';
 
