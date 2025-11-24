@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+import { NgtFormComponent } from '../forms/template-driven/ngt-form/ngt-form.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
 

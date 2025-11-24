@@ -15,10 +15,10 @@ import {
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
-import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { NgtTranslateService } from '../../services/http/ngt-translate.service';
-import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
+import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtTranslateService } from '../../../../services/http/ngt-translate.service';
+import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 @Component({

@@ -20,21 +20,21 @@ import {
 import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
-import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { applyInputMask, InputMaskEnum, removeInputMask } from '../../helpers/input-mask/input-mask.helper';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
+import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { applyInputMask, InputMaskEnum, removeInputMask } from '../../../../helpers/input-mask/input-mask.helper';
 import {
     NgtHttpFindExistingResourceInterface,
     NgtHttpFindExistingResourceResponse,
     NgtHttpResourceService,
-} from '../../services/http/ngt-http-resource.service';
-import { NgtHttpValidationResponse, NgtHttpValidationService } from '../../services/http/ngt-http-validation.service';
-import { NgtTranslateService } from '../../services/http/ngt-translate.service';
-import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+} from '../../../../services/http/ngt-http-resource.service';
+import { NgtHttpValidationResponse, NgtHttpValidationService } from '../../../../services/http/ngt-http-validation.service';
+import { NgtTranslateService } from '../../../../services/http/ngt-translate.service';
+import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
-import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
-import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
-import { validateCNPJ, validateCPF } from '../../helpers/validators/validation.helper';
+import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
+import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
+import { validateCNPJ, validateCPF } from '../../../../helpers/validators/validation.helper';
 
 @Component({
     selector: 'ngt-input',

@@ -6,7 +6,7 @@ import { NgtTranslateService } from '../../../services/http/ngt-translate.servic
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtCheckboxComponent } from '../../ngt-checkbox/ngt-checkbox.component';
+import { NgtCheckboxComponent } from '../../forms/template-driven/ngt-checkbox/ngt-checkbox.component';
 import { NgtDatatableComponent } from '../ngt-datatable.component';
 
 @Component({

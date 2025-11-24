@@ -20,15 +20,15 @@ import { FlatpickrOptions } from 'ev-date-picker';
 import { EvDatePickerComponent } from 'ev-date-picker/ev-date-picker.component';
 import { Subscription } from 'rxjs';
 
-import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
-import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { getEnumFromString } from '../../helpers/enum/enum';
-import { applyInputMask, InputMaskEnum } from '../../helpers/input-mask/input-mask.helper';
-import { uuid } from '../../helpers/uuid';
-import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
+import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { getEnumFromString } from '../../../../helpers/enum/enum';
+import { applyInputMask, InputMaskEnum } from '../../../../helpers/input-mask/input-mask.helper';
+import { uuid } from '../../../../helpers/uuid';
+import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
-import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
-import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
+import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
+import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 
 export enum NgtDateLocale {
     BRAZIL = 'BRAZIL',

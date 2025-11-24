@@ -15,13 +15,13 @@ import {
 import { ControlContainer, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
-import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
+import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
-import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
+import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtRadioButtonContainerComponent } from './ngt-radio-button-container/ngt-radio-button-container.component';
-import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
+import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 
 @Component({
     selector: 'ngt-radio-button',

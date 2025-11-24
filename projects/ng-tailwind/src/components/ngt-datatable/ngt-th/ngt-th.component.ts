@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtInputComponent } from '../../ngt-input/ngt-input.component';
+import { NgtInputComponent } from '../../forms/template-driven/ngt-input/ngt-input.component';
 import { NgtDatatableComponent } from '../ngt-datatable.component';
 
 @Component({

@@ -24,16 +24,16 @@ import { forkJoin, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import Viewer from 'viewerjs';
 
-import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
-import { getEnumFromString } from '../../helpers/enum/enum';
-import { uuid } from '../../helpers/uuid';
-import { NgtAttachmentHttpService } from '../../services/http/ngt-attachment-http.service';
-import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtDropzoneFileViewerComponent } from '../shared/ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
-import { NgtDropzoneErrorType, NgtDropzoneFile, NgtDropzonePreviewType } from '../../meta/ngt-dropzone.meta';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
+import { getEnumFromString } from '../../../../helpers/enum/enum';
+import { uuid } from '../../../../helpers/uuid';
+import { NgtAttachmentHttpService } from '../../../../services/http/ngt-attachment-http.service';
+import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtDropzoneFileViewerComponent } from '../../../shared/ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
+import { NgtDropzoneErrorType, NgtDropzoneFile, NgtDropzonePreviewType } from '../../../../meta/ngt-dropzone.meta';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
-import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
-import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
+import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
+import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 
 @Component({
     selector: 'ngt-dropzone',

@@ -13,7 +13,7 @@ import {
 import { ControlContainer, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 
 export enum NgtSliderColorSchemeEnum {

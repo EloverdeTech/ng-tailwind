@@ -22,16 +22,16 @@ import {
 import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
-import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { uuid } from '../../helpers/uuid';
-import { NgtHttpPagination, NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
-import { NgtTranslateService } from '../../services/http/ngt-translate.service';
-import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
+import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { uuid } from '../../../../helpers/uuid';
+import { NgtHttpPagination, NgtHttpResponse, NgtHttpService } from '../../../../services/http/ngt-http.service';
+import { NgtTranslateService } from '../../../../services/http/ngt-translate.service';
+import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtInputComponent } from '../ngt-input/ngt-input.component';
-import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
-import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
+import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
+import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 
 @Component({
     selector: 'ngt-multi-select',

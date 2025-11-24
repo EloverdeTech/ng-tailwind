@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
 import { getIdFromUri } from '../../../../helpers/routing/route';
 import { NgtHttpFormService } from '../../../../services/http/ngt-http-form.service';
 import { NgtAbilityValidationService } from '../../../../services/validation/ngt-ability-validation.service';
-import { NgtFormValidationMessageComponent } from '../../../ngt-form/ngt-form-validation-message/ngt-form-validation-message.component';
+import { NgtFormValidationMessageComponent } from '../../template-driven/ngt-form/ngt-form-validation-message/ngt-form-validation-message.component';
 
 export enum NgtReactFormState {
     CREATING = 'CREATING',

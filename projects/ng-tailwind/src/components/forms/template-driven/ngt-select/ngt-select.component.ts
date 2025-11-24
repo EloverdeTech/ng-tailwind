@@ -23,18 +23,18 @@ import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
 import { DropdownPosition, NgOption, NgSelectComponent } from '@ng-select/ng-select';
 import { Observable, Observer, Subject, Subscription } from 'rxjs';
 
-import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../base/ngt-control-value-accessor';
-import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { getEnumFromString } from '../../helpers/enum/enum';
-import { uuid } from '../../helpers/uuid';
-import { NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
-import { NgtTranslateService } from '../../services/http/ngt-translate.service';
-import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
+import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { getEnumFromString } from '../../../../helpers/enum/enum';
+import { uuid } from '../../../../helpers/uuid';
+import { NgtHttpResponse, NgtHttpService } from '../../../../services/http/ngt-http.service';
+import { NgtTranslateService } from '../../../../services/http/ngt-translate.service';
+import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
-import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
+import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } from './ngt-select.directive';
-import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
-import { delay } from '../../helpers/promise/promise-helper';
+import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
+import { delay } from '../../../../helpers/promise/promise-helper';
 
 export enum NgtSelectDropdownPanelHeight {
     AUTO = 'auto',

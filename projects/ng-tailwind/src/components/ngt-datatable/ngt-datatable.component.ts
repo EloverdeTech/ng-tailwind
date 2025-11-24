@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtHttpPagination, NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
-import { NgtInputComponent } from '../ngt-input/ngt-input.component';
+import { NgtInputComponent } from '../forms/template-driven/ngt-input/ngt-input.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 import { NgtPaginationComponent } from '../ngt-pagination/ngt-pagination.component';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';

@@ -14,10 +14,10 @@ import { ControlContainer, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
-import { isValidNgForm } from '../../helpers/form/form';
-import { getIdFromUri } from '../../helpers/routing/route';
-import { NgtHttpFormService } from '../../services/http/ngt-http-form.service';
-import { NgtAbilityValidationService } from '../../services/validation/ngt-ability-validation.service';;
+import { isValidNgForm } from '../../../../helpers/form/form';
+import { getIdFromUri } from '../../../../helpers/routing/route';
+import { NgtHttpFormService } from '../../../../services/http/ngt-http-form.service';
+import { NgtAbilityValidationService } from '../../../../services/validation/ngt-ability-validation.service';;
 
 export enum NgtFormState {
     CREATING = 'CREATING',

@@ -114,21 +114,21 @@ export * from './components/ngt-header-nav/ngt-header-nav.component';
 /** Form Components */
 
 // NgtCheckbox
-export * from './components/ngt-checkbox/ngt-checkbox.module';
-export * from './components/ngt-checkbox/ngt-checkbox.component';
+export * from './components/forms/template-driven/ngt-checkbox/ngt-checkbox.module';
+export * from './components/forms/template-driven/ngt-checkbox/ngt-checkbox.component';
 
 // NgtFloatingButton
 export * from './components/ngt-floating-button/ngt-floating-button.module';
 export * from './components/ngt-floating-button/ngt-floating-button.component';
 
 // NgtSlider
-export * from './components/ngt-slider/ngt-slider.module';
-export * from './components/ngt-slider/ngt-slider.component';
+export * from './components/forms/template-driven/ngt-slider/ngt-slider.module';
+export * from './components/forms/template-driven/ngt-slider/ngt-slider.component';
 
 // NgtRadioButton
-export * from './components/ngt-radio-button/ngt-radio-button.module';
-export * from './components/ngt-radio-button/ngt-radio-button.component';
-export * from './components/ngt-radio-button/ngt-radio-button-container/ngt-radio-button-container.component';
+export * from './components/forms/template-driven/ngt-radio-button/ngt-radio-button.module';
+export * from './components/forms/template-driven/ngt-radio-button/ngt-radio-button.component';
+export * from './components/forms/template-driven/ngt-radio-button/ngt-radio-button-container/ngt-radio-button-container.component';
 
 // NgtSection
 export * from './components/ngt-section/ngt-section.module';
@@ -137,38 +137,38 @@ export * from './components/ngt-section/ngt-section.component';
 /** Template-driven Form Components */
 
 // NgtTextarea
-export * from './components/ngt-textarea/ngt-textarea.module';
-export * from './components/ngt-textarea/ngt-textarea.component';
+export * from './components/forms/template-driven/ngt-textarea/ngt-textarea.module';
+export * from './components/forms/template-driven/ngt-textarea/ngt-textarea.component';
 
 // NgtDate
-export * from './components/ngt-date/ngt-date.module';
-export * from './components/ngt-date/ngt-date.component';
+export * from './components/forms/template-driven/ngt-date/ngt-date.module';
+export * from './components/forms/template-driven/ngt-date/ngt-date.component';
 
 // NgtButton
 export * from './components/ngt-button/ngt-button.module';
 export * from './components/ngt-button/ngt-button.component';
 
 // NgtInput
-export * from './components/ngt-input/ngt-input.module';
-export * from './components/ngt-input/ngt-input.component';
+export * from './components/forms/template-driven/ngt-input/ngt-input.module';
+export * from './components/forms/template-driven/ngt-input/ngt-input.component';
 
 // NgtSelect
-export * from './components/ngt-select/ngt-select.module';
-export * from './components/ngt-select/ngt-select.component';
-export * from './components/ngt-select/ngt-select.directive';
+export * from './components/forms/template-driven/ngt-select/ngt-select.module';
+export * from './components/forms/template-driven/ngt-select/ngt-select.component';
+export * from './components/forms/template-driven/ngt-select/ngt-select.directive';
 
 // NgtMultiSelect
-export * from './components/ngt-multi-select/ngt-multi-select.module';
-export * from './components/ngt-multi-select/ngt-multi-select.component';
+export * from './components/forms/template-driven/ngt-multi-select/ngt-multi-select.module';
+export * from './components/forms/template-driven/ngt-multi-select/ngt-multi-select.component';
 
 // NgtForm
-export * from './components/ngt-form/ngt-form.module';
-export * from './components/ngt-form/ngt-form.component';
-export * from './components/ngt-form/ngt-form-validation-message/ngt-form-validation-message.component';
+export * from './components/forms/template-driven/ngt-form/ngt-form.module';
+export * from './components/forms/template-driven/ngt-form/ngt-form.component';
+export * from './components/forms/template-driven/ngt-form/ngt-form-validation-message/ngt-form-validation-message.component';
 
 // NgtDropzone
-export * from './components/ngt-dropzone/ngt-dropzone.module';
-export * from './components/ngt-dropzone/ngt-dropzone.component';
+export * from './components/forms/template-driven/ngt-dropzone/ngt-dropzone.module';
+export * from './components/forms/template-driven/ngt-dropzone/ngt-dropzone.component';
 export * from './meta/ngt-dropzone.meta';
 export * from './services/http/ngt-attachment-http.service';
 

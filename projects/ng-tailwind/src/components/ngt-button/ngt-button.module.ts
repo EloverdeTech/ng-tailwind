@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { NgtFormModule } from '../ngt-form/ngt-form.module';
+import { NgtFormModule } from '../forms/template-driven/ngt-form/ngt-form.module';
 import { NgtButtonComponent } from './ngt-button.component';
 
 @NgModule({

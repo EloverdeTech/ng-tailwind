@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, Optional } from '@angular/core';
 
-import { NgtTranslateService } from '../../../services/http/ngt-translate.service';
+import { NgtTranslateService } from '../../../../../services/http/ngt-translate.service';
 
 @Component({
     selector: 'ngt-form-validation-message',
