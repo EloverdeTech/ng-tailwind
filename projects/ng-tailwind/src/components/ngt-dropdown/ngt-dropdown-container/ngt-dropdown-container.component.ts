@@ -1,14 +1,19 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, signal, WritableSignal } from '@angular/core';
+import { NgtDropdownComponent } from '../ngt-dropdown.component';
 
 @Component({
     selector: '[ngt-dropdown-container]',
     templateUrl: './ngt-dropdown-container.component.html',
-    standalone: false
+    standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgtDropdownContainerComponent {
-    @Output() public onActiveDropdownChange = new EventEmitter();
+    public readonly onActiveDropdownChange = output<NgtDropdownComponent>();
 
-    public setActiveDropdown(activeDropdown) {
+    public readonly activeDropdown: WritableSignal<NgtDropdownComponent | null> = signal(null);
+
+    public setActiveDropdown(activeDropdown: NgtDropdownComponent): void {
+        this.activeDropdown.set(activeDropdown);
         this.onActiveDropdownChange.emit(activeDropdown);
     }
 }

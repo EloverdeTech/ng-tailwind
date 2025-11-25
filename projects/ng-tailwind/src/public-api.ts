@@ -48,7 +48,6 @@ export * from './components/ngt-pagination/ngt-pagination.component';
 /** General Components */
 
 // NgtDropdown
-export * from './components/ngt-dropdown/ngt-dropdown.module';
 export * from './components/ngt-dropdown/ngt-dropdown.component';
 export * from './components/ngt-dropdown/ngt-dropdown-container/ngt-dropdown-container.component';
 
