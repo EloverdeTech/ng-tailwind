@@ -42,6 +42,7 @@ import { NgtReactiveInputMaskService } from './services/ngt-reactive-input-mask.
 import { NgtReactInputValidationConfig, NgtReactiveInputValidationService } from './services/ngt-reactive-input-validation.service';
 import { NgtReactiveInputLoaderService } from './services/ngt-reactive-input-loader.service';
 import { NgtValidationModule } from '../../../ngt-validation/ngt-validation.module';
+import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 
 @Component({
     selector: 'ngt-reactive-input',
@@ -62,6 +63,7 @@ import { NgtValidationModule } from '../../../ngt-validation/ngt-validation.modu
         NgtShiningModule,
         NgtSvgModule,
         NgtValidationModule,
+        NgtHelperComponent,
     ],
 })
 export class NgtReactiveInputComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {

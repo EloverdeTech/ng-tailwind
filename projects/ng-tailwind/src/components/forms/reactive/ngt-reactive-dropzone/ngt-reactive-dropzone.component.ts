@@ -37,6 +37,7 @@ import { NgtReactiveDropzoneStateService } from './services/ngt-reactive-dropzon
 import { CustomDropzonePreviewComponent } from '../../../shared/custom-dropzone-preview/custom-dropzone-preview.component';
 import { NgtDropzoneFileViewerComponent } from '../../../shared/ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
 import { NgtDropzoneViewComponent } from '../../../shared/ngt-dropzone-view/ngt-dropzone-view.component';
+import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 
 @Component({
     selector: 'ngt-reactive-dropzone',
@@ -58,6 +59,7 @@ import { NgtDropzoneViewComponent } from '../../../shared/ngt-dropzone-view/ngt-
         ReactiveFormsModule,
         NgxDropzoneModule,
         NgtValidationModule,
+        NgtHelperComponent,
 
         CustomDropzonePreviewComponent,
         NgtDropzoneFileViewerComponent,

@@ -39,6 +39,7 @@ import { NgtReactiveSelectDropdownService } from './services/ngt-reactive-select
 import { NgtReactiveSelectStateService } from './services/ngt-reactive-select-state.service';
 import { NgtReactiveSelectItemsConfig, NgtReactiveSelectItemsService } from './services/ngt-reactive-select-items.service';
 import { NgtReactiveSelectTagManagerService } from './services/ngt-reactive-select-tag-manager.service';
+import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 
 export enum NgtReactSelectDropdownPanelHeight {
     AUTO = 'auto',
@@ -72,6 +73,7 @@ export enum NgtReactSelectDropdownPanelHeight {
         NgtValidationModule,
         NgtShiningModule,
         NgtSvgModule,
+        NgtHelperComponent,
 
         /** Directives */
         NgtReactiveSelectOptionTemplate,

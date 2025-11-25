@@ -31,6 +31,7 @@ import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 import { NgtShiningModule } from '../../../ngt-shining/ngt-shining.module';
 import { NgtValidationModule } from '../../../ngt-validation/ngt-validation.module';
 import { NgtReactiveTextareaValidationService, NgtReactiveTextareaValidationConfig } from './services/ngt-reactive-textarea-validation.service';
+import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 
 @Component({
     selector: 'ngt-reactive-textarea',
@@ -46,6 +47,7 @@ import { NgtReactiveTextareaValidationService, NgtReactiveTextareaValidationConf
         ReactiveFormsModule,
         NgtShiningModule,
         NgtValidationModule,
+        NgtHelperComponent,
     ],
 })
 export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {

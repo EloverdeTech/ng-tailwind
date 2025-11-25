@@ -34,6 +34,7 @@ import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 import { NgtShiningModule } from '../../../ngt-shining/ngt-shining.module';
 import { NgtValidationModule } from '../../../ngt-validation/ngt-validation.module';
 import { NgtReactiveDateFormatterService } from './services/ngt-reactive-date-formatter.service';
+import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 
 export enum NgtReactiveDateLocale {
     BRAZIL = 'BRAZIL',
@@ -63,6 +64,7 @@ export enum NgtReactiveDateMode {
         EvDatePickerModule,
         NgtShiningModule,
         NgtValidationModule,
+        NgtHelperComponent,
     ],
 })
 export class NgtReactiveDateComponent extends NgtControlValueAccessor implements OnInit, AfterViewInit, OnDestroy {

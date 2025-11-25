@@ -7,14 +7,12 @@
         <span class="flex">
             <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} mb-2">{{ label() }}</span>
 
-            <!-- TODO: Review ngt-helper for onPush -->
-
-            <!-- @if (helpText()) {
+            @if (helpText()) {
                 <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpTextColor()" [autoXReverse]="helperAutoXReverse()"
                     class="ml-1">
                     {{ helpText() }}
                 </ngt-helper>
-            } -->
+            }
         </span>
     }
 
@@ -67,14 +65,12 @@
     @if (label() && !isShining() && !isToggleMode()) {
         <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} ml-2">{{ label() }}</span>
 
-        <!-- TODO: Review ngt-helper for onPush -->
-
-        <!-- @if (helpText()) {
+        @if (helpText()) {
             <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpTextColor()" [autoXReverse]="helperAutoXReverse()"
                 class="ml-1">
                 {{ helpText() }}
             </ngt-helper>
-        } -->
+        }
     }
 </label>
 

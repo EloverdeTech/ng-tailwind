@@ -13,14 +13,12 @@
         <span class="text-red-500 font-bold text-md ml-1">*</span>
     }
 
-    <!-- TODO: Review ngt-helper for onPush -->
-
-    <!-- @if (helpText()) {
-    <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpTextColor()"
-        [helperReverseYPosition]="helperReverseYPosition()" [autoXReverse]="helperAutoXReverse()" class="ml-1">
-        {{ helpText() }}
-    </ngt-helper>
-    } -->
+    @if (helpText()) {
+        <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpTextColor()"
+            [helperReverseYPosition]="helperReverseYPosition()" [autoXReverse]="helperAutoXReverse()" class="ml-1">
+            {{ helpText() }}
+        </ngt-helper>
+    }
 </label>
 }
 

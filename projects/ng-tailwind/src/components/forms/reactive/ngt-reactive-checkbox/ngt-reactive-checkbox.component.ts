@@ -23,6 +23,7 @@ import { NgtShiningModule } from '../../../ngt-shining/ngt-shining.module';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 import { NgtReactiveFormComponent } from '../ngt-reactive-form/ngt-reactive-form.component';
+import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 
 export enum NgtReactiveCheckboxMode {
     DEFAULT = 'DEFAULT',
@@ -43,6 +44,7 @@ export enum NgtReactiveCheckboxMode {
         CommonModule,
         ReactiveFormsModule,
         NgtShiningModule,
+        NgtHelperComponent,
     ],
     animations: [
         trigger('slideLeftToRight', [
