@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { NgtHelperModule } from '../../../ngt-helper/ngt-helper.module';
+import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 import { NgtShiningModule } from '../../../ngt-shining/ngt-shining.module';
 import { NgtCheckboxComponent } from './ngt-checkbox.component';
 
@@ -11,7 +11,7 @@ import { NgtCheckboxComponent } from './ngt-checkbox.component';
     imports: [
         CommonModule,
         NgtShiningModule,
-        NgtHelperModule,
+        NgtHelperComponent,
     ]
 })
 export class NgtCheckboxModule { }

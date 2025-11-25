@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 import { NgtFormModule } from '../ngt-form/ngt-form.module';
-import { NgtHelperModule } from '../../../ngt-helper/ngt-helper.module';
+import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 import { NgtShiningModule } from '../../../ngt-shining/ngt-shining.module';
 import { NgtSvgModule } from '../../../ngt-svg/ngt-svg.module';
 import { NgtValidationModule } from '../../../ngt-validation/ngt-validation.module';
@@ -31,7 +31,7 @@ import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } fr
         NgtValidationModule,
         NgtFormModule,
         NgtShiningModule,
-        NgtHelperModule,
+        NgtHelperComponent,
         NgtSvgModule
     ]
 })

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
-import { NgtHelperModule } from '../../../ngt-helper/ngt-helper.module';
+import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 import { NgtSvgModule } from '../../../ngt-svg/ngt-svg.module';
 import { NgtValidationModule } from '../../../ngt-validation/ngt-validation.module';
 import { CustomDropzonePreviewComponent } from '../../../shared/custom-dropzone-preview/custom-dropzone-preview.component';
@@ -22,7 +22,7 @@ import { NgtDropzoneComponent } from './ngt-dropzone.component';
         NgtValidationModule,
         NgxDropzoneModule,
         NgtSvgModule,
-        NgtHelperModule,
+        NgtHelperComponent,
         CustomDropzonePreviewComponent,
         NgtDropzoneFileViewerComponent,
         NgtDropzoneViewComponent,

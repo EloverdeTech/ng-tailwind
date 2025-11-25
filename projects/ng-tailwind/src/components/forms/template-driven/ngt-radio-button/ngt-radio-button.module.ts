@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { NgtHelperModule } from '../../../ngt-helper/ngt-helper.module';
+import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 import { NgtShiningModule } from '../../../ngt-shining/ngt-shining.module';
 import { NgtRadioButtonContainerComponent } from './ngt-radio-button-container/ngt-radio-button-container.component';
 import { NgtRadioButtonComponent } from './ngt-radio-button.component';
@@ -12,7 +12,7 @@ import { NgtRadioButtonComponent } from './ngt-radio-button.component';
     imports: [
         CommonModule,
         NgtShiningModule,
-        NgtHelperModule
+        NgtHelperComponent
     ]
 })
 export class NgtRadioButtonModule { }

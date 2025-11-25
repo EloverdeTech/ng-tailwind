@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import { NgtStylizableModule } from '../../directives/ngt-stylizable/ngt-stylizable.module';
-import { NgtHelperModule } from '../ngt-helper/ngt-helper.module';
+import { NgtHelperComponent } from '../ngt-helper/ngt-helper.component';
 import { NgtSvgModule } from '../ngt-svg/ngt-svg.module';
 import { NgtSectionComponent } from './ngt-section.component';
 
@@ -13,7 +13,7 @@ import { NgtSectionComponent } from './ngt-section.component';
         CommonModule,
         NgtStylizableModule,
         NgtSvgModule,
-        NgtHelperModule
+        NgtHelperComponent
     ]
 })
 export class NgtSectionModule { }

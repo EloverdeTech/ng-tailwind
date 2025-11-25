@@ -79,7 +79,6 @@ export * from './components/ngt-content/ngt-content.module';
 export * from './components/ngt-content/ngt-content.component';
 
 // NgtHelper
-export * from './components/ngt-helper/ngt-helper.module';
 export * from './components/ngt-helper/ngt-helper.component';
 
 // NgtPopover
