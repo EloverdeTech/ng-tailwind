@@ -28,6 +28,7 @@ import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 import { NgtShiningModule } from '../../../ngt-shining/ngt-shining.module';
 import { NgtSvgModule } from '../../../ngt-svg/ngt-svg.module';
 import { uuid } from '../../../../helpers/uuid';
+import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 
 @Component({
     selector: 'ngt-reactive-radio-button',
@@ -43,6 +44,7 @@ import { uuid } from '../../../../helpers/uuid';
         ReactiveFormsModule,
         NgtShiningModule,
         NgtSvgModule,
+        NgtHelperComponent,
     ],
 })
 export class NgtReactiveRadioButtonComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {
