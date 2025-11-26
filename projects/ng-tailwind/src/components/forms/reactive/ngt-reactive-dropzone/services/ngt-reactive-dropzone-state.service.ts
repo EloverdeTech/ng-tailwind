@@ -16,10 +16,6 @@ export class NgtReactiveDropzoneStateService {
     public readonly loading: WritableSignal<boolean> = signal(false);
     public readonly shining: WritableSignal<boolean> = signal(false);
 
-    // Form State
-    public readonly formControlHasErrors: WritableSignal<boolean> = signal(false);
-    public readonly formControlIsDirty: WritableSignal<boolean> = signal(false);
-
     public reset(): void {
         this.dropzoneHeight.set('180px');
         this.uploadedResources.set([]);
@@ -28,7 +24,5 @@ export class NgtReactiveDropzoneStateService {
         this.loading.set(false);
         this.shining.set(false);
         this.showFileViewer.set(false);
-        this.formControlHasErrors.set(false);
-        this.formControlIsDirty.set(false);
     }
 }

@@ -8,7 +8,6 @@ import {
     ElementRef,
     Injector,
     input,
-    OnDestroy,
     Optional,
     output,
     Signal,
@@ -20,7 +19,6 @@ import {
 import { AsyncValidatorFn, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgxDropzoneChangeEvent, NgxDropzoneComponent, NgxDropzoneModule } from 'ngx-dropzone';
-import { Subscription } from 'rxjs';
 
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { uuid } from '../../../../helpers/uuid';
@@ -66,7 +64,7 @@ import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
         NgtDropzoneViewComponent,
     ],
 })
-export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {
+export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implements AfterViewInit {
     @ViewChild('container', { static: false }) public container: ElementRef;
     @ViewChild(NgxDropzoneComponent, { static: true }) public ngxDropzone: NgxDropzoneComponent;
     @ViewChild(NgtDropzoneFileViewerComponent, { static: true }) public fileViewer: NgtDropzoneFileViewerComponent;
@@ -149,8 +147,6 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
 
     public readonly ngxElementId: string = uuid();
 
-    private subscriptions: Subscription[] = [];
-
     public constructor(
         @Optional() @SkipSelf()
         private ngtForm: NgtReactiveFormComponent,
@@ -189,10 +185,6 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
         this.setupComponent();
 
         setTimeout(() => this.stateService.componentReady.set(true), 500);
-    }
-
-    public ngOnDestroy(): void {
-        this.destroySubscriptions();
     }
 
     public onSelectFiles(event: NgxDropzoneChangeEvent): void {
@@ -426,8 +418,6 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
     private setupComponent(): void {
         this.setupValidators();
 
-        this.setupSubscriptions();
-
         if (this.value) {
             this.fileService.resetFilesLoad(Array.isArray(this.value) ? this.value : [this.value]);
             this.loadFilePreview(Array.isArray(this.value) ? this.value : [this.value]);
@@ -449,29 +439,13 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
         this.formControl.setValidators(syncValidators);
         this.formControl.setAsyncValidators(asyncValidators);
         this.formControl.updateValueAndValidity();
-    }
 
-    private setupSubscriptions(): void {
-        if (!this.formControl) {
-            return;
+        if (this.value) {
+            this.markAsDirty();
         }
-
-        this.destroySubscriptions();
-
-        this.subscriptions.push(
-            this.formControl.statusChanges.subscribe(() => {
-                this.stateService.formControlHasErrors.set(!!this.formControl?.errors);
-                this.stateService.formControlIsDirty.set(this.formControl?.dirty || false);
-            })
-        );
     }
 
     private hasChangesBetweenValues(a: any, b: any): boolean {
         return JSON.stringify(a) !== JSON.stringify(b);
-    }
-
-    private destroySubscriptions(): void {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());
-        this.subscriptions = [];
     }
 }
