@@ -260,11 +260,9 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
             this.value = parseFloat(value);
         }
 
-        if (!this.getNativeValue() || (this.validateMinValueOnMask())) {
+        if (this.hasChangesBetweenValues()) {
             this.setNativeValue(<string>value ?? '');
         }
-
-        this.onValueChangeEvent.emit(this.value);
     }
 
     public setFocus(): void {
@@ -361,7 +359,7 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
             this.subscriptions.push(
                 this.formControl.events.subscribe((event) => {
                     if (event instanceof TouchedChangeEvent) {
-                        this.touched.set(true);
+                        this.touched.set(event.touched);
                     }
 
                     this.formControlHasErrors.set(!!this.formControl?.errors);
