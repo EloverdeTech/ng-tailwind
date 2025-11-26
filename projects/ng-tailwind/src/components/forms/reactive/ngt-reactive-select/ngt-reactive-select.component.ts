@@ -17,7 +17,7 @@ import {
     output,
     untracked,
 } from '@angular/core';
-import { ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { ReactiveFormsModule, TouchedChangeEvent, ValidatorFn } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgOption, NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { Observable, Subject, Subscription } from 'rxjs';
@@ -243,11 +243,17 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
             this.ngSelectComponent.element.parentElement.parentElement.parentElement.title = '';
         }
 
-        this.subscriptions.push(
-            this.formControl.statusChanges.subscribe(() => {
-                this.stateService.updateFormControlState(this.formControl);
-            })
-        );
+        if (this.formControl) {
+            this.subscriptions.push(
+                this.formControl.events.subscribe((event) => {
+                    if (event instanceof TouchedChangeEvent) {
+                        this.touched.set(true);
+                    }
+
+                    this.stateService.updateFormControlState(this.formControl);
+                })
+            );
+        }
     }
 
     public ngOnDestroy(): void {
@@ -434,6 +440,13 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
 
         this.formControl.setValidators(syncValidators);
         this.formControl.updateValueAndValidity();
+
+        if (this.value) {
+            this.markAsDirty();
+
+            this.stateService.formControlHasErrors.set(!!this.formControl.errors);
+            this.stateService.formControlIsDirty.set(true);
+        }
     }
 
     private setupNgtStylizable(): void {
@@ -515,7 +528,7 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
 
         if (this.isDisabledState()) {
             selectClass += ' select-border-disabled';
-        } else if (this.stateService.formControlHasErrors() && this.stateService.formControlIsDirty()) {
+        } else if (this.stateService.formControlHasErrors() && this.stateService.formControlIsDirty() && this.touched()) {
             selectClass += ' select-border-error';
         } else {
             selectClass += ' select-border-normal';

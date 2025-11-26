@@ -17,13 +17,14 @@ import {
     ViewEncapsulation,
     WritableSignal,
 } from '@angular/core';
-import { ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
+import { ReactiveFormsModule, TouchedChangeEvent, ValidatorFn, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { english } from 'flatpickr/dist/l10n/default.js';
 import { Portuguese } from 'flatpickr/dist/l10n/pt.js';
 import moment from 'moment';
 import { FlatpickrOptions, EvDatePickerComponent, EvDatePickerModule } from 'ev-date-picker';
 
+import { Subscription } from 'rxjs';
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { applyInputMask, InputMaskEnum } from '../../../../helpers/input-mask/input-mask.helper';
@@ -146,6 +147,7 @@ export class NgtReactiveDateComponent extends NgtControlValueAccessor implements
     private readonly formControlIsDirty: WritableSignal<boolean> = signal(false);
 
     private lastInputedDateString: string;
+    private subscriptions: Subscription[] = [];
 
     public constructor(
         @Self() @Optional()
@@ -183,6 +185,8 @@ export class NgtReactiveDateComponent extends NgtControlValueAccessor implements
 
     public ngOnDestroy(): void {
         this.evDatePicker?.flatpickr?.['calendarContainer']?.remove();
+
+        this.destroySubscriptions();
     }
 
     public change(value: string | string[]): void {
@@ -315,10 +319,18 @@ export class NgtReactiveDateComponent extends NgtControlValueAccessor implements
     }
 
     private setupSubscriptions(): void {
-        this.formControl?.statusChanges.subscribe(() => {
-            this.formControlHasErrors.set(!!this.formControl?.errors);
-            this.formControlIsDirty.set(this.formControl?.dirty);
-        });
+        if (this.formControl) {
+            this.subscriptions.push(
+                this.formControl.events.subscribe((event) => {
+                    if (event instanceof TouchedChangeEvent) {
+                        this.touched.set(true);
+                    }
+
+                    this.formControlHasErrors.set(!!this.formControl?.errors);
+                    this.formControlIsDirty.set(this.formControl?.dirty);
+                })
+            );
+        }
     }
 
     private registerEffects(): void {
@@ -338,6 +350,13 @@ export class NgtReactiveDateComponent extends NgtControlValueAccessor implements
 
         this.formControl.setValidators(syncValidators);
         this.formControl.updateValueAndValidity();
+
+        if (this.value) {
+            this.markAsDirty();
+
+            this.formControlHasErrors.set(!!this.formControl.errors);
+            this.formControlIsDirty.set(true);
+        }
     }
 
     private setupDateInputMask(): void {
@@ -413,7 +432,7 @@ export class NgtReactiveDateComponent extends NgtControlValueAccessor implements
             this.ngtStyle.compile(['h', 'color.text', 'px', 'py', 'text', 'rounded', 'color.bg', 'color.border'])
         ];
 
-        if (this.formControlHasErrors() && this.formControlIsDirty()) {
+        if (this.formControlHasErrors() && this.formControlIsDirty() && this.touched()) {
             classes.push('border-error');
         }
 
@@ -422,5 +441,10 @@ export class NgtReactiveDateComponent extends NgtControlValueAccessor implements
 
     private hasChangeBetweenValues(a: any, b: any): boolean {
         return JSON.stringify(a) != JSON.stringify(b);
+    }
+
+    private destroySubscriptions(): void {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
     }
 }

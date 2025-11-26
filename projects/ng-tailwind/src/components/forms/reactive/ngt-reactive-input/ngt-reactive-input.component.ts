@@ -20,7 +20,7 @@ import {
     ViewChild,
     WritableSignal,
 } from '@angular/core';
-import { AsyncValidatorFn, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ReactiveFormsModule, TouchedChangeEvent, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { NgtShiningModule } from '../../../ngt-shining/ngt-shining.module';
@@ -357,12 +357,18 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
     }
 
     private setupSubscriptions(): void {
-        this.subscriptions.push(
-            this.formControl.statusChanges.subscribe(() => {
-                this.formControlHasErrors.set(!!this.formControl?.errors);
-                this.formControlIsDirty.set(this.formControl?.dirty);
-            })
-        );
+        if (this.formControl) {
+            this.subscriptions.push(
+                this.formControl.events.subscribe((event) => {
+                    if (event instanceof TouchedChangeEvent) {
+                        this.touched.set(true);
+                    }
+
+                    this.formControlHasErrors.set(!!this.formControl?.errors);
+                    this.formControlIsDirty.set(this.formControl?.dirty);
+                })
+            );
+        }
 
         const unlistenKeydown = this.renderer.listen(this.inputElement.nativeElement, "keydown", (event) => {
             if (this.getNativeValue()?.length >= this.maxLength()) {
@@ -441,6 +447,13 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
         this.formControl.setValidators(syncValidators);
         this.formControl.setAsyncValidators(asyncValidators);
         this.formControl.updateValueAndValidity();
+
+        if (this.value) {
+            this.markAsDirty();
+
+            this.formControlHasErrors.set(!!this.formControl.errors);
+            this.formControlIsDirty.set(true);
+        }
     }
 
     private setupMask(previousMask?: string): void {
@@ -597,7 +610,7 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
             this.ngtStyle.compile(['h', 'text', 'color.border', 'color.bg', 'color.text', 'rounded', 'cursor'])
         ];
 
-        if (this.formControlHasErrors() && this.formControlIsDirty()) {
+        if (this.formControlHasErrors() && this.formControlIsDirty() && this.touched()) {
             classes.push('input-has-error border-red-700');
         }
 

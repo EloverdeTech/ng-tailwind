@@ -18,7 +18,7 @@ import {
     WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AsyncValidatorFn, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ReactiveFormsModule, TouchedChangeEvent, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
@@ -184,16 +184,18 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
     }
 
     private setupSubscriptions(): void {
-        if (!this.formControl) {
-            return;
-        }
+        if (this.formControl) {
+            this.subscriptions.push(
+                this.formControl.events.subscribe((event) => {
+                    if (event instanceof TouchedChangeEvent) {
+                        this.touched.set(true);
+                    }
 
-        this.subscriptions.push(
-            this.formControl.statusChanges.subscribe(() => {
-                this.formControlHasErrors.set(!!this.formControl?.errors);
-                this.formControlIsDirty.set(this.formControl?.dirty);
-            })
-        );
+                    this.formControlHasErrors.set(!!this.formControl?.errors);
+                    this.formControlIsDirty.set(this.formControl?.dirty);
+                })
+            );
+        }
 
         const unlistenKeydown = this.renderer.listen(this.textareaElement.nativeElement, 'keydown', (event) => {
             if (this.getNativeValue()?.length >= this.maxLength()) {
@@ -238,6 +240,13 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
         this.formControl.setValidators(syncValidators);
         this.formControl.setAsyncValidators(asyncValidators);
         this.formControl.updateValueAndValidity();
+
+        if (this.value) {
+            this.markAsDirty();
+
+            this.formControlHasErrors.set(!!this.formControl.errors);
+            this.formControlIsDirty.set(true);
+        }
     }
 
     private setupNgtStylizable(): void {
@@ -286,7 +295,7 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
             this.ngtStyle.compile(['text', 'color.border', 'color.bg', 'color.text', 'rounded'])
         ];
 
-        if (this.formControlHasErrors() && this.formControlIsDirty()) {
+        if (this.formControlHasErrors() && this.formControlIsDirty() && this.touched()) {
             classes.push('input-has-error border-red-700');
         }
 

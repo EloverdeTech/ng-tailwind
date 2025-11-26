@@ -5,6 +5,7 @@ export abstract class NgtControlValueAccessor implements ControlValueAccessor {
     public onValueChangeEvent: EventEmitter<any> = new EventEmitter;
 
     public formControl: AbstractControl;
+    public touched: WritableSignal<boolean> = signal(false);
 
     protected injector: Injector;
 
@@ -75,6 +76,7 @@ export abstract class NgtControlValueAccessor implements ControlValueAccessor {
             this.formControl = this.getControl();
         }
 
+        this.touched.set(true);
         this.formControl?.markAsTouched();
     };
 
