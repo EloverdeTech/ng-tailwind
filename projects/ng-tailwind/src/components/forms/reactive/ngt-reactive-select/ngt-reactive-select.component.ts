@@ -247,7 +247,7 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
             this.subscriptions.push(
                 this.formControl.events.subscribe((event) => {
                     if (event instanceof TouchedChangeEvent) {
-                        this.touched.set(true);
+                        this.touched.set(event.touched);
                     }
 
                     this.stateService.updateFormControlState(this.formControl);

@@ -188,7 +188,7 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
             this.subscriptions.push(
                 this.formControl.events.subscribe((event) => {
                     if (event instanceof TouchedChangeEvent) {
-                        this.touched.set(true);
+                        this.touched.set(event.touched);
                     }
 
                     this.formControlHasErrors.set(!!this.formControl?.errors);
