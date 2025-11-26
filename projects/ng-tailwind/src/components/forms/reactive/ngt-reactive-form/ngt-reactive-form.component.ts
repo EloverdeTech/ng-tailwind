@@ -95,9 +95,15 @@ export class NgtReactiveFormComponent implements OnInit, OnDestroy {
     }
 
     public onSubmit(): void {
+        this.form().markAllAsTouched();
+
         this.isSubmitted = true;
 
-        this.canShowInvalidFormMessage.set(!this.form().valid);
+        if (!this.form().valid) {
+            NgtReactiveFormComponent.onSubmitInvalidForm.emit(this.form());
+
+            this.canShowInvalidFormMessage.set(!this.isDisabledState());
+        }
     }
 
     public setFormState(state: NgtReactFormState, triggerChange: boolean = true): void {
@@ -177,11 +183,7 @@ export class NgtReactiveFormComponent implements OnInit, OnDestroy {
 
     private subcribeFormGroupStatusChanges(): Subscription {
         return this.form().statusChanges.subscribe(() => {
-            if (!this.form().valid && this.isSubmitted) {
-                NgtReactiveFormComponent.onSubmitInvalidForm.emit(this.form());
-
-                this.canShowInvalidFormMessage.set(!this.isDisabledState());
-            } else if (this.canShowInvalidFormMessage()) {
+            if (this.form().valid && this.canShowInvalidFormMessage()) {
                 this.canShowInvalidFormMessage.set(false);
             }
         });
