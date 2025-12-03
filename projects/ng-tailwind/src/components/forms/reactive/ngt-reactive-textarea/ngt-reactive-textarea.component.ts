@@ -295,7 +295,7 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
             this.ngtStyle.compile(['text', 'color.border', 'color.bg', 'color.text', 'rounded'])
         ];
 
-        if (this.formControlHasErrors() && this.formControlIsDirty() && this.touched()) {
+        if (this.formControlHasErrors() && (this.formControlIsDirty() || this.touched())) {
             classes.push('input-has-error border-red-700');
         }
 

@@ -608,7 +608,7 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
             this.ngtStyle.compile(['h', 'text', 'color.border', 'color.bg', 'color.text', 'rounded', 'cursor'])
         ];
 
-        if (this.formControlHasErrors() && this.formControlIsDirty() && this.touched()) {
+        if (this.formControlHasErrors() && (this.formControlIsDirty() || this.touched())) {
             classes.push('input-has-error border-red-700');
         }
 

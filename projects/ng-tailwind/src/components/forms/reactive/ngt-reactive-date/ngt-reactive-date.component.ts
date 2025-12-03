@@ -432,7 +432,7 @@ export class NgtReactiveDateComponent extends NgtControlValueAccessor implements
             this.ngtStyle.compile(['h', 'color.text', 'px', 'py', 'text', 'rounded', 'color.bg', 'color.border'])
         ];
 
-        if (this.formControlHasErrors() && this.formControlIsDirty() && this.touched()) {
+        if (this.formControlHasErrors() && (this.formControlIsDirty() || this.touched())) {
             classes.push('border-error');
         }
 

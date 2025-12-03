@@ -528,7 +528,7 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
 
         if (this.isDisabledState()) {
             selectClass += ' select-border-disabled';
-        } else if (this.stateService.formControlHasErrors() && this.stateService.formControlIsDirty() && this.touched()) {
+        } else if (this.stateService.formControlHasErrors() && (this.stateService.formControlIsDirty() || this.touched())) {
             selectClass += ' select-border-error';
         } else {
             selectClass += ' select-border-normal';
