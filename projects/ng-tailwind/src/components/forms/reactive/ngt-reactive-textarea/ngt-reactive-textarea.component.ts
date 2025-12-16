@@ -9,6 +9,7 @@ import {
     input,
     OnDestroy,
     Optional,
+    output,
     Renderer2,
     Self,
     Signal,
@@ -18,7 +19,7 @@ import {
     WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AsyncValidatorFn, ReactiveFormsModule, TouchedChangeEvent, ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ReactiveFormsModule, TouchedChangeEvent, ValidatorFn, ValueChangeEvent } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
@@ -77,6 +78,10 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
     public readonly minLength = input<number>();
     public readonly customSyncValidators = input<ValidatorFn[]>();
     public readonly customAsyncValidators = input<AsyncValidatorFn[]>();
+
+    /** Outputs */
+
+    public readonly onValueChange = output<string>();
 
     /** Computed Signals */
 
@@ -189,6 +194,10 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
                 this.formControl.events.subscribe((event) => {
                     if (event instanceof TouchedChangeEvent) {
                         this.touched.set(event.touched);
+                    }
+
+                    if (event instanceof ValueChangeEvent) {
+                        this.onValueChange.emit(event.value);
                     }
 
                     this.formControlHasErrors.set(!!this.formControl?.errors);

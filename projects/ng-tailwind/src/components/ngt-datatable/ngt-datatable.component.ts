@@ -471,7 +471,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
 
     private initSearchWithInput() {
         this.subscriptions.push(
-            this.inputSearch.onValueChange().subscribe((value: string) => {
+            this.inputSearch.onValueChange.subscribe((value: string) => {
                 if (this.currentState.filters.defaultFilters['term']) {
                     if (!value) {
                         this.removeFilter('term');

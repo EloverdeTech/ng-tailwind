@@ -17,7 +17,7 @@ import {
     output,
     untracked,
 } from '@angular/core';
-import { ReactiveFormsModule, TouchedChangeEvent, ValidatorFn } from '@angular/forms';
+import { ReactiveFormsModule, TouchedChangeEvent, ValidatorFn, ValueChangeEvent } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgOption, NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
 import { Observable, Subject, Subscription } from 'rxjs';
@@ -150,6 +150,7 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
     public readonly onSelectedItemRemove = output<any>();
     public readonly onClear = output<void>();
     public readonly onClose = output<void>();
+    public readonly onValueChange = output<any>();
 
     /** Computed Signals */
 
@@ -248,6 +249,10 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
                 this.formControl.events.subscribe((event) => {
                     if (event instanceof TouchedChangeEvent) {
                         this.touched.set(event.touched);
+                    }
+
+                    if (event instanceof ValueChangeEvent) {
+                        this.onValueChange.emit(event.value);
                     }
 
                     this.stateService.updateFormControlState(this.formControl);

@@ -20,7 +20,7 @@ import {
     ViewChild,
     WritableSignal,
 } from '@angular/core';
-import { AsyncValidatorFn, ReactiveFormsModule, TouchedChangeEvent, ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ReactiveFormsModule, TouchedChangeEvent, ValidatorFn, ValueChangeEvent } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { NgtShiningModule } from '../../../ngt-shining/ngt-shining.module';
@@ -131,6 +131,7 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
     public readonly onClickLeftIcon = output<void>();
     public readonly onClickRightIcon = output<void>();
     public readonly validatePhoneResult = output<any>();
+    public readonly onValueChange = output<string | number>();
 
     /** Computed Signals */
 
@@ -360,6 +361,10 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
                 this.formControl.events.subscribe((event) => {
                     if (event instanceof TouchedChangeEvent) {
                         this.touched.set(event.touched);
+                    }
+
+                    if (event instanceof ValueChangeEvent) {
+                        this.onValueChange.emit(event.value);
                     }
 
                     this.formControlHasErrors.set(!!this.formControl?.errors);

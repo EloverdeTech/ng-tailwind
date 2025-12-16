@@ -111,6 +111,7 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
     public readonly onFileUploadInit = output<void>();
     public readonly onFileUploaded = output<void>();
     public readonly onFilePreviewLoaded = output<void>();
+    public readonly onValueChange = output<any>();
 
     /** Computed Signals */
 
@@ -306,6 +307,8 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
                 && this.hasChangesBetweenValues(this.value, this.formControl.value)
             ) {
                 this.formControl.setValue(value);
+
+                this.onValueChange.emit(value);
             }
 
             if (this.stateService.componentReady()) {

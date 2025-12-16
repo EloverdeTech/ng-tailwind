@@ -7,6 +7,7 @@ import {
     Injector,
     input,
     Optional,
+    output,
     Signal,
     SkipSelf,
     ViewChild,
@@ -59,6 +60,10 @@ export class NgtReactiveSliderComponent extends NgtControlValueAccessor implemen
     public readonly max = input<number>(100);
     public readonly step = input<number>(1);
 
+    /** Outputs */
+
+    public readonly onValueChange = output<number>();
+
     /** Computed Signals */
 
     public readonly isShining: Signal<boolean> = computed(
@@ -101,6 +106,8 @@ export class NgtReactiveSliderComponent extends NgtControlValueAccessor implemen
     }
 
     public change(value: number): void {
+        this.onValueChange.emit(value);
+
         if (this.hasChangesBetweenValues()) {
             this.formControl?.setValue(value ?? this.min());
 

@@ -7,6 +7,7 @@ import {
     OnDestroy,
     OnInit,
     Optional,
+    output,
     Renderer2,
     Self,
     SkipSelf,
@@ -55,6 +56,8 @@ export class NgtTextareaComponent extends NgtControlValueAccessor implements OnI
     // Validation
     @Input() public isRequired: boolean = false;
     @Input() public maxLength: number = 300;
+
+    public readonly onValueChange = output<string>();
 
     public componentReady = false;
     public ngtStyle: NgtStylizableService;
@@ -147,7 +150,7 @@ export class NgtTextareaComponent extends NgtControlValueAccessor implements OnI
         let ngModelValue = value ? value : '';
 
         if (this.componentReady) {
-            this.onValueChangeEvent.emit(this.value);
+            this.onValueChange.emit(this.value);
         }
 
         if (this.value != nativeValue) {

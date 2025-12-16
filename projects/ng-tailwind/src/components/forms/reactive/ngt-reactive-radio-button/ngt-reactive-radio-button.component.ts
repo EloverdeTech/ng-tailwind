@@ -8,6 +8,7 @@ import {
     input,
     OnDestroy,
     Optional,
+    output,
     OutputRefSubscription,
     Self,
     Signal,
@@ -66,6 +67,10 @@ export class NgtReactiveRadioButtonComponent extends NgtControlValueAccessor imp
 
     public readonly isSelectable = input<boolean>(true);
     public readonly isDisabled = input<boolean>(false);
+
+    /** Outputs */
+
+    public readonly onValueChange = output<boolean>();
 
     /** Computed Signals */
 
@@ -157,6 +162,8 @@ export class NgtReactiveRadioButtonComponent extends NgtControlValueAccessor imp
     }
 
     public change(value: boolean): void {
+        this.onValueChange.emit(value);
+
         if (this.getNativeValue() !== value) {
             this.setNativeValue(value);
         }

@@ -9,6 +9,7 @@ import {
     OnDestroy,
     OnInit,
     Optional,
+    output,
     Self,
     Signal,
     signal,
@@ -17,7 +18,7 @@ import {
     ViewEncapsulation,
     WritableSignal,
 } from '@angular/core';
-import { ReactiveFormsModule, TouchedChangeEvent, ValidatorFn, Validators } from '@angular/forms';
+import { ReactiveFormsModule, TouchedChangeEvent, ValidatorFn, Validators, ValueChangeEvent } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { english } from 'flatpickr/dist/l10n/default.js';
 import { Portuguese } from 'flatpickr/dist/l10n/pt.js';
@@ -103,6 +104,10 @@ export class NgtReactiveDateComponent extends NgtControlValueAccessor implements
     /** Validation Inputs */
 
     public readonly isRequired = input<boolean>(false);
+
+    /** Outputs */
+
+    public readonly onValueChange = output<string | string[]>();
 
     /** Computed Signals */
 
@@ -324,6 +329,10 @@ export class NgtReactiveDateComponent extends NgtControlValueAccessor implements
                 this.formControl.events.subscribe((event) => {
                     if (event instanceof TouchedChangeEvent) {
                         this.touched.set(event.touched);
+                    }
+
+                    if (event instanceof ValueChangeEvent) {
+                        this.onValueChange.emit(event.value);
                     }
 
                     this.formControlHasErrors.set(!!this.formControl?.errors);

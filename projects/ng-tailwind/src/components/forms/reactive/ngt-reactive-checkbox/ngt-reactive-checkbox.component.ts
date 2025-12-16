@@ -9,6 +9,7 @@ import {
     Injector,
     input,
     Optional,
+    output,
     Self,
     Signal,
     SkipSelf,
@@ -79,6 +80,10 @@ export class NgtReactiveCheckboxComponent extends NgtControlValueAccessor implem
     public readonly isDisabled = input<boolean>(false);
     public readonly isClickDisabled = input<boolean>(false);
 
+    /** Outputs */
+
+    public readonly onValueChange = output<boolean>();
+
     /** Computed Signals */
 
     public readonly isDisabledByParent: Signal<boolean> = computed(
@@ -140,6 +145,8 @@ export class NgtReactiveCheckboxComponent extends NgtControlValueAccessor implem
     }
 
     public change(value: boolean): void {
+        this.onValueChange.emit(value);
+
         if (this.hasChangeBetweenValues()) {
             this.setNativeValue(value);
         }

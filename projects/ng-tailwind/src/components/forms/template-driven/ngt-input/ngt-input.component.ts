@@ -103,6 +103,7 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
     @Output() public onClickLeftIcon: EventEmitter<any> = new EventEmitter<any>();
     @Output() public onClickRightIcon: EventEmitter<any> = new EventEmitter<any>();
     @Output() public validatePhoneResult: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public onValueChange: EventEmitter<string | number> = new EventEmitter();
 
     public maxTotalCharsCount: number;
     public existingResourceId: string;
@@ -270,7 +271,7 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
         }
 
         if (this.componentReady) {
-            this.onValueChangeEvent.emit(this.value);
+            this.onValueChange.emit(this.value);
         }
 
         if (this.ngtResourceService && this.findExistingResource && this.value) {

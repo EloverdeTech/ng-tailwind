@@ -1,9 +1,7 @@
-import { EventEmitter, forwardRef, Injector, signal, WritableSignal } from '@angular/core';
+import { forwardRef, Injector, signal, WritableSignal } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl } from '@angular/forms';
 
 export abstract class NgtControlValueAccessor implements ControlValueAccessor {
-    public onValueChangeEvent: EventEmitter<any> = new EventEmitter;
-
     public formControl: AbstractControl;
     public touched: WritableSignal<boolean> = signal(false);
 
@@ -64,10 +62,6 @@ export abstract class NgtControlValueAccessor implements ControlValueAccessor {
     }
 
     public change(value: any) { };
-
-    public onValueChange(): EventEmitter<any> {
-        return this.onValueChangeEvent;
-    }
 
     public onChange = (_) => { };
 

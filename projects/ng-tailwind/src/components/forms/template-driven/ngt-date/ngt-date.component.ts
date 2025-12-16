@@ -6,6 +6,7 @@ import {
     OnDestroy,
     OnInit,
     Optional,
+    output,
     Self,
     SimpleChanges,
     SkipSelf,
@@ -86,6 +87,8 @@ export class NgtDateComponent extends NgtControlValueAccessor implements OnInit,
 
     // Validation
     @Input() public isRequired: boolean = false;
+
+    public readonly onValueChange = output<any>();
 
     public ngtStyle: NgtStylizableService;
     public dateConfig: FlatpickrOptions;
@@ -210,7 +213,7 @@ export class NgtDateComponent extends NgtControlValueAccessor implements OnInit,
 
     public change(value: any) {
         if (this.componentReady) {
-            this.onValueChangeEvent.emit(this.value);
+            this.onValueChange.emit(this.value);
         }
 
         if (!value || (value instanceof Object && !Object.keys(value).length)) {
