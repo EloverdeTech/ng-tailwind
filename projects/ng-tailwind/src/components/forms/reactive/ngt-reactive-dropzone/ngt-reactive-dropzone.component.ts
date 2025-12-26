@@ -291,6 +291,8 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
             this.onTouched();
 
             this.value = this.stateService.nativeValue();
+
+            this.onValueChange.emit(value);
         }
     }
 
@@ -300,15 +302,6 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
 
             if (this.hasChangesBetweenValues(this.value, this.stateService.nativeValue())) {
                 this.onNativeChange(value);
-            }
-
-            if (
-                this.formControl
-                && this.hasChangesBetweenValues(this.value, this.formControl.value)
-            ) {
-                this.formControl.setValue(value);
-
-                this.onValueChange.emit(value);
             }
 
             if (this.stateService.componentReady()) {
@@ -449,6 +442,6 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
     }
 
     private hasChangesBetweenValues(a: any, b: any): boolean {
-        return JSON.stringify(a) !== JSON.stringify(b);
+        return JSON.stringify(a ?? null) !== JSON.stringify(b ?? null);
     }
 }
