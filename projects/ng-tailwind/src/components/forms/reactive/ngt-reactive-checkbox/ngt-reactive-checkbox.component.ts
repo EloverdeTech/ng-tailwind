@@ -145,8 +145,6 @@ export class NgtReactiveCheckboxComponent extends NgtControlValueAccessor implem
     }
 
     public change(value: boolean): void {
-        this.onValueChange.emit(value);
-
         if (this.hasChangeBetweenValues()) {
             this.setNativeValue(value);
         }
@@ -156,7 +154,7 @@ export class NgtReactiveCheckboxComponent extends NgtControlValueAccessor implem
         if (this.hasChangeBetweenValues()) {
             this.value = this.getNativeValue();
 
-            this.formControl?.setValue(this.value);
+            this.onValueChange.emit(this.value);
         }
     }
 
