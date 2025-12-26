@@ -19,7 +19,7 @@ export abstract class NgtControlValueAccessor implements ControlValueAccessor {
     };
 
     public set value(v: any) {
-        if (!this.hasValueChanges(v, this._value())) {
+        if (this.hasValueChanges(v, this._value())) {
             this._value.set(v);
 
             this.onChange(v);
@@ -35,7 +35,7 @@ export abstract class NgtControlValueAccessor implements ControlValueAccessor {
     }
 
     public writeValue(value: any): void {
-        if (value == this.ignore || this.hasValueChanges(value, this._value())) {
+        if (value == this.ignore || !this.hasValueChanges(value, this._value())) {
             return;
         }
 
@@ -99,15 +99,7 @@ export abstract class NgtControlValueAccessor implements ControlValueAccessor {
     }
 
     private hasValueChanges(value1: any, value2: any): boolean {
-        if (Array.isArray(value1)) {
-            value1 = JSON.stringify(value1);
-        }
-
-        if (Array.isArray(value2)) {
-            value2 = JSON.stringify(value2);
-        }
-
-        return value1 === value2;
+        return JSON.stringify(value1) != JSON.stringify(value2);
     }
 }
 
