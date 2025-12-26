@@ -284,7 +284,7 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
     }
 
     private hasChangesBetweenValues(): boolean {
-        return this.getNativeValue() !== this.value;
+        return this.getNativeValue() != this.value;
     }
 
     private getRemainingCharacters(): number {
