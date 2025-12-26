@@ -65,6 +65,7 @@ export class NgtReactiveRadioButtonComponent extends NgtControlValueAccessor imp
 
     /** Behavior Inputs */
 
+    public readonly id = input<string>();
     public readonly isSelectable = input<boolean>(true);
     public readonly isDisabled = input<boolean>(false);
 
@@ -108,8 +109,7 @@ export class NgtReactiveRadioButtonComponent extends NgtControlValueAccessor imp
 
     public ngtStyle: NgtStylizableService;
 
-    public uuid: string = uuid();
-
+    private uuid: string = uuid();
     private subscriptions: Array<Subscription | OutputRefSubscription> = [];
 
     public constructor(
