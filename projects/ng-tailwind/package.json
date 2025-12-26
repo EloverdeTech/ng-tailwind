@@ -1,6 +1,6 @@
 {
     "name": "ng-tailwind",
-    "version": "7.0.4",
+    "version": "7.0.5",
     "peerDependencies": {
         "@angular/common": ">=19.0.0",
         "@angular/core": ">=19.0.0",
