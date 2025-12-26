@@ -19,8 +19,7 @@
 <div [class]="isShining() ? 'hidden' : 'flex flex-col'">
     <textarea [class]="textareaClasses()" autocomplete="new-password" [rows]="rows()" [disabled]="isDisabledState()"
         [readonly]="isReadonly()" [placeholder]="placeholder()" (input)="onNativeChange()" (blur)="onTouched()"
-        #textareaElement>
-    </textarea>
+        #textareaElement></textarea>
 
     @if (showCharactersLength() && remainingCharacters() !== null) {
         <p class="text-xxs mt-1">
