@@ -111,38 +111,39 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
 
     /** Behavior Inputs */
 
+    public readonly remoteResource = input<any>();
+    public readonly items = input<Array<any> | Observable<any>>([]);
+    public readonly bindLabel = input<string>('name');
+    public readonly bindValue = input<string>();
+    public readonly inputAttrs = input<{ [key: string]: string }>();
+    public readonly groupBy = input<string | Function>(null);
+    public readonly tabIndex = input<number>();
+    public readonly groupValue = input<(groupKey: string, cildren: any[]) => Object>();
+    public readonly trackByFn = input<(item: any) => any>();
+    public readonly isAllowedToRemoveFn = input<(a: any) => boolean>();
+    public readonly sortSelectedItemsFn = input<(a: any, b: any) => any>();
     public readonly autoLoad = input<boolean>(false);
     public readonly allowCreate = input<boolean | Promise<any> | Function>(false);
     public readonly allowOriginalItemsUnselect = input<boolean>(true);
     public readonly isDisabled = input<boolean>(false);
     public readonly isReadonly = input<boolean>(false);
-    public readonly remoteResource = input<any>();
     public readonly hideSelected = input<boolean>(false);
-    public readonly bindLabel = input<string>('name');
-    public readonly bindValue = input<string>();
-    public readonly items = input<Array<any> | Observable<any>>([]);
-    public readonly inputAttrs = input<{ [key: string]: string }>();
     public readonly closeOnSelect = input<boolean>(true);
     public readonly clearable = input<boolean>(true);
-    public readonly groupBy = input<string | Function>(null);
     public readonly multiple = input<boolean>(false);
     public readonly searchable = input<boolean>(true);
     public readonly clearSearchOnAdd = input<boolean>(true);
     public readonly virtualScroll = input<boolean>(true);
-    public readonly tabIndex = input<number>();
     public readonly guessCompareWith = input<boolean>(true);
     public readonly compareWith = input<(a: any, b: any) => boolean>((a: any, b: any) => a === b);
     public readonly autoSelectUniqueOption = input<boolean>(false);
-    public readonly groupValue = input<(groupKey: string, cildren: any[]) => Object>();
-    public readonly trackByFn = input<(item: any) => any>();
-    public readonly sortSelectedItemsFn = input<(a: any, b: any) => any>();
-    public readonly isAllowedToRemoveFn = input<(a: any) => boolean>();
+    public readonly valueAsArray = input<boolean>(false);
 
     /** Validation Inputs */
 
     public readonly maxSelectedItems = input<number>();
-    public readonly isRequired = input<boolean>(false);
     public readonly customSyncValidators = input<ValidatorFn[]>();
+    public readonly isRequired = input<boolean>(false);
 
     /** Outputs */
 
@@ -310,20 +311,21 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
         if (this.hasChangesBetweenValues(this.value, value)) {
             value = this.sortSelectedItems(value);
 
+            if (this.valueAsArray() && !Array.isArray(value)) {
+                value = [value];
+            }
+
             this.nativeValue = value;
             this.value = value;
         }
     }
 
     public change(value: any): void {
-        if (
-            this.formControl
-            && this.hasChangesBetweenValues(value, this.formControl.value)
-        ) {
-            this.formControl.setValue(value);
-        }
-
         if (this.hasChangesBetweenValues(value, this.nativeValue)) {
+            if (this.valueAsArray() && !Array.isArray(value)) {
+                value = [value];
+            }
+
             this.nativeValue = this.sortSelectedItems(value);
 
             this.changeDetector.detectChanges();
@@ -557,7 +559,7 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
     }
 
     private hasChangesBetweenValues(a: any, b: any): boolean {
-        return JSON.stringify(a) !== JSON.stringify(b);
+        return JSON.stringify(a ?? null) !== JSON.stringify(b ?? null);
     }
 
     private hadPreviousSelection(item: any): boolean {
