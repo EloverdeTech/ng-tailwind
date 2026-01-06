@@ -252,17 +252,27 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
 
     public onNativeChange(): void {
         if (this.hasChangesBetweenValues()) {
-            this.value = this.maskService.removeMask(this.getNativeValue());
+            let value: string | number = this.maskService.removeMask(this.getNativeValue());
+
+            if (value && this.mask() == InputMaskEnum.DECIMAL) {
+                value = parseFloat(value);
+            }
+
+            this.value = value;
         }
     }
 
     public change(value: string | number): void {
-        if (value && typeof value === 'string' && this.mask() == InputMaskEnum.DECIMAL) {
-            this.value = parseFloat(value);
+        if (value && this.mask() == InputMaskEnum.DECIMAL) {
+            if (typeof value === 'number') {
+                value = value.toString();
+            }
+
+            value = value.replace('.', ',');
         }
 
         if (this.hasChangesBetweenValues()) {
-            this.setNativeValue(<string>value ?? '');
+            this.setNativeValue(value ?? '');
         }
     }
 
@@ -552,7 +562,7 @@ export class NgtReactiveInputComponent extends NgtControlValueAccessor implement
         }, 500);
     }
 
-    private setNativeValue(value: string): void {
+    private setNativeValue(value: string | number): void {
         this.inputElement.nativeElement.value = value;
     }
 
