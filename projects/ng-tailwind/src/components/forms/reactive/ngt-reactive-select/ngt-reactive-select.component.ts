@@ -150,7 +150,7 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
     public readonly onLoadRemoteResource = output<any>();
     public readonly onSelectedItemRemove = output<any>();
     public readonly onClear = output<void>();
-    public readonly onClose = output<void>();
+    public readonly onToggleDropdown = output<boolean>();
     public readonly onValueChange = output<any>();
 
     /** Computed Signals */
@@ -268,6 +268,8 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
     }
 
     public onOpen(): void {
+        this.onToggleDropdown.emit(true);
+
         const parentElements = document.querySelectorAll('#ngtSelectParentContainer');
 
         if (this.dropdownPosition() === 'auto' && parentElements?.length) {
@@ -275,6 +277,10 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
 
             this.calculateDropdownPosition(parentContainer);
         }
+    }
+
+    public onClose(): void {
+        this.onToggleDropdown.emit(false);
     }
 
     public onClearSelect(): void {

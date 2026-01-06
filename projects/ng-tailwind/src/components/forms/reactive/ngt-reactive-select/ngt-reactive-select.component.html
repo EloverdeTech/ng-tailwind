@@ -38,7 +38,7 @@
         [loadingText]="loadingText() || ngtTranslateService.ngtSelectLoadingText"
         [maxSelectedItems]="maxSelectedItems()" [tabIndex]="tabIndex()" [items]="stateService.ngSelectItems() | async"
         [groupValue]="groupValue()" [loading]="isLoading()" [compareWith]="getCompareWith()" [inputAttrs]="inputAttrs()"
-        (scroll)="onScroll($event)" (close)="onClose.emit()" (clear)="onClearSelect()" 
+        (scroll)="onScroll($event)" (close)="onClose()" (clear)="onClearSelect()" 
         (remove)="onRemoveSelectedItem($event)" (open)="onOpen()" (change)="onNativeChange($event)" 
         (blur)="onTouched()" (click)="stateService.markAsClicked()">
 
