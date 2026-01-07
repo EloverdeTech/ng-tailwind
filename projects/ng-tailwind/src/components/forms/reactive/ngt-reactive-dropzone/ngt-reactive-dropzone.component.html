@@ -84,5 +84,5 @@
         [disableContent]="canDownloadFile() ? 'none' : 'popout'">
     </ngt-dropzone-file-viewer>
 
-    <ngt-validation [control]="formControl"></ngt-validation>
+    <ngt-validation [control]="formControl" [minItems]="minItems()"></ngt-validation>
 </div>

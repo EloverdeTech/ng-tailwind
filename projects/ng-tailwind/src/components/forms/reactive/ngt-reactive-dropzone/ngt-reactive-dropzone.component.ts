@@ -98,6 +98,7 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
 
     /** Validation Inputs */
 
+    public readonly minItems = input<number>();
     public readonly isRequired = input<boolean>(false);
     public readonly customSyncValidators = input<ValidatorFn[]>();
     public readonly customAsyncValidators = input<AsyncValidatorFn[]>();
@@ -426,6 +427,7 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
         }
 
         const syncValidators = this.validationService.getSyncValidators({
+            minItems: this.minItems(),
             isRequired: this.isRequired(),
             customSyncValidators: this.customSyncValidators(),
         });

@@ -84,9 +84,15 @@
     }
 
     @if (shouldShowError('minlength')) {
-        <span class="help-block has-error">
-            {{ ngtTranslateService.ngtValidationMinLengthField(minLength) }}
-        </span>
+        @if (minLength) {
+            <span class="help-block has-error">
+                {{ ngtTranslateService.ngtValidationMinLengthField(minLength) }}
+            </span>
+        } @else if (minItems) {
+            <span class="help-block has-error">
+                {{ ngtTranslateService.ngtValidationMinItemsField(minItems) }}
+            </span>
+        }
     }
 
     @if (shouldShowError('invalid_custom_validator')) {
