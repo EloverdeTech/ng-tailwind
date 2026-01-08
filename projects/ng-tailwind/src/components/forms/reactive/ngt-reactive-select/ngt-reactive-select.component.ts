@@ -336,7 +336,11 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
 
             this.changeDetector.detectChanges();
 
-            this.ngSelectComponent.writeValue(this.nativeValue);
+            const valueToNgSelect = !this.multiple() && this.valueAsArray() && this.nativeValue?.length
+                ? this.nativeValue[0]
+                : this.nativeValue;
+
+            this.ngSelectComponent.writeValue(valueToNgSelect);
         }
     }
 
