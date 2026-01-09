@@ -80,7 +80,7 @@ export class NgtModalComponent implements AfterViewInit {
     }
 
     public async ngAfterViewInit(): Promise<void> {
-        if (this.isDisabled === undefined && this.ngtAbilityValidationService) {
+        if (this.isDisabled() === undefined && this.ngtAbilityValidationService) {
             this.internalDisabledState.set(
                 !(await this.ngtAbilityValidationService.hasManagePermission())
             );
