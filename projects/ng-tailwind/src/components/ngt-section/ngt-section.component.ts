@@ -114,7 +114,7 @@ export class NgtSectionComponent implements AfterViewInit {
         }
 
         if (this.ngtAbilityValidationService && this.name) {
-            if (this.isDisabled === undefined) {
+            if (this.isDisabled() === undefined) {
                 this.internalDisabledState.set(
                     !(await this.ngtAbilityValidationService.isSectionEnabled(this.name))
                 );
