@@ -288,12 +288,12 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
     public onNativeChange(value: any): void {
         this.stateService.nativeValue.set(value ?? []);
 
+        this.onValueChange.emit(value);
+
         if (this.hasChangesBetweenValues(this.value, this.stateService.nativeValue())) {
             this.onTouched();
 
             this.value = this.stateService.nativeValue();
-
-            this.onValueChange.emit(value);
         }
     }
 
@@ -303,6 +303,10 @@ export class NgtReactiveDropzoneComponent extends NgtControlValueAccessor implem
 
             if (this.hasChangesBetweenValues(this.value, this.stateService.nativeValue())) {
                 this.onNativeChange(value);
+
+                if (!value?.length) {
+                    this.reset();
+                }
             }
 
             if (this.stateService.componentReady()) {
