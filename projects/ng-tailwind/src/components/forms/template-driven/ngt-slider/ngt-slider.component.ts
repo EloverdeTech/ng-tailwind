@@ -1,20 +1,26 @@
 import {
     AfterViewInit,
+    ChangeDetectionStrategy,
     Component,
+    computed,
+    effect,
     ElementRef,
     Host,
-    Input,
-    OnDestroy,
+    Injector,
+    input,
     Optional,
-    Renderer2,
+    Signal,
+    signal,
     SkipSelf,
     ViewChild,
+    WritableSignal,
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
 
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
+import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
 
 export enum NgtSliderColorSchemeEnum {
     PRIMARY = 'primary',
@@ -27,6 +33,7 @@ export enum NgtSliderColorSchemeEnum {
     selector: 'ngt-slider',
     templateUrl: './ngt-slider.component.html',
     styleUrls: ['./ngt-slider.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         NgtValueAccessorProvider(NgtSliderComponent),
     ],
@@ -35,62 +42,125 @@ export enum NgtSliderColorSchemeEnum {
     ],
     standalone: false
 })
-export class NgtSliderComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {
-    @ViewChild('element', { static: true }) public element: ElementRef;
-    @ViewChild('display', { static: true }) public display: ElementRef;
+export class NgtSliderComponent extends NgtControlValueAccessor implements AfterViewInit {
+    @ViewChild('sliderElement', { static: true }) public sliderElement: ElementRef;
 
-    @Input() public label: string;
-    @Input() public shining: boolean;
-    @Input() public isDisabled: boolean;
-    @Input() public showPercentageSymbol: boolean;
-    @Input() public name: string;
-    @Input() public min: string = '0';
-    @Input() public max: string = '100';
-    @Input() public step: string = '1';
-    @Input() public color: NgtSliderColorSchemeEnum = NgtSliderColorSchemeEnum.PRIMARY;
+    /** Visual Inputs */
 
-    private subscriptions: Array<Subscription> = [];
+    public readonly label = input<string>();
+    public readonly shining = input<boolean>(false);
+    public readonly showPercentageSymbol = input<boolean>(false);
+    public readonly color = input<NgtSliderColorSchemeEnum>(NgtSliderColorSchemeEnum.PRIMARY);
+
+    /** Behavior Inputs */
+
+    public readonly isDisabled = input<boolean>(false);
+    public readonly name = input<string>();
+    public readonly min = input<string>('0');
+    public readonly max = input<string>('100');
+    public readonly step = input<string>('1');
+
+    /** Computed Signals */
+
+    public readonly isShining: Signal<boolean> = computed(
+        () => this.shining() || this.ngtForm?.shining()
+    );
+
+    public readonly isDisabledByParent: Signal<boolean> = computed(
+        () => this.ngtForm?.isDisabledState() || this.ngtSection?.isDisabledState() || this.ngtModal?.isDisabledState()
+    );
+
+    public readonly isDisabledState: Signal<boolean> = computed(
+        () => this.isDisabled() || this.isDisabledByParent()
+    );
+
+    public readonly sliderClasses: Signal<string> = computed(() => this.getSliderClasses());
+
+    public readonly minValue: Signal<number> = computed(() => this.coerceNumber(this.min(), 0));
+    public readonly maxValue: Signal<number> = computed(() => this.coerceNumber(this.max(), 100));
+    public readonly stepValue: Signal<number> = computed(() => this.coerceNumber(this.step(), 1));
+
+    public readonly displayValue: Signal<number> = computed(
+        () => this.value ?? this.minValue()
+    );
+
+    /** Internal Signals */
+
+    private readonly viewReady: WritableSignal<boolean> = signal(false);
 
     public constructor(
         @Optional() @Host()
         public formContainer: ControlContainer,
-        private renderer: Renderer2,
+
         @Optional() @SkipSelf()
-        private ngtFormComponent: NgtFormComponent,
+        private ngtForm: NgtFormComponent,
+
+        @Optional() @SkipSelf()
+        private ngtSection: NgtSectionComponent,
+
+        @Optional() @SkipSelf()
+        private ngtModal: NgtModalComponent,
+
+        protected override injector: Injector,
     ) {
         super();
 
-        if (this.ngtFormComponent) {
-            this.shining = this.ngtFormComponent.isShining();
+        effect(() => {
+            if (!this.viewReady()) {
+                return;
+            }
 
-            this.subscriptions.push(
-                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                    this.shining = shining;
-                })
-            );
+            this.setNativeValue(this.displayValue());
+        }, { injector: this.injector });
+    }
+
+    public ngAfterViewInit(): void {
+        this.formControl = this.getControl();
+        this.viewReady.set(true);
+    }
+
+    public onNativeChange(): void {
+        if (this.hasChangesBetweenValues()) {
+            this.value = this.getNativeValue();
         }
     }
 
-    public ngAfterViewInit() {
-        this.renderer.listen(this.element.nativeElement, 'change', () => {
-            this.onNativeChange(this.element.nativeElement.value);
-        });
+    public change(value: number): void {
+        if (this.hasChangesBetweenValues()) {
+            this.setNativeValue(value ?? this.minValue());
+        }
     }
 
-    public ngOnDestroy() {
-        this.destroySubscriptions();
+    private setNativeValue(value: number): void {
+        this.sliderElement.nativeElement.value = value;
     }
 
-    public change(value: boolean) {
-        this.element.nativeElement.value = value;
+    private getNativeValue(): number {
+        const value = parseFloat(this.sliderElement.nativeElement.value);
+
+        return Number.isNaN(value) ? this.minValue() : value;
     }
 
-    public onNativeChange(value: boolean) {
-        this.value = value;
+    private getSliderClasses(): string {
+        const classes: string[] = [
+            'block w-full cursor-pointer overflow-hidden appearance-none bg-gray-400 rounded',
+            this.color(),
+        ];
+
+        if (this.isDisabledState()) {
+            classes.push('cursor-not-allowed opacity-50');
+        }
+
+        return classes.join(' ');
     }
 
-    private destroySubscriptions() {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());
-        this.subscriptions = [];
+    private hasChangesBetweenValues(): boolean {
+        return this.getNativeValue() !== this.value;
+    }
+
+    private coerceNumber(value: string, fallback: number): number {
+        const parsed = parseFloat(value);
+
+        return Number.isNaN(parsed) ? fallback : parsed;
     }
 }

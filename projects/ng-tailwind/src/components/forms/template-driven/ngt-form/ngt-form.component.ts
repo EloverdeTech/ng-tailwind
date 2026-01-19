@@ -1,14 +1,16 @@
 import {
-    AfterViewInit,
-    ChangeDetectorRef,
+    ChangeDetectionStrategy,
     Component,
+    computed,
     EventEmitter,
     Host,
-    Input,
+    input,
     OnDestroy,
     OnInit,
     Optional,
-    Output,
+    output,
+    signal,
+    WritableSignal,
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,45 +19,56 @@ import { Observable, Subscription } from 'rxjs';
 import { isValidNgForm } from '../../../../helpers/form/form';
 import { getIdFromUri } from '../../../../helpers/routing/route';
 import { NgtHttpFormService } from '../../../../services/http/ngt-http-form.service';
-import { NgtAbilityValidationService } from '../../../../services/validation/ngt-ability-validation.service';;
+import { NgtAbilityValidationService } from '../../../../services/validation/ngt-ability-validation.service';
 
 export enum NgtFormState {
     CREATING = 'CREATING',
     EDITING = 'EDITING'
-};
+}
 
 @Component({
     selector: 'ngt-form',
     templateUrl: './ngt-form.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
-    public static onSubmitInvalidForm: EventEmitter<NgForm> = new EventEmitter;
+export class NgtFormComponent implements OnInit, OnDestroy {
+    public static onSubmitInvalidForm: EventEmitter<NgForm> = new EventEmitter();
 
-    @Input() public guessFormState: boolean = true;
-    @Input() public message: string = '';
-    @Input() public routeIdentifier: string = 'id';
-    @Input() public resource: any;
-    @Input() public customLayout: boolean;
-    @Input() public isDisabled: boolean;
+    /** Inputs */
 
-    @Output() public onCreating: EventEmitter<any> = new EventEmitter;
-    @Output() public onEditing: EventEmitter<any> = new EventEmitter;
-    @Output() public onLoadingChange: EventEmitter<boolean> = new EventEmitter;
-    @Output() public onShiningChange: EventEmitter<boolean> = new EventEmitter;
-    @Output() public setupComponent: EventEmitter<any> = new EventEmitter;
-    @Output() public onResourceLoadingError: EventEmitter<string> = new EventEmitter;
+    public readonly guessFormState = input<boolean>(true);
+    public readonly message = input<string>('');
+    public readonly routeIdentifier = input<string>('id');
+    public readonly resource = input<any>();
+    public readonly customLayout = input<boolean>(false);
+    public readonly isDisabled = input<boolean>();
 
-    public formState: NgtFormState;
-    public uriId: any;
+    /** Outputs */
 
-    private loading: boolean;
-    private shining: boolean;
+    public readonly onCreating = output<void>();
+    public readonly onEditing = output<any>();
+    public readonly onLoadingChange = output<boolean>();
+    public readonly onShiningChange = output<boolean>();
+    public readonly setupComponent = output<void>();
+    public readonly onResourceLoadingError = output<string>();
+
+    /** Signals */
+
+    public readonly formState: WritableSignal<NgtFormState> = signal(null);
+    public readonly uriId: WritableSignal<any> = signal(null);
+    public readonly loading: WritableSignal<boolean> = signal(false);
+    public readonly shining: WritableSignal<boolean> = signal(false);
+    public readonly canShowInvalidFormMessage: WritableSignal<boolean> = signal(false);
+    public readonly isDisabledByAbilityValidation: WritableSignal<boolean> = signal(false);
+
+    public readonly isDisabledState = computed(() => this.isDisabled() || this.isDisabledByAbilityValidation());
+
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
         public router: Router,
-        public route: ActivatedRoute,
+        public activatedRoute: ActivatedRoute,
 
         @Optional() @Host()
         public formContainer: ControlContainer,
@@ -63,91 +76,81 @@ export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
         @Optional() @Host()
         public ngForm: NgForm,
 
-        private changeDetector: ChangeDetectorRef,
-        private ngtHttpFormService: NgtHttpFormService,
+        private httpFormService: NgtHttpFormService,
 
         @Optional()
-        private ngtAbilityValidationService: NgtAbilityValidationService
+        private abilityValidationService: NgtAbilityValidationService
     ) { }
 
-    public ngOnInit() {
-        if (this.guessFormState) {
-            this.subscriptions.push(
-                this.determineFormState().subscribe(() => {
-                    this.setupComponent.emit();
-                })
-            );
-        } else {
-            this.setupComponent.emit();
+    public ngOnInit(): void {
+        if (this.guessFormState()) {
+            this.determineFormState();
         }
+
+        this.bindDisabledStateByAbilityValidation();
 
         this.subscriptions.push(
             this.ngForm.ngSubmit.subscribe(() => {
                 if (!this.ngForm.valid) {
                     NgtFormComponent.onSubmitInvalidForm.emit(this.ngForm);
+
+                    this.canShowInvalidFormMessage.set(!this.isDisabledState());
                 }
             })
         );
     }
 
-    public async ngAfterViewInit(): Promise<void> {
-        if (this.isDisabled === undefined && this.ngtAbilityValidationService) {
-            this.isDisabled = !(await this.ngtAbilityValidationService.hasManagePermission());
-
-            this.changeDetector.detectChanges();
-        }
-    }
-
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.destroySubscriptions();
     }
 
-    public isCreating() {
-        return this.formState === NgtFormState.CREATING;
+    public isCreating(): boolean {
+        return this.formState() === NgtFormState.CREATING;
     }
 
-    public isEditing() {
-        return this.formState === NgtFormState.EDITING;
+    public isEditing(): boolean {
+        return this.formState() === NgtFormState.EDITING;
     }
 
-    public isLoading() {
-        return this.loading;
+    public isLoading(): boolean {
+        return this.loading();
     }
 
-    public isShining() {
-        return this.shining;
+    public isShining(): boolean {
+        return this.shining();
     }
 
-    public canShowValidationMessage() {
-        return this.formContainer &&
-            this.formContainer['submitted'] &&
-            this.formContainer.status != 'VALID' &&
-            this.formContainer.status != 'DISABLED';
+    public canShowValidationMessage(): boolean {
+        return this.canShowInvalidFormMessage() ||
+            (this.formContainer &&
+                this.formContainer['submitted'] &&
+                this.formContainer.status !== 'VALID' &&
+                this.formContainer.status !== 'DISABLED');
     }
 
-    public setShining(shining: boolean) {
-        this.shining = shining;
-        this.onShiningChange.emit(this.shining);
+    public setShining(shining: boolean): void {
+        this.shining.set(shining);
+        this.onShiningChange.emit(shining);
     }
 
-    public setLoading(loading: boolean) {
-        this.loading = loading;
-        this.onLoadingChange.emit(this.loading);
+    public setLoading(loading: boolean): void {
+        this.loading.set(loading);
+        this.onLoadingChange.emit(loading);
     }
 
-    public setFormState(state: NgtFormState, triggerChange: boolean = true) {
-        this.formState = state;
+    public setFormState(state: NgtFormState, triggerChange: boolean = true): void {
+        this.formState.set(state);
 
         if (triggerChange) {
             this.triggerFormStateChange();
         }
     }
 
-    public getFormState() {
-        return this.formState;
+    public getFormState(): NgtFormState {
+        return this.formState();
     }
 
-    public triggerFormStateChange() {
+    public triggerFormStateChange(): void {
         if (this.isEditing()) {
             this.triggerFormEditing();
         } else if (this.isCreating()) {
@@ -155,17 +158,17 @@ export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    public formHasChanges() {
+    public formHasChanges(): boolean {
         return this.ngForm.dirty;
     }
 
-    public saveResource() {
+    public saveResource(): Observable<any> {
         return new Observable((observer) => {
             if (isValidNgForm(this.ngForm)) {
                 this.setLoading(true);
 
                 this.subscriptions.push(
-                    this.ngtHttpFormService.saveResource(this.resource)
+                    this.httpFormService.saveResource(this.resource())
                         .subscribe((response: any) => {
                             this.setLoading(false);
                             observer.next(response);
@@ -178,60 +181,70 @@ export class NgtFormComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    protected triggerFormCreating() {
+    private triggerFormCreating(): void {
         this.onCreating.emit();
+        this.setupComponent.emit();
     }
 
-    protected triggerFormEditing() {
-        if (this.uriId && this.resource) {
+    private triggerFormEditing(): void {
+        const currentUriId = this.uriId();
+        const currentResource = this.resource();
+
+        if (currentUriId && currentResource) {
             this.setLoading(true);
             this.setShining(true);
 
-            this.subscriptions.push(
-                this.ngtHttpFormService.loadResourceById(this.resource, this.uriId)
-                    .subscribe(
-                        (resource: any) => {
-                            this.setLoading(false);
-                            this.setShining(false);
+            this.httpFormService.loadResourceById(currentResource, currentUriId)
+                .subscribe({
+                    next: (resource: any) => {
+                        this.setLoading(false);
+                        this.setShining(false);
 
-                            this.onEditing.emit(resource);
+                        this.onEditing.emit(resource);
 
-                            setTimeout(() => this.ngForm.form.markAsPristine(), 1500);
-                        },
-                        (error) => {
-                            this.setLoading(false);
-                            this.setShining(false);
+                        setTimeout(() => this.ngForm.form.markAsPristine(), 1500);
 
-                            this.onResourceLoadingError.emit(error);
-                        }
-                    )
-            );
+                        this.setupComponent.emit();
+                    },
+                    error: (error) => {
+                        this.setLoading(false);
+                        this.setShining(false);
+
+                        this.onResourceLoadingError.emit(error);
+                    }
+                });
 
             return;
         }
 
         this.onEditing.emit(null);
+        this.setupComponent.emit();
     }
 
-    private determineFormState() {
-        return new Observable((observer) => {
-            this.subscriptions.push(
-                getIdFromUri(this.route, this.routeIdentifier).subscribe((id: string) => {
-                    this.uriId = id;
+    private determineFormState(): void {
+        getIdFromUri(this.activatedRoute, this.routeIdentifier())
+            .subscribe((id: string) => {
+                this.uriId.set(id);
 
-                    if (this.uriId) {
-                        this.setFormState(NgtFormState.EDITING);
-                    } else {
-                        this.setFormState(NgtFormState.CREATING);
-                    }
-
-                    observer.next(null);
-                })
-            );
-        });
+                this.setFormState(
+                    this.uriId()
+                        ? NgtFormState.EDITING
+                        : NgtFormState.CREATING
+                );
+            });
     }
 
-    private destroySubscriptions() {
+    private async bindDisabledStateByAbilityValidation(): Promise<void> {
+        if (this.isDisabled() === undefined && this.abilityValidationService) {
+            const hasPermission = await this.abilityValidationService.hasManagePermission();
+
+            if (!hasPermission) {
+                this.isDisabledByAbilityValidation.set(true);
+            }
+        }
+    }
+
+    private destroySubscriptions(): void {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
     }

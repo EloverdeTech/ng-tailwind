@@ -1,14 +1,17 @@
 import {
     AfterViewInit,
+    ChangeDetectionStrategy,
     Component,
     ElementRef,
-    HostListener,
     Injector,
-    Input,
+    NgZone,
     Optional,
     Self,
-    SimpleChanges,
     ViewChild,
+    input,
+    signal,
+    WritableSignal,
+    effect,
 } from '@angular/core';
 
 import { fadeDownAnimation } from '../../animations/ngt-angular-animations';
@@ -23,6 +26,7 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
     animations: [
         fadeDownAnimation('fadeDownAnimation', 600)
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 
@@ -30,56 +34,54 @@ export class NgtSidenavComponent implements AfterViewInit {
     @ViewChild('sideMenu', { static: true }) public sideMenuRef: ElementRef;
     @ViewChild('container', { static: true }) public containerRef: ElementRef;
 
-    @Input() public size: Size = Size.XS;
-    @Input() public initVisible: boolean = false;
-    @Input() public closeMenuOnMobileView: boolean = true;
+    /** Inputs */
 
-    public visible: boolean = false;
-    public open: boolean = false;
-    public isMenuContracted: boolean = false;
+    public readonly size = input<Size>(Size.XS);
+    public readonly initVisible = input<boolean>(false);
+    public readonly closeMenuOnMobileView = input<boolean>(true);
+
+    /** Signals */
+
+    public readonly visible: WritableSignal<boolean> = signal(false);
+    public readonly open: WritableSignal<boolean> = signal(false);
+    public readonly isMenuContracted: WritableSignal<boolean> = signal(false);
+
     public ngtStyle: NgtStylizableService;
 
-    private screenWidth: number;
+    private readonly screenWidth: WritableSignal<number> = signal(window.innerWidth);
+    private readonly sizeState: WritableSignal<Size> = signal(Size.XS);
+    private resizeListener: () => void;
 
     public constructor(
         private injector: Injector,
+        private zone: NgZone,
         @Self() @Optional() private ngtStyleDirective: NgtStylizableDirective,
     ) {
-        if (this.ngtStyleDirective) {
-            this.ngtStyle = this.ngtStyleDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
-
-        this.ngtStyle.load(this.injector, 'Sidenav', {
-            h: 'md:h-auto h-screen',
-            color: {}
-        });
-
+        this.setupNgtStylizable();
         this.bindScreenSize();
+
+        effect(() => {
+            this.sizeState.set(this.normalizeInputSize());
+        });
     }
 
-    @HostListener('window:resize', ['$event'])
-    public bindScreenSize(event?) {
-        this.screenWidth = window.innerWidth;
+    public bindScreenSize(): void {
+        this.zone.runOutsideAngular(() => {
+            this.resizeListener = () => this.screenWidth.set(window.innerWidth);
+            window.addEventListener('resize', this.resizeListener);
+        });
     }
 
     public ngAfterViewInit() {
-        if (this.initVisible) {
+        if (this.initVisible()) {
             setTimeout(() => {
-                this.visible = true;
+                this.visible.set(true);
             });
         }
     }
 
-    public ngOnChanges(changes: SimpleChanges) {
-        if (changes.size) {
-            this.size = getEnumFromString(changes.size.currentValue, Size);
-        }
-    }
-
     public toggleMenu() {
-        if (this.open) {
+        if (this.open()) {
             this.closeMenu();
         } else {
             this.openMenu();
@@ -87,15 +89,15 @@ export class NgtSidenavComponent implements AfterViewInit {
     }
 
     public closeMenu() {
-        this.open = false;
+        this.open.set(false);
     }
 
     public openMenu() {
-        this.open = true;
+        this.open.set(true);
     }
 
     public getNavSize() {
-        switch (this.size) {
+        switch (this.normalizeSize()) {
             case Size.AUTO: return 'md:w-auto w-4/12';
             case Size.XS: return 'md:w-1/12 w-4/12';
             case Size.SM: return 'md:w-2/12 w-5/12';
@@ -106,7 +108,7 @@ export class NgtSidenavComponent implements AfterViewInit {
     }
 
     public getContainerSize() {
-        if (!this.visible) {
+        if (!this.visible()) {
             return 'w-full';
         }
 
@@ -114,7 +116,7 @@ export class NgtSidenavComponent implements AfterViewInit {
             return 'w-full';
         }
 
-        switch (this.size) {
+        switch (this.normalizeSize()) {
             case Size.AUTO: return 'w-full';
             case Size.XS: return 'md:w-11/12 w-full';
             case Size.SM: return 'md:w-10/12 w-full';
@@ -125,20 +127,41 @@ export class NgtSidenavComponent implements AfterViewInit {
     }
 
     public toggleMenuSize(size: Size) {
-        if (this.isMenuContracted) {
-            this.size = size;
-            this.isMenuContracted = false;
+        if (this.isMenuContracted()) {
+            this.sizeState.set(size);
+            this.isMenuContracted.set(false);
         } else {
-            this.size = Size.AUTO;
-            this.isMenuContracted = true;
+            this.sizeState.set(Size.AUTO);
+            this.isMenuContracted.set(true);
         }
     }
 
     public isMobileView() {
-        if (!this.closeMenuOnMobileView) {
+        if (!this.closeMenuOnMobileView()) {
             return false;
         }
 
-        return this.screenWidth < 1024;
+        return this.screenWidth() < 1024;
+    }
+
+    private normalizeSize(): Size {
+        return this.sizeState();
+    }
+
+    private normalizeInputSize(): Size {
+        return typeof this.size() === 'string'
+            ? getEnumFromString(this.size(), Size)
+            : this.size();
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStyleDirective
+            ? this.ngtStyleDirective.getNgtStylizableService()
+            : new NgtStylizableService();
+
+        this.ngtStyle.load(this.injector, 'Sidenav', {
+            h: 'md:h-auto h-screen',
+            color: {}
+        });
     }
 }

@@ -1,38 +1,39 @@
 <div class="flex min-w-full relative justify-center text-gray-700">
-    <div *ngIf="isOpen" class="flex fixed min-w-full h-full inset-0 px-6 py-6 md:py-0 md:px-0 justify-center"
-        style="background: rgba(0,0,0,.7); z-index: 1100 !important;" @fade>
-        <ng-container *ngIf="!disableDefaultCloses">
-            <button class="fixed inset-0 h-full w-full bg-black opacity-0 cursor-default z-0" tabindex="-1"
-                type="button" (click)='close()'>
-            </button>
-        </ng-container>
+    @if (isOpenSignal()) {
+        <div class="flex fixed min-w-full h-full inset-0 px-6 py-6 md:py-0 md:px-0 justify-center"
+            style="background: rgba(0,0,0,.7); z-index: 1100 !important;" @fade>
+            @if (!disableDefaultCloses()) {
+                <button class="fixed inset-0 h-full w-full bg-black opacity-0 cursor-default z-0" tabindex="-1"
+                    type="button" (click)="close()">
+                </button>
+            }
 
-        <div class="{{ ngtStyle.compile(['w', 'overflow', 'border', 'rounded']) }} relative bg-white w-full self-center rounded shadow-lg z-10"
-            style="max-height: 85%;">
-            <div class="cursor-default text-left {{ ngtStyle.compile(['py', 'px']) }}">
-                <div *ngIf="!customLayout">
-                    <ngt-modal-header class="w-full" [disableDefaultCloses]="disableDefaultCloses">
-                        <ng-content select='[header]'></ng-content>
-                    </ngt-modal-header>
+            <div class="{{ resolvedStyle().compile(['w', 'overflow', 'border', 'rounded']) }} relative bg-white w-full self-center rounded shadow-lg z-10"
+                style="max-height: 85%;">
+                <div class="cursor-default text-left {{ resolvedStyle().compile(['py', 'px']) }}">
+                    @if (!customLayout()) {
+                        <ngt-modal-header class="w-full" [disableDefaultCloses]="disableDefaultCloses()">
+                            <ng-content select='[header]'></ng-content>
+                        </ngt-modal-header>
+                    }
+
+                    @if (!customLayout()) {
+                        <fieldset [disabled]="isDisabledState()" style="min-inline-size: 100% !important">
+                            <ngt-modal-body [isDisabled]="isDisabledState()">
+                                <ng-content select='[body]'></ng-content>
+                            </ngt-modal-body>
+                        </fieldset>
+                    }
+
+                    @if (!customLayout()) {
+                        <ngt-modal-footer>
+                            <ng-content select='[footer]'></ng-content>
+                        </ngt-modal-footer>
+                    }
+
+                    <ng-content></ng-content>
                 </div>
-
-                <ng-container *ngIf="!customLayout">
-                    <fieldset [disabled]="isDisabledState()" style="min-inline-size: 100% !important">
-                        <ngt-modal-body [isDisabled]="isDisabledState()">
-                            <ng-content select='[body]'></ng-content>
-                        </ngt-modal-body>
-                    </fieldset>
-                </ng-container>
-
-                <!--Footer-->
-                <ng-container *ngIf="!customLayout">
-                    <ngt-modal-footer>
-                        <ng-content select='[footer]'></ng-content>
-                    </ngt-modal-footer>
-                </ng-container>
-
-                <ng-content></ng-content>
             </div>
         </div>
-    </div>
+    }
 </div>

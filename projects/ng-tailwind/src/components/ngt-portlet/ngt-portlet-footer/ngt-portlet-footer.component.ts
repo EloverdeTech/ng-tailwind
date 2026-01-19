@@ -1,4 +1,10 @@
-import { Component, Injector, Optional, Self } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Injector,
+    Optional,
+    Self,
+} from '@angular/core';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
@@ -6,6 +12,7 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 @Component({
     selector: 'ngt-portlet-footer',
     templateUrl: './ngt-portlet-footer.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtPortletFooterComponent {
@@ -15,11 +22,13 @@ export class NgtPortletFooterComponent {
         private injector: Injector,
         @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
     ) {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
+        this.setupNgtStylizable();
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
 
         this.ngtStyle.load(this.injector, 'NgtPortletFooter', {
             px: 'px-6',

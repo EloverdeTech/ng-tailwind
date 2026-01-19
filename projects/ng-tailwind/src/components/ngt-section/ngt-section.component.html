@@ -1,72 +1,88 @@
-<div *ngIf="canDisplay" class="flex {{ ngtSectionStyle.compile(['mb']) }}" #elementRef>
-    <ngt-svg *ngIf="icon" [src]='icon'
+@if (canDisplayState()) {
+<div class="flex {{ ngtSectionStyle.compile(['mb']) }}" #elementRef>
+    @if (icon()) {
+    <ngt-svg [src]='icon()'
         class="hidden md:block {{ ngtSectionStyle.compile(['color.text', 'h', 'w', 'my', 'pr']) }}">
     </ngt-svg>
+    }
 
     <div
-        class="w-full pb-4 md:pb-0 {{ accordion && !showSection ? 'flex' : '' }} {{ ngtSectionStyle.compile(['border']) }}">
-        <div *ngIf="!accordion && caption" class="flex">
-            <span class="pl-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
-                {{ caption }}
-            </span>
+        class="w-full pb-4 md:pb-0 {{ accordion() && !showSection ? 'flex' : '' }} {{ ngtSectionStyle.compile(['border']) }}">
+        @if (!accordion() && caption()) {
+            <div class="flex">
+                <span class="pl-5 {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
+                    {{ caption() }}
+                </span>
 
-            <span *ngIf="subtitle"
-                class="self-center {{ ngtSubtitleStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml']) }}">
-                {{ subtitle }}
-            </span>
+                @if (subtitle()) {
+                    <span class="self-center {{ ngtSubtitleStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml']) }}">
+                        {{ subtitle() }}
+                    </span>
+                }
 
-            <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" class="ml-1 hover:opacity-100 opacity-100"
-                [iconColor]="helpIconColor">
-                {{ helpText }}
-            </ngt-helper>
-        </div>
+                @if (helpText()) {
+                    <ngt-helper [helpTitle]="helpTitle()" class="ml-1 hover:opacity-100 opacity-100"
+                        [iconColor]="helpIconColor()">
+                        {{ helpText() }}
+                    </ngt-helper>
+                }
+            </div>
+        }
 
-        <ng-container *ngIf="accordion">
-            <div class="flex flex-wrap items-center cursor-pointer {{ helpText ? '' : 'hover:opacity-75' }} {{ accordion && showSection ? ngtCaptionStyle.compile(['pb', 'px']) : ngtCaptionStyle.compile(['py', 'px']) }}"
-                (click)='toggle()' style="max-width: fit-content;">
-                <div *ngIf="!showSection"
-                    class="flex {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
-                    <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M2.82 4.59l9.18 9.16 9.18 -9.16 2.82 2.82 -12 12 -12 -12 2.82 -2.82z" />
-                    </svg>
-                </div>
-
-                <div *ngIf="showSection"
-                    class="flex {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
-                    <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M2.82 19.41l9.18 -9.16 9.18 9.16 2.82 -2.82 -12 -12 -12 12 2.82 2.82z" />
-                    </svg>
-                </div>
+        @if (accordion()) {
+            <div class="flex flex-wrap items-center cursor-pointer {{ helpText() ? '' : 'hover:opacity-75' }} {{ accordion() && showSection ? ngtCaptionStyle.compile(['pb', 'px']) : ngtCaptionStyle.compile(['py', 'px']) }}"
+                (click)="toggle()" style="max-width: fit-content;">
+                @if (!showSection) {
+                    <div class="flex {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
+                        <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M2.82 4.59l9.18 9.16 9.18 -9.16 2.82 2.82 -12 12 -12 -12 2.82 -2.82z" />
+                        </svg>
+                    </div>
+                } @else {
+                    <div class="flex {{ ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font']) }}">
+                        <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M2.82 19.41l9.18 -9.16 9.18 9.16 2.82 -2.82 -12 -12 -12 12 2.82 2.82z" />
+                        </svg>
+                    </div>
+                }
 
                 <span [class]="ngtCaptionStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml'])">
-                    {{ caption }}
+                    {{ caption() }}
                 </span>
 
-                <span *ngIf="subtitle"
-                    [class]="ngtSubtitleStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml'])">
-                    {{ subtitle }}
-                </span>
+                @if (subtitle()) {
+                    <span [class]="ngtSubtitleStyle.compile(['color.text', 'color.border', 'text', 'border', 'font', 'ml'])">
+                        {{ subtitle() }}
+                    </span>
+                }
 
-                <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" class="ml-1" [iconColor]="helpIconColor"
-                    class="ml-1 hover:opacity-100 opacity-100">
-                    {{ helpText }}
-                </ngt-helper>
+                @if (helpText()) {
+                    <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpIconColor()"
+                        class="ml-1 hover:opacity-100 opacity-100">
+                        {{ helpText() }}
+                    </ngt-helper>
+                }
 
-                <div *ngIf="removable"
-                    class="flex items-center justify-center h-6 w-6 ml-2 rounded-full hover:bg-red-500 hover:text-white text-gray-600 text-sm"
-                    (click)='remove($event)'>
-                    <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path
-                            d="M4 21.33c0,1.47 1.2,2.67 2.67,2.67l10.66 0c1.47,0 2.67,-1.2 2.67,-2.67l0 -16 -16 0 0 16zm17.33 -20l-4.66 0 -1.34 -1.33 -6.66 0 -1.34 1.33 -4.66 0 0 2.67 18.66 0 0 -2.67z" />
-                    </svg>
-                </div>
+                @if (removable()) {
+                    <div
+                        class="flex items-center justify-center h-6 w-6 ml-2 rounded-full hover:bg-red-500 hover:text-white text-gray-600 text-sm"
+                        (click)="remove($event)">
+                        <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path
+                                d="M4 21.33c0,1.47 1.2,2.67 2.67,2.67l10.66 0c1.47,0 2.67,-1.2 2.67,-2.67l0 -16 -16 0 0 16zm17.33 -20l-4.66 0 -1.34 -1.33 -6.66 0 -1.34 1.33 -4.66 0 0 2.67 18.66 0 0 -2.67z" />
+                        </svg>
+                    </div>
+                }
             </div>
-        </ng-container>
+        }
 
-        <div *ngIf='showSection' class="{{ ngtSectionStyle.compile(['px', 'pl']) }}" [@enterAnimation]='!showSection'>
-            <fieldset [disabled]="isDisabledState()" style="min-inline-size: 100% !important">
-                <ng-content></ng-content>
-            </fieldset>
-        </div>
+        @if (showSection) {
+            <div class="{{ ngtSectionStyle.compile(['px', 'pl']) }}" [@enterAnimation]="!showSection">
+                <fieldset [disabled]="isDisabledState()" style="min-inline-size: 100% !important">
+                    <ng-content></ng-content>
+                </fieldset>
+            </div>
+        }
     </div>
 </div>
+}

@@ -1,15 +1,21 @@
 import {
+    AfterContentInit,
+    ChangeDetectionStrategy,
     Component,
     ElementRef,
-    EventEmitter,
     Injector,
-    Input,
     OnDestroy,
     Optional,
-    Output,
+    OutputRefSubscription,
     Self,
     SkipSelf,
     ViewChild,
+    effect,
+    input,
+    output,
+    signal,
+    WritableSignal,
+    Input,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -22,19 +28,34 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
 @Component({
     selector: '[ngt-td-check]',
     templateUrl: './ngt-td-check.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class NgtTdCheckComponent implements OnDestroy {
+export class NgtTdCheckComponent implements AfterContentInit, OnDestroy {
     @ViewChild(NgtCheckboxComponent, { static: true }) public checkbox: NgtCheckboxComponent;
-    @Input() public reference: any;
-    @Input() public isDisabled: boolean;
+
+    /** Inputs */
+
+    public readonly reference = input<any>();
+    public readonly isDisabled = input<boolean>(false);
+    // public readonly checked = input<boolean>(false);
+
     @Input() public checked: boolean = false;
-    @Output() public onCheckboxInit: EventEmitter<any> = new EventEmitter();
+
+    /** Outputs */
+
+    public readonly onCheckboxInit = output<any>();
+
+    /** Signals */
 
     public ngtStyle: NgtStylizableService;
 
+    private readonly referenceState: WritableSignal<any> = signal(null);
+    private readonly isDisabledState: WritableSignal<boolean> = signal(false);
+    private readonly checkedState: WritableSignal<boolean> = signal(false);
+
     private id: string = uuid();
-    private subscriptions: Array<Subscription> = [];
+    private subscriptions: Array<Subscription | OutputRefSubscription> = [];
     private isFirstChange: boolean = true;
 
     public constructor(
@@ -44,53 +65,66 @@ export class NgtTdCheckComponent implements OnDestroy {
         @Optional() @SkipSelf()
         private ngtDataTable: NgtDatatableComponent
     ) {
-        this.bindNgtStyle();
+        this.setupNgtStylizable();
+
+        effect(() => {
+            this.referenceState.set(this.reference());
+        });
+
+        effect(() => {
+            this.isDisabledState.set(!!this.isDisabled());
+        });
+
+        effect(() => {
+            this.checkedState.set(!!this.checked);
+        });
     }
 
     public ngAfterContentInit(): void {
         if (this.ngtDataTable) {
             this.subscriptions.push(
                 this.ngtDataTable.onToogleAllCheckboxes.subscribe((checked: boolean) => {
-                    this.checked = checked;
+                    this.checkedState.set(checked);
                 })
             );
 
             this.subscriptions.push(
                 this.ngtDataTable.onClearSelectedElements.subscribe(() => {
-                    this.checked = false;
+                    this.checkedState.set(false);
                 })
             );
 
             this.onCheckboxInit.emit({
                 id: this.id,
-                checked: this.checked,
-                reference: this.reference
+                checked: this.checkedState(),
+                reference: this.referenceState()
             });
         }
     }
 
-    public ngOnDestroy(): void {
-        this.destroySubscriptions();
-    }
-
     public onCheckboxChange(checked: boolean): void {
+        this.checkedState.set(checked);
+
         if (this.ngtDataTable && !this.isFirstChange) {
             this.ngtDataTable.onToogleCheckbox.emit({
                 id: this.id,
                 checked: checked,
-                reference: this.reference
+                reference: this.referenceState()
             });
         }
 
         this.isFirstChange = false;
     }
 
-    private bindNgtStyle(): void {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
+    public ngOnDestroy(): void {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
 
         this.ngtStyle.load(this.injector, 'NgtTdCheck', {
             py: 'py-4',
@@ -117,10 +151,5 @@ export class NgtTdCheckComponent implements OnDestroy {
             'border',
             'color.border',
         ]);
-    }
-
-    private destroySubscriptions(): void {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());
-        this.subscriptions = [];
     }
 }

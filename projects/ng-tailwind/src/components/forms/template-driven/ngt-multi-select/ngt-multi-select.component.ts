@@ -1,26 +1,29 @@
 import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    computed,
+    effect,
     ElementRef,
-    EventEmitter,
     Host,
     HostListener,
     Injector,
-    Input,
-    OnChanges,
+    input,
     OnDestroy,
-    OnInit,
     Optional,
-    Output,
+    output,
     Self,
-    SimpleChanges,
+    Signal,
+    signal,
     SkipSelf,
     TemplateRef,
     ViewChild,
-    ViewEncapsulation,
+    WritableSignal,
 } from '@angular/core';
 import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -32,74 +35,145 @@ import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtInputComponent } from '../ngt-input/ngt-input.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
+import { NgtMultiSelectLoaderService } from './services/ngt-multi-select-loader.service';
 
 @Component({
     selector: 'ngt-multi-select',
     templateUrl: './ngt-multi-select.component.html',
-    encapsulation: ViewEncapsulation.None,
     styleUrls: ['./ngt-multi-select.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
-        NgtValueAccessorProvider(NgtMultiSelectComponent)
+        NgtValueAccessorProvider(NgtMultiSelectComponent),
+        NgtMultiSelectLoaderService,
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     standalone: false
 })
-export class NgtMultiSelectComponent extends NgtControlValueAccessor implements OnInit, OnDestroy, OnChanges {
+export class NgtMultiSelectComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {
     @ViewChild('containerRef') public containerRef: ElementRef;
     @ViewChild('inputSearch') public inputSearch: NgtInputComponent;
     @ViewChild('elementCheckboxTemplate') public elementCheckboxTemplate: TemplateRef<any>;
 
-    /** Visual */
-    @Input() public customOptionTemplate: TemplateRef<any>;
-    @Input() public customHeaderTemplate: TemplateRef<any>;
-    @Input() public label: string;
-    @Input() public helpTitle: string;
-    @Input() public helpText: string;
-    @Input() public helpTextColor: string = 'text-green-500';
-    @Input() public helperReverseYPosition: boolean;
-    @Input() public helperAutoXReverse: boolean = true;
-    @Input() public shining: boolean = false;
-    @Input() public loading: boolean = false;
+    /** Visual Inputs */
 
-    /** Behavior */
-    @Input() public bindLabel: string | Function = 'name';
-    @Input() public bindSearch: string = 'name';
-    @Input() public itemsPerPage: number = 15;
-    @Input() public name: string;
-    @Input() public remoteResource: any;
-    @Input() public items: Array<any> = [];
-    @Input() public searchable: boolean = true;
-    @Input() public allowOriginalItemsUnselect: boolean = true;
-    @Input() public allowSelectAll: boolean = true;
-    @Input() public allowDisplayOnlySelected: boolean = true;
-    @Input() public autoSelectUniqueOption: boolean;
+    public readonly customOptionTemplate = input<TemplateRef<any>>();
+    public readonly customHeaderTemplate = input<TemplateRef<any>>();
+    public readonly label = input<string>();
+    public readonly helpTitle = input<string>();
+    public readonly helpText = input<string>();
+    public readonly helpTextColor = input<string>('text-green-500');
+    public readonly helperReverseYPosition = input<boolean>();
+    public readonly helperAutoXReverse = input<boolean>(true);
+    public readonly shining = input<boolean>(false);
+    public readonly loading = input<boolean>(false);
 
-    /** Validation */
-    @Input() public isRequired: boolean;
-    @Input() public isDisabled: boolean;
+    /** Behavior Inputs */
 
-    @Output() public onDataChange: EventEmitter<Array<NgtSelectContainerSelectableElementInterface>> = new EventEmitter();
+    public readonly bindLabel = input<string | Function>('name');
+    public readonly bindSearch = input<string>('name');
+    public readonly itemsPerPage = input<number>(15);
+    public readonly name = input<string>();
+    public readonly remoteResource = input<any>();
+    public readonly items = input<Array<any>>([]);
+    public readonly searchable = input<boolean>(true);
+    public readonly allowOriginalItemsUnselect = input<boolean>(true);
+    public readonly allowSelectAll = input<boolean>(true);
+    public readonly allowDisplayOnlySelected = input<boolean>(true);
+    public readonly autoSelectUniqueOption = input<boolean>();
 
-    public searchTerm: string = '';
-    public searchInputName: string = uuid();
+    /** Validation Inputs */
 
-    public selectAllCheckboxName: string = uuid();
-    public displayOnlySelectedName: string = uuid();
+    public readonly isRequired = input<boolean>();
+    public readonly isDisabled = input<boolean>();
 
-    public selectedElements: Array<NgtSelectContainerSelectableElementInterface> = [];
-    public itemsTotal: number;
-    public selectAllCheckbox: boolean;
-    public displayOnlySelected: boolean;
+    /** Outputs */
 
-    public nativeName: string = uuid();
-    public nativeValue: any;
+    public readonly onDataChange = output<Array<NgtSelectContainerSelectableElementInterface>>();
 
+    /** Computed Signals */
+
+    public readonly isShining: Signal<boolean> = computed(
+        () => this.shining() || this.loaderService.shining() || this.ngtForm?.isShining()
+    );
+
+    public readonly isLoading: Signal<boolean> = computed(
+        () => this.loading() || this.loaderService.loading()
+    );
+
+    public readonly isDisabledByParent: Signal<boolean> = computed(
+        () => !!(this.ngtForm?.isDisabledState() || this.ngtSection?.isDisabledState() || this.ngtModal?.isDisabledState())
+    );
+
+    public readonly isDisabledState: Signal<boolean> = computed(
+        () => this.isDisabled() || this.isDisabledByParent()
+    );
+
+    public readonly currentSelectableElements: Signal<Array<NgtSelectContainerSelectableElementInterface>> = computed(() => {
+        if (this.inSearch() && this.items()?.length) {
+            return this.selectableElementsOnSearch();
+        } else if (this.displayOnlySelected()) {
+            return this.selectedElements();
+        }
+
+        return this.selectableElements();
+    });
+
+    public readonly hasNoData: Signal<boolean> = computed(
+        () => !this.currentSelectableElements()?.length
+    );
+
+    public readonly hasValidationErrors: Signal<boolean> = computed(() => {
+        const hasErrors = this.formControlHasErrors();
+        const isDirty = this.formControlIsDirty();
+        const isSubmitted = !!(this.formContainer && (this.formContainer as any)['submitted']);
+
+        return hasErrors && (isDirty || isSubmitted);
+    });
+
+    public readonly containerClasses: Signal<string> = computed(() => {
+        const classes = ['border w-full rounded', this.ngtStyle.compile(['h'])];
+
+        if (this.hasValidationErrors()) {
+            classes.push('border-red-500');
+        }
+
+        if (this.isDisabledState()) {
+            classes.push('disabled-background');
+        }
+
+        return classes.join(' ');
+    });
+
+    public readonly selectedCount: Signal<number> = computed(
+        () => this.selectedElements()?.length || 0
+    );
+
+    /** Writable Signals */
+
+    public readonly selectableElements: WritableSignal<Array<NgtSelectContainerSelectableElementInterface>> = signal([]);
+    public readonly selectableElementsOnSearch: WritableSignal<Array<NgtSelectContainerSelectableElementInterface>> = signal([]);
+    public readonly selectedElements: WritableSignal<Array<NgtSelectContainerSelectableElementInterface>> = signal([]);
+    public readonly componentReady: WritableSignal<boolean> = signal(false);
+    public readonly searchTerm: WritableSignal<string> = signal('');
+    // public readonly selectAllCheckbox: WritableSignal<boolean> = signal(false);
+    // TODO: CHANGE THIS TO SIGNAL
+    public selectAllCheckbox: boolean = false;
+    public readonly displayOnlySelected: WritableSignal<boolean> = signal(false);
+    public readonly itemsTotal: WritableSignal<number> = signal(0);
+
+    /** Internal State */
+
+    public readonly searchInputName: string = uuid();
+    public readonly selectAllCheckboxName: string = uuid();
+    public readonly displayOnlySelectedName: string = uuid();
     public ngtStyle: NgtStylizableService;
-    public selectableElements: Array<NgtSelectContainerSelectableElementInterface> = [];
-    public selectableElementsOnSearch: Array<NgtSelectContainerSelectableElementInterface> = [];
-    public componentReady: boolean;
+
+    private readonly formControlHasErrors: WritableSignal<boolean> = signal(false);
+    private readonly formControlIsDirty: WritableSignal<boolean> = signal(false);
+    private readonly inSearch: WritableSignal<boolean> = signal(false);
+    private readonly currentItemsPerPage: WritableSignal<number> = signal(15);
 
     private pagination: NgtHttpPagination = {
         count: null,
@@ -112,16 +186,16 @@ export class NgtMultiSelectComponent extends NgtControlValueAccessor implements 
     };
 
     private subscriptions: Array<Subscription> = [];
-    private inSearch: boolean;
-    private searchTimeout: any;
+    private searchSubject$ = new Subject<string>();
     private previousSearchTerm: string = '';
-    private becameVisible: boolean;
+    private becameVisible: boolean = false;
     private selectableResourcesCount: number;
-    private originalItems: Array<NgtSelectContainerSelectableElementInterface>;
+    private originalItems: Array<NgtSelectContainerSelectableElementInterface> = [];
 
     public constructor(
         private ngtHttpService: NgtHttpService,
-        private changeDetector: ChangeDetectorRef,
+        private cdr: ChangeDetectorRef,
+        private loaderService: NgtMultiSelectLoaderService,
 
         @Optional() @SkipSelf()
         private ngtForm: NgtFormComponent,
@@ -145,372 +219,480 @@ export class NgtMultiSelectComponent extends NgtControlValueAccessor implements 
     ) {
         super();
 
-        if (this.ngtForm) {
-            this.shining = this.ngtForm.isShining();
-
-            this.subscriptions.push(
-                this.ngtForm.onShiningChange.subscribe((shining: boolean) => {
-                    this.shining = shining;
-                })
-            );
-        }
-
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
-
-        this.ngtStyle.load(this.injector, 'NgtMultiSelect', { h: 'h-64' });
+        this.setupNgtStylizable();
+        this.registerEffects();
     }
 
     @HostListener('scroll', ['$event'])
     public onScroll(event: any): void {
-        const isScrollEnd = event.target.scrollTop && event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 30);
+        const isScrollEnd = event.target.scrollTop &&
+            event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 30);
 
-        if (isScrollEnd && !this.loading && !this.displayOnlySelected && this.selectableElements?.length
-            && this.pagination.per_page < this.pagination.total) {
+        if (
+            isScrollEnd
+            && !this.isLoading()
+            && !this.displayOnlySelected()
+            && this.selectableElements()?.length
+            && this.pagination.per_page < this.pagination.total
+        ) {
             const currentPerPage = typeof this.pagination.per_page === 'string'
                 ? Number.parseInt(this.pagination.per_page)
                 : this.pagination.per_page;
 
-            setTimeout(() => this.loadData(currentPerPage + this.itemsPerPage, this.searchTerm));
+            setTimeout(() => this.loadData(currentPerPage + this.currentItemsPerPage(), this.searchTerm()));
         }
     }
 
-    public ngOnInit(): void {
+    public ngAfterViewInit(): void {
         if (!this.formContainer) {
             console.error("The element must be inside a <form #form='ngForm'> tag!");
         }
 
-        if (!this.name) {
+        if (!this.name()) {
             console.error("The element must contain a name attribute!");
         }
-    }
 
-    public ngDoCheck(): void {
-        if (!this.becameVisible && !this.isHidden()) {
-            this.becameVisible = true;
+        this.setupSearchSubscription();
 
-            this.loadData().then(() => {
-                this.initComponentValidation();
-
-                if (this.canAutoSelectUniqueOption()) {
-                    this.selectableElements[0].isSelected = true;
-
-                    this.onNativeChange(this.selectableElements[0]);
-                }
-
-                this.originalItems = [...this.selectedElements];
-            });
-        }
-    }
-
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes.isRequired && this.componentReady) {
-            this.updateValidations();
-        }
-
-        if (changes.isDisabled) {
-            this.displayOnlySelected = this.disabled();
-        }
-
-        if (changes.items) {
-            this.bindSelectableElements(changes.items.currentValue);
-
-            this.componentReady = true;
-
-            if (this.canAutoSelectUniqueOption()) {
-                this.selectableElements[0].isSelected = true;
-
-                this.onNativeChange(this.selectableElements[0]);
-            }
-        }
-
-        if (changes.remoteResource && this.becameVisible) {
-            this.loadData().then(() => {
-                this.initComponentValidation();
-
-                if (this.canAutoSelectUniqueOption()) {
-                    this.selectableElements[0].isSelected = true;
-
-                    this.onNativeChange(this.selectableElements[0]);
-                }
-            });
-        }
-
-        if (changes.itemsPerPage) {
-            this.pagination.per_page = changes.itemsPerPage.currentValue;
-        }
+        this.cdr.detach();
     }
 
     public ngOnDestroy(): void {
         this.destroySubscriptions();
+        this.searchSubject$.complete();
+        this.cdr.reattach();
     }
 
     public setFocus(): void {
-        setTimeout(() => this.inputSearch.setFocus());
+        setTimeout(() => this.inputSearch?.setFocus());
     }
 
     public async refresh(itemsPerPage?: number, searchTerm?: string): Promise<void> {
-        this.itemsPerPage = itemsPerPage !== undefined ? itemsPerPage : this.itemsPerPage;
-        this.searchTerm = searchTerm !== undefined ? searchTerm : this.searchTerm;
+        if (itemsPerPage !== undefined) {
+            this.currentItemsPerPage.set(itemsPerPage);
+        }
 
-        return this.loadData(this.itemsPerPage, this.searchTerm);
+        if (searchTerm !== undefined) {
+            this.searchTerm.set(searchTerm);
+        }
+
+        return this.loadData(this.currentItemsPerPage(), this.searchTerm());
     }
 
     public reset(): void {
         this.value = [];
-        this.nativeValue = [];
-        this.selectedElements = [];
+        this.selectedElements.set([]);
         this.refresh();
     }
 
     public selectAll(): void {
-        if (this.allowSelectAll && !this.loading && !this.disabled()) {
-            this.selectAllCheckbox = !this.selectAllCheckbox;
+        if (this.allowSelectAll() && !this.isLoading() && !this.isDisabledState()) {
+            const newSelectAllState = !this.selectAllCheckbox;
+
+            this.selectAllCheckbox = newSelectAllState;
 
             this.value = [];
-            this.nativeValue = [];
-            this.selectedElements = this.allowOriginalItemsUnselect ? [] : [...this.originalItems];
+            this.selectedElements.set(this.allowOriginalItemsUnselect() ? [] : [...this.originalItems]);
 
-            const perpage = this.selectAllCheckbox ? this.pagination.total : this.itemsPerPage;
+            const perpage = newSelectAllState ? this.pagination.total : this.currentItemsPerPage();
 
-            this.loadData(perpage, this.searchTerm)
+            this.loadData(perpage, this.searchTerm())
                 .then(() => {
                     this.containerRef?.nativeElement?.scrollTo({ top: 0 });
 
-                    this.selectableElements.forEach(
-                        element => element.isSelected = this.selectAllCheckbox || this.isSelectedElement(element)
-                    );
+                    const updatedElements = this.selectableElements().map(element => ({
+                        ...element,
+                        isSelected: newSelectAllState || this.isSelectedElement(element)
+                    }));
 
-                    if (this.selectAllCheckbox) {
-                        this.selectedElements = this.selectableElements;
+                    this.selectableElements.set(updatedElements);
+
+                    if (newSelectAllState) {
+                        this.selectedElements.set([...updatedElements]);
                     }
+
+                    this.cdr.detectChanges();
                 });
         }
     }
 
     public selectElements(elements: Array<any>): void {
-        if (!this.disabled()) {
+        if (!this.isDisabledState()) {
             const elementIds = this.isColoquentResources() ? elements.map(element => element.getApiId()) : elements;
 
-            this.selectableElements.forEach(
-                (selectableElement: NgtSelectContainerSelectableElementInterface) => {
-                    const value = selectableElement.value;
+            const updatedElements = this.selectableElements().map(selectableElement => {
+                const value = selectableElement.value;
 
-                    if (
-                        !selectableElement.isSelected
-                        && (
-                            (this.isColoquentResources() && elementIds.includes(value.getApiId()))
-                            || elementIds.includes(value)
-                        )
-                    ) {
-                        selectableElement.isSelected = true;
+                if (
+                    !selectableElement.isSelected
+                    && (
+                        (this.isColoquentResources() && elementIds.includes(value.getApiId()))
+                        || elementIds.includes(value)
+                    )
+                ) {
+                    const updated = { ...selectableElement, isSelected: true };
 
-                        this.handleElementSelection(selectableElement);
-                    }
+                    this.handleElementSelection(updated);
+
+                    return updated;
                 }
-            );
+
+                return selectableElement;
+            });
+
+            this.selectableElements.set(updatedElements);
+            this.cdr.detectChanges();
         }
     }
 
     public toggleItem(selectableElement: NgtSelectContainerSelectableElementInterface, event?: Event): void {
         event?.stopImmediatePropagation();
 
-        if (!this.disabled() && this.canSelectItem(selectableElement)) {
-            selectableElement.isSelected = !selectableElement.isSelected;
+        if (!this.isDisabledState() && this.canSelectItem(selectableElement)) {
+            const updatedElement = { ...selectableElement, isSelected: !selectableElement.isSelected };
 
-            this.handleElementSelection(selectableElement);
+            this.updateSelectableElement(updatedElement);
+            this.handleElementSelection(updatedElement);
+            this.cdr.detectChanges();
         }
     }
 
     public onNativeChange(selectableElement: NgtSelectContainerSelectableElementInterface): void {
-        if (this.componentReady) {
+        if (this.componentReady()) {
             this.handleElementSelection(selectableElement);
 
-            if (this.hasChangesBetweenBindings(this.value, this.selectedElements)) {
-                this.value = this.selectedElements.map(e => e.value);
+            if (this.hasChangesBetweenBindings(this.value, this.selectedElements())) {
+                this.value = this.selectedElements().map(e => e.value);
             }
+
+            this.cdr.detectChanges();
         }
     }
 
     public change(selectedElements: Array<any>): void {
-        if (this.hasChangesBetweenBindings(selectedElements, this.selectedElements)) {
-            if (this.selectableElements?.length) {
+        if (this.hasChangesBetweenBindings(selectedElements, this.selectedElements())) {
+            const currentSelectableElements = this.selectableElements();
+
+            if (currentSelectableElements?.length) {
                 this.bindSelectedElements(selectedElements);
 
-                this.selectableElements.filter(element => this.isSelectedElement(element))
-                    .forEach(element => element.isSelected = true);
+                const updatedSelectableElements = currentSelectableElements.map(element => ({
+                    ...element,
+                    isSelected: this.isSelectedElement(element)
+                }));
 
-                this.selectableElementsOnSearch.filter(element => this.isSelectedElement(element))
-                    .forEach(element => element.isSelected = true);
+                this.selectableElements.set(updatedSelectableElements);
+
+                const updatedSearchElements = this.selectableElementsOnSearch().map(element => ({
+                    ...element,
+                    isSelected: this.isSelectedElement(element)
+                }));
+
+                this.selectableElementsOnSearch.set(updatedSearchElements);
             } else {
-                this.selectedElements = selectedElements?.map(
+                const newSelectedElements = selectedElements?.map(
                     element => ({ uuid: uuid(), isSelected: true, value: element })
                 ) ?? [];
 
-                this.changeDetector.detectChanges();
+                this.selectedElements.set(newSelectedElements);
             }
 
             if (!selectedElements?.length) {
                 this.markAsPristine();
             }
+
+            this.cdr.detectChanges();
         }
     }
 
     public search(term: string): void {
-        if (!this.componentReady || term === undefined || term === null || term === this.previousSearchTerm || this.loading) {
-            return;
-        }
-
-        if (this.searchTimeout) {
-            clearTimeout(this.searchTimeout);
-        }
-
-        this.searchTimeout = setTimeout(() => {
-            this.previousSearchTerm = term;
-            this.selectAllCheckbox = this.selectedElements?.length == this.selectableResourcesCount;
-
-            if (!term) {
-                this.inSearch = false;
-
-                if (this.items?.length) {
-                    return;
-                }
-            }
-
-            this.inSearch = true;
-
-            if (this.items?.length) {
-                const normalizedTerm = term.toLowerCase().trim();
-
-                this.selectableElementsOnSearch = this.selectableElements.filter(item => {
-                    const value = String(this.getSelectableElementValue(item) ?? '').toLowerCase();
-
-                    return value.includes(normalizedTerm);
-                });
-            } else {
-                this.loadData(this.itemsPerPage, term);
-            }
-        }, 500);
+        this.searchSubject$.next(term);
     }
 
-    public getSelectableElements(): Array<any> {
-        if (this.inSearch && this.items?.length) {
-            return this.selectableElementsOnSearch;
-        } else if (this.displayOnlySelected) {
-            return this.selectedElements;
-        }
+    public getSelectableElementValue(selectableItem: NgtSelectContainerSelectableElementInterface): string {
+        const bindLabelValue = this.bindLabel();
 
-        return this.selectableElements;
-    }
-
-    public getSelectableElementValue(selectableItem: any): string {
-        if (typeof this.bindLabel === 'function') {
-            return this.bindLabel(selectableItem.value);
+        if (typeof bindLabelValue === 'function') {
+            return bindLabelValue(selectableItem.value);
         } else if (typeof selectableItem.value['getAttribute'] === 'function') {
-            return selectableItem.value.getAttribute(this.bindLabel);
+            return selectableItem.value.getAttribute(bindLabelValue as string);
         }
 
-        return selectableItem.value[this.bindLabel];
-    }
-
-    public hasValidationErrors(): boolean {
-        return this.formControl?.errors && (
-            this.formControl.dirty || (this.formContainer && this.formContainer['submitted'])
-        );
+        return selectableItem.value[bindLabelValue as string];
     }
 
     public canSelectItem(item: NgtSelectContainerSelectableElementInterface): boolean {
-        return !this.disabled()
+        return !this.isDisabledState()
             && (
-                this.allowOriginalItemsUnselect
-                || !this.originalItems?.some(originalItem => originalItem.uuid == item.uuid)
+                this.allowOriginalItemsUnselect()
+                || !this.originalItems?.some(originalItem => originalItem.uuid === item.uuid)
             );
     }
 
-    public disabled(): boolean {
-        return this.isDisabled || this.isDisabledByParent();
+    public trackByUuid(index: number, element: NgtSelectContainerSelectableElementInterface): string {
+        return element.uuid;
+    }
+
+    private registerEffects(): void {
+        effect(() => {
+            const items = this.items();
+
+            if (items?.length) {
+                this.bindSelectableElements(items);
+                this.componentReady.set(true);
+
+                if (this.canAutoSelectUniqueOption()) {
+                    const firstElement = this.selectableElements()[0];
+
+                    if (firstElement) {
+                        const updated = { ...firstElement, isSelected: true };
+
+                        this.selectableElements.update(elements => {
+                            const newElements = [...elements];
+
+                            newElements[0] = updated;
+
+                            return newElements;
+                        });
+
+                        this.onNativeChange(updated);
+                    }
+                }
+
+                this.cdr.detectChanges();
+            }
+        });
+
+        effect(() => {
+            const remoteResource = this.remoteResource();
+
+            if (remoteResource && this.becameVisible) {
+                this.loadData().then(() => {
+                    this.initComponentValidation();
+
+                    if (this.canAutoSelectUniqueOption()) {
+                        const firstElement = this.selectableElements()[0];
+
+                        if (firstElement) {
+                            const updated = { ...firstElement, isSelected: true };
+
+                            this.selectableElements.update(elements => {
+                                const newElements = [...elements];
+
+                                newElements[0] = updated;
+
+                                return newElements;
+                            });
+
+                            this.onNativeChange(updated);
+                        }
+                    }
+
+                    this.cdr.detectChanges();
+                });
+            }
+        });
+
+        effect(() => {
+            const isRequired = this.isRequired();
+
+            if (this.componentReady()) {
+                this.updateValidations();
+                this.cdr.detectChanges();
+            }
+        });
+
+        effect(() => {
+            const isDisabled = this.isDisabled();
+
+            this.displayOnlySelected.set(this.isDisabledState());
+            this.cdr.detectChanges();
+        });
+
+        effect(() => {
+            const newItemsPerPage = this.itemsPerPage();
+
+            this.currentItemsPerPage.set(newItemsPerPage);
+            this.pagination.per_page = newItemsPerPage;
+        });
+
+        effect(() => {
+            if (!this.becameVisible && !this.isHidden()) {
+                this.becameVisible = true;
+
+                this.loadData().then(() => {
+                    this.initComponentValidation();
+
+                    if (this.canAutoSelectUniqueOption()) {
+                        const firstElement = this.selectableElements()[0];
+
+                        if (firstElement) {
+                            const updated = { ...firstElement, isSelected: true };
+
+                            this.selectableElements.update(elements => {
+                                const newElements = [...elements];
+
+                                newElements[0] = updated;
+
+                                return newElements;
+                            });
+
+                            this.onNativeChange(updated);
+                        }
+                    }
+
+                    this.originalItems = [...this.selectedElements()];
+                    this.cdr.detectChanges();
+                });
+            }
+        });
+    }
+
+    private setupSearchSubscription(): void {
+        this.subscriptions.push(
+            this.searchSubject$.pipe(
+                debounceTime(500),
+                distinctUntilChanged()
+            ).subscribe(term => {
+                this.performSearch(term);
+            })
+        );
+    }
+
+    private performSearch(term: string): void {
+        if (!this.componentReady() || term === this.previousSearchTerm || this.isLoading()) {
+            return;
+        }
+
+        this.previousSearchTerm = term;
+        this.selectAllCheckbox = this.selectedElements()?.length === this.selectableResourcesCount;
+
+        if (!term) {
+            this.inSearch.set(false);
+
+            if (this.items()?.length) {
+                this.cdr.detectChanges();
+
+                return;
+            }
+        }
+
+        this.inSearch.set(true);
+
+        if (this.items()?.length) {
+            const normalizedTerm = term.toLowerCase().trim();
+
+            const filteredElements = this.selectableElements().filter(item => {
+                const value = String(this.getSelectableElementValue(item) ?? '').toLowerCase();
+
+                return value.includes(normalizedTerm);
+            });
+
+            this.selectableElementsOnSearch.set(filteredElements);
+            this.cdr.detectChanges();
+        } else {
+            this.loadData(this.currentItemsPerPage(), term);
+        }
     }
 
     private handleElementSelection(selectableElement: NgtSelectContainerSelectableElementInterface): void {
+        const currentSelected = this.selectedElements();
+
         if (selectableElement.isSelected && !this.isSelectedElement(selectableElement)) {
-            this.selectedElements.push(selectableElement);
+            this.selectedElements.set([...currentSelected, selectableElement]);
         } else if (!selectableElement.isSelected && this.isSelectedElement(selectableElement)) {
-            this.selectedElements = this.selectedElements.filter(
+            const filtered = currentSelected.filter(
                 selectedElement => selectedElement.uuid !== selectableElement.uuid
             );
 
+            this.selectedElements.set(filtered);
+
             this.onNativeChange(selectableElement);
 
-            if (this.displayOnlySelected && !this.selectedElements.length) {
-                this.displayOnlySelected = false;
+            if (this.displayOnlySelected() && !filtered.length) {
+                this.displayOnlySelected.set(false);
             }
         }
     }
 
-    private async loadData(perpage: number = this.itemsPerPage, searchTerm?: string): Promise<void> {
+    private updateSelectableElement(updatedElement: NgtSelectContainerSelectableElementInterface): void {
+        this.selectableElements.update(elements =>
+            elements.map(el => el.uuid === updatedElement.uuid ? updatedElement : el)
+        );
+
+        this.selectableElementsOnSearch.update(elements =>
+            elements.map(el => el.uuid === updatedElement.uuid ? updatedElement : el)
+        );
+    }
+
+    private async loadData(perpage: number = this.currentItemsPerPage(), searchTerm?: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            if (this.remoteResource) {
-                if (this.loading) {
+            const resource = this.remoteResource();
+
+            if (resource) {
+                if (this.isLoading()) {
                     return resolve();
                 }
 
-                if (perpage == this.itemsPerPage) {
+                if (perpage === this.currentItemsPerPage()) {
                     this.containerRef?.nativeElement?.scrollTo({ top: 0 });
                 }
 
-                this.selectableElements = [];
-                this.loading = true;
-                this.itemsPerPage = perpage;
+                this.selectableElements.set([]);
+                this.loaderService.setLoading(true);
+                this.currentItemsPerPage.set(perpage);
 
-                const pagination: NgtHttpPagination = { ...this.pagination, ...{ per_page: perpage } };
-                const filters = searchTerm ? { [this.bindSearch]: searchTerm } : null;
+                const pagination: NgtHttpPagination = { ...this.pagination, per_page: perpage };
+                const filters = searchTerm ? { [this.bindSearch()]: searchTerm } : null;
 
                 this.subscriptions.push(
-                    this.ngtHttpService.get(
-                        this.remoteResource, filters, pagination
-                    ).subscribe(
-                        (response: NgtHttpResponse) => {
+                    this.ngtHttpService.get(resource, filters, pagination).subscribe({
+                        next: (response: NgtHttpResponse) => {
                             this.bindSelectableElements(response.data);
 
                             this.pagination = response.meta.pagination;
-                            this.itemsTotal = this.pagination.total;
-                            this.loading = false;
+                            this.itemsTotal.set(this.pagination.total);
+                            this.loaderService.setLoading(false);
 
                             if (!this.selectableResourcesCount && !searchTerm) {
                                 this.selectableResourcesCount = this.pagination.total;
                             }
 
-                            this.onDataChange.emit(this.selectableElements);
-                            this.componentReady = true;
-                            this.changeDetector.detectChanges();
+                            this.onDataChange.emit(this.selectableElements());
+                            this.componentReady.set(true);
+                            this.cdr.detectChanges();
 
-                            setTimeout(() => this.displayOnlySelected = this.disabled());
+                            setTimeout(() => {
+                                this.displayOnlySelected.set(this.isDisabledState());
+                                this.cdr.detectChanges();
+                            });
 
                             resolve();
                         },
-                        (error) => {
+                        error: (error) => {
                             console.error(error);
-                            this.loading = false;
-                            this.changeDetector.detectChanges();
+                            this.loaderService.setLoading(false);
+                            this.cdr.detectChanges();
 
                             reject();
                         }
-                    )
+                    })
                 );
-            } else {
+            } else if (!this.items()?.length) {
                 console.error('The property [remoteResource] needs to be present to be able to make remote search');
+                resolve();
+            } else {
+                resolve();
             }
         });
     }
 
     private bindSelectableElements(data: Array<any>): void {
+        const currentSelected = this.selectedElements();
         const formattedElements: Array<NgtSelectContainerSelectableElementInterface> = [];
 
         data.forEach(item => {
-            const alreadySelected = this.findSelectedElement(item);
+            const alreadySelected = this.findSelectedElement(item, currentSelected);
 
             if (alreadySelected) {
                 formattedElements.push(alreadySelected);
@@ -519,40 +701,66 @@ export class NgtMultiSelectComponent extends NgtControlValueAccessor implements 
             }
         });
 
-        this.selectableElements = formattedElements;
+        this.selectableElements.set(formattedElements);
     }
 
     private bindSelectedElements(selectedElements: Array<any>): void {
-        this.selectableElements.forEach(selectableElement => {
+        const currentSelectableElements = this.selectableElements();
+        const newSelectedElements: Array<NgtSelectContainerSelectableElementInterface> = [];
+
+        currentSelectableElements.forEach(selectableElement => {
             const shouldBeSelected: boolean = !!selectedElements?.find(
                 selectedElement => this.compareWith(selectedElement, selectableElement.value)
             );
 
             if (shouldBeSelected) {
-                selectableElement.isSelected = true;
-                this.handleElementSelection(selectableElement);
+                newSelectedElements.push({ ...selectableElement, isSelected: true });
             }
         });
+
+        if (newSelectedElements.length > 0) {
+            this.selectedElements.update(current => {
+                const existingUuids = current.map(el => el.uuid);
+                const toAdd = newSelectedElements.filter(el => !existingUuids.includes(el.uuid));
+
+                return [...current, ...toAdd];
+            });
+        }
     }
 
     private initComponentValidation(): void {
-        if (this.formContainer?.control && (this.formControl = this.formContainer.control.get(this.name))) {
-            this.formControl = this.formContainer.control.get(this.name);
+        if (this.formContainer?.control && (this.formControl = this.formContainer.control.get(this.name()))) {
+            this.formControl = this.formContainer.control.get(this.name());
             this.markAsPristine();
             this.updateValidations();
+            this.setupFormControlSubscription();
+        }
+    }
+
+    private setupFormControlSubscription(): void {
+        if (this.formControl) {
+            this.subscriptions.push(
+                this.formControl.statusChanges.subscribe(() => {
+                    this.formControlHasErrors.set(!!this.formControl?.errors);
+                    this.formControlIsDirty.set(!!this.formControl?.dirty);
+                    this.cdr.detectChanges();
+                })
+            );
         }
     }
 
     private updateValidations(): void {
         const syncValidators = [];
 
-        if (this.isRequired) {
+        if (this.isRequired()) {
             syncValidators.push(this.isRequiredValidator());
         }
 
         setTimeout(() => {
-            this.formControl.setValidators(syncValidators);
-            this.formControl.updateValueAndValidity();
+            if (this.formControl) {
+                this.formControl.setValidators(syncValidators);
+                this.formControl.updateValueAndValidity();
+            }
         });
     }
 
@@ -566,50 +774,58 @@ export class NgtMultiSelectComponent extends NgtControlValueAccessor implements 
         };
     }
 
-    private findSelectedElement(item: any): any {
-        return this.selectedElements.find(selectedElement => this.compareWith(selectedElement.value, item));
+    private findSelectedElement(item: any, selectedElements: Array<NgtSelectContainerSelectableElementInterface>): NgtSelectContainerSelectableElementInterface | undefined {
+        return selectedElements.find(selectedElement => this.compareWith(selectedElement.value, item));
     }
 
     private compareWith(a: any, b: any): boolean {
         if (typeof a['getApiId'] === 'function' && typeof b['getApiId'] === 'function') {
-            return a.getApiId() == b.getApiId();
+            return a.getApiId() === b.getApiId();
         } else if (a.id && b.id) {
-            return a.id == b.id;
+            return a.id === b.id;
         }
 
         return JSON.stringify(a) === JSON.stringify(b);
     }
 
-    private hasChangesBetweenBindings(value: Array<any>, nativeValue: Array<any>): boolean {
+    private hasChangesBetweenBindings(value: Array<any>, nativeValue: Array<NgtSelectContainerSelectableElementInterface>): boolean {
+        let compareValue = nativeValue;
+
         if (value?.length && !value[0].uuid) {
-            nativeValue = nativeValue.map(element => element.value);
+            compareValue = nativeValue.map(element => element.value) as any;
         }
 
-        return JSON.stringify(value) !== JSON.stringify(nativeValue);
+        return JSON.stringify(value) !== JSON.stringify(compareValue);
     }
 
     private isSelectedElement(selectableElement: NgtSelectContainerSelectableElementInterface): boolean {
-        return !!this.selectedElements.find(selectedElement => selectedElement.uuid === selectableElement.uuid);
+        return !!this.selectedElements().find(selectedElement => selectedElement.uuid === selectableElement.uuid);
     }
 
     private canAutoSelectUniqueOption(): boolean {
-        return this.autoSelectUniqueOption
+        return this.autoSelectUniqueOption()
             && (!this.value || !this.value?.length)
-            && this.selectableElements?.length == 1;
+            && this.selectableElements()?.length === 1;
     }
 
     private isHidden(): boolean {
-        return !this.containerRef?.nativeElement.offsetParent;
+        return !this.containerRef?.nativeElement?.offsetParent;
     }
 
     private isColoquentResources(): boolean {
-        return this.selectableElements?.length && typeof this.selectableElements[0].value['getApiId'] === 'function';
+        const elements = this.selectableElements();
+
+        return elements?.length && typeof elements[0].value['getApiId'] === 'function';
     }
 
-    private isDisabledByParent(): boolean {
-        return this.ngtForm?.isDisabled
-            || this.ngtSection?.isDisabledState()
-            || this.ngtModal?.isDisabledState();
+    private setupNgtStylizable(): void {
+        if (this.ngtStylizableDirective) {
+            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
+        } else {
+            this.ngtStyle = new NgtStylizableService();
+        }
+
+        this.ngtStyle.load(this.injector, 'NgtMultiSelect', { h: 'h-64' });
     }
 
     private destroySubscriptions(): void {

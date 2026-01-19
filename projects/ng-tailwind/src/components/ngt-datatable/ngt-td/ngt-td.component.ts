@@ -1,4 +1,11 @@
-import { Component, ElementRef, Injector, Optional, Self } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    Injector,
+    Optional,
+    Self,
+} from '@angular/core';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
@@ -6,6 +13,7 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 @Component({
     selector: '[ngt-td]',
     templateUrl: './ngt-td.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtTdComponent {
@@ -16,15 +24,13 @@ export class NgtTdComponent {
         private hostElement: ElementRef,
         @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
     ) {
-        this.bindNgtStyle();
+        this.setupNgtStylizable();
     }
 
-    private bindNgtStyle() {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
 
         this.ngtStyle.load(this.injector, 'NgtTd', {
             py: 'py-4',

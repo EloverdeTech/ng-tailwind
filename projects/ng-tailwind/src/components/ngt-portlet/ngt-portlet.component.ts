@@ -1,5 +1,12 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Injector, Input, Optional, Self } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Injector,
+    Optional,
+    Self,
+    input,
+} from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -15,17 +22,20 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
             ])
         ])
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtPortletComponent {
-    @Input() public caption: string;
-    @Input() public icon: string = null;
-    @Input() public customLayout: boolean = false;
-    @Input() public withFooter: boolean = false;
-    @Input() public withBody: boolean = true;
-    @Input() public helpTitle: string = '';
-    @Input() public helpText: string = '';
-    @Input() public helpIconColor: string = '';
+    /** Inputs */
+
+    public readonly caption = input<string>();
+    public readonly icon = input<string>(null);
+    public readonly customLayout = input<boolean>(false);
+    public readonly withFooter = input<boolean>(false);
+    public readonly withBody = input<boolean>(true);
+    public readonly helpTitle = input<string>('');
+    public readonly helpText = input<string>('');
+    public readonly helpIconColor = input<string>('');
 
     public ngtStyle: NgtStylizableService;
 
@@ -33,11 +43,13 @@ export class NgtPortletComponent {
         private injector: Injector,
         @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
     ) {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
+        this.setupNgtStylizable();
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
 
         this.ngtStyle.load(this.injector, 'NgtPortlet', {
             h: 'h-auto',

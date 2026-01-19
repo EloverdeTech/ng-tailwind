@@ -1,18 +1,24 @@
-<div class="flex flex-col">
-    <span *ngIf='label && !shining' class="text-sm mb-2">{{ label }}:</span>
+@if (label()) {
+    <label class="flex mb-2 text-sm" [hidden]='isShining()'>
+        <span class="truncate" [title]="label()">
+            {{ label() }}:
+        </span>
+    </label>
+}
 
-    <div class="{{ shining ? 'hidden' : 'flex' }} items-center">
-        <input class="block w-full cursor-pointer overflow-hidden appearance-none bg-gray-400 {{color}}"
-            [class.cursor-not-allowed]="isDisabled" type="range" [name]='name' ([ngModel])='value' [min]='min'
-            [max]='max' [step]='step' [disabled]="isDisabled" #element>
+<div [class]="isShining() ? 'hidden' : 'flex items-center'">
+    <input [class]="sliderClasses()" type="range" [name]='name()' [min]='minValue()' [max]='maxValue()' [step]='stepValue()'
+        [disabled]="isDisabledState()" (change)="onNativeChange()" (blur)="onTouched()" #sliderElement>
 
-        <span id='display' class="text-xs ml-2 font-semibold" #display>{{ value }}</span>
-        <span *ngIf="showPercentageSymbol" class="text-xs font-semibold">%</span>
-    </div>
+    <span class="text-xs ml-2 font-semibold">{{ displayValue() }}</span>
+
+    @if (showPercentageSymbol()) {
+        <span class="text-xs font-semibold">%</span>
+    }
 </div>
 
-<ng-container *ngIf='shining'>
-    <div class="flex">
-        <ngt-shining class="w-full h-6"></ngt-shining>
-    </div>
-</ng-container>
+@if (isShining()) {
+    <ngt-shining class="block w-full h-6"></ngt-shining>
+}
+
+<ng-content></ng-content>

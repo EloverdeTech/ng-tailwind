@@ -1,5 +1,5 @@
 <div class="flex flex-col">
-    <div class='flex-grow {{ ngtStyle.compile(["color.bg"]) }}'>
+    <div [class]="contentClass()">
         <ng-content></ng-content>
     </div>
 </div>

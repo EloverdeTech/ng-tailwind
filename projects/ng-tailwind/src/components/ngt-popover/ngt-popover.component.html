@@ -1,6 +1,6 @@
-<ngt-dropdown class="flex w-full hover:opacity-100" [closeOnClick]="closeOnClick" [openMethod]="openMethod"
-            [autoYReverse]="false" [reverseXPosition]="!placeOnLeft" [reverseYPosition]="!placeOnBottom"
-            [closeTimeout]="closeTimeout" (onHostClick)="fireClickEvent()" #dropdownRef>
+<ngt-dropdown class="flex w-full hover:opacity-100" [closeOnClick]="closeOnClick()" [openMethod]="openMethod()"
+            [autoYReverse]="false" [reverseXPosition]="!placeOnLeft()" [reverseYPosition]="!placeOnBottom()"
+            [closeTimeout]="closeTimeout()" (onHostClick)="fireClickEvent()" #dropdownRef>
     <div #hostDiv host>
         <ng-content></ng-content>
     </div>

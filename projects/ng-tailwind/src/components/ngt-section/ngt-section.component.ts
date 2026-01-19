@@ -1,7 +1,20 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
-    AfterViewInit, ChangeDetectorRef, Component, computed, ElementRef, EventEmitter, Injector, input, Input, Optional, Output, Self, signal, ViewChild,
-    WritableSignal
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    ElementRef,
+    Injector,
+    input,
+    Optional,
+    output,
+    Self,
+    signal,
+    ViewChild,
+    WritableSignal,
+    effect,
+    Input
 } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -19,39 +32,47 @@ import { NgtAbilityValidationService } from '../../services/validation/ngt-abili
             ])
         ]),
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtSectionComponent implements AfterViewInit {
     @ViewChild('elementRef') public elementRef: ElementRef;
 
-    @Input() public name: string;
-    @Input() public icon: string;
-    @Input() public caption: string;
-    @Input() public subtitle: string;
-    @Input() public accordion: boolean;
+    /** Inputs */
+
+    public readonly name = input<string>();
+    public readonly icon = input<string>();
+    public readonly caption = input<string>();
+    public readonly subtitle = input<string>();
+    public readonly accordion = input<boolean>(false);
+    public readonly removable = input<boolean>(false);
+    public readonly helpTitle = input<string>();
+    public readonly helpText = input<string>();
+    public readonly helpIconColor = input<string>();
+    // public readonly showSection = input<boolean>(true);
+
+    // TODO: CHANGE THIS TO SIGNAL
     @Input() public showSection: boolean = true;
-    @Input() public removable: boolean;
-    @Input() public helpTitle: string;
-    @Input() public helpText: string;
-    @Input() public helpIconColor: string;
 
-    @Output() public onRemove: EventEmitter<void> = new EventEmitter();
+    /** Outputs */
 
-    @Output() public onToggleSection: EventEmitter<boolean> = new EventEmitter();
+    public readonly onRemove = output<void>();
+    public readonly onToggleSection = output<boolean>();
+
+    /** Signals */
+
     public readonly isDisabled = input<boolean>();
     public readonly isDisabledState = computed(() => this.isDisabled() || this.internalDisabledState());
+    public readonly canDisplayState: WritableSignal<boolean> = signal(false);
 
     public ngtSectionStyle: NgtStylizableService;
     public ngtCaptionStyle: NgtStylizableService;
     public ngtSubtitleStyle: NgtStylizableService;
 
-    public canDisplay: boolean;
-
     private readonly internalDisabledState: WritableSignal<boolean> = signal(false);
 
     public constructor(
         private injector: Injector,
-        private changeDetector: ChangeDetectorRef,
 
         @Self() @Optional()
         private ngtStylizableDirective: NgtStylizableDirective,
@@ -107,23 +128,23 @@ export class NgtSectionComponent implements AfterViewInit {
     }
 
     public async ngAfterViewInit(): Promise<void> {
-        if (!this.ngtAbilityValidationService || !this.name) {
-            this.canDisplay = true;
+        if (!this.ngtAbilityValidationService || !this.name()) {
+            this.canDisplayState.set(true);
 
-            this.changeDetector.detectChanges();
+            return;
         }
 
-        if (this.ngtAbilityValidationService && this.name) {
+        if (this.ngtAbilityValidationService && this.name()) {
             if (this.isDisabled() === undefined) {
                 this.internalDisabledState.set(
-                    !(await this.ngtAbilityValidationService.isSectionEnabled(this.name))
+                    !(await this.ngtAbilityValidationService.isSectionEnabled(this.name()))
                 );
             }
 
-            this.canDisplay = !(await this.ngtAbilityValidationService.isSectionHidden(this.name));
+            this.canDisplayState.set(
+                !(await this.ngtAbilityValidationService.isSectionHidden(this.name()))
+            );
         }
-
-        this.changeDetector.detectChanges();
     }
 
     public open(): void {
@@ -134,7 +155,6 @@ export class NgtSectionComponent implements AfterViewInit {
 
     public close(): void {
         this.showSection = false;
-
         this.onToggleSection.emit(this.showSection);
     }
 

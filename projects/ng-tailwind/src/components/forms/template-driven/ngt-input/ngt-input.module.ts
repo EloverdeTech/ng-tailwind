@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
-import { NgtFormModule } from '../ngt-form/ngt-form.module';
 import { NgtHelperComponent } from '../../../ngt-helper/ngt-helper.component';
 import { NgtShiningModule } from '../../../ngt-shining/ngt-shining.module';
 import { NgtSvgModule } from '../../../ngt-svg/ngt-svg.module';
@@ -15,11 +14,9 @@ import { NgtInputComponent } from './ngt-input.component';
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule,
         NgtValidationModule,
         NgtShiningModule,
         NgtSvgModule,
-        NgtFormModule,
         NgtHelperComponent
     ]
 })

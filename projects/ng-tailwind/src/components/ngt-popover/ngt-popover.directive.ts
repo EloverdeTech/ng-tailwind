@@ -3,13 +3,13 @@ import {
     Directive,
     ElementRef,
     HostListener,
-    Input,
     OnDestroy,
     TemplateRef,
     ViewContainerRef,
+    input,
+ OutputRefSubscription
 } from '@angular/core';
 
-import { Subscription } from 'rxjs';
 import { NgtPopoverPosition, NgtPopoverTooltipComponent } from './ngt-popover-tooltip/ngt-popover-tooltip.component';
 import { NgtPopoverOpenMethod } from './ngt-popover.component';
 
@@ -18,22 +18,22 @@ import { NgtPopoverOpenMethod } from './ngt-popover.component';
     standalone: false
 })
 export class NgtPopoverDirective implements OnDestroy {
-    @Input() public ngtPopoverContent: string;
-    @Input() public ngtPopoverTemplate: TemplateRef<any>;
-    @Input() public ngtPopoverPosition: NgtPopoverPosition = NgtPopoverPosition.DEFAULT;
-    @Input() public ngtPopoverTemplateStyle: string = 'text-xxs';
+    public readonly ngtPopoverContent = input<string>();
+    public readonly ngtPopoverTemplate = input<TemplateRef<any>>();
+    public readonly ngtPopoverPosition = input<NgtPopoverPosition>(NgtPopoverPosition.DEFAULT);
+    public readonly ngtPopoverTemplateStyle = input<string>('text-xxs');
 
-    @Input() public dismissDelay: number = 1000;
-    @Input() public showDelay: number = 1000;
-    @Input() public closeOnClick: boolean;
-    @Input() public openMethod: 'HOVER' | 'CLICK' = NgtPopoverOpenMethod.HOVER;
+    public readonly dismissDelay = input<number>(1000);
+    public readonly showDelay = input<number>(1000);
+    public readonly closeOnClick = input<boolean>(false);
+    public readonly openMethod = input<'HOVER' | 'CLICK'>(NgtPopoverOpenMethod.HOVER);
 
     private componentRef: ComponentRef<NgtPopoverTooltipComponent> = null;
     private dismissTimeoutInstance: any;
     private showTimeoutInstance: any;
 
-    private toolTipMouseHoverSubscription: Subscription;
-    private toolTipMouseLeaveSubscription: Subscription;
+    private toolTipMouseHoverSubscription: OutputRefSubscription;
+    private toolTipMouseLeaveSubscription: OutputRefSubscription;
 
     public constructor(
         private elementRef: ElementRef,
@@ -42,7 +42,7 @@ export class NgtPopoverDirective implements OnDestroy {
 
     @HostListener('click')
     public onClick(): void {
-        if (this.openMethod != NgtPopoverOpenMethod.CLICK) {
+        if (this.openMethod() != NgtPopoverOpenMethod.CLICK) {
             return;
         }
 
@@ -58,7 +58,7 @@ export class NgtPopoverDirective implements OnDestroy {
     @HostListener('document:click', ['$event.target'])
     public onDocumentClick(target: HTMLElement) {
         if (
-            this.closeOnClick
+            this.closeOnClick()
             && !this.componentRef?.location?.nativeElement?.contains(target)
             && target !== this.elementRef.nativeElement
             && target !== this.componentRef?.location?.nativeElement
@@ -73,7 +73,7 @@ export class NgtPopoverDirective implements OnDestroy {
             clearTimeout(this.showTimeoutInstance);
         }
 
-        if (this.closeOnClick) {
+        if (this.closeOnClick()) {
             return;
         }
 
@@ -81,16 +81,16 @@ export class NgtPopoverDirective implements OnDestroy {
             clearTimeout(this.dismissTimeoutInstance);
         }
 
-        this.dismissTimeoutInstance = setTimeout(() => this.destroy(), this.dismissDelay);
+        this.dismissTimeoutInstance = setTimeout(() => this.destroy(), this.dismissDelay());
     }
 
     @HostListener('mouseenter')
     public onMouseEnter(): void {
-        if (this.componentRef || this.openMethod != NgtPopoverOpenMethod.HOVER) {
+        if (this.componentRef || this.openMethod() != NgtPopoverOpenMethod.HOVER) {
             return;
         }
 
-        this.showTimeoutInstance = setTimeout(() => this.createPopover(), this.showDelay);
+        this.showTimeoutInstance = setTimeout(() => this.createPopover(), this.showDelay());
     }
 
     public ngOnDestroy(): void {
@@ -117,15 +117,17 @@ export class NgtPopoverDirective implements OnDestroy {
 
         const rect = this.elementRef.nativeElement.getBoundingClientRect();
 
-        this.componentRef.instance.positionX = rect.left;
-        this.componentRef.instance.positionY = (this.ngtPopoverPosition === NgtPopoverPosition.TOP)
-            ? rect.top
-            : rect.bottom;
+        this.componentRef.instance.positionX.set(rect.left);
+        this.componentRef.instance.positionY.set(
+            (this.ngtPopoverPosition() === NgtPopoverPosition.TOP)
+                ? rect.top
+                : rect.bottom
+        );
 
-        this.componentRef.instance.popover = this.ngtPopoverContent;
-        this.componentRef.instance.popoverTemplate = this.ngtPopoverTemplate;
-        this.componentRef.instance.position = this.ngtPopoverPosition;
-        this.componentRef.instance.popoverTemplateStyle = this.ngtPopoverTemplateStyle;
+        this.componentRef.instance.popover.set(this.ngtPopoverContent());
+        this.componentRef.instance.popoverTemplate.set(this.ngtPopoverTemplate());
+        this.componentRef.instance.position.set(this.ngtPopoverPosition());
+        this.componentRef.instance.popoverTemplateStyle.set(this.ngtPopoverTemplateStyle());
 
         this.bindSubscriptions();
 

@@ -1,18 +1,17 @@
 import {
-    AfterContentChecked,
+    AfterViewInit,
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    computed,
+    effect,
     ElementRef,
-    EventEmitter,
-    Host,
     Injector,
-    Input,
-    OnDestroy,
-    OnInit,
+    input,
     Optional,
-    Output,
+    output,
+    Signal,
     signal,
-    SimpleChanges,
     SkipSelf,
     ViewChild,
     ViewEncapsulation,
@@ -20,110 +19,136 @@ import {
 } from '@angular/core';
 import { ControlContainer, NgForm, Validators } from '@angular/forms';
 import { NgxDropzoneChangeEvent, NgxDropzoneComponent } from 'ngx-dropzone';
-import { forkJoin, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-import Viewer from 'viewerjs';
 
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { getEnumFromString } from '../../../../helpers/enum/enum';
 import { uuid } from '../../../../helpers/uuid';
-import { NgtAttachmentHttpService } from '../../../../services/http/ngt-attachment-http.service';
 import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtDropzoneFileViewerComponent } from '../../../shared/ngt-dropzone-file-viewer/ngt-dropzone-file-viewer.component';
 import { NgtDropzoneErrorType, NgtDropzoneFile, NgtDropzonePreviewType } from '../../../../meta/ngt-dropzone.meta';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
+import { NgtDropzoneStateService } from './services/ngt-dropzone-state.service';
+import { NgtDropzoneFileService, UploadFilesResult } from './services/ngt-dropzone-file.service';
+import { ErrorValidationResult, NgtDropzoneErrorService } from './services/ngt-dropzone-error.service';
+import { NgtDropzoneViewerService } from './services/ngt-dropzone-viewer.service';
 
 @Component({
     selector: 'ngt-dropzone',
     templateUrl: './ngt-dropzone.component.html',
     styleUrls: ['./ngt-dropzone.component.css'],
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         NgtValueAccessorProvider(NgtDropzoneComponent),
+
+        NgtDropzoneStateService,
+        NgtDropzoneFileService,
+        NgtDropzoneErrorService,
+        NgtDropzoneViewerService,
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     standalone: false
 })
-export class NgtDropzoneComponent extends NgtControlValueAccessor implements OnInit, OnDestroy, AfterContentChecked {
-    @ViewChild('container') public container: ElementRef;
+export class NgtDropzoneComponent extends NgtControlValueAccessor implements AfterViewInit {
+    @ViewChild('container', { static: false }) public container: ElementRef;
     @ViewChild(NgxDropzoneComponent, { static: true }) public ngxDropzone: NgxDropzoneComponent;
     @ViewChild(NgtDropzoneFileViewerComponent, { static: true }) public ngtDropzoneFileViewer: NgtDropzoneFileViewerComponent;
 
-    // Visual
-    @Input() public label: string;
-    @Input() public placeholder: string;
-    @Input() public helpTextColor: string = 'text-green-500';
-    @Input() public helpText: string;
-    @Input() public helpTitle: string;
+    /** Visual Inputs */
 
-    // Behavior
-    @Input() public resources: Array<NgtDropzoneFile> = [];
-    @Input() public multipleSelection: boolean = false;
-    @Input() public itemsLimit: number;
-    @Input() public showFileName: boolean = false;
-    @Input() public disableClick: boolean = false;
-    @Input() public disabled: boolean = false;
-    @Input() public viewMode: boolean = false;
-    @Input() public removable: boolean = false;
-    @Input() public canDownloadFile: boolean = true;
-    @Input() public verticalExpandable: boolean = false;
-    @Input() public isRequired: boolean;
-    @Input() public hideNgxDropzone: boolean;
-    @Input() public acceptedFiles: string = '*' /** Mime type */;
-    @Input() public unacceptedFiles: string; /** Mime type */;
-    @Input() public maxFileSize: number; /** Bytes */;
-    @Input() public previewType: NgtDropzonePreviewType = NgtDropzonePreviewType.DEFAULT;
-    @Input() public name: string;
-    @Input() public remoteResource: any;
+    public readonly label = input<string>();
+    public readonly placeholder = input<string>('');
+    public readonly helpTextColor = input<string>('text-green-500');
+    public readonly helpText = input<string>();
+    public readonly helpTitle = input<string>();
 
-    @Output() public onFileSelected: EventEmitter<NgxDropzoneChangeEvent> = new EventEmitter();
-    @Output() public onFileSelectError: EventEmitter<NgtDropzoneErrorType> = new EventEmitter();
-    @Output() public onFileUploadFail: EventEmitter<any> = new EventEmitter();
-    @Output() public onFileRemoved = new EventEmitter();
-    @Output() public onFileUploadInit = new EventEmitter();
-    @Output() public onFileUploaded = new EventEmitter();
-    @Output() public onFilePreviewLoaded = new EventEmitter();
+    /** Behavior Inputs */
 
-    public dropzoneHeight: string = '180px';
-    public uploadedResources = [];
-    public forceDisableClick: boolean = false;
-    public nativeValue = [];
-    public showNgtDropzoneFileViewer: boolean = false;
-    public componentReady = false;
-    public loading: boolean = false;
-    public ngtDropzoneLoaderStyle: NgtStylizableService;
-    public ngxElementId: string = uuid();
-    public imageViewerOptions: any = {
-        navbar: true,
-        toolbar: {
-            zoomIn: true,
-            zoomOut: true,
-            reset: true,
-            rotateLeft: true,
-            rotateRight: true,
-            prev: true,
-            next: true,
-        }
-    };
+    public readonly resources = input<Array<NgtDropzoneFile>>([]);
+    public readonly multipleSelection = input<boolean>(false);
+    public readonly itemsLimit = input<number>();
+    public readonly showFileName = input<boolean>(false);
+    public readonly disableClick = input<boolean>(false);
+    public readonly disabled = input<boolean>(false);
+    public readonly viewMode = input<boolean>(false);
+    public readonly removable = input<boolean>(false);
+    public readonly canDownloadFile = input<boolean>(true);
+    public readonly verticalExpandable = input<boolean>(false);
+    public readonly hideNgxDropzone = input<boolean>(false);
+    public readonly acceptedFiles = input<string>('*'); /** Mime type */
+    public readonly unacceptedFiles = input<string>(); /** Mime type */
+    public readonly maxFileSize = input<number>(); /** Bytes */
+    public readonly previewType = input<NgtDropzonePreviewType>(NgtDropzonePreviewType.DEFAULT);
+    public readonly name = input<string>();
+    public readonly remoteResource = input<any>();
+
+    /** Validation Inputs */
+
+    public readonly isRequired = input<boolean>(false);
+
+    /** Outputs */
+
+    public readonly onFileSelected = output<NgxDropzoneChangeEvent>();
+    public readonly onFileSelectError = output<NgtDropzoneErrorType>();
+    public readonly onFileUploadFail = output<any>();
+    public readonly onFileRemoved = output<any>();
+    public readonly onFileUploadInit = output<void>();
+    public readonly onFileUploaded = output<void>();
+    public readonly onFilePreviewLoaded = output<void>();
+
+    /** Computed Signals */
+
+    public readonly isDisabledByParent: Signal<boolean> = computed(
+        () => !!this.ngtForm?.isDisabled() || !!this.ngtSection?.isDisabledState() || !!this.ngtModal?.isDisabledState()
+    );
+
+    public readonly isDisabledState: Signal<boolean> = computed(
+        () => this.disabled() || this.isDisabledByParent()
+    );
+
+    public readonly shouldDisableClick: Signal<boolean> = computed(
+        () => this.disableClick() || this.stateService.forceDisableClick()
+    );
+
+    public readonly dropzoneHeight: Signal<string> = computed(
+        () => this.stateService.dropzoneHeight()
+    );
+
+    public readonly uploadedResources: Signal<any[]> = computed(
+        () => this.stateService.uploadedResources()
+    );
+
+    public readonly showNgtDropzoneFileViewer: Signal<boolean> = computed(
+        () => this.stateService.showFileViewer()
+    );
+
+    public readonly componentReady: Signal<boolean> = computed(
+        () => this.stateService.componentReady()
+    );
+
+    public readonly loading: Signal<boolean> = computed(
+        () => this.stateService.loading()
+    );
+
+    /** File Viewer */
 
     public fileViewerUrl: WritableSignal<string> = signal('');
     public fileViewerFileName: WritableSignal<string> = signal('');
     public fileViewerFileSize: WritableSignal<number> = signal(0);
 
-    private subscriptions: Array<Subscription> = [];
+    /** Internal Control */
+
+    public readonly ngxElementId: string = uuid();
+    public readonly ngtDropzoneLoaderStyle: NgtStylizableService;
 
     public constructor(
-        @Optional() @Host()
         public formContainer: ControlContainer,
 
         private changeDetector: ChangeDetectorRef,
-
-        @Optional() @SkipSelf()
-        private ngtAttachmentHttpService: NgtAttachmentHttpService,
 
         @Optional() @SkipSelf()
         private ngtForm: NgtFormComponent,
@@ -133,6 +158,11 @@ export class NgtDropzoneComponent extends NgtControlValueAccessor implements OnI
 
         @Optional() @SkipSelf()
         private ngtModal: NgtModalComponent,
+
+        private stateService: NgtDropzoneStateService,
+        private fileService: NgtDropzoneFileService,
+        private errorService: NgtDropzoneErrorService,
+        private viewerService: NgtDropzoneViewerService,
 
         protected override injector: Injector,
     ) {
@@ -146,25 +176,15 @@ export class NgtDropzoneComponent extends NgtControlValueAccessor implements OnI
                 text: 'text-gray-600'
             }
         });
+
+        this.registerEffects();
     }
 
-    public ngOnChanges(changes: SimpleChanges) {
-        if (changes.previewType) {
-            this.previewType = getEnumFromString(changes.previewType.currentValue, NgtDropzonePreviewType);
-        }
-    }
+    public ngAfterViewInit(): void {
+        this.setupContainerHeight();
 
-    public ngAfterContentChecked() {
-        if (this.container && this.container.nativeElement) {
-            this.dropzoneHeight = `${this.container.nativeElement.parentElement.offsetHeight}px`;
-
-            this.changeDetector.detectChanges();
-        }
-    }
-
-    public ngOnInit() {
         setTimeout(() => {
-            this.componentReady = true;
+            this.stateService.componentReady.set(true);
 
             setTimeout(() => {
                 this.initComponent();
@@ -172,51 +192,30 @@ export class NgtDropzoneComponent extends NgtControlValueAccessor implements OnI
         }, 500);
     }
 
-    public ngOnDestroy() {
-        this.destroySubscriptions();
-    }
-
-    public imagePreview(index) {
-        const images = this.uploadedResources.filter((resource) => this.isImage(resource));
-        const imagesDiv = document.createElement("div");
-
-        images.forEach((image) => {
-            let imageElement = document.createElement("img");
-
-            imageElement.src = image.file.url;
-
-            imagesDiv.appendChild(imageElement);
-        });
+    public imagePreview(index: number): void {
+        const imagesDiv = this.viewerService.createImagePreview(
+            this.stateService.uploadedResources(),
+            (resource) => this.fileService.isImage(resource, this.previewType())
+        );
 
         this.onImageClick(imagesDiv, index);
     }
 
-    public onImageClick(element, index?) {
-        if (!this.viewMode) {
-            this.forceDisableClick = true;
+    public onImageClick(element: HTMLElement, index?: number): void {
+        if (!this.viewMode()) {
+            this.stateService.forceDisableClick.set(true);
         }
 
-        const ngtDropzoneComponent = this;
-
-        if (index !== null && index !== undefined) {
-            this.imageViewerOptions = { ...this.imageViewerOptions, ...{ initialViewIndex: index } };
-        }
-
-        const viewer = new Viewer(element, {
-            ...this.imageViewerOptions, ...{
-                hidden() {
-                    ngtDropzoneComponent.forceDisableClick = false;
-                    viewer.destroy();
-                }
-            }
-        });
-
-        viewer.show();
+        this.viewerService.showViewer(
+            element,
+            index,
+            () => this.stateService.forceDisableClick.set(false)
+        );
     }
 
-    public onFileClick(url: string, name: string, size: number) {
-        this.forceDisableClick = true;
-        this.showNgtDropzoneFileViewer = true;
+    public onFileClick(url: string, name: string, size: number): void {
+        this.stateService.forceDisableClick.set(true);
+        this.stateService.showFileViewer.set(true);
 
         this.fileViewerUrl.set(url);
         this.fileViewerFileName.set(name);
@@ -226,257 +225,232 @@ export class NgtDropzoneComponent extends NgtControlValueAccessor implements OnI
     }
 
     public onCloseFileViewer(): void {
-        this.showNgtDropzoneFileViewer = false;
-        this.forceDisableClick = false;
+        this.stateService.showFileViewer.set(false);
+        this.stateService.forceDisableClick.set(false);
     }
 
-    public async onSelect(event: NgxDropzoneChangeEvent) {
-        if (event.rejectedFiles.length) {
-            for (const rejectedFile of <any>event.rejectedFiles) {
-                if (rejectedFile.reason == 'size') {
-                    this.onFileSelectError.emit(NgtDropzoneErrorType.SIZE);
-                    break;
-                } else if (rejectedFile.reason == 'no_multiple') {
-                    this.onFileSelectError.emit(NgtDropzoneErrorType.NO_MULTIPLE);
-                    break;
-                } else if (rejectedFile.reason == 'type') {
-                    this.onFileSelectError.emit(NgtDropzoneErrorType.TYPE);
-                    break;
-                } else {
-                    this.onFileSelectError.emit(NgtDropzoneErrorType.DEFAULT);
-                    break;
-                }
+    public async onSelect(event: NgxDropzoneChangeEvent): Promise<void> {
+        const errorResult: ErrorValidationResult = this.errorService.validateRejectedFiles(event);
+
+        if (errorResult.hasError) {
+            return this.onFileSelectError.emit(errorResult.errorType);
+        }
+
+        const limit = this.itemsLimit();
+
+        if (limit) {
+            const shouldClearExistingResources = this.errorService.shouldClearExistingResources(
+                limit,
+                event.addedFiles?.length || 0,
+                this.stateService.uploadedResources().length
+            );
+
+            if (shouldClearExistingResources) {
+                this.stateService.uploadedResources.set([]);
+            }
+
+            const limitResult: ErrorValidationResult = this.errorService.validateItemsLimit(
+                event.addedFiles?.length || 0,
+                this.stateService.uploadedResources().length,
+                limit
+            );
+
+            if (limitResult.hasError) {
+                return this.onFileSelectError.emit(limitResult.errorType);
             }
         }
 
-        if (this.itemsLimit) {
-            if (this.itemsLimit == 1 && event.addedFiles
-                && event.addedFiles.length == this.itemsLimit && this.uploadedResources.length == this.itemsLimit) {
-                this.uploadedResources = [];
-            }
+        this.onFileSelected.emit(event);
 
-            if (event.addedFiles
-                && event.addedFiles.length + this.uploadedResources.length <= this.itemsLimit) {
-                this.onFileSelected.emit(event);
-                this.uploadFiles(event.addedFiles);
-            } else {
-                this.onFileSelectError.emit(NgtDropzoneErrorType.ITEMS_LIMIT);
-            }
-        } else {
-            this.onFileSelected.emit(event);
-            this.uploadFiles(event.addedFiles);
-        }
+        await this.uploadFiles(event.addedFiles);
     }
 
-    public async uploadFiles(files: Array<File>) {
-        if (files && files.length) {
-            const temporaryFiles = [];
-            const temporaryAttachments = [];
-            const observables = [];
-            const unacceptedFiles = [];
+    public async uploadFiles(files: File[]): Promise<void> {
+        if (!files?.length) {
+            return;
+        }
 
-            this.loading = true;
-            this.onFileUploadInit.emit();
+        this.stateService.loading.set(true);
+        this.onFileUploadInit.emit();
 
-            files.forEach(file => {
-                if (file.type.includes(this.unacceptedFiles)) {
-                    return unacceptedFiles.push(file);
-                }
+        try {
+            const result: UploadFilesResult = await this.fileService.uploadFiles(
+                files,
+                this.remoteResource(),
+                this.unacceptedFiles()
+            );
 
-                observables.push(this.ngtAttachmentHttpService.upload(file, this.remoteResource).pipe(
-                    map((response: any) => {
-                        if (response && response.data) {
-                            if (response.data.attributes && response.data.attributes.data) {
-                                file['url'] = response.data.attributes.data.url;
-                            }
+            setTimeout(() => this.changeDetector.detectChanges(), 500);
 
-                            temporaryFiles.push({
-                                id: response.data.id,
-                                size: file.size,
-                                file: file
-                            });
-                            response.data['loaded'] = true;
-                            temporaryAttachments.push(response.data);
-                        }
-                    })
-                ));
-            });
-
-            if (!observables.length && unacceptedFiles.length) {
-                this.loading = false;
+            if (!result.uploadedFiles.length && result.unacceptedFiles.length) {
+                this.stateService.loading.set(false);
 
                 return this.onFileSelectError.emit(NgtDropzoneErrorType.TYPE);
             }
 
-            this.subscriptions.push(
-                forkJoin(observables).subscribe(
-                    (response) => {
-                        this.uploadedResources.push(...temporaryFiles);
+            this.stateService.uploadedResources.set([
+                ...this.stateService.uploadedResources(),
+                ...result.uploadedFiles
+            ]);
 
-                        if (this.itemsLimit == 1) {
-                            this.onNativeChange([...temporaryAttachments]);
-                        } else {
-                            this.onNativeChange([...temporaryAttachments, ...this.nativeValue]);
-                        }
+            if (this.itemsLimit() === 1) {
+                this.onNativeChange([...result.uploadedAttachments]);
+            } else {
+                this.onNativeChange([
+                    ...result.uploadedAttachments,
+                    ...this.stateService.nativeValue()
+                ]);
+            }
 
-                        this.onFileUploaded.emit();
-                        this.loading = false;
+            this.onFileUploaded.emit();
+            this.stateService.loading.set(false);
 
-                        if (unacceptedFiles.length) {
-                            this.onFileSelectError.emit(NgtDropzoneErrorType.TYPE);
-                        }
-
-                        setTimeout(() => this.changeDetector.detectChanges(), 500);
-                    },
-                    (error) => {
-                        this.onFileUploadFail.emit(error);
-                        this.loading = false;
-
-                        setTimeout(() => this.changeDetector.detectChanges(), 500);
-                    })
-            );
+            if (result.unacceptedFiles.length) {
+                this.onFileSelectError.emit(NgtDropzoneErrorType.TYPE);
+            }
+        } catch (error) {
+            this.onFileUploadFail.emit(error);
+            this.stateService.loading.set(false);
         }
     }
 
-    public async loadFilePreview(attachments: any) {
-        if (attachments && attachments.length && attachments[0]) {
-            let temporaryResource = [];
-            let observables = [];
-
-            attachments.forEach((attachment: any) => {
-                if (!(attachment instanceof File) && !attachment.loaded) {
-                    this.loading = true;
-
-                    attachment['loaded'] = true;
-
-                    observables.push(this.ngtAttachmentHttpService.preview(attachment)
-                        .pipe(
-                            map((response: any) => {
-                                temporaryResource.push({
-                                    id: response.data.getApiId(),
-                                    file: response.data.getAttribute('file')
-                                });
-                            })
-                        ));
-                }
-            });
-
-            this.subscriptions.push(
-                forkJoin(observables).subscribe(
-                    (response) => {
-                        this.uploadedResources.push(...temporaryResource);
-                        this.onNativeChange(attachments);
-                        this.onFilePreviewLoaded.emit();
-                        this.loading = false;
-
-                        setTimeout(() => this.changeDetector.detectChanges(), 500);
-                    },
-                    (error) => {
-                        this.loading = false;
-                    })
-            );
+    public async loadFilePreview(attachments: any[]): Promise<void> {
+        if (!attachments?.length || !attachments[0]) {
+            return;
         }
+
+        this.stateService.loading.set(true);
+
+        try {
+            const loadedResources: any[] = await this.fileService.loadFilePreview(attachments);
+
+            if (loadedResources.length) {
+                this.stateService.uploadedResources.set([
+                    ...this.stateService.uploadedResources(),
+                    ...loadedResources
+                ]);
+
+                this.onNativeChange(attachments);
+                this.onFilePreviewLoaded.emit();
+            }
+
+            this.stateService.loading.set(false);
+        } catch (error) {
+            this.stateService.loading.set(false);
+        }
+
+        setTimeout(() => this.changeDetector.detectChanges(), 500);
     }
 
-    public onRemove(resource: any) {
-        this.uploadedResources.splice(this.uploadedResources.indexOf(resource), 1);
-        this.nativeValue = this.nativeValue.filter(element => element.id != resource.id);
-        this.onNativeChange(this.nativeValue);
+    public onRemove(resource: any): void {
+        this.stateService.uploadedResources.set(
+            this.stateService.uploadedResources().filter(r => r !== resource)
+        );
+
+        this.stateService.nativeValue.set(
+            this.stateService.nativeValue().filter(element => element.id !== resource.id)
+        );
+
+        this.onNativeChange(this.stateService.nativeValue());
         this.onFileRemoved.emit(resource);
     }
 
-    public isImage(resource: any) {
-        return this.previewType == 'IMAGE'
-            || (
-                resource.file?.type
-                && resource.file.type.includes('image')
-                && !resource.file.type.includes('dwg')
-            );
+    public isImage(resource: any): boolean {
+        return this.fileService.isImage(resource, this.previewType());
     }
 
-    public isVideo(resource: any) {
-        return this.previewType == 'VIDEO' || (resource.file && resource.file.type && resource.file.type.includes('video'));
+    public isVideo(resource: any): boolean {
+        return this.fileService.isVideo(resource, this.previewType());
     }
 
-    public isAudio(resource: any) {
-        return (resource.file && resource.file.type && resource.file.type.includes('audio'));
+    public isAudio(resource: any): boolean {
+        return this.fileService.isAudio(resource);
     }
 
-    public isFile(resource: any) {
-        return !this.isImage(resource) && !this.isAudio(resource) && !this.isVideo(resource);
+    public isFile(resource: any): boolean {
+        return this.fileService.isFile(resource, this.previewType());
     }
 
-    public getFormattedFileSize(resource: any) {
-        if (resource) {
-            let size = resource.size || resource.fileSize;
-
-            if (!size) {
-                if (resource.file && resource.file.size) {
-                    size = resource.file.size;
-                } else {
-                    size = 0;
-                }
-            }
-
-            if (parseFloat(size) > 1000000) {
-                return (parseFloat(size) / 1000000).toFixed(2) + ' Mb';
-            }
-
-            return Math.round(parseFloat(size) / 1000) + ' Kb';
-        }
+    public getFormattedFileSize(resource: any): string {
+        return this.fileService.getFormattedFileSize(resource);
     }
 
-    public onNativeChange(value: any) {
+    public onNativeChange(value: any): void {
         if (value === undefined) {
             this.value = [];
-            this.nativeValue = [];
+            this.stateService.nativeValue.set([]);
         } else {
-            this.nativeValue = value;
+            this.stateService.nativeValue.set(value);
 
-            if (JSON.stringify(this.value) != JSON.stringify(this.nativeValue)) {
-                this.value = this.nativeValue;
+            if (this.hasChangesBetweenValues(this.value, this.stateService.nativeValue())) {
+                this.value = this.stateService.nativeValue();
             }
         }
     }
 
-    public change(value: any) {
-        if (value && !this.viewMode) {
+    public change(value: any): void {
+        if (value && !this.viewMode()) {
             this.onNativeChange(Array.isArray(value) ? value : [value]);
 
-            if (this.componentReady) {
+            if (this.stateService.componentReady()) {
                 this.loadFilePreview(Array.isArray(value) ? value : [value]);
             }
         }
     }
 
-    public downloadFile(attachment: any) {
-        this.ngtAttachmentHttpService.download(attachment).subscribe(() => { });
+    public downloadFile(attachment: any): void {
+        this.fileService.downloadFile(attachment).subscribe(() => { });
     }
 
-    public reset() {
-        this.uploadedResources = [];
+    public reset(): void {
+        this.stateService.reset();
         this.value = [];
-        this.nativeValue = [];
         this.initComponent();
     }
 
-    public openFileSelector() {
-        document.getElementById(this.ngxElementId).click();
+    public openFileSelector(): void {
+        document.getElementById(this.ngxElementId)?.click();
     }
 
     public isDisabled(): boolean {
-        return this.disabled || this.isDisabledByParent();
+        return this.isDisabledState();
     }
 
-    private initComponent() {
-        if (this.viewMode) {
-            this.previewType = NgtDropzonePreviewType.DEFAULT;
+    private registerEffects(): void {
+        effect(() => this.setupValidators());
 
+        effect(() => {
+            const previewTypeValue = this.previewType();
+
+            if (this.viewMode()) {
+                getEnumFromString(previewTypeValue as string, NgtDropzonePreviewType);
+            }
+        });
+
+        effect(() => {
+            if (this.container?.nativeElement) {
+                this.setupContainerHeight();
+            }
+        });
+    }
+
+    private setupContainerHeight(): void {
+        if (this.container?.nativeElement?.parentElement) {
+            this.stateService.dropzoneHeight.set(
+                `${this.container.nativeElement.parentElement.offsetHeight}px`
+            );
+
+            this.changeDetector.detectChanges();
+        }
+    }
+
+    private initComponent(): void {
+        if (this.viewMode()) {
             return;
         }
 
-        if (this.formContainer && this.formContainer.control
-            && (this.formControl = this.formContainer.control.get(this.name))) {
+        if (this.formContainer?.control
+            && (this.formControl = this.formContainer.control.get(this.name()))) {
             this.resetFilesLoad();
             this.loadFilePreview(Array.isArray(this.value) ? this.value : [this.value]);
             this.updateValidations();
@@ -489,43 +463,32 @@ export class NgtDropzoneComponent extends NgtControlValueAccessor implements OnI
         }
     }
 
-    private resetFilesLoad() {
+    private resetFilesLoad(): void {
         if (Array.isArray(this.value)) {
-            this.value.forEach(element => {
-                if (element) {
-                    element['loaded'] = false;
-                }
-            });
+            this.fileService.resetFilesLoad(this.value);
         }
     }
 
-    private updateValidations() {
+    private setupValidators(): void {
         if (!this.formControl) {
             return;
         }
 
-        let syncValidators = [];
+        const syncValidators = [];
 
-        if (this.isRequired) {
+        if (this.isRequired()) {
             syncValidators.push(Validators.required);
         }
 
-        syncValidators.push();
-
-        setTimeout(() => {
-            this.formControl.setValidators(syncValidators);
-            this.formControl.updateValueAndValidity();
-        });
+        this.formControl.setValidators(syncValidators);
+        this.formControl.updateValueAndValidity();
     }
 
-    private isDisabledByParent(): boolean {
-        return this.ngtForm?.isDisabled
-            || this.ngtSection?.isDisabledState()
-            || this.ngtModal?.isDisabledState();
+    private updateValidations(): void {
+        this.setupValidators();
     }
 
-    private destroySubscriptions() {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());
-        this.subscriptions = [];
+    private hasChangesBetweenValues(a: any, b: any): boolean {
+        return JSON.stringify(a ?? null) !== JSON.stringify(b ?? null);
     }
 }

@@ -1,7 +1,10 @@
-<ngt-form-validation-message *ngIf='!customLayout' [canShowValidationMessage]="canShowValidationMessage()"
-    [message]="message">
-</ngt-form-validation-message>
+@if (!customLayout()) {
+    <ngt-form-validation-message 
+        [canShowValidationMessage]="canShowValidationMessage()"
+        [message]="message()">
+    </ngt-form-validation-message>
+}
 
-<fieldset [disabled]="isDisabled" style="min-inline-size: 100% !important">
+<fieldset [disabled]="isDisabledState()" style="min-inline-size: 100% !important">
     <ng-content></ng-content>
 </fieldset>

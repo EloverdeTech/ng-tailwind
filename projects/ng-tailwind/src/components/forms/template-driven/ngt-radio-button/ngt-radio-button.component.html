@@ -1,33 +1,34 @@
-<label
-    class="inline-flex items-center {{ disabled() || !isSelectable ? 'cursor-not-allowed opacity-50' : 'cursor-pointer' }}">
-    <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' [disabled]='disabled() || !isSelectable'
-        #element>
+<label [class]="labelClasses()">
+    <input class="hidden" type="radio" [name]="name()" [disabled]='isDisabledState() || !isSelectable()'
+        (change)="onNativeChange()" #radioBtnElement>
 
-    <div class="{{ value ? ngtStyle.compile(['color.border', 'color.text']) : 'border-gray-500' }}
-                    shadow rounded-full border border-gray-400 text-sm {{ !shining ? 'flex justify-center items-center' : 'hidden' }}"
-        [style]="getStyle()">
-
+    <div [class]="radioClasses()" [style]="radioStyle()">
         <div style="width: 14px; height: 14px;">
-            <svg *ngIf="value" class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.107 29.107">
-
-                <path
-                    d="M14.554 0C6.561 0 0 6.562 0 14.552c0 7.996 6.561 14.555 14.554 14.555 7.996 0 14.553-6.559 14.553-14.555C29.106 6.562 22.55 0 14.554 0z" />
-            </svg>
+            @if (currentValue()) {
+                <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.107 29.107">
+                    <path
+                        d="M14.554 0C6.561 0 0 6.562 0 14.552c0 7.996 6.561 14.555 14.554 14.555 7.996 0 14.553-6.559 14.553-14.555C29.106 6.562 22.55 0 14.554 0z" />
+                </svg>
+            }
         </div>
     </div>
 
-    <span *ngIf='label && !shining' class="text-xs ml-2" [class.line-through]='!isSelectable'>
-        {{ label }}
-    </span>
+    @if (label() && !isShining()) {
+        <span class="text-xs ml-2" [class.line-through]='!isSelectable()'>
+            {{ label() }}
+        </span>
+    }
 
-    <ngt-helper *ngIf="helpText" class="ml-1" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
-        [autoXReverse]="helperAutoXReverse" [helperReverseYPosition]="helperReverseYPosition">
-        {{ helpText }}
-    </ngt-helper>
+    @if (helpText()) {
+        <ngt-helper class="ml-1" [helpTitle]="helpTitle()" [iconColor]="helpTextColor()"
+            [autoXReverse]="helperAutoXReverse()" [helperReverseYPosition]="helperReverseYPosition()">
+            {{ helpText() }}
+        </ngt-helper>
+    }
 </label>
 
-<ng-container *ngIf='shining'>
+@if (isShining()) {
     <div class="flex">
         <ngt-shining class="w-16 h-12"></ngt-shining>
     </div>
-</ng-container>
+}

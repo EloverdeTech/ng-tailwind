@@ -1,14 +1,19 @@
 import {
     AfterViewInit,
+    ChangeDetectionStrategy,
     Component,
+    computed,
+    effect,
+    EffectRef,
     ElementRef,
     Host,
     Injector,
-    Input,
+    input,
     OnDestroy,
     Optional,
-    Renderer2,
+    OutputRefSubscription,
     Self,
+    Signal,
     SkipSelf,
     ViewChild,
 } from '@angular/core';
@@ -27,6 +32,7 @@ import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
     selector: 'ngt-radio-button',
     templateUrl: './ngt-radio-button.component.html',
     styleUrls: ['./ngt-radio-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         NgtValueAccessorProvider(NgtRadioButtonComponent),
     ],
@@ -36,28 +42,60 @@ import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
     standalone: false
 })
 export class NgtRadioButtonComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {
-    @ViewChild('element', { static: true }) public element: ElementRef;
+    @ViewChild('radioBtnElement', { static: true }) public element: ElementRef;
 
-    @Input() public label: string;
-    @Input() public name: string;
-    @Input() public shining: boolean;
-    @Input() public isSelectable: boolean = true;
-    @Input() public isDisabled: boolean;
-    @Input() public selectedHexColor: string;
+    /** Visual Inputs */
 
-    @Input() public helpTitle: string;
-    @Input() public helpTextColor: string = 'text-green-500';
-    @Input() public helpText: string;
-    @Input() public helperReverseYPosition: boolean;
-    @Input() public helperAutoXReverse: boolean = true;
+    public readonly label = input<string>();
+    public readonly name = input<string>();
+    public readonly shining = input<boolean>(false);
+    public readonly selectedHexColor = input<string>();
+
+    public readonly helpTitle = input<string>();
+    public readonly helpTextColor = input<string>('text-green-500');
+    public readonly helpText = input<string>();
+    public readonly helperReverseYPosition = input<boolean>(false);
+    public readonly helperAutoXReverse = input<boolean>(true);
+
+    /** Behavior Inputs */
+
+    public readonly isSelectable = input<boolean>(true);
+    public readonly isDisabled = input<boolean>(false);
+
+    /** Computed Signals */
+
+    public readonly isShining: Signal<boolean> = computed(
+        () => this.shining() || this.ngtForm?.shining()
+    );
+
+    public readonly isDisabledByParent: Signal<boolean> = computed(
+        () => this.ngtForm?.isDisabledState() || this.ngtSection?.isDisabledState() || this.ngtModal?.isDisabledState()
+    );
+
+    public readonly isDisabledState: Signal<boolean> = computed(
+        () => this.isDisabled() || this.isDisabledByParent()
+    );
+
+    public readonly currentValue: Signal<any> = computed(() => this.value);
+
+    public readonly labelClasses: Signal<string> = computed(() =>
+        this.getLabelClasses()
+    );
+
+    public readonly radioStyle: Signal<string> = computed(() =>
+        this.getRadioStyle()
+    );
+
+    public readonly radioClasses: Signal<string> = computed(() =>
+        this.getRadioClasses()
+    );
 
     public ngtStyle: NgtStylizableService;
 
-    private subscriptions: Array<Subscription> = [];
+    private subscriptions: Array<Subscription | OutputRefSubscription> = [];
+    private nativeValueEffect?: EffectRef;
 
     public constructor(
-        private renderer: Renderer2,
-
         @Self() @Optional()
         private ngtStylizableDirective: NgtStylizableDirective,
 
@@ -80,21 +118,63 @@ export class NgtRadioButtonComponent extends NgtControlValueAccessor implements 
     ) {
         super();
 
+        this.setupNgtStylizable();
+    }
+
+    public ngAfterViewInit(): void {
+        this.formControl = this.getControl();
+
+        this.setupSubscriptions();
+        this.setupNativeValueEffect();
+    }
+
+    public ngOnDestroy(): void {
+        this.destroySubscriptions();
+        this.nativeValueEffect?.destroy();
+    }
+
+    public onNativeChange(): void {
+        const value: boolean = this.getNativeValue();
+
+        if (this.value !== value) {
+            this.value = value;
+        }
+
+        if (value && this.ngtRadioButtonContainer) {
+            this.ngtRadioButtonContainer.setActiveRadioButton(this);
+        }
+    }
+
+    public change(value: boolean): void {
+        if (this.getNativeValue() !== value) {
+            this.setNativeValue(value);
+        }
+
+        if (value && this.ngtRadioButtonContainer) {
+            this.ngtRadioButtonContainer.setActiveRadioButton(this);
+        }
+    }
+
+    private setupSubscriptions(): void {
         if (this.ngtRadioButtonContainer) {
             this.subscriptions.push(
                 this.ngtRadioButtonContainer.onActiveRadioButtonChange.subscribe((activeRadioButton: NgtRadioButtonComponent) => {
-                    this.value = (activeRadioButton.name === this.name);
+                    const isActive = activeRadioButton.name() === this.name();
+
+                    if (this.value !== isActive) {
+                        this.value = isActive;
+                    }
                 })
             );
         }
+    }
 
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
 
-        this.ngtStyle.load(this.injector, 'NgtCheckbox', {
+        this.ngtStyle.load(this.injector, 'NgtRadioButton', {
             color: {
                 text: 'text-gray-500',
                 border: 'border-gray-500',
@@ -102,55 +182,63 @@ export class NgtRadioButtonComponent extends NgtControlValueAccessor implements 
         });
     }
 
-    public ngAfterViewInit() {
-        this.renderer.listen(this.element.nativeElement, 'change', (value) => {
-            this.onNativeChange(this.element.nativeElement.checked);
+    private setupNativeValueEffect(): void {
+        this.nativeValueEffect = effect(() => {
+            this.setNativeValue(!!this.currentValue());
         });
     }
 
-    public ngOnDestroy() {
-        this.destroySubscriptions();
+    private setNativeValue(value: boolean): void {
+        this.element.nativeElement.checked = value;
     }
 
-    public change(value: boolean) {
-        if (value) {
-            this.element.nativeElement.checked = value;
+    private getNativeValue(): boolean {
+        return this.element.nativeElement.checked;
+    }
 
-            if (this.ngtRadioButtonContainer) {
-                this.ngtRadioButtonContainer.setActiveRadioButton(this);
-            }
+    private getLabelClasses(): string {
+        const classes: string[] = ['inline-flex items-center'];
+
+        if (this.isDisabledState() || !this.isSelectable()) {
+            classes.push('cursor-not-allowed opacity-50');
+        } else {
+            classes.push('cursor-pointer');
         }
+
+        return classes.join(' ');
     }
 
-    public onNativeChange(value: boolean) {
-        this.value = value ? value : !value;
-
-        if (this.ngtRadioButtonContainer) {
-            this.ngtRadioButtonContainer.setActiveRadioButton(this);
-        }
-    }
-
-    public disabled(): boolean {
-        return this.isDisabled || this.isDisabledByParent();
-    }
-
-    public getStyle(): string {
+    private getRadioStyle(): string {
         let baseStyle = 'width: 20px; height: 20px;';
 
-        if (this.selectedHexColor) {
-            baseStyle += ` color: ${this.selectedHexColor}`;
+        if (this.selectedHexColor()) {
+            baseStyle += ` color: ${this.selectedHexColor()}`;
         }
 
         return baseStyle;
     }
 
-    private isDisabledByParent(): boolean {
-        return this.ngtForm?.isDisabled
-            || this.ngtSection?.isDisabledState()
-            || this.ngtModal?.isDisabledState();
+    private getRadioClasses(): string {
+        const classes: string[] = [
+            'shadow rounded-full border text-sm'
+        ];
+
+        if (!this.isShining()) {
+            classes.push('flex justify-center items-center');
+        } else {
+            classes.push('hidden');
+        }
+
+        if (this.currentValue()) {
+            classes.push(this.ngtStyle.compile(['color.border', 'color.text']));
+        } else {
+            classes.push('border-gray-500');
+        }
+
+        return classes.join(' ');
     }
 
-    private destroySubscriptions() {
+    private destroySubscriptions(): void {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
     }

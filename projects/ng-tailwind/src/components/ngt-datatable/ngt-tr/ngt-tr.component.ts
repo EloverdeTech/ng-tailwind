@@ -1,12 +1,13 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     ElementRef,
     HostBinding,
     Injector,
-    Input,
     Optional,
     Self,
     SkipSelf,
+    input,
     ViewEncapsulation,
 } from '@angular/core';
 
@@ -20,11 +21,12 @@ import { NgtTheadComponent } from '../ngt-thead/ngt-thead.component';
     templateUrl: './ngt-tr.component.html',
     styleUrls: ['./ngt-tr.component.css'],
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtTrComponent {
-    @HostBinding('class.evenStripped') @Input() public evenStripped: boolean;
-    @HostBinding('class.oddStripped') @Input() public oddStripped: boolean;
+    public readonly evenStripped = input<boolean>(false);
+    public readonly oddStripped = input<boolean>(false);
 
     public ngtStyle: NgtStylizableService;
 
@@ -35,11 +37,23 @@ export class NgtTrComponent {
         @SkipSelf() @Optional() private ngtTbody: NgtTbodyComponent,
         @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
     ) {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
+        this.setupNgtStylizable();
+    }
+
+    @HostBinding('class.evenStripped')
+    public get evenStrippedClass(): boolean {
+        return this.evenStripped();
+    }
+
+    @HostBinding('class.oddStripped')
+    public get oddStrippedClass(): boolean {
+        return this.oddStripped();
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
 
         this.ngtStyle.load(this.injector, 'NgtTr', {
             border: 'border-r border-t md:border-r-0 md:border-t-0',

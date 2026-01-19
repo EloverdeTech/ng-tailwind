@@ -1,4 +1,11 @@
-import { Component, Input, Optional, SkipSelf } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Optional,
+    SkipSelf,
+    computed,
+    input,
+} from '@angular/core';
 import { ControlContainer, FormGroupDirective, UntypedFormControl } from '@angular/forms';
 
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
@@ -6,14 +13,31 @@ import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 @Component({
     selector: 'ngt-validation',
     templateUrl: './ngt-validation.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtValidationComponent {
-    @Input({ required: true }) public control: UntypedFormControl;
-    @Input() public container: ControlContainer;
-    @Input() public minValue: number;
-    @Input() public minLength: number;
-    @Input() public minItems: number;
+    /** Inputs */
+
+    public readonly control = input.required<UntypedFormControl>();
+    public readonly container = input<ControlContainer>();
+    public readonly minValue = input<number>();
+    public readonly minLength = input<number>();
+    public readonly minItems = input<number>();
+
+    /** Computed Signals */
+
+    public readonly isSubmitted = computed(() => {
+        if (this.formGroup) {
+            return this.formGroup.submitted;
+        }
+
+        return (this.container() as any)?.submitted;
+    });
+
+    public readonly isDirty = computed(() => this.control()?.dirty);
+
+    public readonly isTouched = computed(() => this.control()?.touched);
 
     public constructor(
         @Optional()
@@ -23,27 +47,11 @@ export class NgtValidationComponent {
         private formGroup: FormGroupDirective,
     ) { }
 
-    public get isSubmitted(): boolean {
-        if (this.formGroup) {
-            return this.formGroup.submitted;
-        }
-
-        return this.container?.['submitted'];
-    }
-
-    public get isDirty(): boolean {
-        return this.control?.dirty;
-    }
-
-    public get isTouched(): boolean {
-        return this.control?.touched;
-    }
-
     public shouldShowError(error: string): boolean {
-        return this.hasError(error) && (this.isTouched || this.isSubmitted);
+        return this.hasError(error) && (this.isTouched() || this.isSubmitted());
     }
 
     private hasError(error: string): boolean {
-        return this.control?.errors?.[error];
+        return this.control()?.errors?.[error];
     }
 }

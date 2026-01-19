@@ -1,18 +1,15 @@
 import {
-    AfterViewInit,
-    ChangeDetectorRef,
+    ChangeDetectionStrategy,
     Component,
+    Signal,
+    computed,
     effect,
     Injector,
-    Input,
-    OnChanges,
-    OnDestroy,
+    input,
     Optional,
     Self,
-    SimpleChanges,
     SkipSelf,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -25,23 +22,63 @@ import { NgtSectionComponent } from '../ngt-section/ngt-section.component';
     selector: 'ngt-button',
     templateUrl: './ngt-button.component.html',
     styleUrls: ['./ngt-button.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
-    @Input() public href: string;
-    @Input() public type: string = 'success';
-    @Input() public link: boolean;
-    @Input() public loading: boolean;
-    @Input() public isDisabled: boolean;
-    @Input() public forceEnable: boolean;
-    @Input() public noSubmit: boolean;
+export class NgtButtonComponent {
+    /** Inputs */
+
+    public readonly href = input<string>();
+    public readonly type = input<string>('success');
+    public readonly link = input<boolean>(false);
+    public readonly loading = input<boolean>(false);
+    public readonly isDisabled = input<boolean>(false);
+    public readonly forceEnable = input<boolean>(false);
+    public readonly noSubmit = input<boolean>(false);
+
+    /** Computed Signals */
+
+    public readonly isDisabledByParent: Signal<boolean> = computed(
+        () => this.ngtForm?.isDisabled()
+            || this.ngtReactiveForm?.isDisabledState()
+            || this.ngtSection?.isDisabledState()
+            || this.ngtModal?.isDisabledState()
+    );
+
+    public readonly isDisabledState: Signal<boolean> = computed(
+        () => !this.forceEnable() && (this.isDisabled() || this.isDisabledByParent())
+    );
+
+    public readonly loadingState: Signal<boolean> = computed(
+        () => this.loading()
+            || this.ngtReactiveForm?.loading()
+            || this.ngtForm?.loading()
+    );
+
+    public readonly buttonType: Signal<'button' | 'submit'> = computed(
+        () => (this.loadingState() || this.isDisabledState() || this.noSubmit()) ? 'button' : 'submit'
+    );
+
+    public readonly containerClass: Signal<string> = computed(
+        () => `flex justify-center items-center focus:outline-none cursor-pointer ${this.ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border', 'text', 'font', 'w', 'h', 'rounded'])}`
+    );
+
+    public readonly wrapperClass: Signal<string> = computed(
+        () => `relative ${this.ngtStyle.compile(['w', 'h'])}`
+    );
+
+    public readonly stateClasses: Signal<Record<string, boolean>> = computed(
+        () => ({
+            'disabled-button': this.isDisabledState(),
+            'loading-button': this.loadingState(),
+        })
+    );
+
+    /** Other */
 
     public ngtStyle: NgtStylizableService;
 
-    private subscriptions: Array<Subscription> = [];
-
     public constructor(
-        private changeDetector: ChangeDetectorRef,
         private injector: Injector,
 
         @Optional() @SkipSelf()
@@ -59,11 +96,24 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
         @Self() @Optional()
         private ngtStylizableDirective: NgtStylizableDirective,
     ) {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
+        this.setupNgtStylizable();
+
+        effect(() => {
+            this.applyTypeStyle(this.type());
+        });
+    }
+
+    public onClick(event: Event): void {
+        if (this.isDisabledState() || this.loadingState()) {
+            event.preventDefault();
+            event.stopPropagation();
         }
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
 
         this.ngtStyle.load(this.injector, 'NgtButton', {
             px: 'px-2',
@@ -74,90 +124,47 @@ export class NgtButtonComponent implements AfterViewInit, OnChanges, OnDestroy {
             h: 'h-full',
             rounded: 'rounded'
         });
+    }
 
-        effect(() => {
-            if (this.ngtReactiveForm) {
-                this.loading = this.ngtReactiveForm.loading();
+    private applyTypeStyle(type: string): void {
+        if (type === 'success') {
+            this.ngtStyle.load(this.injector, 'NgtSuccessButton', {
+                color: {
+                    bg: 'bg-green-500',
+                    text: 'text-white text-xs',
+                }
+            });
+
+            return;
+        }
+
+        if (type === 'warning') {
+            this.ngtStyle.load(this.injector, 'NgtWarningButton', {
+                color: {
+                    bg: 'bg-orange-500',
+                    text: 'text-white text-xs',
+                }
+            });
+
+            return;
+        }
+
+        if (type === 'danger') {
+            this.ngtStyle.load(this.injector, 'NgtDangerButton', {
+                color: {
+                    bg: 'bg-red-500',
+                    text: 'text-white text-xs',
+                }
+            });
+
+            return;
+        }
+
+        this.ngtStyle.load(this.injector, 'NgtInfoButton', {
+            color: {
+                bg: 'bg-blue-500',
+                text: 'text-white text-xs',
             }
         });
-    }
-
-    public onClick(event: Event): void {
-        if (this.disabled() || this.loading) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-    }
-
-    public ngAfterViewInit(): void {
-        this.bindSubscriptions();
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
-        if (changes.type) {
-            if (changes.type.currentValue == 'success') {
-                this.ngtStyle.load(this.injector, 'NgtSuccessButton', {
-                    color: {
-                        bg: 'bg-green-500',
-                        text: 'text-white text-xs',
-                    }
-                });
-            } else if (changes.type.currentValue == 'warning') {
-                this.ngtStyle.load(this.injector, 'NgtWarningButton', {
-                    color: {
-                        bg: 'bg-orange-500',
-                        text: 'text-white text-xs',
-                    }
-                });
-            } else if (changes.type.currentValue == 'danger') {
-                this.ngtStyle.load(this.injector, 'NgtDangerButton', {
-                    color: {
-                        bg: 'bg-red-500',
-                        text: 'text-white text-xs',
-                    }
-                });
-            } else {
-                this.ngtStyle.load(this.injector, 'NgtInfoButton', {
-                    color: {
-                        bg: 'bg-blue-500',
-                        text: 'text-white text-xs',
-                    }
-                });
-            }
-        }
-    }
-
-    public disabled(): boolean {
-        return !this.forceEnable && (this.isDisabled || this.isDisabledByParent());
-    }
-
-    public ngOnDestroy(): void {
-        this.destroySubscriptions();
-    }
-
-    private bindSubscriptions(): void {
-        if (this.ngtForm) {
-            this.loading = this.ngtForm.isLoading();
-
-            this.changeDetector.detectChanges();
-
-            this.subscriptions.push(
-                this.ngtForm.onLoadingChange.subscribe((loading: boolean) => {
-                    this.loading = loading;
-                })
-            );
-        }
-    }
-
-    private isDisabledByParent(): boolean {
-        return this.ngtForm?.isDisabled
-            || this.ngtReactiveForm?.isDisabledState()
-            || this.ngtSection?.isDisabledState()
-            || this.ngtModal?.isDisabledState();
-    }
-
-    private destroySubscriptions(): void {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());
-        this.subscriptions = [];
     }
 }

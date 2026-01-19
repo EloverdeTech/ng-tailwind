@@ -1,5 +1,14 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Injector, Input, Optional, Self } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Injector,
+    Optional,
+    Self,
+    input,
+    signal,
+    WritableSignal,
+} from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -44,45 +53,33 @@ export enum NgtFloatingButtonType {
             ]),
         ]),
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtFloatingButtonComponent {
-    @Input() public menus: Array<NgtFloatingButtonMenu>;
-    @Input() public icon: string;
-    @Input() public label: string;
-    @Input() public withAnimation: boolean = false;
+    /** Inputs */
 
-    public isOpen: boolean = false;
+    public readonly menus = input<Array<NgtFloatingButtonMenu>>([]);
+    public readonly icon = input<string>();
+    public readonly label = input<string>();
+    public readonly withAnimation = input<boolean>(false);
+
+    public readonly isOpen: WritableSignal<boolean> = signal(false);
     public ngtStyle: NgtStylizableService;
 
     public constructor(
         private injector: Injector,
         @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
     ) {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
-
-        this.ngtStyle.load(this.injector, 'NgtFloatingButton', {
-            color: {
-                bg: 'bg-blue-500',
-                text: 'text-white',
-            },
-            px: 'px-4',
-            py: 'py-4',
-            h: 'h-12',
-            w: 'w-12'
-        });
+        this.setupNgtStylizable();
     }
 
     public toggleMenu() {
-        this.isOpen = !(this.isOpen);
+        this.isOpen.set(!this.isOpen());
     }
 
     public openExternalLink(url: string) {
-        window.open(url, "_blank");
+        window.open(url, '_blank');
         this.toggleMenu();
     }
 
@@ -103,5 +100,22 @@ export class NgtFloatingButtonComponent {
 
     public isTypeNavigation(menu: NgtFloatingButtonMenu) {
         return menu.type == NgtFloatingButtonType.NAVIGATION;
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
+
+        this.ngtStyle.load(this.injector, 'NgtFloatingButton', {
+            color: {
+                bg: 'bg-blue-500',
+                text: 'text-white',
+            },
+            px: 'px-4',
+            py: 'py-4',
+            h: 'h-12',
+            w: 'w-12'
+        });
     }
 }

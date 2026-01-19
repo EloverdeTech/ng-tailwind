@@ -1,20 +1,21 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     ElementRef,
-    EventEmitter,
     Injector,
-    Input,
-    OnChanges,
     OnDestroy,
     Optional,
-    Output,
+    OutputRefSubscription,
     Self,
-    SimpleChanges,
     SkipSelf,
     TemplateRef,
     ViewChild,
+    effect,
+    input,
+    output,
+    signal,
+    WritableSignal,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
@@ -24,40 +25,48 @@ import { NgtDatatableComponent } from '../ngt-datatable.component';
 @Component({
     selector: '[ngt-th]',
     templateUrl: './ngt-th.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class NgtThComponent implements OnChanges, OnDestroy {
+export class NgtThComponent implements OnDestroy {
     @ViewChild('searchInput') public searchInput: NgtInputComponent;
     @ViewChild('modal', { static: true }) public modal: TemplateRef<any>;
 
-    @Input() public reference: string;
-    @Input() public sortReference: string;
-    @Input() public modalWidth: string = 'md:max-w-md';
-    @Input() public searchModalOverflow: string = 'overflow-visible';
-    @Input() public sortable: boolean;
-    @Input() public searchable: boolean;
-    @Input() public hasCustomSearch: boolean = false;
-    @Input() public searchLabel: string;
-    @Input() public searchIcon: string;
-    @Input() public sortableTooltip: NgtSortableTooltip = {
+    /** Inputs */
+
+    public readonly reference = input<string>();
+    public readonly sortReference = input<string>();
+    public readonly modalWidth = input<string>('md:max-w-md');
+    public readonly searchModalOverflow = input<string>('overflow-visible');
+    public readonly sortable = input<boolean>(false);
+    public readonly searchable = input<boolean>(false);
+    public readonly hasCustomSearch = input<boolean>(false);
+    public readonly searchLabel = input<string>();
+    public readonly searchIcon = input<string>();
+    public readonly sortableTooltip = input<NgtSortableTooltip>({
         ascending: 'Ordenar de Z a A',
         descending: 'Limpar ordenação',
         unordered: 'Ordenar de A a Z'
-    };
+    });
 
-    @Output() public onEnableSearch = new EventEmitter();
+    /** Outputs */
 
-    public inputFocused: boolean = false;
-    public isCurrentSort = false;
-    public sortDirection = '';
-    public searchTerm: any;
-    public customSearchTerm: any;
+    public readonly onEnableSearch = output<void>();
+
+    /** Signals */
+
+    public readonly isCurrentSort: WritableSignal<boolean> = signal(false);
+    public readonly sortDirection: WritableSignal<string> = signal('');
+    public readonly searchTerm: WritableSignal<any> = signal(null);
+    public readonly customSearchTerm: WritableSignal<any> = signal(null);
+
+    /** Other */
 
     public ngtStyle: NgtStylizableService;
     public filterModalHeaderStyle: NgtStylizableService = new NgtStylizableService();
     public filterModalBodyStyle: NgtStylizableService = new NgtStylizableService();
 
-    private subscriptions: Array<Subscription> = [];
+    private subscriptions: Array<OutputRefSubscription> = [];
 
     public constructor(
         private injector: Injector,
@@ -66,62 +75,40 @@ export class NgtThComponent implements OnChanges, OnDestroy {
         @Optional() @SkipSelf()
         public ngtDataTable: NgtDatatableComponent
     ) {
-        if (this.checkDataTable()) {
-            this.subscriptions.push(
-                this.ngtDataTable.onDataChange.subscribe(() => {
-                    this.isCurrentSort = this.ngtDataTable.getCurrentSort().field == this.getSortReference();
+        this.setupNgtStylizable();
+        this.bindSubscriptions();
 
-                    if (this.isCurrentSort) {
-                        this.sortDirection = this.ngtDataTable.getCurrentSort().direction;
-                    }
-                })
-            );
+        effect(() => {
+            const label = this.searchLabel();
 
-            this.subscriptions.push(
-                this.ngtDataTable.onClearFilter.subscribe((reference) => {
-                    if (reference == this.reference || !reference) {
-                        this.searchTerm = '';
-                        this.customSearchTerm = null;
-                    }
-                })
-            );
-        }
-
-        this.bindNgtStyle();
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
-        if (changes.searchLabel && this.checkDataTable) {
-            this.ngtDataTable.setFilterDescription(this.reference, this.searchLabel);
-        }
-    }
-
-    public ngOnDestroy() {
-        this.destroySubscriptions();
+            if (label && this.checkDataTable()) {
+                this.ngtDataTable.setFilterDescription(this.reference(), label);
+            }
+        });
     }
 
     public async sort() {
-        if (this.sortable && this.checkDataTable() && this.checkReference()) {
-            let sortDirection = this.getNextSortDirection();
+        if (this.sortable() && this.checkDataTable() && this.checkReference()) {
+            const nextSortDirection = this.getNextSortDirection();
 
-            if (sortDirection) {
-                await this.ngtDataTable.sort(this.getSortReference(), sortDirection);
+            if (nextSortDirection) {
+                await this.ngtDataTable.sort(this.getSortReference(), nextSortDirection);
             } else {
                 this.ngtDataTable.sort('', '');
             }
 
-            this.sortDirection = sortDirection;
+            this.sortDirection.set(nextSortDirection);
         }
     }
 
-    public enableSearch(event: any) {
+    public enableSearch(event: Event) {
         event.stopPropagation();
 
-        this.ngtDataTable.searchModal.ngtStyle.w = this.modalWidth;
-        this.ngtDataTable.searchModal.ngtStyle.overflow = this.searchModalOverflow;
+        this.ngtDataTable.searchModal.ngtStyle().w = this.modalWidth();
+        this.ngtDataTable.searchModal.ngtStyle().overflow = this.searchModalOverflow();
 
         this.ngtDataTable.setSearchModalTemplate(this.modal);
-        this.ngtDataTable.openSearchModal(this.reference);
+        this.ngtDataTable.openSearchModal(this.reference());
 
         setTimeout(() => {
             if (this.searchInput) {
@@ -132,40 +119,49 @@ export class NgtThComponent implements OnChanges, OnDestroy {
         this.onEnableSearch.emit();
     }
 
+    public onSearchTermChange(term: any) {
+        this.searchTerm.set(term);
+        this.search(term);
+    }
+
     public search(term: any) {
-        if (!this.hasCustomSearch && this.searchTerm === undefined
-            && this.customSearchTerm === undefined && !term) {
+        if (!this.hasCustomSearch() && this.searchTerm() === undefined
+            && this.customSearchTerm() === undefined && !term) {
             return;
         }
 
-        if (this.searchable && this.reference) {
-            let filter = {};
+        if (this.searchable() && this.reference()) {
+            const filter = {};
 
-            filter[this.reference] = term;
+            filter[this.reference()] = term;
             this.ngtDataTable.search(filter);
         }
     }
 
     public customSearch(term: any) {
-        this.customSearchTerm = term;
+        this.customSearchTerm.set(term);
+    }
+
+    public ngOnDestroy(): void {
+        this.destroySubscriptions();
     }
 
     public getTooltip() {
-        if (this.sortable && this.sortableTooltip) {
-            if (this.sortDirection == 'asc') {
-                return this.sortableTooltip.ascending;
-            } else if (this.sortDirection == 'desc') {
-                return this.sortableTooltip.descending;
+        if (this.sortable() && this.sortableTooltip()) {
+            if (this.sortDirection() == 'asc') {
+                return this.sortableTooltip().ascending;
+            } else if (this.sortDirection() == 'desc') {
+                return this.sortableTooltip().descending;
             }
 
-            return this.sortableTooltip.unordered;
+            return this.sortableTooltip().unordered;
         }
 
         return '';
     }
 
     private getSortReference() {
-        return this.sortReference ? this.sortReference : this.reference;
+        return this.sortReference() ? this.sortReference() : this.reference();
     }
 
     private checkDataTable() {
@@ -179,7 +175,7 @@ export class NgtThComponent implements OnChanges, OnDestroy {
     }
 
     private checkReference() {
-        if (!this.reference && !this.sortReference) {
+        if (!this.reference() && !this.sortReference()) {
             console.error('The [ngt-th] must have a [reference] or a [sortReference] property to be able to sort');
 
             return false;
@@ -189,19 +185,17 @@ export class NgtThComponent implements OnChanges, OnDestroy {
     }
 
     private getNextSortDirection() {
-        switch (this.sortDirection) {
+        switch (this.sortDirection()) {
             case 'asc': return 'desc';
             case 'desc': return '';
             case '': return 'asc';
         }
     }
 
-    private bindNgtStyle() {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
 
         this.ngtStyle.load(this.injector, 'NgtTh', {
             py: 'py-4',
@@ -246,6 +240,31 @@ export class NgtThComponent implements OnChanges, OnDestroy {
             px: 'px-0',
             py: 'py-0'
         });
+    }
+
+    private bindSubscriptions(): void {
+        if (this.checkDataTable()) {
+            this.subscriptions.push(
+                this.ngtDataTable.onDataChange.subscribe(() => {
+                    const currentSort = this.ngtDataTable.getCurrentSort();
+
+                    this.isCurrentSort.set(currentSort.field == this.getSortReference());
+
+                    if (this.isCurrentSort()) {
+                        this.sortDirection.set(currentSort.direction);
+                    }
+                })
+            );
+
+            this.subscriptions.push(
+                this.ngtDataTable.onClearFilter.subscribe((reference) => {
+                    if (reference == this.reference() || !reference) {
+                        this.searchTerm.set('');
+                        this.customSearchTerm.set(null);
+                    }
+                })
+            );
+        }
     }
 
     private destroySubscriptions() {

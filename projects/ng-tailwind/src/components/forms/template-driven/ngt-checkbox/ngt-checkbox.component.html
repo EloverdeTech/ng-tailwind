@@ -1,72 +1,81 @@
-<label class="flex items-center {{ disabled() ? 'cursor-not-allowed opacity-50' : 'cursor-pointer' }}"
+<label class="flex items-center {{ isDisabledState() ? 'cursor-not-allowed opacity-50' : 'cursor-pointer' }}"
     [class.flex-col]='isToggleMode()' style="max-width: max-content;">
-    <input type="checkbox" [name]='name' class="hidden" ([ngModel])='value' [disabled]="disabled() || isClickDisabled"
-        #element>
+    <input class="hidden" type="checkbox" [name]='name()' ([ngModel])='value' [disabled]="isDisabledState()"
+        (change)="onNativeChange()" #checkboxElement>
 
-    <span *ngIf="isToggleMode() && label" class="flex">
-        <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} mb-2">{{ label }}</span>
+    @if (isToggleMode() && label()) {
+        <span class="flex">
+            <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} mb-2">{{ label() }}</span>
 
-        <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
-            [autoXReverse]="helperAutoXReverse" class="ml-1">
-            {{ helpText }}
-        </ngt-helper>
-    </span>
+            @if (helpText()) {
+                <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpTextColor()"
+                    [autoXReverse]="helperAutoXReverse()" class="ml-1">
+                    {{ helpText() }}
+                </ngt-helper>
+            }
+        </span>
+    }
 
-    <ng-container *ngIf="isDefaultMode()">
-        <div style="transition: background-color .2s ease-out" class="{{ value ? ngtStyle.compile(['color.bg']) : 'bg-white' }}  {{ ngtStyle.compile(['h', 'w']) }}
-                    shadow rounded border border-gray-400 {{ !shining ? 'flex justify-center' : 'hidden' }}">
+    @if (isDefaultMode()) {
+        <div style="transition: background-color .2s ease-out" class="{{ currentValue() ? ngtStyle.compile(['color.bg']) : 'bg-white' }}  {{ ngtStyle.compile(['h', 'w']) }}
+                        shadow rounded border border-gray-400 {{ !isShining() ? 'flex justify-center' : 'hidden' }}">
             <svg class="fill-current self-center text-white pointer-events-none" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20">
                 <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
             </svg>
         </div>
-    </ng-container>
+    }
 
-    <ng-container *ngIf="isRadioMode()">
+    @if (isRadioMode()) {
         <div style="transition: background-color .2s ease-out"
-            class="{{ value ? ngtStyle.compile(['color.border', 'color.text']) : 'border-gray-500' }}
-                    shadow w-6 h-6 rounded-full border-2 border-gray-400 {{ !shining ? 'flex justify-center' : 'hidden' }}">
-            <svg *ngIf="value" class="fill-current self-center h-3" xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 29.107 29.107">
-                <path
-                    d="M14.554 0C6.561 0 0 6.562 0 14.552c0 7.996 6.561 14.555 14.554 14.555 7.996 0 14.553-6.559 14.553-14.555C29.106 6.562 22.55 0 14.554 0z" />
-            </svg>
-        </div>
-    </ng-container>
-
-    <ng-container *ngIf="isToggleMode() || isSideToggleMode()">
-        <div class="shadow w-14 h-7 rounded-full border border-gray-400 {{ shining ? 'hidden' : 'flex' }}"
-            [class.justify-end]="value" style="padding: 1px;">
-            <div *ngIf="value"
-                class="flex text-sm text-white {{ ngtStyle.compile(['color.bg']) }} pointer-events-none rounded-full px-1.5 py-2"
-                @slideLeftToRight>
-                <svg class="fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+            class="{{ currentValue() ? ngtStyle.compile(['color.border', 'color.text']) : 'border-gray-500' }}
+                        shadow w-6 h-6 rounded-full border-2 border-gray-400 {{ !isShining() ? 'flex justify-center' : 'hidden' }}">
+            @if (currentValue()) {
+                <svg class="fill-current self-center h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29.107 29.107">
+                    <path
+                        d="M14.554 0C6.561 0 0 6.562 0 14.552c0 7.996 6.561 14.555 14.554 14.555 7.996 0 14.553-6.559 14.553-14.555C29.106 6.562 22.55 0 14.554 0z" />
                 </svg>
-            </div>
-
-            <div *ngIf="!value" class="flex text-xl text-white bg-gray-300 pointer-events-none rounded-full px-1 py-3"
-                @slideRightToLeft>
-                <svg class="fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path class="heroicon-ui"
-                        d="M16.24 14.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 0 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12l2.83 2.83z" />
-                </svg>
-            </div>
+            }
         </div>
-    </ng-container>
+    }
 
-    <ng-container *ngIf='label && !shining && !isToggleMode()'>
-        <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} ml-2">{{ label }}</span>
+    @if (isToggleMode() || isSideToggleMode()) {
+        <div class="shadow w-14 h-7 rounded-full border border-gray-400 {{ isShining() ? 'hidden' : 'flex' }}"
+            [class.justify-end]="currentValue()" style="padding: 1px;">
+            @if (currentValue()) {
+                <div class="flex text-sm text-white {{ ngtStyle.compile(['color.bg']) }} pointer-events-none rounded-full px-1.5 py-2"
+                    @slideLeftToRight>
+                    <svg class="fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+                    </svg>
+                </div>
+            }
 
-        <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
-            [autoXReverse]="helperAutoXReverse" class="ml-1">
-            {{ helpText }}
-        </ngt-helper>
-    </ng-container>
+            @if (!currentValue()) {
+                <div class="flex text-xl text-white bg-gray-300 pointer-events-none rounded-full px-1 py-3" @slideRightToLeft>
+                    <svg class="fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path class="heroicon-ui"
+                            d="M16.24 14.83a1 1 0 0 1-1.41 1.41L12 13.41l-2.83 2.83a1 1 0 0 1-1.41-1.41L10.59 12 7.76 9.17a1 1 0 0 1 1.41-1.41L12 10.59l2.83-2.83a1 1 0 0 1 1.41 1.41L13.41 12l2.83 2.83z" />
+                    </svg>
+                </div>
+            }
+        </div>
+    }
+
+    @if (label() && !isShining() && !isToggleMode()) {
+        <span class="{{ ngtStyle.compile(['text', 'fontCase']) }} ml-2">{{ label() }}</span>
+
+        @if (helpText()) {
+            <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpTextColor()"
+                [autoXReverse]="helperAutoXReverse()" class="ml-1">
+                {{ helpText() }}
+            </ngt-helper>
+        }
+    }
 </label>
 
-<ng-container *ngIf='shining'>
+@if (isShining()) {
     <div class="flex">
         <ngt-shining class="w-16 h-12"></ngt-shining>
     </div>
-</ng-container>
+}

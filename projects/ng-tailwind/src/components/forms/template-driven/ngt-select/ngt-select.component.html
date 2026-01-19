@@ -1,62 +1,72 @@
-<label *ngIf="label" [hidden]='shining'
-    class="{{ shining ? '' : 'block' }} {{ ngtStyle.compile(['color.text', 'text', 'font', 'fontCase']) }} mb-2 flex">
-    <ngt-svg *ngIf="labelIcon" class="mr-1 {{labelIconColor}}" src="{{labelIcon}}"></ngt-svg>
-    
-    <span class="truncate" [title]="label">
-        {{ label }}:
-    </span>
+@if (label() && !isShining()) {
+    <label class="block {{ ngtStyle.compile(['color.text', 'text', 'font', 'fontCase']) }} mb-2 flex">
+        @if (labelIcon()) {
+            <ngt-svg class="mr-1 {{ labelIconColor() }}" src="{{ labelIcon() }}"></ngt-svg>
+        }
 
-    <span class="text-red-500 font-bold text-md ml-1" *ngIf="isRequired">*</span>
+        <span class="truncate" [title]="label()">
+            {{ label() }}:
+        </span>
 
-    <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
-        [helperReverseYPosition]="helperReverseYPosition" [autoXReverse]="helperAutoXReverse" class="ml-1">
-        {{ helpText }}
-    </ngt-helper>
-</label>
+        @if (isRequired()) {
+            <span class="text-red-500 font-bold text-md ml-1">*</span>
+        }
 
-<div [hidden]='shining' class="{{ ngtStyle.compile(['text']) }} {{ getSelectClass() }} normal-case"
+        @if (helpText()) {
+            <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpTextColor()"
+                [helperReverseYPosition]="helperReverseYPosition()" [autoXReverse]="helperAutoXReverse()" class="ml-1">
+                {{ helpText() }}
+            </ngt-helper>
+        }
+    </label>
+}
+
+<div [hidden]='isShining()' class="{{ ngtStyle.compile(['text']) }} {{ selectClass() }} normal-case"
     style="min-height: 2.5rem;">
-    <ng-select class="custom" [(ngModel)]='nativeValue' [name]='nativeName' [addTag]='allowCreate'
-        [addTagText]="createText || ngtTranslateService.ngtSelectCreateText" [bindLabel]="bindLabel"
-        [multiple]="multiple" [hideSelected]="hideSelected" [typeahead]="typeahead"
-        [notFoundText]="notFoundText || ngtTranslateService.ngtSelectNotFoundText" [searchable]="searchable"
-        [searchFn]="itemSearchFn" [disabled]='disabled() || isReadonly' [clearable]="clearable && hasSelectedValue()"
-        [closeOnSelect]="closeOnSelect" [trackByFn]="trackBy" [labelForId]="labelForId"
-        [typeToSearchText]="typeToSearchText || ngtTranslateService.ngtSelectTypeToSearchText"
-        [placeholder]="placeholder || ngtTranslateService.ngtSelectPlaceholder" [dropdownPosition]="dropdownPosition"
-        [groupBy]="groupBy" [clearAllText]="clearAllTooltip || ngtTranslateService.ngtSelectClearAllTooltip"
-        [clearSearchOnAdd]="clearSearchOnAdd" [bindValue]="bindValue" [virtualScroll]="virtualScroll"
-        [loadingText]="loadingText || ngtTranslateService.ngtSelectLoadingText" [maxSelectedItems]="maxSelectedItems"
-        [tabIndex]="tabIndex" [items]="ngSelectItems | async" [groupValue]="groupValue" [loading]="loading"
-        [compareWith]='compareWith' [inputAttrs]="inputAttrs" (scroll)="onScroll($event)" (close)="onClose.emit()"
-        (change)="onNativeChange($event)" (clear)='onClearSelect()' (remove)='onRemoveSelectedItem($event)'
-        (open)="onOpen()" (click)="wasClicked = true">
+    <ng-select class="custom" [(ngModel)]='nativeValue' [name]='nativeName' [addTag]='allowCreate()'
+        [addTagText]="createText() || ngtTranslateService?.ngtSelectCreateText" [bindLabel]="bindLabel()"
+        [multiple]="multiple()" [hideSelected]="hideSelected()" [typeahead]="typeaheadSubject()"
+        [notFoundText]="notFoundText() || ngtTranslateService?.ngtSelectNotFoundText" [searchable]="searchable()"
+        [searchFn]="itemSearchFn()" [disabled]='isDisabledState()' [clearable]="isClearable() && hasSelectedValue()"
+        [closeOnSelect]="shouldCloseOnSelect()" [trackByFn]="trackBy()" [labelForId]="labelForId()"
+        [typeToSearchText]="typeToSearchText() || ngtTranslateService?.ngtSelectTypeToSearchText"
+        [placeholder]="placeholder() || ngtTranslateService?.ngtSelectPlaceholder"
+        [dropdownPosition]="dropdownPosition()" [groupBy]="groupBy()"
+        [clearAllText]="clearAllTooltip() || ngtTranslateService?.ngtSelectClearAllTooltip"
+        [clearSearchOnAdd]="clearSearchOnAdd()" [bindValue]="bindValue()" [virtualScroll]="virtualScroll()"
+        [loadingText]="loadingText() || ngtTranslateService?.ngtSelectLoadingText"
+        [maxSelectedItems]="maxSelectedItems()" [tabIndex]="tabIndex()" [items]="stateService.ngSelectItems() | async"
+        [groupValue]="groupValue()" [loading]="isLoading()" [compareWith]='getCompareWith()' [inputAttrs]="inputAttrs()"
+        (scroll)="onScroll($event)" (close)="handleClose()" (change)="onNativeChange($event)" (clear)='onClearSelect()'
+        (remove)='onRemoveSelectedItem($event)' (open)="onOpen()" (click)="markClicked()">
 
-        <ng-template *ngIf='ngtSelectHeaderTemplate' ng-header-tmp>
+        @if (ngtSelectHeaderTemplate) {
+        <ng-template ng-header-tmp>
             <ng-template [ngTemplateOutlet]="ngtSelectHeaderTemplate">
             </ng-template>
         </ng-template>
+        }
 
         <ng-template ng-label-tmp let-item="item">
             <div class="flex w-full items-center pr-1">
-                <ng-container *ngIf="multiple && !cantRemoveItem(item)">
-                    <div class="ng-value-icon px-1 h-full border-r mr-2 {{ ngtStyle.compile(['color.text', 'text']) }} cursor-pointer"
-                        (click)='removeItem($event, item)'>
-                        <svg class="ng-value-icon fill-current self-center" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="M19.1 17.2l-5.3-5.3 5.3-5.3-1.8-1.8-5.3 5.4-5.3-5.3-1.8 1.7 5.3 5.3-5.3 5.3L6.7 19l5.3-5.3 5.3 5.3 1.8-1.8z" />
-                        </svg>
-                    </div>
-                </ng-container>
+                @if (multiple() && !cantRemoveItem(item)) {
+                <div class="ng-value-icon px-1 h-full border-r mr-2 {{ ngtStyle.compile(['color.text', 'text']) }} cursor-pointer"
+                    (click)='removeItem($event, item)'>
+                    <svg class="ng-value-icon fill-current self-center" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M19.1 17.2l-5.3-5.3 5.3-5.3-1.8-1.8-5.3 5.4-5.3-5.3-1.8 1.7 5.3 5.3-5.3 5.3L6.7 19l5.3-5.3 5.3 5.3 1.8-1.8z" />
+                    </svg>
+                </div>
+                }
 
-                <ng-template *ngIf='ngtOptionSelectedTemplate' [ngTemplateOutlet]="ngtOptionSelectedTemplate"
-                    [ngTemplateOutletContext]="{ item: item }">
+                @if (ngtOptionSelectedTemplate) {
+                <ng-template [ngTemplateOutlet]="ngtOptionSelectedTemplate" [ngTemplateOutletContext]="{ item: item }">
                 </ng-template>
-
-                <ng-template *ngIf='!ngtOptionSelectedTemplate' [ngTemplateOutlet]="ngtOptionTemplate"
-                    [ngTemplateOutletContext]="{ item: item }">
+                } @else {
+                <ng-template [ngTemplateOutlet]="ngtOptionTemplate" [ngTemplateOutletContext]="{ item: item }">
                 </ng-template>
+                }
             </div>
         </ng-template>
 
@@ -68,12 +78,14 @@
     </ng-select>
 </div>
 
-<ng-container *ngIf='shining'>
+@if (isShining()) {
     <div class="flex">
         <ngt-shining class="{{ ngtStyle.compile(['h']) }} w-full"></ngt-shining>
     </div>
-</ng-container>
+}
 
 <ngt-validation [control]="formControl" [container]="formContainer"></ngt-validation>
 
-<input *ngIf='componentReady' type='hidden' [ngModel]="value" [name]="name" [value]="value">
+@if (componentReady()) {
+    <input type='hidden' [ngModel]="value" [name]="name()" [value]="value">
+}

@@ -1,13 +1,14 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     Injector,
-    Input,
-    OnDestroy,
     Optional,
     Self,
     SkipSelf,
+    Signal,
+    computed,
+    input,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -20,16 +21,52 @@ import { NgtModalBodyComponent } from '../ngt-modal/ngt-modal-body/ngt-modal-bod
 @Component({
     selector: 'ngt-action',
     templateUrl: './ngt-action.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class NgtActionComponent implements OnDestroy {
-    @Input() public href: string;
-    @Input() public icon: string;
-    @Input() public ngtStyle: NgtStylizableService;
-    @Input() public isDisabled: boolean;
-    @Input() public forceEnable: boolean;
+export class NgtActionComponent {
+    /** Inputs */
 
-    private subscriptions: Array<Subscription> = [];
+    public readonly href = input<string>();
+    public readonly icon = input<string>();
+    public readonly ngtStyle = input<NgtStylizableService>();
+    public readonly isDisabled = input<boolean>(false);
+    public readonly forceEnable = input<boolean>(false);
+
+    /** Computed Signals */
+
+    public readonly resolvedStyle: Signal<NgtStylizableService> = computed(
+        () => this.ngtStyle() ?? this.localStyle
+    );
+
+    public readonly isDisabledByParent: Signal<boolean> = computed(
+        () => this.ngtForm?.isDisabled()
+            || this.ngtReactiveForm?.isDisabledState()
+            || this.ngtSection?.isDisabledState()
+            || this.ngtModal?.isDisabledState()
+    );
+
+    public readonly isDisabledState: Signal<boolean> = computed(
+        () => !this.forceEnable() && (this.isDisabled() || this.isDisabledByParent())
+    );
+
+    public readonly anchorClass: Signal<string> = computed(
+        () => this.isDisabledState()
+            ? 'block rounded-full cursor-not-allowed text-gray-600 bg-gray-400 hover:bg-gray-400 opacity-50'
+            : 'cursor-pointer'
+    );
+
+    public readonly containerClass: Signal<string> = computed(
+        () => `flex justify-center rounded-full ${this.resolvedStyle().compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py', 'shadow', 'text'])}`
+    );
+
+    public readonly containerClassWithBorder: Signal<string> = computed(
+        () => `flex justify-center rounded-full ${this.resolvedStyle().compile(['h', 'w', 'color.bg', 'color.text', 'px', 'py', 'shadow', 'text', 'border', 'color.border'])}`
+    );
+
+    /** Internal */
+
+    private localStyle: NgtStylizableService;
 
     public constructor(
         private injector: Injector,
@@ -52,13 +89,21 @@ export class NgtActionComponent implements OnDestroy {
         @Optional() @SkipSelf()
         public ngtModalBody: NgtModalBodyComponent
     ) {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
+        this.setupNgtStylizable();
+    }
 
-        this.ngtStyle.load(this.injector, 'NgtAction', {
+    public onClick(event: Event) {
+        if (this.isDisabledState()) {
+            event.stopPropagation();
+        }
+    }
+
+    private setupNgtStylizable(): void {
+        this.localStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
+
+        this.localStyle.load(this.injector, 'NgtAction', {
             h: 'h-full',
             w: 'w-full',
             color: {
@@ -69,31 +114,5 @@ export class NgtActionComponent implements OnDestroy {
             text: 'text-sm',
             border: 'border-0',
         });
-    }
-
-    public ngOnDestroy() {
-        this.destroySubscriptions();
-    }
-
-    public onClick(event: Event) {
-        if (this.disabled()) {
-            event.stopPropagation();
-        }
-    }
-
-    public disabled(): boolean {
-        return !this.forceEnable && (this.isDisabled || this.isDisabledByParent());
-    }
-
-    private isDisabledByParent(): boolean {
-        return this.ngtForm?.isDisabled
-            || this.ngtReactiveForm?.isDisabledState()
-            || this.ngtSection?.isDisabledState()
-            || this.ngtModal?.isDisabledState();
-    }
-
-    private destroySubscriptions(): void {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());
-        this.subscriptions = [];
     }
 }

@@ -1,58 +1,58 @@
 <div class="w-full">
     <div class="flex flex-wrap w-full">
-        <ngt-tag *ngIf="hasAppliedFilters()" class="w-full sm:w-auto {{ filterTagMargin }}"
-            [class.sm:mr-4]="filterTagMargin == 'mb-4'" color.bg="bg-red-500" (click)="removeFilter()" ngt-stylizable>
-            Limpar Filtros
-        </ngt-tag>
+        @if (hasAppliedFilters()) {
+            <ngt-tag class="w-full sm:w-auto {{ filterTagMargin() }}"
+                [class.sm:mr-4]="filterTagMargin() == 'mb-4'" color.bg="bg-red-500" (click)="removeFilter()" ngt-stylizable>
+                Limpar Filtros
+            </ngt-tag>
 
-        <ng-container *ngIf="hasAppliedFilters()">
-            <ng-container *ngFor="let filter of filtersTranslated">
-                <ngt-tag class="w-full sm:w-auto {{ filterTagMargin }}" [class.sm:mr-4]="filterTagMargin == 'mb-4'"
-                    [color.bg]="filterTagBgColor" (click)="removeFilter(filter.reference)" ngt-stylizable
+            @for (filter of filtersTranslated; track filter.reference) {
+                <ngt-tag class="w-full sm:w-auto {{ filterTagMargin() }}" [class.sm:mr-4]="filterTagMargin() == 'mb-4'"
+                    [color.bg]="filterTagBgColor()" (click)="removeFilter(filter.reference)" ngt-stylizable
                     [title]="getTitle(filter)">
                     {{ filter.translation + ': ' + getTagFilterValue(filter) }}
                 </ngt-tag>
-            </ng-container>
-        </ng-container>
+            }
+        }
     </div>
 
     <table style="display: table;" class="text-left w-full border-collapse table-responsive" #table>
         <ng-content></ng-content>
     </table>
 
-    <p *ngIf="emptyStateVisible" class="mt-8 mx-auto self-center text-center text-xl">
-        {{ ngtTranslateService.ngtDatatableNoDataFound }}
-    </p>
+    @if (emptyStateVisible) {
+        <p class="mt-8 mx-auto self-center text-center text-xl">
+            {{ ngtTranslateService.ngtDatatableNoDataFound }}
+        </p>
+    }
 
-    <div *ngIf="loading">
-        <div *ngFor="let i of [1, 2, 3, 4]" class="flex w-full mt-3">
-            <ng-container *ngIf="columnCount.length >= 2">
-                <ng-container *ngFor="let j of columnCount; let last = last">
-                    <ng-container *ngIf="last">
-                        <ngt-shining class="h-10 w-full"></ngt-shining>
-                    </ng-container>
-
-                    <ng-container *ngIf="!last">
-                        <ngt-shining class="h-10 w-full mr-10"></ngt-shining>
-                    </ng-container>
-                </ng-container>
-            </ng-container>
-
-            <ng-container *ngIf="columnCount.length < 2">
-                <ngt-shining class="h-10 w-full"></ngt-shining>
-                <ngt-shining class="h-10 w-full mr-10 ml-10"></ngt-shining>
-                <ngt-shining class="h-10 w-full"></ngt-shining>
-            </ng-container>
-        </div>
-    </div>
+    @if (loading) {
+        @for (i of [1, 2, 3, 4]; track $index) {
+            <div class="flex w-full mt-3">
+                @if (columnCount.length >= 2) {
+                    @for (j of columnCount; track $index; let last = $last) {
+                        @if (last) {
+                            <ngt-shining class="h-10 w-full"></ngt-shining>
+                        } @else {
+                            <ngt-shining class="h-10 w-full mr-10"></ngt-shining>
+                        }
+                    }
+                } @else {
+                    <ngt-shining class="h-10 w-full"></ngt-shining>
+                    <ngt-shining class="h-10 w-full mr-10 ml-10"></ngt-shining>
+                    <ngt-shining class="h-10 w-full"></ngt-shining>
+                }
+            </div>
+        }
+    }
 </div>
 
-<div class="clearfix {{ paginationMargin }}" [hidden]='!data || data.length == 0'>
+<div class="clearfix {{ paginationMargin() }}" [hidden]="!data || data.length == 0">
     <ngt-pagination [pagesInterval]='4' (onPageChange)='apply($event, false)' (onPerPageChange)='apply(1, false)'
         #ngtPagination>
     </ngt-pagination>
 </div>
 
 <ngt-modal [customLayout]="true" [isDisabled]="false" [ngtStyle]="filterModalStyle" #searchModal>
-    <ng-container *ngTemplateOutlet="searchModalTemplate"></ng-container>
+    <ng-container [ngTemplateOutlet]="searchModalTemplate()"></ng-container>
 </ngt-modal>

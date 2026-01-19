@@ -79,25 +79,25 @@
 
     @if (shouldShowError('minValue')) {
         <span class="help-block has-error">
-            {{ ngtTranslateService.ngtValidationValueMustBeGreaterThan(minValue) }}
+            {{ ngtTranslateService.ngtValidationValueMustBeGreaterThan(minValue()) }}
         </span>
     }
 
     @if (shouldShowError('minlength')) {
-        @if (minLength) {
+        @if (minLength()) {
             <span class="help-block has-error">
-                {{ ngtTranslateService.ngtValidationMinLengthField(minLength) }}
+                {{ ngtTranslateService.ngtValidationMinLengthField(minLength()) }}
             </span>
-        } @else if (minItems) {
+        } @else if (minItems()) {
             <span class="help-block has-error">
-                {{ ngtTranslateService.ngtValidationMinItemsField(minItems) }}
+                {{ ngtTranslateService.ngtValidationMinItemsField(minItems()) }}
             </span>
         }
     }
 
     @if (shouldShowError('invalid_custom_validator')) {
         <span class="help-block has-error">
-            {{ control.errors.invalid_custom_validator }}
+            {{ control()?.errors?.invalid_custom_validator }}
         </span>
     }
 </div>

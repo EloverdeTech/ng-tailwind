@@ -2,16 +2,14 @@ import {
     ChangeDetectorRef,
     ComponentRef,
     Directive,
-    EventEmitter,
+    OutputRefSubscription,
+    output,
     HostListener,
-    Input,
+    input,
     OnDestroy,
-    Output,
     TemplateRef,
     ViewContainerRef,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
-
 import { NgtContextMenuComponent, NgtContextMenuOptionInterface } from './ngt-context-menu.component';
 
 @Directive({
@@ -19,15 +17,15 @@ import { NgtContextMenuComponent, NgtContextMenuOptionInterface } from './ngt-co
     standalone: false
 })
 export class NgtContextMenuDirective implements OnDestroy {
-    @Output() public onNgtContextMenuClick: EventEmitter<NgtContextMenuOptionInterface> = new EventEmitter();
-    @Output() public onOpenNgtContextMenu: EventEmitter<NgtContextMenuComponent> = new EventEmitter();
+    public readonly onNgtContextMenuClick = output<NgtContextMenuOptionInterface>();
+    public readonly onOpenNgtContextMenu = output<NgtContextMenuComponent>();
 
-    @Input() public ngtContextMenuOptions: NgtContextMenuOptionInterface[];
-    @Input() public ngtContextMenuTemplate: TemplateRef<any>;
+    public readonly ngtContextMenuOptions = input<NgtContextMenuOptionInterface[]>();
+    public readonly ngtContextMenuTemplate = input<TemplateRef<any>>();
 
     private componentRef: ComponentRef<NgtContextMenuComponent> = null;
-    private menuItemClickSubscription: Subscription;
-    private templateClickSubscription: Subscription;
+    private menuItemClickSubscription: OutputRefSubscription;
+    private templateClickSubscription: OutputRefSubscription;
 
     public constructor(
         private viewContainerRef: ViewContainerRef,
@@ -69,10 +67,10 @@ export class NgtContextMenuDirective implements OnDestroy {
     private createComponent(event: MouseEvent): void {
         this.componentRef = this.viewContainerRef.createComponent(NgtContextMenuComponent);
 
-        this.componentRef.instance.positionX = event.clientX;
-        this.componentRef.instance.positionY = event.clientY;
-        this.componentRef.instance.menuItems = this.ngtContextMenuOptions;
-        this.componentRef.instance.menuTemplate = this.ngtContextMenuTemplate;
+        this.componentRef.instance.positionX.set(event.clientX);
+        this.componentRef.instance.positionY.set(event.clientY);
+        this.componentRef.instance.menuItems.set(this.ngtContextMenuOptions() ?? []);
+        this.componentRef.instance.menuTemplate.set(this.ngtContextMenuTemplate());
 
         this.bindSubscriptions();
 

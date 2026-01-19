@@ -1,131 +1,198 @@
 import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    computed,
+    effect,
     ElementRef,
-    EventEmitter,
     Host,
     Injector,
     Input,
+    input,
+    NgZone,
     OnDestroy,
-    OnInit,
     Optional,
-    Output,
-    Renderer2,
+    output,
     Self,
-    SimpleChanges,
+    Signal,
+    signal,
     SkipSelf,
     TemplateRef,
     ViewChild,
+    WritableSignal,
 } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { ControlContainer, NgForm, TouchedChangeEvent, ValueChangeEvent } from '@angular/forms';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { applyInputMask, InputMaskEnum, removeInputMask } from '../../../../helpers/input-mask/input-mask.helper';
+import { InputMaskEnum } from '../../../../helpers/input-mask/input-mask.helper';
 import {
     NgtHttpFindExistingResourceInterface,
     NgtHttpFindExistingResourceResponse,
     NgtHttpResourceService,
 } from '../../../../services/http/ngt-http-resource.service';
-import { NgtHttpValidationResponse, NgtHttpValidationService } from '../../../../services/http/ngt-http-validation.service';
+import { NgtHttpValidationService } from '../../../../services/http/ngt-http-validation.service';
 import { NgtTranslateService } from '../../../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
-import { validateCNPJ, validateCPF } from '../../../../helpers/validators/validation.helper';
+import { NgtInputMaskService } from './services/ngt-input-mask.service';
+import { NgtInputValidationService, NgtInputValidationConfig } from './services/ngt-input-validation.service';
+import { NgtInputLoaderService } from './services/ngt-input-loader.service';
 
 @Component({
     selector: 'ngt-input',
     templateUrl: './ngt-input.component.html',
     styleUrls: ['./ngt-input.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         NgtValueAccessorProvider(NgtInputComponent),
+        NgtInputMaskService,
+        NgtInputValidationService,
+        NgtInputLoaderService,
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     standalone: false
 })
-export class NgtInputComponent extends NgtControlValueAccessor implements OnInit, OnDestroy {
+export class NgtInputComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {
     @ViewChild("element", { static: true }) public element: ElementRef;
 
-    // Visual
-    @Input() public label: string;
-    @Input() public placeholder: string = '';
-    @Input() public shining: boolean;
-    @Input() public loading: boolean;
-    @Input() public helpTitle: string;
-    @Input() public helpTextColor: string = 'text-green-500';
-    @Input() public helpText: string;
-    @Input() public innerLeftIcon: string;
-    @Input() public innerLeftIconColor: string;
-    @Input() public innerRightIcon: string;
-    @Input() public innerRightIconColor: string;
-    @Input() public decimalMaskPrecision: number = 2;
-    @Input() public showCharactersLength: boolean = false;
-    @Input() public uppercase: boolean = false;
-    @Input() public customInnerContentTemplate: TemplateRef<any>;
-    @Input() public helperReverseYPosition: boolean;
-    @Input() public helperAutoXReverse: boolean = true;
+    /** Visual Inputs */
 
-    //Behavior
-    @Input() public isDisabled: boolean;
-    @Input() public isReadonly: boolean;
-    @Input() public showRoundedIcon: boolean;
-    @Input() public type: string = 'text';
-    @Input() public name: string;
-    @Input() public mask: string;
-    @Input() public focus: boolean;
-    @Input() public allowClear: boolean;
-    @Input() public jit: boolean;
-    @Input() public useInputEvent: boolean;
+    public readonly label = input<string>();
+    public readonly placeholder = input<string>('');
+    public readonly helpTitle = input<string>();
+    public readonly helpText = input<string>();
+    public readonly helpTextColor = input<string>('text-green-500');
+    public readonly innerLeftIcon = input<string>();
+    public readonly innerLeftIconColor = input<string>();
+    public readonly innerRightIcon = input<string>();
+    public readonly innerRightIconColor = input<string>();
+    public readonly decimalMaskPrecision = input<number>(2);
+    public readonly showCharactersLength = input<boolean>(false);
+    public readonly uppercase = input<boolean>(false);
+    public readonly customInnerContentTemplate = input<TemplateRef<any>>();
+    public readonly helperReverseYPosition = input<boolean>(false);
+    public readonly helperAutoXReverse = input<boolean>(true);
+    public readonly shining = input<boolean>(false);
+    public readonly loading = input<boolean>(false);
+    public readonly showRoundedIcon = input<boolean>(false);
 
-    //Validations
-    @Input() public findExistingResource: NgtHttpFindExistingResourceInterface;
-    @Input() public allowPhoneValidation: boolean;
-    @Input() public validatePassword: boolean;
-    @Input() public passwordableId: string;
-    @Input() public passwordPolicyId: string;
-    @Input() public isRequired: boolean;
-    @Input() public uniqueResource: any;
-    @Input() public minValue: number;
-    @Input() public maxValue: number;
-    @Input() public maxLength: number;
-    @Input() public minLength: number;
-    @Input() public match: string;
-    @Input() public multipleOf: number;
-    @Input() public validateMinValueOnMask: boolean;
-    @Input() public externalServerDependency: boolean;
-    @Input() public customValidator: () => AsyncValidatorFn;
+    /** Behavior Inputs */
 
-    @Output() public onClickLeftIcon: EventEmitter<any> = new EventEmitter<any>();
-    @Output() public onClickRightIcon: EventEmitter<any> = new EventEmitter<any>();
-    @Output() public validatePhoneResult: EventEmitter<any> = new EventEmitter<any>();
-    @Output() public onValueChange: EventEmitter<string | number> = new EventEmitter();
+    public readonly type = input<string>('text');
+    public readonly name = input<string>();
+    // public readonly mask = input<InputMaskEnum | string>();
 
-    public maxTotalCharsCount: number;
+    @Input() public mask: InputMaskEnum | string;
+
+    public readonly isDisabled = input<boolean>(false);
+    public readonly isReadonly = input<boolean>(false);
+    public readonly focus = input<boolean>(false);
+    public readonly allowClear = input<boolean>(false);
+    public readonly jit = input<boolean>(false);
+
+    /** Validation Inputs */
+
+    public readonly findExistingResource = input<NgtHttpFindExistingResourceInterface>();
+    public readonly allowPhoneValidation = input<boolean>(false);
+    public readonly validatePassword = input<boolean>(false);
+    public readonly passwordableId = input<string>();
+    public readonly passwordPolicyId = input<string>();
+    public readonly isRequired = input<boolean>(false);
+    public readonly uniqueResource = input<any>();
+    public readonly minValue = input<number>();
+    public readonly maxValue = input<number>();
+    public readonly maxLength = input<number>();
+    public readonly minLength = input<number>();
+    public readonly match = input<string>();
+    public readonly multipleOf = input<number>();
+    public readonly validateMinValueOnMask = input<boolean>(false);
+    public readonly externalServerDependency = input<boolean>(false);
+    public readonly customValidator = input<() => any>();
+
+    /** Outputs */
+
+    public readonly onClickLeftIcon = output<void>();
+    public readonly onClickRightIcon = output<void>();
+    public readonly validatePhoneResult = output<any>();
+    public readonly onValueChange = output<string | number>();
+
+    /** Computed Signals */
+
+    public readonly isShining: Signal<boolean> = computed(
+        () => this.shining() || this.loaderService.shining() || this.ngtForm?.isShining()
+    );
+
+    public readonly isLoading: Signal<boolean> = computed(
+        () => this.loading() || this.loaderService.loading()
+    );
+
+    public readonly isDisabledByParent: Signal<boolean> = computed(
+        () => !!(this.ngtForm?.isDisabled() || this.ngtSection?.isDisabledState() || this.ngtModal?.isDisabledState())
+    );
+
+    public readonly isDisabledState: Signal<boolean> = computed(
+        () => this.isDisabled() || this.isDisabledByParent() || this.forceDisable()
+    );
+
+    public readonly currentValue: Signal<any> = computed(() => this.value);
+
+    public readonly inputPaddingClass: Signal<string> = computed(() =>
+        this.getInputPaddingClass()
+    );
+
+    public readonly shouldShowClearButton: Signal<boolean> = computed(() =>
+        !this.isDisabledState() && this.allowClear() && this.currentValue() && !this.isLoading()
+    );
+
+    public readonly shouldShowPasswordIcon: Signal<boolean> = computed(
+        () => this.type() === 'password' && this.currentValue()
+    );
+
+    public readonly shouldShowRightIcon: Signal<boolean> = computed(
+        () => this.innerRightIcon() && this.type() !== 'password'
+    );
+
+    public readonly remainingCharacters: Signal<number> = computed(() =>
+        this.getRemainingCharacters()
+    );
+
+    public readonly inputClasses: Signal<string> = computed(() =>
+        this.getInputClasses()
+    );
+
+    /** Other */
+
     public existingResourceId: string;
-    public componentReady: boolean;
-    public inputProperties: {
-        htmlType?: string;
-        length?: number;
-    } = {};
+    public forceDisable: WritableSignal<boolean> = signal(false);
 
+    /** Internal Control */
+
+    public readonly inputHtmlType: WritableSignal<string> = signal('text');
+    public readonly componentReady: WritableSignal<boolean> = signal(false);
     public ngtStyle: NgtStylizableService;
 
-    private emailValidatorTimeout: any;
-    private passwordValidatorTimeout: any;
-    private phoneValidatorTimeout: any;
-    private uniqueValidatorTimeout: any;
-    private searchExistingResourceTimeout: any;
-    private subscriptions: Array<Subscription> = [];
+    private readonly formControlHasErrors: WritableSignal<boolean> = signal(false);
+    private readonly formControlIsDirty: WritableSignal<boolean> = signal(false);
+    private readonly maxTotalCharsCount: WritableSignal<number> = signal(0);
+
+    private phoneValidatorTimeout: NodeJS.Timeout;
+    private searchExistingResourceTimeout: NodeJS.Timeout;
+
+    private inputSubject$ = new Subject<string>();
+    private isUserTyping = false;
+
+    private subscriptions: Subscription[] = [];
+    private listeners: Array<() => void> = [];
 
     public constructor(
-        private renderer: Renderer2,
-        private changeDetector: ChangeDetectorRef,
-
         @Self() @Optional()
         private ngtStylizableDirective: NgtStylizableDirective,
 
@@ -133,16 +200,10 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
         public formContainer: ControlContainer,
 
         @Optional() @SkipSelf()
-        private ngtFormComponent: NgtFormComponent,
-
-        @Optional() @SkipSelf()
-        private ngtValidationService: NgtHttpValidationService,
+        private ngtForm: NgtFormComponent,
 
         @Optional() @SkipSelf()
         private ngtResourceService: NgtHttpResourceService,
-
-        @Optional() @SkipSelf()
-        private ngtForm: NgtFormComponent,
 
         @Optional() @SkipSelf()
         private ngtSection: NgtSectionComponent,
@@ -150,23 +211,410 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
         @Optional() @SkipSelf()
         private ngtModal: NgtModalComponent,
 
-        protected override injector: Injector,
-
         @Optional()
-        public ngtTranslateService: NgtTranslateService
+        public ngtTranslateService: NgtTranslateService,
+
+        private validationService: NgtInputValidationService,
+        private maskService: NgtInputMaskService,
+        private loaderService: NgtInputLoaderService,
+
+        private cdr: ChangeDetectorRef,
+        private ngZone: NgZone,
+
+        protected override injector: Injector,
     ) {
         super();
 
-        if (this.ngtFormComponent) {
-            this.shining = this.ngtFormComponent.isShining();
+        this.setupNgtStylizable();
 
+        this.registerEffects();
+    }
+
+    public ngAfterViewInit(): void {
+        if (!this.formContainer) {
+            console.error("The element must be inside a <form #form='ngForm'> tag!", this.element.nativeElement);
+        }
+
+        if (!this.name()) {
+            console.error("The element must contain a name attribute!", this.element.nativeElement);
+        } else {
+            setTimeout(() => {
+                this.componentReady.set(true);
+                this.cdr.detectChanges();
+
+                setTimeout(() => {
+                    this.setupComponent();
+
+                    if (!this.getElementTitle() || this.getElementTitle() === 'null') {
+                        this.element.nativeElement.parentElement.parentElement.title = '';
+                    }
+
+                    this.cdr.detectChanges();
+                });
+            }, 500);
+        }
+
+        this.cdr.detach();
+    }
+
+    public ngOnDestroy(): void {
+        this.clearTimeouts();
+
+        this.validationService.clearTimeouts();
+
+        this.destroySubscriptions();
+
+        this.destroyListeners();
+
+        this.inputSubject$.complete();
+
+        this.cdr.reattach();
+    }
+
+    public onNativeChange(): void {
+        if (this.hasChangesBetweenValues()) {
+            const nativeValue = this.getNativeValue();
+            const cleanValue = this.maskService.removeMaskFromValue(nativeValue);
+
+            if (this.mask === InputMaskEnum.DECIMAL) {
+                this.value = cleanValue.replace(/\./g, '').replace(',', '.');
+            } else {
+                this.value = cleanValue;
+            }
+        }
+    }
+
+    public change(value: string | number): void {
+        if (value && typeof value === 'string' && this.mask === InputMaskEnum.DECIMAL) {
+            value = parseFloat(value);
+        }
+
+        if (!this.getNativeValue() || this.validateMinValueOnMask()) {
+            this.setNativeValue(value ?? '');
+        }
+
+        if (!value && value !== 0) {
+            this.clearInput();
+
+            return;
+        }
+
+        const nativeValue = this.getNativeValue();
+
+        if (this.mask) {
+            const ngModelValue = this.maskService.removeMaskFromValue(nativeValue);
+
+            if (nativeValue && ngModelValue !== this.value) {
+                this.value = ngModelValue;
+            }
+
+            if (
+                (this.mask === InputMaskEnum.CELLPHONE || this.mask === InputMaskEnum.INTERNATIONAL_PHONE)
+                && this.allowPhoneValidation() && this.value
+            ) {
+                this.validatePhone();
+            }
+        } else {
+            if (value) {
+                this.value = value;
+            }
+
+            if (this.value !== nativeValue) {
+                this.setNativeValue(value);
+            }
+        }
+
+        if (this.componentReady()) {
+            this.onValueChange.emit(this.value);
+        }
+
+        if (this.ngtResourceService && this.findExistingResource() && this.value) {
+            this.searchExistingResource();
+        }
+    }
+
+    public setFocus(): void {
+        setTimeout(() => this.element.nativeElement.focus(), 200);
+    }
+
+    public setDisabledState(isDisabled: boolean): void {
+        this.forceDisable.set(isDisabled);
+
+        this.cdr.detectChanges();
+    }
+
+    public clearInput(event?: Event): void {
+        event?.stopPropagation();
+
+        this.setNativeValue('');
+        this.value = '';
+
+        this.markAsPristine();
+    }
+
+    public restorePlaceholder(): void {
+        if (this.placeholder() && this.mask) {
+            setTimeout(() => this.element.nativeElement.placeholder = this.placeholder());
+        }
+    }
+
+    public showPassword(): void {
+        this.element.nativeElement.type = 'text';
+        this.inputHtmlType.set('text');
+        this.cdr.detectChanges();
+    }
+
+    public hidePassword(): void {
+        this.element.nativeElement.type = 'password';
+        this.inputHtmlType.set('password');
+        this.cdr.detectChanges();
+    }
+
+    public hasFocus(): boolean {
+        return document.activeElement === this.element.nativeElement;
+    }
+
+    private setupComponent(): void {
+        if (!this.formContainer || !this.formContainer.control) {
+            return;
+        }
+
+        this.formControl = this.formContainer.control.get(this.name());
+
+        if (!this.formControl) {
+            return;
+        }
+
+        this.setupPropertiesByHtmlType();
+
+        this.setupValidators();
+
+        this.setupSubscriptions();
+
+        this.setupListeners();
+
+        if (this.value) {
+            this.formControl.markAsDirty();
+        } else {
+            this.formControl.markAsPristine();
+        }
+
+        this.cdr.detectChanges();
+    }
+
+    private setupPropertiesByHtmlType(): void {
+        const currentType = this.type();
+
+        const props = {
+            shortText: { htmlType: "text", length: 30 },
+            text: { htmlType: "text", length: 100 },
+            longText: { htmlType: "text", length: 150 },
+            extraLongText: { htmlType: "text", length: 300 },
+            customText: { htmlType: "text", length: this.maxLength() },
+            password: { htmlType: "password", length: 150 },
+            email: { htmlType: "text", length: 100 },
+            decimal: { htmlType: "text", length: 9 }
+        };
+
+        if (currentType in props) {
+            this.inputHtmlType.set(props[currentType].htmlType);
+            this.maxTotalCharsCount.set(props[currentType].length);
+        } else {
+            this.inputHtmlType.set(currentType);
+            this.maxTotalCharsCount.set(this.maxLength() || 100);
+        }
+    }
+
+    private setupSubscriptions(): void {
+        if (this.formControl) {
             this.subscriptions.push(
-                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
-                    this.shining = shining;
+                this.formControl.events.subscribe((event) => {
+                    if (this.isUserTyping) {
+                        return;
+                    }
+
+                    if (event instanceof TouchedChangeEvent) {
+                        this.touched.set(event.touched);
+                    }
+
+                    if (event instanceof ValueChangeEvent) {
+                        this.onValueChange.emit(event.value);
+                    }
+
+                    this.formControlHasErrors.set(!!this.formControl?.errors);
+                    this.formControlIsDirty.set(this.formControl?.dirty);
+
+                    if (event instanceof TouchedChangeEvent) {
+                        this.cdr.detectChanges();
+                    }
                 })
             );
         }
 
+        this.subscriptions.push(
+            this.inputSubject$.pipe(
+                debounceTime(100),
+                distinctUntilChanged()
+            ).subscribe(value => {
+                this.isUserTyping = false;
+
+                if (this.hasChangesBetweenValues()) {
+                    const cleanValue = this.maskService.removeMaskFromValue(value);
+
+                    if (this.mask === InputMaskEnum.DECIMAL) {
+                        this.value = cleanValue.replace(/\./g, '').replace(',', '.');
+                    } else {
+                        this.value = cleanValue;
+                    }
+                }
+
+                this.cdr.detectChanges();
+            })
+        );
+    }
+
+    private setupListeners(): void {
+        const inputElement = this.element.nativeElement;
+
+        this.ngZone.runOutsideAngular(() => {
+            const inputHandler = (event: Event) => {
+                this.isUserTyping = true;
+
+                const value = (event.target as HTMLInputElement).value;
+
+                this.inputSubject$.next(value);
+            };
+
+            const keydownHandler = (event: KeyboardEvent) => {
+                const currentLength = (event.target as HTMLInputElement).value?.length || 0;
+                const maxLen = this.maxTotalCharsCount();
+
+                if (currentLength >= maxLen) {
+                    if (event.keyCode !== 8 && event.keyCode !== 46) {
+                        event.preventDefault();
+
+                        return false;
+                    }
+                }
+            };
+
+            const blurHandler = () => {
+                this.isUserTyping = false;
+
+                this.ngZone.run(() => {
+                    this.onTouched();
+                    this.restorePlaceholder();
+                    this.cdr.detectChanges();
+                });
+            };
+
+            const focusHandler = () => {
+                // Nada - só previne CD padrão
+            };
+
+            const mouseleaveHandler = () => {
+                this.restorePlaceholder();
+            };
+
+            if (this.jit()) {
+                inputElement.addEventListener('input', inputHandler, { passive: true });
+                this.listeners.push(() => inputElement.removeEventListener('input', inputHandler));
+            } else {
+                inputElement.addEventListener('change', inputHandler, { passive: true });
+                this.listeners.push(() => inputElement.removeEventListener('change', inputHandler));
+            }
+
+            inputElement.addEventListener('keydown', keydownHandler);
+            inputElement.addEventListener('blur', blurHandler);
+            inputElement.addEventListener('focus', focusHandler, { passive: true });
+            inputElement.addEventListener('mouseleave', mouseleaveHandler, { passive: true });
+
+            this.listeners.push(
+                () => inputElement.removeEventListener('keydown', keydownHandler),
+                () => inputElement.removeEventListener('blur', blurHandler),
+                () => inputElement.removeEventListener('focus', focusHandler),
+                () => inputElement.removeEventListener('mouseleave', mouseleaveHandler)
+            );
+        });
+    }
+
+    private registerEffects(): void {
+        effect(() => {
+            if (this.focus()) {
+                this.setFocus();
+            }
+        });
+
+        effect(() => {
+            this.setupMask();
+            this.cdr.detectChanges();
+        });
+
+        effect(() => {
+            this.setupValidators();
+            this.cdr.detectChanges();
+        });
+    }
+
+    private setupValidators(): void {
+        if (!this.formControl) {
+            return;
+        }
+
+        const config: NgtInputValidationConfig = {
+            type: this.type(),
+            mask: this.mask,
+            match: this.match(),
+            minValue: this.minValue(),
+            maxValue: this.maxValue(),
+            minLength: this.minLength(),
+            maxLength: this.maxLength(),
+            isRequired: this.isRequired(),
+            validatePassword: this.validatePassword(),
+            passwordableId: this.passwordableId(),
+            passwordPolicyId: this.passwordPolicyId(),
+            uniqueResource: this.uniqueResource(),
+            multipleOf: this.multipleOf(),
+            externalServerDependency: this.externalServerDependency(),
+            customValidator: this.customValidator(),
+        };
+
+        const syncValidators = this.validationService.getSyncValidators(config, this.value);
+        const asyncValidators = this.validationService.getAsyncValidators(
+            config,
+            (loading: boolean) => this.loaderService.setLoading(loading),
+            this.value
+        );
+
+        this.formControl.setValidators(syncValidators);
+        this.formControl.setAsyncValidators(asyncValidators);
+        this.formControl.updateValueAndValidity();
+
+        if (this.value) {
+            this.markAsDirty();
+            this.formControlHasErrors.set(!!this.formControl.errors);
+            this.formControlIsDirty.set(true);
+        }
+    }
+
+    private setupMask(): void {
+        const currentMask = this.mask;
+
+        if (!this.element?.nativeElement || !currentMask) {
+            return;
+        }
+
+        this.maskService.applyMask(
+            currentMask,
+            this.element.nativeElement,
+            this.decimalMaskPrecision(),
+            this.maxValue(),
+            this.minValue(),
+            this.validateMinValueOnMask()
+        );
+    }
+
+    private setupNgtStylizable(): void {
         if (this.ngtStylizableDirective) {
             this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
         } else {
@@ -180,560 +628,10 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
             font: 'font-normal',
             color: {
                 border: 'border-gray-400 focus:border-gray-700',
-                bg: 'bg-bg-white focus:bg-white',
+                bg: 'bg-white focus:bg-white',
                 text: 'text-gray-800'
             }
         });
-    }
-
-    public ngOnInit() {
-        if (!this.formContainer) {
-            console.error("The element must be inside a <form #form='ngForm'> tag!", this.element.nativeElement);
-        }
-
-        if (!this.name) {
-            console.error("The element must contain a name attribute!", this.element.nativeElement);
-        } else {
-            setTimeout(() => {
-                this.componentReady = true;
-                this.changeDetector.detectChanges();
-
-                setTimeout(() => {
-                    this.initComponent();
-                    this.changeDetector.detectChanges();
-
-                    if (!this.getElementTitle() || this.getElementTitle() === 'null') {
-                        this.element.nativeElement.parentElement.parentElement.title = '';
-                    }
-
-                    this.changeDetector.detectChanges();
-                });
-            }, 500);
-        }
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
-        this.setupMasks(changes.mask ? changes.mask.previousValue : null);
-
-        if (changes.match || changes.isRequired || changes.type || changes.mask || changes.minValue) {
-            this.updateValidations();
-        }
-    }
-
-    public ngOnDestroy() {
-        this.destroySubscriptions();
-    }
-
-    public onNativeChange() {
-        if (this.hasChangesBetweenModels()) {
-            this.value = this.removeMasks(this.getNativeValue());
-        }
-    }
-
-    public change(value: any) {
-        if (value && typeof value === 'string' && this.mask == 'decimal') {
-            value = parseFloat(value);
-        }
-
-        if (!this.getNativeValue() || (this.validateMinValueOnMask)) {
-            this.element.nativeElement.value = value ?? '';
-        }
-
-        if (!value && value !== 0) {
-            this.clearInput();
-        }
-
-        let nativeValue = this.getNativeValue();
-
-        if (this.mask) {
-            let ngModelValue = this.removeMasks(nativeValue);
-
-            if (nativeValue && ngModelValue != this.value) {
-                this.value = ngModelValue;
-            }
-
-            if (
-                (this.mask == InputMaskEnum.CELLPHONE || this.mask == InputMaskEnum.INTERNATIONAL_PHONE)
-                && this.allowPhoneValidation && this.value
-            ) {
-                this.validatePhone();
-            }
-        } else {
-            let ngModelValue = this.removeMasks(value);
-
-            if (value && ngModelValue != value) {
-                this.value = ngModelValue;
-            }
-
-            if (this.value != nativeValue) {
-                this.element.nativeElement.value = ngModelValue;
-            }
-        }
-
-        if (this.componentReady) {
-            this.onValueChange.emit(this.value);
-        }
-
-        if (this.ngtResourceService && this.findExistingResource && this.value) {
-            this.searchExistingResource();
-        }
-    }
-
-    public setFocus() {
-        setTimeout(() => {
-            this.element.nativeElement.focus();
-        }, 200);
-    }
-
-    public clearInput(event?: Event) {
-        if (event) {
-            event.stopPropagation();
-        }
-
-        this.element.nativeElement.value = '';
-        this.value = '';
-
-        this.markAsPristine();
-    }
-
-    public restorePlaceholder(): void {
-        setTimeout(() => this.element.nativeElement.placeholder = this.placeholder);
-    }
-
-    public showPassword() {
-        this.element.nativeElement.type = 'text';
-        this.changeDetector.detectChanges();
-    }
-
-    public hidePassword() {
-        this.element.nativeElement.type = 'password';
-        this.changeDetector.detectChanges();
-    }
-
-    public getInputPaddings() {
-        let paddingClass: string = '';
-
-        if (this.innerLeftIcon || this.customInnerContentTemplate) {
-            paddingClass += 'pl-10 pr-4 ';
-        } else {
-            paddingClass += 'px-4 ';
-        }
-
-        if (this.innerRightIcon || this.allowClear || this.type == 'password') {
-            if (this.allowClear && this.value && (this.innerRightIcon || this.type == 'password')) {
-                paddingClass += 'pr-10 ';
-            } else {
-                paddingClass += 'pr-8 ';
-            }
-        }
-
-        return paddingClass;
-    }
-
-    public getRemainingCharacters() {
-        if (this.element?.nativeElement?.value?.length) {
-            if ((this.maxTotalCharsCount - this.element.nativeElement.value.length) > 0) {
-                return this.maxTotalCharsCount - this.element.nativeElement.value.length;
-            } else {
-                return 0;
-            }
-        }
-
-        return this.maxTotalCharsCount;
-    }
-
-    public hasFocus(): boolean {
-        return document.activeElement === this.element.nativeElement;
-    }
-
-    public disabled(): boolean {
-        return this.isDisabled || this.isDisabledByParent();
-    }
-
-    private initComponent() {
-        if (this.formContainer && this.formContainer.control && (this.formControl = this.formContainer.control.get(this.name))) {
-            if (this.focus) {
-                this.setFocus();
-            }
-
-            let watch = "change";
-
-            if (this.jit) {
-                watch += " keyup keydown keypress";
-            }
-
-            watch.split(' ').forEach((evt) => {
-                this.renderer.listen(this.element.nativeElement, evt, () => {
-                    let nativeValue = this.removeMasks(this.getNativeValue());
-
-                    if (this.value != nativeValue) {
-                        this.value = nativeValue;
-                    }
-                });
-            });
-
-            this.renderer.listen(this.element.nativeElement, "keydown", (event) => {
-                if (this.element.nativeElement && this.element.nativeElement.value && this.element.nativeElement.value.length >= this.maxLength) {
-                    // Backspace and delete
-                    if (event.keyCode != 8 && event.keyCode != 46) {
-                        event.preventDefault();
-
-                        return false;
-                    }
-                }
-            });
-
-            this.maxTotalCharsCount = this.maxLength;
-            this.updateValidations();
-
-            if (this.match) {
-                this.renderer.listen(this.element.nativeElement, "keypress", () => {
-                    this.matchValidator();
-                });
-            }
-
-            if (this.value) {
-                this.formControl.markAsDirty();
-            } else {
-                this.formControl.markAsPristine();
-            }
-        }
-
-        this.setupProperties();
-    }
-
-    private updateValidations() {
-        if (!this.formControl) {
-            return;
-        }
-
-        const syncValidators = [];
-
-        if (this.type == 'email') {
-            syncValidators.push(Validators.email);
-        }
-
-        if (this.isRequired) {
-            syncValidators.push(Validators.required);
-        }
-
-        if (this.maxLength) {
-            syncValidators.push(Validators.maxLength(this.maxLength));
-        }
-
-        if (this.minLength) {
-            syncValidators.push(Validators.minLength(this.minLength));
-        }
-
-        if (this.mask == 'cnpj-cpf' || this.mask == 'cnpj-cpf-rut' || this.mask == 'cpf') {
-            syncValidators.push(this.cnpjCpfValidator());
-        }
-
-        if (this.mask == 'time') {
-            syncValidators.push(this.timeValidator());
-        }
-
-        if (this.match) {
-            syncValidators.push(this.matchValidator());
-        }
-
-        if (this.minValue !== undefined) {
-            syncValidators.push(this.minValueValidator());
-        }
-
-        if (this.multipleOf) {
-            syncValidators.push(this.multipleOfValidator());
-        }
-
-        if (this.externalServerDependency) {
-            syncValidators.push(this.externalServerDependencyValidator());
-        }
-
-        setTimeout(() => {
-            this.formControl.setValidators(syncValidators);
-
-            const asyncValidators = [];
-
-            if (this.uniqueResource) {
-                asyncValidators.push(this.uniqueValidator());
-            }
-
-            if (this.type == 'email' && this.hasEmailServiceValidation()) {
-                asyncValidators.push(this.emailValidator());
-            }
-
-            if (this.type == 'login' && this.hasEmailServiceValidation()) {
-                asyncValidators.push(this.emailValidator(true));
-            }
-
-            if (this.type == 'password' && this.validatePassword && this.hasPasswordValidation()) {
-                asyncValidators.push(this.passwordValidator());
-            }
-
-            if (this.customValidator) {
-                asyncValidators.push(this.customValidator());
-            }
-
-            this.formControl.setAsyncValidators(asyncValidators);
-            this.formControl.updateValueAndValidity();
-        });
-    }
-
-    private setupMasks(previousMask?: string) {
-        if (this.mask != previousMask && !this.mask) {
-            removeInputMask(this.element.nativeElement);
-
-            return this.clearInput();
-        }
-
-        let masks = {
-            [InputMaskEnum.CPF]: {
-                mask: ['999.999.999-99'],
-                showMaskOnHover: false
-            },
-            [InputMaskEnum.CNPJ]: {
-                mask: ['99.999.999/9999-99'],
-                showMaskOnHover: false
-            },
-            [InputMaskEnum.CUIT]: {
-                mask: ['99-99999999-9'],
-                clearMaskOnLostFocus: false
-            },
-            [InputMaskEnum.RUT]: {
-                mask: ['999999999999'],
-                clearMaskOnLostFocus: false
-            },
-            [InputMaskEnum.CPF_CNPJ_RUT]: {
-                mask: ['999.999.999-99', '999999999999', '99.999.999/9999-99'],
-                keepStatic: true,
-                showMaskOnHover: false
-            },
-            [InputMaskEnum.CPF_CNPJ]: {
-                mask: ['999.999.999-99', '99.999.999/9999-99'],
-                keepStatic: true,
-                showMaskOnHover: false
-            },
-            [InputMaskEnum.DECIMAL]: {
-                digits: this.decimalMaskPrecision,
-                groupSeparator: '.',
-                radixPoint: ',',
-                autoGroup: true,
-                repeat: 16,
-                rightAlign: false,
-                max: this.maxValue,
-                showMaskOnHover: false
-            },
-            [InputMaskEnum.CELLPHONE]: {
-                mask: ['(99) 999-999', '(99) 9999-9999', '(99) 99999-9999'],
-                keepStatic: true,
-                showMaskOnHover: false
-            },
-            [InputMaskEnum.INTERNATIONAL_PHONE]: {
-                mask: ['+999 99 999-999', '+99 (99) 9999-9999', '+99 (99) 99999-9999', '+999 (99) 9999-9999', '+999 (99) 99999-9999'],
-                keepStatic: true,
-                showMaskOnHover: false
-            },
-            [InputMaskEnum.PLATE]: {
-                mask: ['AAA-9&99'],
-                keepStatic: true,
-                showMaskOnHover: false
-            },
-            [InputMaskEnum.CEP]: {
-                mask: ['99999-999'],
-                showMaskOnHover: false
-            },
-            [InputMaskEnum.INTEGER]: {
-                max: this.maxValue,
-                min: this.validateMinValueOnMask ? this.minValue : undefined,
-                rightAlign: false,
-                showMaskOnHover: false
-            },
-            [InputMaskEnum.NUMERIC_STRING]: {
-                regex: "[0-9]*",
-                showMaskOnHover: false
-            },
-            [InputMaskEnum.TIME]: '99:99',
-        };
-
-        if (this.mask == InputMaskEnum.DECIMAL) {
-            applyInputMask(this.element.nativeElement, InputMaskEnum.DECIMAL, masks[this.mask]);
-        } else if (this.mask == InputMaskEnum.INTEGER) {
-            applyInputMask(this.element.nativeElement, InputMaskEnum.INTEGER, masks[this.mask]);
-        } else {
-            applyInputMask(this.element.nativeElement, masks[this.mask]);
-        }
-    }
-
-    private setupProperties() {
-        let props = {
-            shortText: {
-                htmlType: "text",
-                length: 30
-            },
-            text: {
-                htmlType: "text",
-                length: 100
-            },
-            longText: {
-                htmlType: "text",
-                length: 150
-            },
-            extraLongText: {
-                htmlType: "text",
-                length: 300
-            },
-            customText: {
-                htmlType: "text",
-                length: this.maxLength
-            },
-            password: {
-                htmlType: "password",
-                length: 150
-            },
-            email: {
-                htmlType: "text",
-                length: 100,
-            },
-            decimal: {
-                htmlType: "text",
-                length: 9,
-            }
-        };
-
-        if (this.type in props) {
-            this.inputProperties = props[this.type];
-            this.maxLength = this.inputProperties.length;
-        } else {
-            console.warn("Type [" + this.type + "] is not a valid tail-form-input type!", this.element.nativeElement);
-        }
-    }
-
-    private minValueValidator() {
-        return (control: AbstractControl) => parseFloat(control.value) < this.minValue ? { 'minValue': true } : null;
-    }
-
-    private multipleOfValidator() {
-        return (control: AbstractControl) => {
-            if (control.value) {
-                return (control.value % this.multipleOf !== 0) ? { 'multipleOf': true } : null;
-            }
-        };
-    }
-
-    private externalServerDependencyValidator() {
-        // TODO: Validar tempo de requisição
-        return (control: AbstractControl) => !control.value ? { 'externalServerDependency': true } : null;
-    }
-
-    private timeValidator() {
-        const regexExp = new RegExp('^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$');
-
-        return (control: AbstractControl) => {
-            if (control.value) {
-                if (regexExp.test(control.value)) {
-                    return null;
-                } else {
-                    return { 'time': true };
-                }
-            }
-        };
-    }
-
-    private cnpjCpfValidator() {
-        return (control: AbstractControl) => {
-            if (!control.value) {
-                return null;
-            }
-
-            if (control.value && control.value.length <= 11) {
-                if (validateCPF(control.value)) {
-                    return null;
-                } else {
-                    return { 'cpf': true };
-                }
-            } else if (control.value && control.value.length == 12) {
-                return null;
-            } else {
-                if (control.value && validateCNPJ(control.value)) {
-                    return null;
-                } else {
-                    return { 'cnpj': true };
-                }
-            }
-        };
-    }
-
-    private matchValidator() {
-        return (control: AbstractControl) => {
-            if (this.value != this.match) {
-                return { 'match': true };
-            } else {
-                return null;
-            }
-        };
-    }
-
-    private emailValidator(isLoginValidation: boolean = false): AsyncValidatorFn {
-        return (control: AbstractControl) => {
-            if (this.emailValidatorTimeout) {
-                clearTimeout(this.emailValidatorTimeout);
-            }
-
-            if (this.value) {
-                return new Promise((resolve) => {
-                    this.emailValidatorTimeout = setTimeout(() => {
-                        this.loading = true;
-
-                        this.ngtValidationService.emailValidation(this.value)
-                            .then((response: NgtHttpValidationResponse) => {
-                                this.loading = false;
-
-                                if (isLoginValidation) {
-                                    resolve(response.valid ? { 'login': true } : null);
-                                }
-
-                                resolve(response.valid ? null : { 'email': true });
-                            })
-                            .catch(() => {
-                                this.loading = false;
-                                resolve(null);
-                            });
-                    }, 500);
-                });
-            }
-
-            return Promise.resolve(null);
-        };
-    }
-
-    private passwordValidator(): AsyncValidatorFn {
-        return (control: AbstractControl) => {
-            if (this.passwordValidatorTimeout) {
-                clearTimeout(this.passwordValidatorTimeout);
-            }
-
-            if (this.value) {
-                return new Promise((resolve) => {
-                    this.passwordValidatorTimeout = setTimeout(() => {
-                        this.loading = true;
-
-                        this.ngtValidationService.passwordValidation(this.value, this.passwordableId, this.passwordPolicyId)
-                            .then((response: NgtHttpValidationResponse) => {
-                                this.loading = false;
-
-                                resolve(response.valid ? null : { 'invalid_password': true });
-                            })
-                            .catch(() => {
-                                this.loading = false;
-
-                                resolve(null);
-                            });
-                    }, 500);
-                });
-            }
-
-            return Promise.resolve(null);
-        };
     }
 
     private async searchExistingResource(): Promise<void> {
@@ -742,13 +640,23 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
         }
 
         this.searchExistingResourceTimeout = setTimeout(() => {
-            this.loading = true;
-            this.findExistingResource.value = this.value;
+            this.loaderService.setLoading(true);
 
-            this.ngtResourceService.findExisting(this.findExistingResource)
-                .then((response: NgtHttpFindExistingResourceResponse) => this.existingResourceId = response.id)
-                .catch(() => this.existingResourceId = null)
-                .finally(() => this.loading = false);
+            const resource = this.findExistingResource();
+
+            resource.value = this.value;
+
+            this.ngtResourceService.findExisting(resource)
+                .then((response: NgtHttpFindExistingResourceResponse) => {
+                    this.existingResourceId = response.id;
+                })
+                .catch(() => {
+                    this.existingResourceId = null;
+                })
+                .finally(() => {
+                    this.loaderService.setLoading(false);
+                    this.cdr.detectChanges();
+                });
         }, 500);
     }
 
@@ -758,97 +666,106 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
         }
 
         this.phoneValidatorTimeout = setTimeout(() => {
-            this.loading = true;
+            this.loaderService.setLoading(true);
 
-            this.ngtValidationService.phoneValidation(this.value)
-                .then((response: any) => this.validatePhoneResult.emit(response))
-                .finally(() => this.loading = false);
-        });
+            const validationService = this.injector.get(NgtHttpValidationService, null);
+
+            if (validationService) {
+                validationService.phoneValidation(this.value)
+                    .then((response: any) => {
+                        this.validatePhoneResult.emit(response);
+                    })
+                    .finally(() => {
+                        this.loaderService.setLoading(false);
+                        this.cdr.detectChanges();
+                    });
+            }
+        }, 500);
     }
 
-    private uniqueValidator(): AsyncValidatorFn {
-        if (!this.ngtValidationService) {
-            throw new Error("In order to use unique validation you must provide a implementation for NgtHttpValidationService class!");
-        }
-
-        return (control: AbstractControl) => {
-            if (this.uniqueValidatorTimeout) {
-                clearTimeout(this.uniqueValidatorTimeout);
-            }
-
-            if (this.value && this.uniqueResource) {
-                return new Promise((resolve) => {
-                    this.uniqueValidatorTimeout = setTimeout(() => {
-                        this.loading = true;
-
-                        this.ngtValidationService.unique(this.uniqueResource, this.value).then((response: NgtHttpValidationResponse) => {
-                            this.loading = false;
-
-                            resolve(response.valid ? null : { 'unique': true });
-                        }).catch(() => {
-                            this.loading = false;
-                            resolve(null);
-                        });
-                    }, 500);
-                });
-            }
-
-            return Promise.resolve(null);
-        };
+    private setNativeValue(value: string | number): void {
+        this.element.nativeElement.value = value ?? '';
     }
 
-    private getNativeValue() {
+    private getNativeValue(): string {
         return this.element.nativeElement.value;
     }
 
     private getElementTitle(): string {
-        return this.element.nativeElement.parentElement.parentElement.title;
+        return this.element.nativeElement.parentElement?.parentElement?.title;
     }
 
-    private removeMasks(value: string) {
-        if (this.mask == "decimal") {
-            value = (value + "")
-                .replace(/\./g, '')
-                .replace(',', '.');
-        } else if (this.mask == "cnpj-cpf" || this.mask == "cpf" || this.mask == "cnpj" || this.mask == "cnpj-cpf-rut" || this.mask == "cuit") {
-            value = (value + "")
-                .replace(/[^\d]/g, '');
-        } else if (
-            this.mask == InputMaskEnum.CELLPHONE
-            || this.mask == InputMaskEnum.INTERNATIONAL_PHONE
-        ) {
-            value = (value + "")
-                .replace('(', '')
-                .replace(')', '')
-                .replace(' ', '')
-                .replace(' ', '')
-                .replace('-', '')
-                .replace('+', '');
+    private hasChangesBetweenValues(): boolean {
+        const nativeValue = this.getNativeValue();
+        const cleanNative = this.maskService.removeMaskFromValue(nativeValue);
+        const cleanCurrent = this.maskService.removeMaskFromValue(this.value);
+
+        return cleanNative !== cleanCurrent;
+    }
+
+    private getInputPaddingClass(): string {
+        let paddingClass = '';
+
+        if (this.innerLeftIcon() || this.customInnerContentTemplate()) {
+            paddingClass += 'pl-10 pr-4 ';
+        } else {
+            paddingClass += 'px-4 ';
         }
 
-        return value;
+        if (this.innerRightIcon() || this.allowClear() || this.type() === 'password') {
+            if (this.allowClear() && this.currentValue() && (this.innerRightIcon() || this.type() === 'password')) {
+                paddingClass += 'pr-10 ';
+            } else {
+                paddingClass += 'pr-8 ';
+            }
+        }
+
+        return paddingClass;
     }
 
-    private hasEmailServiceValidation(): boolean {
-        return typeof this.ngtValidationService?.emailValidation === 'function';
+    private getRemainingCharacters(): number {
+        if (!this.showCharactersLength() || !this.maxTotalCharsCount()) {
+            return null;
+        }
+
+        const currentLength = this.currentValue()?.length || 0;
+        const maxLength = this.maxTotalCharsCount();
+        const remaining = maxLength - currentLength;
+
+        return remaining > 0 ? remaining : 0;
     }
 
-    private hasPasswordValidation(): boolean {
-        return typeof this.ngtValidationService?.passwordValidation === 'function';
+    private getInputClasses(): string {
+        const classes: string[] = [
+            'flex border appearance-none focus:outline-none leading-tight w-full',
+            this.inputPaddingClass(),
+            this.ngtStyle.compile(['h', 'text', 'color.border', 'color.bg', 'color.text', 'rounded'])
+        ];
+
+        if (this.formControlHasErrors() && (this.formControlIsDirty() || (this.formContainer as any)?.submitted)) {
+            classes.push('input-has-error border-red-700');
+        }
+
+        return classes.join(' ');
     }
 
-    private isDisabledByParent(): boolean {
-        return this.ngtForm?.isDisabled
-            || this.ngtSection?.isDisabledState()
-            || this.ngtModal?.isDisabledState();
-    }
-
-    private hasChangesBetweenModels(): boolean {
-        return this.removeMasks(this.getNativeValue()) !== this.value;
-    }
-
-    private destroySubscriptions() {
+    private destroySubscriptions(): void {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
+    }
+
+    private destroyListeners(): void {
+        this.listeners.forEach(unlisten => unlisten());
+        this.listeners = [];
+    }
+
+    private clearTimeouts(): void {
+        if (this.phoneValidatorTimeout) {
+            clearTimeout(this.phoneValidatorTimeout);
+        }
+
+        if (this.searchExistingResourceTimeout) {
+            clearTimeout(this.searchExistingResourceTimeout);
+        }
     }
 }

@@ -1,5 +1,13 @@
 import {
-    Component, ElementRef, EventEmitter, Injector, Input, Optional, Output, Self, ViewChild
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    Injector,
+    Optional,
+    Self,
+    ViewChild,
+    input,
+    output,
 } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -16,6 +24,7 @@ export enum NgtPopoverOpenMethod {
 @Component({
     selector: 'ngt-popover',
     templateUrl: './ngt-popover.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 
@@ -23,20 +32,24 @@ export class NgtPopoverComponent {
     @ViewChild('dropdownRef', { static: true }) public dropdownRef: ElementRef;
     @ViewChild('hostDiv') public hostDiv: ElementRef;
 
-    @Input() public closeTimeout: number;
-    @Input() public openMethod: string = NgtPopoverOpenMethod.HOVER;
+    /** Inputs */
 
-    @Input() public closeOnClick: boolean;
-    @Input() public placeOnBottom: boolean;
-    @Input() public placeOnLeft: boolean;
+    public readonly closeTimeout = input<number>();
+    public readonly openMethod = input<string>(NgtPopoverOpenMethod.HOVER);
 
-    @Output() public onClick: EventEmitter<any> = new EventEmitter();
+    public readonly closeOnClick = input<boolean>(false);
+    public readonly placeOnBottom = input<boolean>(false);
+    public readonly placeOnLeft = input<boolean>(false);
+
+    /** Outputs */
+
+    public readonly onClick = output<void>();
 
     public ngtStyle: NgtStylizableService;
 
     public stylesToCompile: Array<string> = ['h', 'w', 'px', 'py', 'm', 'mx', 'my', 'shadow', 'text', 'border', 'color.border', 'color.bg', 'color.text'];
 
-    private clickTimeout;
+    private clickTimeout: any;
 
     public constructor(
         @Optional() @Self()
@@ -45,24 +58,7 @@ export class NgtPopoverComponent {
         public ngtTranslateService: NgtTranslateService,
         private injector: Injector,
     ) {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
-
-        this.ngtStyle.load(this.injector, 'NgtPopover', {
-            text: 'text-sm',
-            fontCase: '',
-            py: 'py-3',
-            px: 'px-2',
-            border: 'border',
-            color: {
-                border: 'border-gray-400',
-                text: 'text-black',
-                bg: 'bg-white'
-            },
-        });
+        this.setupNgtStylizable();
     }
 
     public fireClickEvent(): void {
@@ -80,5 +76,24 @@ export class NgtPopoverComponent {
 
             this.hostDiv.nativeElement.dispatchEvent(event);
         }, 500);
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
+
+        this.ngtStyle.load(this.injector, 'NgtPopover', {
+            text: 'text-sm',
+            fontCase: '',
+            py: 'py-3',
+            px: 'px-2',
+            border: 'border',
+            color: {
+                border: 'border-gray-400',
+                text: 'text-black',
+                bg: 'bg-white'
+            },
+        });
     }
 }

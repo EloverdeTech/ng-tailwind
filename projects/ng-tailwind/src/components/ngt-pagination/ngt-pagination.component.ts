@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Injector, Input, Optional, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Injector,
+    input,
+    Optional,
+    output,
+    signal,
+    WritableSignal,
+} from '@angular/core';
 
 import { NgtHttpMeta, NgtHttpPagination } from '../../services/http/ngt-http.service';
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
@@ -7,13 +16,18 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
 @Component({
     selector: 'ngt-pagination',
     templateUrl: './ngt-pagination.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtPaginationComponent {
-    @Input() public pagesInterval: number;
+    /** Inputs */
 
-    @Output() public onPageChange: EventEmitter<number> = new EventEmitter();
-    @Output() public onPerPageChange: EventEmitter<number> = new EventEmitter();
+    public readonly pagesInterval = input<number>(4);
+
+    /** Outputs */
+
+    public readonly onPageChange = output<number>();
+    public readonly onPerPageChange = output<number>();
 
     /** Styles */
     public ngtPaginationActivePageButtonStyle: NgtStylizableService;
@@ -22,13 +36,18 @@ export class NgtPaginationComponent {
     public ngtPaginationFirstLastButtonStyle: NgtStylizableService;
     public ngtPaginationPageButtonStyle: NgtStylizableService;
 
-    public sectionStartPage: number;
-    public sectionEndPage: number;
-    public displayNextSectionButton: boolean;
-    public displayPreviousSectionButton: boolean;
-    public displayPagination: boolean = true;
+    public registersPerPageOptions = [
+        5, 10, 15, 30, 50, 100
+    ];
 
-    public pagination: NgtHttpPagination = {
+    /** Signals */
+
+    private readonly sectionStartPageState: WritableSignal<number> = signal(null);
+    private readonly sectionEndPageState: WritableSignal<number> = signal(null);
+    private readonly displayNextSectionButtonState: WritableSignal<boolean> = signal(false);
+    private readonly displayPreviousSectionButtonState: WritableSignal<boolean> = signal(false);
+    private readonly displayPaginationState: WritableSignal<boolean> = signal(true);
+    private readonly paginationState: WritableSignal<NgtHttpPagination> = signal({
         count: null,
         page: 1,
         pages: null,
@@ -36,15 +55,10 @@ export class NgtPaginationComponent {
         from: null,
         to: null,
         per_page: null
-    };
+    });
 
-    public pages = [];
-
-    public registersPerPageOptions = [
-        5, 10, 15, 30, 50, 100
-    ];
-
-    public currentRegistersPerPage: number = 15;
+    private readonly pagesState: WritableSignal<number[]> = signal([]);
+    private readonly currentRegistersPerPageState: WritableSignal<number> = signal(15);
 
     public constructor(
         private injector: Injector,
@@ -103,10 +117,63 @@ export class NgtPaginationComponent {
         });
     }
 
+    public get sectionStartPage(): number {
+        return this.sectionStartPageState();
+    }
+
+    public get sectionEndPage(): number {
+        return this.sectionEndPageState();
+    }
+
+    public get displayNextSectionButton(): boolean {
+        return this.displayNextSectionButtonState();
+    }
+
+    public get displayPreviousSectionButton(): boolean {
+        return this.displayPreviousSectionButtonState();
+    }
+
+    public get displayPagination(): boolean {
+        return this.displayPaginationState();
+    }
+
+    public get pagination(): NgtHttpPagination {
+        return this.paginationState();
+    }
+
+    public get pages(): number[] {
+        return this.pagesState();
+    }
+
+    public get currentRegistersPerPage(): number {
+        return this.currentRegistersPerPageState();
+    }
+
+    public set displayPagination(value: boolean) {
+        this.displayPaginationState.set(!!value);
+    }
+
+    public set pagination(value: NgtHttpPagination) {
+        this.paginationState.set(value);
+    }
+
+    public set pages(value: number[]) {
+        this.pagesState.set(value ?? []);
+    }
+
+    public set currentRegistersPerPage(value: number) {
+        this.currentRegistersPerPageState.set(value ?? 15);
+    }
+
     public onRegistersPerPageChange(value: any) {
-        if (value && this.pagination.per_page != value) {
-            this.pagination.per_page = value;
-            this.currentRegistersPerPage = value;
+        const pagination = this.paginationState();
+
+        if (value && pagination.per_page != value) {
+            this.paginationState.set({
+                ...pagination,
+                per_page: value
+            });
+            this.currentRegistersPerPageState.set(value);
 
             this.onPerPageChange.emit(value);
         }
@@ -117,64 +184,69 @@ export class NgtPaginationComponent {
     }
 
     public async goToPreviousPage() {
-        if ((this.pagination.page - 1) > 0) {
-            return this.goToPage(this.pagination.page - 1);
+        if ((this.paginationState().page - 1) > 0) {
+            return this.goToPage(this.paginationState().page - 1);
         }
     }
 
     public async goToNextPage() {
-        if ((this.pagination.page + 1) <= this.pagination.pages) {
-            return this.goToPage(this.pagination.page + 1);
+        if ((this.paginationState().page + 1) <= this.paginationState().pages) {
+            return this.goToPage(this.paginationState().page + 1);
         }
     }
 
     public async goToPreviousSection() {
-        return this.goToPage(this.sectionStartPage - 1);
+        return this.goToPage(this.sectionStartPageState() - 1);
     }
 
     public async goToNextSection() {
-        return this.goToPage(this.sectionEndPage + 1);
+        return this.goToPage(this.sectionEndPageState() + 1);
     }
 
     public async goToFirstPage() {
-        if (this.pagination.page != 1) {
+        if (this.paginationState().page != 1) {
             return this.goToPage(1);
         }
     }
 
     public async goToLastPage() {
-        if (this.pagination.page != this.pagination.pages) {
-            return this.goToPage(this.pagination.pages);
+        if (this.paginationState().page != this.paginationState().pages) {
+            return this.goToPage(this.paginationState().pages);
         }
     }
 
     public getCurrentPage() {
-        return this.pagination.page;
+        return this.paginationState().page;
     }
 
     public getPagination() {
-        return this.pagination;
+        return this.paginationState();
     }
 
     public proccessPagination(meta: NgtHttpMeta) {
-        this.pages = [];
-        this.pagination = meta.pagination;
+        const pagination = meta.pagination;
+        const interval = this.pagesInterval();
+        const sectionStartPage = Math.floor((pagination.page - 1) / interval) * interval + 1;
+        const sectionEndPage = sectionStartPage + (interval - 1);
+        const totalPages = pagination.pages;
 
-        this.sectionStartPage = Math.floor((this.pagination.page - 1) / this.pagesInterval) * this.pagesInterval + 1;
-        this.sectionEndPage = this.sectionStartPage + (this.pagesInterval - 1);
+        const pages: number[] = [];
 
-        const totalPages = this.pagination.pages;
-
-        for (let i = this.sectionStartPage; i <= this.sectionEndPage && i <= totalPages; i++) {
-            this.pages.push(i);
+        for (let i = sectionStartPage; i <= sectionEndPage && i <= totalPages; i++) {
+            pages.push(i);
         }
 
-        this.bindDisplayedButtonSections(this.sectionStartPage, this.sectionEndPage, totalPages);
-        this.displayPagination = true;
+        this.paginationState.set(pagination);
+        this.pagesState.set(pages);
+        this.sectionStartPageState.set(sectionStartPage);
+        this.sectionEndPageState.set(sectionEndPage);
+
+        this.bindDisplayedButtonSections(sectionStartPage, sectionEndPage, totalPages);
+        this.displayPaginationState.set(true);
     }
 
     public resetPagination() {
-        this.pagination = {
+        this.paginationState.set({
             count: null,
             page: 1,
             pages: null,
@@ -182,11 +254,11 @@ export class NgtPaginationComponent {
             from: null,
             to: null,
             per_page: null
-        };
+        });
     }
 
     private bindDisplayedButtonSections(sectionStartPage: number, sectionEndPage: number, totalPages: number) {
-        this.displayPreviousSectionButton = sectionStartPage > 1;
-        this.displayNextSectionButton = sectionEndPage < totalPages;
+        this.displayPreviousSectionButtonState.set(sectionStartPage > 1);
+        this.displayNextSectionButtonState.set(sectionEndPage < totalPages);
     }
 }

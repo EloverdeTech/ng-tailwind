@@ -1,26 +1,23 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
+    ChangeDetectionStrategy,
     Component,
+    computed,
     ElementRef,
     Host,
     Injector,
-    Input,
-    OnChanges,
-    OnDestroy,
+    input,
     Optional,
-    Renderer2,
     Self,
-    SimpleChanges,
+    Signal,
     SkipSelf,
     ViewChild,
 } from '@angular/core';
 import { ControlContainer, NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
 
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { getEnumFromString } from '../../../../helpers/enum/enum';
 import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
@@ -36,6 +33,7 @@ export enum NgtCheckboxMode {
 @Component({
     selector: 'ngt-checkbox',
     templateUrl: './ngt-checkbox.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         NgtValueAccessorProvider(NgtCheckboxComponent)
     ],
@@ -58,31 +56,66 @@ export enum NgtCheckboxMode {
     ],
     standalone: false
 })
-export class NgtCheckboxComponent extends NgtControlValueAccessor implements AfterViewInit, OnChanges, OnDestroy {
-    @ViewChild('element', { static: true }) public element: ElementRef;
+export class NgtCheckboxComponent extends NgtControlValueAccessor implements AfterViewInit {
+    @ViewChild('checkboxElement', { static: true }) public checkboxElement: ElementRef;
 
-    @Input() public label: string;
-    @Input() public shining: boolean = false;
-    @Input() public isDisabled: boolean = false;
-    @Input() public isClickDisabled: boolean = false;
-    @Input() public name: string;
-    @Input() public mode: NgtCheckboxMode = NgtCheckboxMode.DEFAULT;
-    @Input() public helpTitle: string;
-    @Input() public helpTextColor: string = 'text-green-500';
-    @Input() public helpText: string;
-    @Input() public helperAutoXReverse: boolean = true;
+    /** Visual Inputs */
+
+    public readonly label = input<string>();
+    public readonly helpTitle = input<string>();
+    public readonly helpTextColor = input<string>('text-green-500');
+    public readonly helpText = input<string>();
+    public readonly helperAutoXReverse = input<boolean>(true);
+    public readonly shining = input<boolean>(false);
+
+    /** Behavior Inputs */
+
+    public readonly mode = input<NgtCheckboxMode>(NgtCheckboxMode.DEFAULT);
+    public readonly isDisabled = input<boolean>(false);
+    public readonly isClickDisabled = input<boolean>(false);
+    public readonly name = input<string>();
+
+    /** Computed Signals */
+
+    public readonly isDisabledByParent: Signal<boolean> = computed(
+        () => this.ngtForm?.isDisabledState() || this.ngtSection?.isDisabledState() || this.ngtModal?.isDisabledState()
+    );
+
+    public readonly isDisabledState: Signal<boolean> = computed(
+        () => this.isDisabled() || this.isDisabledByParent() || this.isClickDisabled()
+    );
+
+    public readonly isShining: Signal<boolean> = computed(
+        () => this.shining() || this.ngtForm?.shining()
+    );
+
+    public readonly currentValue: Signal<any> = computed(() => this.value);
+
+    public readonly isToggleMode: Signal<boolean> = computed(
+        () => this.mode() == NgtCheckboxMode.TOGGLE
+    );
+
+    public readonly isSideToggleMode: Signal<boolean> = computed(
+        () => this.mode() == NgtCheckboxMode.SIDE_TOGGLE
+    );
+
+    public readonly isDefaultMode: Signal<boolean> = computed(
+        () => this.mode() == NgtCheckboxMode.DEFAULT
+    );
+
+    public readonly isRadioMode: Signal<boolean> = computed(
+        () => this.mode() == NgtCheckboxMode.RADIO
+    );
+
+    /** Other */
 
     public ngtStyle: NgtStylizableService;
 
-    private subscriptions: Array<Subscription> = [];
-
     public constructor(
-        private renderer: Renderer2,
-
         @Optional() @Host()
         public formContainer: ControlContainer,
 
-        @Self() @Optional()
+        @Optional() @Self()
         private ngtStylizableDirective: NgtStylizableDirective,
 
         @Optional() @SkipSelf()
@@ -98,11 +131,29 @@ export class NgtCheckboxComponent extends NgtControlValueAccessor implements Aft
     ) {
         super();
 
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
+        this.setupNgtStylizable();
+    }
+
+    public ngAfterViewInit(): void {
+        this.formControl = this.getControl();
+    }
+
+    public change(value: boolean): void {
+        if (this.hasChangeBetweenValues()) {
+            this.setNativeValue(value);
         }
+    }
+
+    public onNativeChange(): void {
+        if (this.hasChangeBetweenValues()) {
+            this.value = this.getNativeValue();
+        }
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
 
         this.ngtStyle.load(this.injector, 'NgtCheckbox', {
             h: 'h-6',
@@ -117,66 +168,15 @@ export class NgtCheckboxComponent extends NgtControlValueAccessor implements Aft
         });
     }
 
-    public ngAfterViewInit(): void {
-        this.renderer.listen(this.element.nativeElement, 'change', (value) => {
-            this.onNativeChange(this.element.nativeElement.checked);
-        });
+    private setNativeValue(value: boolean): void {
+        this.checkboxElement.nativeElement.checked = value;
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes.mode) {
-            this.mode = getEnumFromString(changes.mode.currentValue, NgtCheckboxMode);
-        }
+    private getNativeValue(): boolean {
+        return this.checkboxElement.nativeElement.checked;
     }
 
-    public ngOnDestroy() {
-        this.destroySubscriptions();
-    }
-
-    public change(value) {
-        if (this.hasChangesBetweenModels()) {
-            this.element.nativeElement.checked = value;
-        }
-    }
-
-    public onNativeChange(value) {
-        if (this.hasChangesBetweenModels()) {
-            this.value = value;
-        }
-    }
-
-    public hasChangesBetweenModels() {
-        return this.element.nativeElement.checked !== this.value;
-    }
-
-    public isToggleMode() {
-        return this.mode === NgtCheckboxMode.TOGGLE;
-    }
-
-    public isSideToggleMode(): boolean {
-        return this.mode === NgtCheckboxMode.SIDE_TOGGLE;
-    }
-
-    public isDefaultMode() {
-        return this.mode === NgtCheckboxMode.DEFAULT;
-    }
-
-    public isRadioMode() {
-        return this.mode === NgtCheckboxMode.RADIO;
-    }
-
-    public disabled(): boolean {
-        return this.isDisabled || this.isDisabledByParent();
-    }
-
-    private isDisabledByParent(): boolean {
-        return this.ngtForm?.isDisabled
-            || this.ngtSection?.isDisabledState()
-            || this.ngtModal?.isDisabledState();
-    }
-
-    private destroySubscriptions() {
-        this.subscriptions.forEach(subscription => subscription.unsubscribe());
-        this.subscriptions = [];
+    private hasChangeBetweenValues(): boolean {
+        return this.getNativeValue() !== this.value;
     }
 }

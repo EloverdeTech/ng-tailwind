@@ -1,87 +1,113 @@
-<label *ngIf="label" class="mb-2 flex {{ ngtStyle.compile(['color.text', 'text', 'font']) }}" [hidden]='shining'>
-    <span class="truncate" [title]="label">
-        {{ label }}:
-    </span>
+@if (label() && !isShining()) {
+    <label class="mb-2 flex {{ ngtStyle.compile(['color.text', 'text', 'font']) }}">
+        <span class="truncate" [title]="label()">
+            {{ label() }}:
+        </span>
 
-    <span *ngIf="isRequired" class="text-red-500 font-bold text-md ml-1">*</span>
+        @if (isRequired()) {
+            <span class="text-red-500 font-bold text-md ml-1">*</span>
+        }
 
-    <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor"
-        [helperReverseYPosition]="helperReverseYPosition" [autoXReverse]="helperAutoXReverse" class="ml-1">
-        <span [innerHtml]="helpText"></span>
-    </ngt-helper>
-</label>
+        @if (helpText()) {
+            <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpTextColor()"
+                [helperReverseYPosition]="helperReverseYPosition()" [autoXReverse]="helperAutoXReverse()" class="ml-1">
+                <span [innerHtml]="helpText()"></span>
+            </ngt-helper>
+        }
+    </label>
+}
 
-<div class="{{ shining ? 'hidden' : 'flex relative'}}">
+<div class="{{ isShining() ? 'hidden' : 'flex relative'}}">
     <input autocomplete="new-password"
-        class="flex border appearance-none focus:outline-none leading-tight w-full {{ getInputPaddings() }} {{ ngtStyle.compile(['h', 'text', 'color.border', 'color.bg', 'color.text', 'rounded', 'cursor']) }}"
-        [disabled]="disabled()" [readonly]="isReadonly || loading" [placeholder]="placeholder"
-        [style]="uppercase ? 'text-transform: uppercase!important':''"
-        [ngClass]="{'input-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
-        [attr.type]="inputProperties.htmlType" (mouseleave)="restorePlaceholder()" (focusout)="restorePlaceholder()"
-        (input)="useInputEvent ? onNativeChange() : null" (change)="!useInputEvent ? onNativeChange() : null" #element>
-    <span *ngIf="innerLeftIcon"
-        class="absolute self-center px-2 {{ innerLeftIconColor }} {{ onClickLeftIcon ? 'cursor-pointer' : '' }}"
-        (click)="onClickLeftIcon.emit()">
+        [class]="inputClasses()"
+        [disabled]="isDisabledState()" [readonly]="isReadonly() || isLoading()" [placeholder]="placeholder()"
+        [style]="uppercase() ? 'text-transform: uppercase!important':''"
+        [attr.type]="inputHtmlType()"
+        (mouseleave)="restorePlaceholder()" (focusout)="restorePlaceholder()"
+        #element>
 
-        <ngt-svg *ngIf="!showRoundedIcon" class="text-xs fill-current" [src]='innerLeftIcon'></ngt-svg>
-        <img *ngIf="showRoundedIcon" class="rounded-full h-4" [src]='innerLeftIcon'>
-    </span>
+    @if (innerLeftIcon()) {
+        <span class="absolute self-center px-2 {{ innerLeftIconColor() }} {{ onClickLeftIcon ? 'cursor-pointer' : '' }}"
+            (click)="onClickLeftIcon.emit()">
 
-    <div *ngIf="customInnerContentTemplate" class="absolute self-center px-2">
-        <ng-container [ngTemplateOutlet]="customInnerContentTemplate"></ng-container>
-    </div>
+            @if (!showRoundedIcon()) {
+                <ngt-svg class="text-xs fill-current" [src]='innerLeftIcon()'></ngt-svg>
+            }
+            @if (showRoundedIcon()) {
+                <img class="rounded-full h-4" [src]='innerLeftIcon()'>
+            }
+        </span>
+    }
+
+    @if (customInnerContentTemplate()) {
+        <div class="absolute self-center px-2">
+            <ng-container [ngTemplateOutlet]="customInnerContentTemplate()"></ng-container>
+        </div>
+    }
 
     <div class="flex absolute h-full justify-end right-0 w-auto">
-        <span *ngIf="!disabled() && allowClear && value && !loading"
-            class="self-center right-0 px-2 text-red-400 cursor-pointer" (click)='clearInput($event)'>
-            <svg class="fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path
-                    d="M19.1 17.2l-5.3-5.3 5.3-5.3-1.8-1.8-5.3 5.4-5.3-5.3-1.8 1.7 5.3 5.3-5.3 5.3L6.7 19l5.3-5.3 5.3 5.3 1.8-1.8z" />
-            </svg>
-        </span>
+        @if (shouldShowClearButton()) {
+            <span class="self-center right-0 px-2 text-red-400 cursor-pointer" (click)='clearInput($event)'>
+                <svg class="fill-current self-center" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                        d="M19.1 17.2l-5.3-5.3 5.3-5.3-1.8-1.8-5.3 5.4-5.3-5.3-1.8 1.7 5.3 5.3-5.3 5.3L6.7 19l5.3-5.3 5.3 5.3 1.8-1.8z" />
+                </svg>
+            </span>
+        }
 
-        <span *ngIf="loading" class="self-center right-0 px-2 text-gray-500">
-            <div class="div-loader"></div>
-        </span>
+        @if (isLoading()) {
+            <span class="self-center right-0 px-2 text-gray-500">
+                <div class="div-loader"></div>
+            </span>
+        }
 
-        <span *ngIf="type == 'password' && value" class="self-center px-2 cursor-pointer">
-            <svg *ngIf="element.type == 'password'" class="fill-current" xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20" (click)='showPassword()'>
-                <path
-                    d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
-            </svg>
+        @if (shouldShowPasswordIcon()) {
+            <span class="self-center px-2 cursor-pointer">
+                @if (inputHtmlType() === 'password') {
+                    <svg class="fill-current" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20" (click)='showPassword()'>
+                        <path
+                            d="M.2 10a11 11 0 0 1 19.6 0A11 11 0 0 1 .2 10zm9.8 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0-2a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
+                    </svg>
+                }
 
-            <svg *ngIf="element.type == 'text'" class="fill-current" xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20" (click)='hidePassword()'>
-                <path
-                    d="M12.81 4.36l-1.77 1.78a4 4 0 0 0-4.9 4.9l-2.76 2.75C2.06 12.79.96 11.49.2 10a11 11 0 0 1 12.6-5.64zm3.8 1.85c1.33 1 2.43 2.3 3.2 3.79a11 11 0 0 1-12.62 5.64l1.77-1.78a4 4 0 0 0 4.9-4.9l2.76-2.75zm-.25-3.99l1.42 1.42L3.64 17.78l-1.42-1.42L16.36 2.22z" />
-            </svg>
-        </span>
+                @if (inputHtmlType() === 'text') {
+                    <svg class="fill-current" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20" (click)='hidePassword()'>
+                        <path
+                            d="M12.81 4.36l-1.77 1.78a4 4 0 0 0-4.9 4.9l-2.76 2.75C2.06 12.79.96 11.49.2 10a11 11 0 0 1 12.6-5.64zm3.8 1.85c1.33 1 2.43 2.3 3.2 3.79a11 11 0 0 1-12.62 5.64l1.77-1.78a4 4 0 0 0 4.9-4.9l2.76-2.75zm-.25-3.99l1.42 1.42L3.64 17.78l-1.42-1.42L16.36 2.22z" />
+                    </svg>
+                }
+            </span>
+        }
 
-        <span *ngIf="innerRightIcon && type != 'password'"
-            class="self-center px-2 {{ innerRightIconColor }}  {{ onClickRightIcon ? 'cursor-pointer' : '' }}"
-            (click)="onClickRightIcon.emit()">
-            <ngt-svg class="text-xxs fill-current" [src]='innerRightIcon'></ngt-svg>
-        </span>
+        @if (shouldShowRightIcon()) {
+            <span class="self-center px-2 {{ innerRightIconColor() }}  {{ onClickRightIcon ? 'cursor-pointer' : '' }}"
+                (click)="onClickRightIcon.emit()">
+                <ngt-svg class="text-xxs fill-current" [src]='innerRightIcon()'></ngt-svg>
+            </span>
+        }
     </div>
 </div>
 
-<ng-container *ngIf="showCharactersLength && maxTotalCharsCount && !shining">
+@if (showCharactersLength() && remainingCharacters() !== null && !isShining()) {
     <p class="text-xxs mt-1">
         {{ ngtTranslateService.ngtTextAreaRemainingCharacters }}:
-        <span class="font-semibold">{{ getRemainingCharacters() }}</span>
+        <span class="font-semibold">{{ remainingCharacters() }}</span>
     </p>
-</ng-container>
+}
 
-<ng-container *ngIf='shining'>
+@if (isShining()) {
     <div class="flex">
         <ngt-shining class="{{ ngtStyle.compile(['h']) }} w-full"></ngt-shining>
     </div>
-</ng-container>
+}
 
-<input *ngIf='componentReady' type="hidden" [ngModel]="value" [name]="name" [value]="value">
+@if (componentReady()) {
+    <input type="hidden" [ngModel]="value" [name]="name()" [value]="value">
+}
 
 <ng-content></ng-content>
 
-<ngt-validation [control]="formControl" [container]="formContainer" [minValue]='minValue' [minLength]='minLength'>
+<ngt-validation [control]="formControl" [container]="formContainer" [minValue]='minValue()' [minLength]='minLength()'>
 </ngt-validation>

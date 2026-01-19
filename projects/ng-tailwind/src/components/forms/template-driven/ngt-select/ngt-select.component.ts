@@ -1,40 +1,48 @@
 import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     ContentChild,
-    DoCheck,
-    EventEmitter,
     Host,
     Injector,
     Input,
-    OnChanges,
     OnDestroy,
     OnInit,
     Optional,
-    Output,
     Self,
-    SimpleChanges,
     SkipSelf,
     TemplateRef,
     ViewChild,
     ViewEncapsulation,
+    computed,
+    effect,
+    input,
+    output,
+    signal,
+    untracked,
 } from '@angular/core';
-import { AbstractControl, ControlContainer, NgForm } from '@angular/forms';
-import { DropdownPosition, NgOption, NgSelectComponent } from '@ng-select/ng-select';
-import { Observable, Observer, Subject, Subscription } from 'rxjs';
+import { ControlContainer, NgForm } from '@angular/forms';
+import { NgOption, NgSelectComponent } from '@ng-select/ng-select';
+import { Observable, Subject, Unsubscribable } from 'rxjs';
 
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { getEnumFromString } from '../../../../helpers/enum/enum';
 import { uuid } from '../../../../helpers/uuid';
-import { NgtHttpResponse, NgtHttpService } from '../../../../services/http/ngt-http.service';
 import { NgtTranslateService } from '../../../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtSelectHeaderTmp, NgtSelectOptionSelectedTmp, NgtSelectOptionTmp } from './ngt-select.directive';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
-import { delay } from '../../../../helpers/promise/promise-helper';
+import { NgtSelectDropdownService } from './services/ngt-select-dropdown.service';
+import { NgtSelectItemsConfig, NgtSelectItemsService } from './services/ngt-select-items.service';
+import { NgtSelectSearchConfig } from './services/ngt-select-search.config';
+import { NgtSelectSearchService } from './services/ngt-select-search.service';
+import { NgtSelectStateService } from './services/ngt-select-state.service';
+import { NgtSelectTagManagerService } from './services/ngt-select-tag-manager.service';
+import { NgtSelectValidationConfig, NgtSelectValidationService } from './services/ngt-select-validation.service';
 
 export enum NgtSelectDropdownPanelHeight {
     AUTO = 'auto',
@@ -50,110 +58,128 @@ export enum NgtSelectDropdownPanelHeight {
     templateUrl: './ngt-select.component.html',
     styleUrls: ['./ngt-select.component.css'],
     providers: [
-        NgtValueAccessorProvider(NgtSelectComponent)
+        NgtValueAccessorProvider(NgtSelectComponent),
+
+        NgtSelectValidationService,
+        NgtSelectSearchService,
+        NgtSelectItemsService,
+        NgtSelectDropdownService,
+        NgtSelectStateService,
+        NgtSelectTagManagerService,
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class NgtSelectComponent extends NgtControlValueAccessor implements OnChanges, OnDestroy, OnInit, DoCheck {
+export class NgtSelectComponent extends NgtControlValueAccessor implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(NgSelectComponent, { static: true }) public ngSelectComponent: NgSelectComponent;
     @ContentChild(NgtSelectOptionTmp, { read: TemplateRef }) public ngtOptionTemplate: TemplateRef<any>;
     @ContentChild(NgtSelectOptionSelectedTmp, { read: TemplateRef }) public ngtOptionSelectedTemplate: TemplateRef<any>;
     @ContentChild(NgtSelectHeaderTmp, { read: TemplateRef }) public ngtSelectHeaderTemplate: TemplateRef<any>;
 
     /** Visual */
-    @Input() public label: string = '';
-    @Input() public labelIcon: string;
-    @Input() public labelIconColor: string;
-    @Input() public helpTitle: string;
-    @Input() public helpText: string;
-    @Input() public helpTextColor: string = 'text-green-500';
-    @Input() public shining = false;
+
+    public readonly label = input<string>('');
+    public readonly labelIcon = input<string>();
+    public readonly labelIconColor = input<string>();
+    public readonly helpTitle = input<string>();
+    public readonly helpText = input<string>();
+    public readonly helpTextColor = input<string>('text-green-500');
+    public readonly shining = input<boolean>(false);
+    // public readonly loading = input<boolean>(false);
+    public readonly loadingText = input<string>('');
+    public readonly notFoundText = input<string>('');
+    public readonly dropdownPosition = input<string>('auto');
+    public readonly typeToSearchText = input<string>('');
+    public readonly clearAllTooltip = input<string>('');
+    public readonly placeholder = input<string>('');
+    public readonly createText = input<string>('');
+    public readonly labelForId = input<string>('');
+    public readonly dropdownPanelMinHeight = input<NgtSelectDropdownPanelHeight | string>(NgtSelectDropdownPanelHeight.AUTO);
+    public readonly helperReverseYPosition = input<boolean>(false);
+    public readonly helperAutoXReverse = input<boolean>(true);
+
     @Input() public loading: boolean = false;
-    @Input() public loadingText: string = '';
-    @Input() public notFoundText: string = '';
-    @Input() public dropdownPosition = 'auto';
-    @Input() public typeToSearchText: string = '';
-    @Input() public clearAllTooltip: string = '';
-    @Input() public placeholder: string = '';
-    @Input() public createText: string = '';
-    @Input() public labelForId: string = '';
-    @Input() public dropdownPanelMinHeight: NgtSelectDropdownPanelHeight = NgtSelectDropdownPanelHeight.AUTO;
-    @Input() public helperReverseYPosition: boolean;
-    @Input() public helperAutoXReverse: boolean = true;
 
     /** Behavior */
-    @Input() public name: string;
-    @Input() public autoLoad: boolean;
-    @Input() public allowCreate: boolean | Promise<any> | Function = false;
-    @Input() public allowOriginalItemsUnselect: boolean = true;
-    @Input() public isDisabled: boolean = false;
-    @Input() public isReadonly: boolean = false;
+
     @Input() public remoteResource: any;
-    @Input() public hideSelected: boolean;
-    @Input() public bindLabel: string = 'name';
-    @Input() public bindValue: string;
-    @Input() public items: Array<any> | Observable<any> = [];
-    @Input() public inputAttrs: { [key: string]: string };
-    @Input() public closeOnSelect: boolean = true;
-    @Input() public clearable: boolean = true;
-    @Input() public groupBy: string | Function = null;
-    @Input() public maxSelectedItems: number;
-    @Input() public multiple: boolean = false;
-    @Input() public searchable: boolean = true;
-    @Input() public clearSearchOnAdd: boolean = true;
-    @Input() public virtualScroll: boolean = true;
-    @Input() public tabIndex: number;
-    @Input() public typeahead: Subject<any>;
-    @Input() public guessCompareWith: boolean = true;
-    @Input() public autoSelectUniqueOption: boolean = false;
-    @Input() public groupValue: (groupKey: string, cildren: any[]) => Object;
-    @Input() public trackBy: (item: any) => any;
-    @Input() public sortSelectedItemsFn: (a: any, b: any) => any;
-    @Input() public isAllowedToRemoveFn: (a: any) => boolean;
+
+    public readonly name = input<string>();
+    public readonly autoLoad = input<boolean>(false);
+    public readonly allowCreate = input<boolean | Promise<any> | Function>(false);
+    public readonly allowOriginalItemsUnselect = input<boolean>(true);
+    public readonly isDisabled = input<boolean>(false);
+    public readonly isReadonly = input<boolean>(false);
+    // public readonly remoteResource = input<any>();
+    public readonly hideSelected = input<boolean>(false);
+    public readonly bindLabel = input<string>('name');
+    public readonly bindValue = input<string>();
+    public readonly items = input<Array<any> | Observable<any>>([]);
+    public readonly inputAttrs = input<{ [key: string]: string }>();
+    public readonly closeOnSelect = input<boolean>(true);
+    public readonly clearable = input<boolean>(true);
+    public readonly groupBy = input<string | Function>(null);
+    public readonly maxSelectedItems = input<number>();
+    public readonly multiple = input<boolean>(false);
+    public readonly searchable = input<boolean>(true);
+    public readonly clearSearchOnAdd = input<boolean>(true);
+    public readonly virtualScroll = input<boolean>(true);
+    public readonly tabIndex = input<number>();
+    public readonly typeahead = input<Subject<any>>();
+    public readonly guessCompareWith = input<boolean>(true);
+    public readonly compareWith = input<(a: any, b: any) => boolean>((a: any, b: any) => a === b);
+    public readonly autoSelectUniqueOption = input<boolean>(false);
+    public readonly groupValue = input<(groupKey: string, cildren: any[]) => Object>();
+    public readonly trackBy = input<(item: any) => any>();
+    public readonly sortSelectedItemsFn = input<(a: any, b: any) => any>();
+    public readonly isAllowedToRemoveFn = input<(a: any) => boolean>();
 
     /** Validation */
-    @Input() public isRequired: boolean = false;
 
-    @Output() public onLoadRemoteResource: EventEmitter<any> = new EventEmitter<any>();
-    @Output() public onSelectedItemRemove: EventEmitter<any> = new EventEmitter<any>();
-    @Output() public onClear: EventEmitter<void> = new EventEmitter<void>();
-    @Output() public onClose: EventEmitter<void> = new EventEmitter<void>();
+    public readonly isRequired = input<boolean>(false);
+
+    public readonly onLoadRemoteResource = output<any>();
+    public readonly onSelectedItemRemove = output<any>();
+    public readonly onClear = output<void>();
+    public readonly onClose = output<void>();
 
     public nativeName = uuid();
     public ngtStyle: NgtStylizableService;
-    public ngSelectItems: any;
-    public nativeValue: any;
-    public componentReady: boolean = false;
-    public wasClicked: boolean;
 
-    private ngSearchObserver: Observer<any>;
-    private originalPerPage = 15;
-    private subscriptions: Array<Subscription> = [];
-    private originalItems: Array<any>;
+    public readonly componentReady = signal<boolean>(false);
 
-    private currentState = {
-        filters: {},
-        sort: {
-            field: '',
-            direction: ''
-        },
-        pagination: {
-            count: null,
-            page: 1,
-            pages: null,
-            total: null,
-            from: null,
-            to: null,
-            per_page: null
-        }
-    };
+    public readonly isShining = computed(() => this.shining() || this.ngtForm?.isShining());
+    public readonly isLoading = computed(() => this.loading || this.stateService.loading());
 
-    private searchTimeout: any;
-    private hadFirstItemsLoad: boolean;
+    public readonly isDisabledByParent = computed(
+        () => this.ngtForm?.isDisabledState() || this.ngtSection?.isDisabledState() || this.ngtModal?.isDisabledState()
+    );
+
+    public readonly isDisabledState = computed(
+        () => this.isDisabled() || this.isDisabledByParent() || this.isReadonly()
+    );
+
+    public readonly isClearable = computed(
+        () => (!this.multiple() && this.isRequired()) ? false : this.clearable()
+    );
+
+    public readonly shouldCloseOnSelect = computed(
+        () => this.multiple() ? false : this.closeOnSelect()
+    );
+
+    public readonly dropdownPanelMinHeightResolved = computed(
+        () => getEnumFromString(this.dropdownPanelMinHeight(), NgtSelectDropdownPanelHeight)
+    );
+
+    public readonly selectClass = computed(() => this.buildSelectClass());
+    public readonly typeaheadSubject = computed(() => this.stateService.typeaheadSubject());
+
+    private readonly nativeValueSignal = signal<any>(undefined);
+    private subscriptions: Array<Unsubscribable> = [];
 
     public constructor(
         @Optional() @Self()
@@ -165,8 +191,13 @@ export class NgtSelectComponent extends NgtControlValueAccessor implements OnCha
         @Optional()
         public ngtTranslateService: NgtTranslateService,
 
-        private ngtHttp: NgtHttpService,
         private changeDetector: ChangeDetectorRef,
+
+        private validationService: NgtSelectValidationService,
+        private searchService: NgtSelectSearchService,
+        private itemsService: NgtSelectItemsService,
+        private dropdownService: NgtSelectDropdownService,
+        private tagManagerService: NgtSelectTagManagerService,
 
         @Optional() @SkipSelf()
         private ngtForm: NgtFormComponent,
@@ -178,6 +209,8 @@ export class NgtSelectComponent extends NgtControlValueAccessor implements OnCha
         private ngtModal: NgtModalComponent,
 
         protected override injector: Injector,
+
+        public stateService: NgtSelectStateService,
     ) {
         super();
 
@@ -195,92 +228,65 @@ export class NgtSelectComponent extends NgtControlValueAccessor implements OnCha
                 bg: 'bg-white'
             }
         });
+
+        const initialItems = new Observable((observer) => {
+            observer.next([]);
+        });
+
+        this.stateService.setNgSelectItems(initialItems);
+
+        this.registerEffects();
     }
 
-    @Input() public compareWith = (a: any, b: any) => a === b;
+    public get nativeValue(): any {
+        return this.nativeValueSignal();
+    }
+
+    public set nativeValue(value: any) {
+        this.nativeValueSignal.set(value);
+    }
 
     public ngOnInit() {
         if (!this.formContainer) {
             console.error("The element must be inside a <form #form='ngForm'> tag!");
         }
 
-        if (!this.name) {
+        if (!this.name()) {
             console.error("The element must contain a name attribute!");
         }
 
-        if (!this.multiple && this.isRequired) {
-            this.clearable = false;
-        }
-
-        if (this.multiple) {
-            this.closeOnSelect = false;
-        }
-
         setTimeout(() => {
-            this.componentReady = true;
+            this.componentReady.set(true);
             this.initComponentValidation();
         }, 500);
-
-        this.ngSelectItems = new Observable((observer) => {
-            this.ngSearchObserver = observer;
-            observer.next([]);
-        });
     }
 
-    public ngAfterViewInit() {
+    public markClicked(): void {
+        this.stateService.markAsClicked();
+    }
+
+    public ngAfterViewInit(): void {
         this.bindInnerInputUniqueId();
-
-        this.bindSubscriptions();
-    }
-
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes.isRequired) {
-            this.updateValidations();
-        }
-
-        if (changes.remoteResource || changes.items) {
-            this.initNgSelectItems();
-        }
-
-        if (changes.dropdownPanelMinHeight) {
-            this.dropdownPanelMinHeight = getEnumFromString(changes.dropdownPanelMinHeight.currentValue, NgtSelectDropdownPanelHeight);
-        }
-    }
-
-    public ngDoCheck(): void {
-        if (!this.hadFirstItemsLoad && this.canLoadItems()) {
-            this.hadFirstItemsLoad = true;
-
-            this.initNgSelectItems();
-
-            setTimeout(() => {
-                this.replaceShowAddTag();
-
-                this.ngSelectComponent.itemsList.mapSelectedItems();
-
-                if (!this.getElementTitle() || this.getElementTitle() === 'null') {
-                    this.ngSelectComponent.element.parentElement.parentElement.parentElement.title = '';
-                }
-
-                this.originalItems = this.ngSelectComponent.selectedItems?.map((element) => element.value);
-
-                this.changeDetector.detectChanges();
-            }, 500);
-        }
     }
 
     public ngOnDestroy() {
+        this.searchService.clearSearchTimeout();
+
         this.destroySubscriptions();
     }
 
     public onOpen(): void {
         const parentElements = document.querySelectorAll('#ngtSelectParentContainer');
 
-        if (this.dropdownPosition == 'auto' && parentElements?.length) {
+        if (this.dropdownPosition() === 'auto' && parentElements?.length) {
             const parentContainer = parentElements[parentElements.length - 1];
 
             this.calculateDropdownPosition(parentContainer);
         }
+    }
+
+    public handleClose(): void {
+        this.onClose.emit();
     }
 
     public removeItem(event: Event, item: any) {
@@ -308,11 +314,11 @@ export class NgtSelectComponent extends NgtControlValueAccessor implements OnCha
     }
 
     public onClearSelect() {
-        if (!this.nativeValue) {
+        if (!this.nativeValueSignal()) {
             this.markAsPristine();
         }
 
-        this.currentState.filters = {};
+        this.searchService.clearFilters();
 
         this.onClear.emit();
     }
@@ -340,77 +346,27 @@ export class NgtSelectComponent extends NgtControlValueAccessor implements OnCha
         }
     }
 
-    public itemSearchFn = (term: string, item: any) => {
-        if (this.remoteResource) {
-            return null;
-        }
+    public itemSearchFn(): (term: string, item: any) => any {
+        return this.searchService.itemSearchFn(this.remoteResource, this.bindLabel());
+    }
 
-        let formattedValue;
+    public getCompareWith(): (a: any, b: any) => boolean {
+        return this.searchService.getCompareWithFn();
+    }
 
-        if (typeof item == 'string') {
-            formattedValue = item;
-        }
+    public loadRemoteData(filters: any): void {
+        const config: NgtSelectSearchConfig = {
+            remoteResource: this.remoteResource,
+            guessCompareWith: this.guessCompareWith(),
+            compareWith: this.compareWith(),
+            autoSelectUniqueOption: this.autoSelectUniqueOption(),
+            currentValue: this.value,
+            ngSearchObserver: this.itemsService.getNgSearchObserver(),
+            onNativeChange: (value: any) => this.onNativeChange(value),
+            onLoadRemoteResource: this.onLoadRemoteResource,
+        };
 
-        if (!this.bindLabel) {
-            return null;
-        }
-
-        if (typeof item['getAttribute'] == 'function') {
-            formattedValue = item.getAttribute([this.bindLabel]);
-        } else if (typeof item == 'object') {
-            formattedValue = item[this.bindLabel];
-        }
-
-        return formattedValue
-            ? formattedValue.toLocaleLowerCase().includes(term.toLocaleLowerCase())
-            : null;
-    };
-
-    public search(filters: any) {
-        this.currentState.filters = { ...this.currentState.filters, ...filters };
-
-        if (!this.remoteResource) {
-            return;
-        }
-
-        if (this.searchTimeout) {
-            clearTimeout(this.searchTimeout);
-        }
-
-        this.loading = true;
-        this.changeDetector.detectChanges();
-
-        this.searchTimeout = setTimeout(() => {
-            this.subscriptions.push(
-                this.ngtHttp
-                    .get(this.remoteResource, this.currentState.filters, this.currentState.pagination)
-                    .subscribe(
-                        (response: NgtHttpResponse) => {
-                            this.loading = false;
-
-                            this.bindCompareWithByResponse(response);
-
-                            this.ngSearchObserver.next(response.data);
-
-                            if (this.canAutoSelectUniqueOption(response)) {
-                                this.onNativeChange(response.data[0]);
-                            }
-
-                            this.onLoadRemoteResource.emit(response.data);
-
-                            this.currentState.pagination = response.meta.pagination;
-
-                            this.changeDetector.detectChanges();
-                        },
-                        (error) => {
-                            this.loading = false;
-                            this.changeDetector.detectChanges();
-                            console.error(error);
-                            this.ngSearchObserver.next([]);
-                        }
-                    )
-            );
-        }, 500);
+        this.searchService.loadRemoteData(config, filters);
     }
 
     public onNativeChange(value): void {
@@ -434,13 +390,7 @@ export class NgtSelectComponent extends NgtControlValueAccessor implements OnCha
     }
 
     public onScroll({ end }) {
-        let currentPerPage = this.currentState.pagination.per_page;
-        let maxItensInBackend = this.currentState.pagination.total;
-
-        if (end >= currentPerPage && end <= maxItensInBackend) {
-            this.currentState.pagination.per_page = parseInt(this.currentState.pagination.per_page) + this.originalPerPage;
-            this.search({});
-        }
+        this.searchService.handleScroll(end, () => this.loadRemoteData({}));
     }
 
     public hasSelectedValue() {
@@ -448,118 +398,69 @@ export class NgtSelectComponent extends NgtControlValueAccessor implements OnCha
     }
 
     public cantRemoveItem(itemValue: any): boolean {
-        return (!this.allowOriginalItemsUnselect && this.hadPreviousSelection(itemValue))
-            || (this.isAllowedToRemoveFn && !this.isAllowedToRemoveFn(itemValue));
-    }
+        const isAllowedFn = this.isAllowedToRemoveFn();
 
-    public getSelectClass() {
-        let selectClass = this.dropdownPanelMinHeight ? 'ng-select-dropdown-panel-' + this.dropdownPanelMinHeight : 'ng-select-dropdown-panel-auto';
-
-        if (this.disabled()) {
-            selectClass += ' select-border-disabled';
-        } else if (this.formControl && this.formControl.errors && (this.formControl.dirty || (this.formContainer && this.formContainer['submitted']))) {
-            selectClass += ' select-border-error';
-        } else {
-            selectClass += ' select-border-normal';
-        }
-
-        if (this.multiple) {
-            selectClass += ` h-auto ${this.ngtStyle.compile(['color.bg', 'color.text'])}`;
-        } else {
-            selectClass += ` ${this.ngtStyle.compile(['h', 'color.bg', 'color.text'])}`;
-        }
-
-        return selectClass;
-    }
-
-    public disabled(): boolean {
-        return this.isDisabled || this.isDisabledByParent();
+        return (!this.allowOriginalItemsUnselect() && this.hadPreviousSelection(itemValue))
+            || (isAllowedFn && !isAllowedFn(itemValue));
     }
 
     private async calculateDropdownPosition(parentContainer: Element): Promise<void> {
-        while (!this.componentReady || this.loading || this.ngSelectComponent.showNoItemsFound()) {
-            await delay(200);
-
-            if (this.ngSelectComponent.showNoItemsFound() && !this.loading && this.componentReady) {
-                break;
-            }
-        }
-
-        this.changeDetector.detectChanges();
-
-        setTimeout(() => {
-            const ngSelectElement = this.ngSelectComponent.element;
-            const ngSelectHeight = ngSelectElement.offsetHeight;
-            const ngSelectYPosition = ngSelectElement.getBoundingClientRect().y;
-
-            const dropdownHeight = this.ngSelectComponent.dropdownPanel.contentElementRef.nativeElement.offsetHeight;
-            const openedSelectHeight = ngSelectHeight + dropdownHeight;
-
-            const parentYPosition = parentContainer.getBoundingClientRect().y;
-            const ngSelectYPositionInsideParent = ngSelectYPosition - parentYPosition;
-
-            const openedSelectTotalHeight = openedSelectHeight + ngSelectYPositionInsideParent;
-            const parentContainerHeight = parentContainer.clientHeight;
-
-            const fitsOnTop = openedSelectHeight < ngSelectYPositionInsideParent;
-            const fitsOnBottom = openedSelectTotalHeight < parentContainerHeight;
-
-            const dropdownPosition: DropdownPosition = !fitsOnBottom && fitsOnTop
-                ? 'top'
-                : 'bottom';
-
-            (<any>this.ngSelectComponent.dropdownPanel['_currentPosition']) = dropdownPosition;
-
-            this.ngSelectComponent.dropdownPanel['_updateDropdownClass'](dropdownPosition);
-        });
+        await this.dropdownService.calculateDropdownPosition(
+            this.ngSelectComponent,
+            parentContainer,
+        );
     }
 
-    private initNgSelectItems() {
-        if (this.remoteResource && this.canLoadItems()) {
-            this.ngSelectItems = new Observable(observer => {
-                this.ngSearchObserver = observer;
-                this.search({});
-            });
+    private initNgSelectItems(): void {
+        const config: NgtSelectItemsConfig = {
+            remoteResource: this.remoteResource,
+            items: this.items(),
+            autoSelectUniqueOption: this.autoSelectUniqueOption(),
+            guessCompareWith: this.guessCompareWith(),
+            compareWith: this.compareWith(),
+            currentValue: this.value,
+            canLoadItems: this.canLoadItems(),
+            ngSearchObserver: null,
+            onNativeChange: (value: any) => this.onNativeChange(value),
+            onLoadRemoteResource: this.onLoadRemoteResource,
+        };
 
-            this.typeahead = new Subject();
+        const externalTypeahead = this.typeahead();
+
+        if (externalTypeahead) {
+            this.stateService.setTypeaheadSubject(externalTypeahead);
+        }
+
+        const ngSelectItems = this.itemsService.initializeItems(config);
+
+        if (config.remoteResource && config.canLoadItems) {
+            const typeaheadSubject = this.itemsService.getTypeaheadSubject();
+
+            this.stateService.setTypeaheadSubject(typeaheadSubject);
 
             this.subscriptions.push(
-                this.typeahead.subscribe((term) => {
-                    this.search({ term: term });
+                typeaheadSubject.subscribe((term) => {
+                    this.loadRemoteData({ term: term });
                 })
             );
-        } else if (this.items instanceof Observable) {
-            this.ngSelectItems = this.items;
-        } else {
-            if (!this.items) {
-                this.items = [];
-            }
-
-            if (this.canAutoSelectUniqueOption()) {
-                this.onNativeChange(this.items[0]);
-            }
-
-            this.ngSelectItems = new Observable((observer) => {
-                this.ngSearchObserver = observer;
-                observer.next(this.items);
-            });
         }
+
+        this.stateService.setNgSelectItems(ngSelectItems);
     }
 
     private initComponentValidation() {
-        if (this.formContainer && this.formContainer.control && (this.formControl = this.formContainer.control.get(this.name))) {
-            this.formControl = this.formContainer.control.get(this.name);
+        const controlName = this.name();
+
+        if (this.formContainer && this.formContainer.control && controlName && (this.formControl = this.formContainer.control.get(controlName))) {
+            this.formControl = this.formContainer.control.get(controlName);
             this.markAsPristine();
             this.updateValidations();
+            this.bindFormStateUpdates();
         }
     }
 
     private sortSelectedItems(value: any): any {
-        if (this.sortSelectedItemsFn && value instanceof Array && value.length > 1) {
-            return value.sort((a, b) => this.sortSelectedItemsFn(a, b));
-        }
-
-        return value;
+        return this.itemsService.sortSelectedItems(value, this.sortSelectedItemsFn());
     }
 
     private getElementTitle(): string {
@@ -575,11 +476,12 @@ export class NgtSelectComponent extends NgtControlValueAccessor implements OnCha
             return;
         }
 
-        let syncValidators = [];
+        const config: NgtSelectValidationConfig = {
+            isRequired: this.isRequired(),
+            multiple: this.multiple(),
+        };
 
-        if (this.isRequired) {
-            syncValidators.push(this.isRequiredValidator());
-        }
+        const syncValidators = this.validationService.getSyncValidators(config);
 
         setTimeout(() => {
             this.formControl.setValidators(syncValidators);
@@ -587,33 +489,10 @@ export class NgtSelectComponent extends NgtControlValueAccessor implements OnCha
         });
     }
 
-    private isRequiredValidator() {
-        return (control: AbstractControl) => {
-            if (this.multiple) {
-                if (Array.isArray(this.value) && this.value.length > 0) {
-                    return null;
-                }
-            } else if (control.value && JSON.stringify(control.value)) {
-                return null;
-            }
-
-            return { 'required': true };
-        };
-    }
-
-    private replaceShowAddTag() {
-        Object.defineProperty(this.ngSelectComponent, 'showAddTag', {
-            get: () => {
-                if (!this.ngSelectComponent['searchTerm']) {
-                    return false;
-                }
-
-                const term = this.ngSelectComponent['searchTerm'].toLocaleLowerCase();
-
-                return this.ngSelectComponent.addTag && !this.ngSelectComponent.loading
-                    && (!this.hasTermInFilteredItems(term) && (!this.hasTermInSelectedItems(term)
-                        || !this.ngSelectComponent.hideSelected && this.ngSelectComponent.isOpen));
-            }
+    private replaceShowAddTag(): void {
+        this.tagManagerService.replaceShowAddTag({
+            ngSelectComponent: this.ngSelectComponent,
+            bindLabel: this.bindLabel(),
         });
     }
 
@@ -627,92 +506,126 @@ export class NgtSelectComponent extends NgtControlValueAccessor implements OnCha
         }
     }
 
-    private bindCompareWithByResponse(response: NgtHttpResponse): void {
-        if (this.guessCompareWith) {
-            if (response.data?.length && typeof response.data[0]['getApiId'] === 'function') {
-                this.compareWith = (a: any, b: any) => a.getApiId() == b.getApiId();
-            } else {
-                this.compareWith = (a: any, b: any) => a === b;
-            }
-        }
-    }
-
-    private hasTermInFilteredItems(term: string) {
-        const filteredItems = this.ngSelectComponent.itemsList.filteredItems;
-
-        if (filteredItems?.length && this.isColoquentResource()) {
-            return filteredItems.some((element: any) => {
-                const elementValue = (<any>element.value).getAttribute(this.bindLabel);
-
-                return elementValue && elementValue.toLocaleLowerCase() === term;
-            });
-        }
-
-        return filteredItems.some((element: any) => {
-            const elementValue = (<any>element.value)[this.bindLabel];
-
-            return elementValue && elementValue.toLocaleLowerCase() === term;
-        });
-    }
-
-    private hasTermInSelectedItems(term: string) {
-        const selectedItems = this.ngSelectComponent.selectedItems;
-
-        if (selectedItems?.length && this.isColoquentResource()) {
-            return selectedItems.some((element: any) => {
-                const elementValue = (<any>element.value).getAttribute(this.bindLabel);
-
-                return elementValue && elementValue.toLocaleLowerCase() === term;
-            });
-        }
-
-        return selectedItems.some((element: any) => {
-            const elementValue = (<any>element.value)[this.bindLabel];
-
-            return elementValue && elementValue.toLocaleLowerCase() === term;
-        });
-    }
-
     private hadPreviousSelection(item: any): boolean {
-        return !!this.originalItems?.find(element => this.compareWith(element, item));
-    }
-
-    private isColoquentResource() {
-        const items = this.ngSelectComponent.itemsList.items;
-
-        return items?.length && typeof items[0].value['getAttribute'] === 'function';
+        return this.itemsService.hadPreviousSelection(item, this.getCompareWith());
     }
 
     private canLoadItems(): boolean {
-        return this.autoLoad || (!this.disabled() && this.wasClicked);
+        return this.autoLoad() || (!this.isDisabledState() && this.stateService.wasClicked());
     }
 
-    private canAutoSelectUniqueOption(response?: NgtHttpResponse): boolean {
-        return !this.value && this.autoSelectUniqueOption
-            && (
-                (Array.isArray(response?.data) && response?.data?.length === 1)
-                || (!response && Array.isArray(this.items) && this.items?.length == 1)
-            );
-    }
+    private buildSelectClass(): string {
+        const minHeight = this.dropdownPanelMinHeightResolved();
+        let selectClass = minHeight ? `ng-select-dropdown-panel-${minHeight}` : 'ng-select-dropdown-panel-auto';
 
-    private bindSubscriptions(): void {
-        if (this.ngtForm) {
-            this.shining = this.ngtForm.isShining();
-
-            this.subscriptions.push(
-                this.ngtForm.onShiningChange.subscribe((shining: boolean) => {
-                    this.shining = shining;
-                })
-            );
+        if (this.isDisabledState()) {
+            selectClass += ' select-border-disabled';
+        } else if (this.stateService.formControlHasErrors()
+            && (this.stateService.formControlIsDirty() || this.stateService.formSubmitted())) {
+            selectClass += ' select-border-error';
+        } else {
+            selectClass += ' select-border-normal';
         }
 
-        this.changeDetector.detectChanges();
+        if (this.multiple()) {
+            selectClass += ` h-auto ${this.ngtStyle.compile(['color.bg', 'color.text'])}`;
+        } else {
+            selectClass += ` ${this.ngtStyle.compile(['h', 'color.bg', 'color.text'])}`;
+        }
+
+        return selectClass;
     }
 
-    private isDisabledByParent(): boolean {
-        return this.ngtForm?.isDisabled
-            || this.ngtSection?.isDisabledState()
-            || this.ngtModal?.isDisabledState();
+    private bindFormStateUpdates(): void {
+        if (!this.formControl) {
+            return;
+        }
+
+        this.updateFormState();
+
+        this.subscriptions.push(
+            this.formControl.statusChanges.subscribe(() => this.updateFormState())
+        );
+
+        this.subscriptions.push(
+            this.formControl.valueChanges.subscribe(() => this.updateFormState())
+        );
+
+        const form = this.formContainer as NgForm;
+
+        if (form?.ngSubmit) {
+            this.subscriptions.push(
+                form.ngSubmit.subscribe(() => this.updateFormState(true))
+            );
+        }
+    }
+
+    private updateFormState(forceSubmitted = false): void {
+        this.stateService.updateFormControlState(
+            this.formControl,
+            forceSubmitted || !!(this.formContainer as any)?.submitted
+        );
+
+        this.changeDetector.markForCheck();
+    }
+
+    private registerEffects(): void {
+        effect(() => {
+            const compareWithInput = this.compareWith();
+
+            untracked(() => this.searchService.setCompareWithFn(compareWithInput));
+        });
+
+        effect(() => {
+            const isRequired = this.isRequired();
+            const multiple = this.multiple();
+            const controlName = this.name();
+            const ready = this.componentReady();
+
+            void isRequired;
+            void multiple;
+
+            untracked(() => {
+                if (ready && controlName) {
+                    this.updateValidations();
+                }
+            });
+        });
+
+        effect(() => {
+            const remoteResource = this.remoteResource;
+            const items = this.items();
+
+            untracked(() => {
+                if (remoteResource || items) {
+                    this.initNgSelectItems();
+                }
+            });
+        });
+
+        effect(() => {
+            if (!this.stateService.hadFirstItemsLoad() && this.canLoadItems() && this.ngSelectComponent) {
+                this.stateService.markFirstItemsLoaded();
+
+                this.initNgSelectItems();
+
+                setTimeout(() => {
+                    this.replaceShowAddTag();
+
+                    this.ngSelectComponent.itemsList.mapSelectedItems();
+
+                    if (!this.getElementTitle() || this.getElementTitle() === 'null') {
+                        this.ngSelectComponent.element.parentElement.parentElement.parentElement.title = '';
+                    }
+
+                    const originalItems = this.ngSelectComponent.selectedItems?.map((element) => element.value);
+
+                    this.itemsService.setOriginalItems(originalItems ?? []);
+
+                    this.changeDetector.markForCheck();
+                }, 500);
+            }
+        });
     }
 
     private destroySubscriptions(): void {

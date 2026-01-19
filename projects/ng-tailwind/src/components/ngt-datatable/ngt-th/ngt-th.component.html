@@ -1,20 +1,22 @@
-<div class="flex items-center w-full {{ ngtStyle.compile(['justifyContent']) }}" [title]="getTooltip()" (click)='sort()'
-    [class.cursor-pointer]='sortable'>
+<div class="flex items-center w-full {{ ngtStyle.compile(['justifyContent']) }}" [title]="getTooltip()" (click)="sort()"
+    [class.cursor-pointer]="sortable()">
     <ng-content></ng-content>
-    <ng-container *ngIf='sortable && isCurrentSort'>
-        <svg *ngIf="sortDirection == 'asc'" class="fill-current self-center cursor-pointer ml-1"
-            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-        </svg>
+    @if (sortable() && isCurrentSort()) {
+        @if (sortDirection() == 'asc') {
+            <svg class="fill-current self-center cursor-pointer ml-1"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+            </svg>
+        } @else if (sortDirection() == 'desc') {
+            <svg class="fill-current self-center cursor-pointer ml-1"
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z" />
+            </svg>
+        }
+    }
 
-        <svg *ngIf="sortDirection == 'desc'" class="fill-current self-center cursor-pointer ml-1"
-            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-            <path d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z" />
-        </svg>
-    </ng-container>
-
-    <ng-container *ngIf='searchable'>
-        <div (click)='enableSearch($event)' class="float-right ml-2" title="Filtrar">
+    @if (searchable()) {
+        <div (click)="enableSearch($event)" class="float-right ml-2" title="Filtrar">
             <ngt-action class="text-lg" h='h-6' w='w-6' [forceEnable]="true" ngt-stylizable>
                 <svg class="fill-current self-center" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -22,35 +24,41 @@
                 </svg>
             </ngt-action>
         </div>
-    </ng-container>
+    }
 </div>
 
 <ng-template #modal>
     <ngt-modal-header [disableDefaultCloses]="ngtDataTable.searchModal.disableDefaultCloses"
         [ngtStyle]="filterModalHeaderStyle" (onClose)="ngtDataTable.searchModal.close()">
-        <ngt-svg *ngIf="searchIcon" [src]="searchIcon" class="text-sm">
-        </ngt-svg>
+        @if (searchIcon()) {
+            <ngt-svg [src]="searchIcon()" class="text-sm">
+            </ngt-svg>
+        } @else {
+            <svg class="fill-current self-center text-sm" viewBox="0 0 12 12"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M7.0042 6.84417L11.8042 2.04417V-0.355835H-0.195801V2.04417L4.6042 6.84417V11.6442L7.0042 9.24417V6.84417Z" />
+            </svg>
+        }
 
-        <svg *ngIf="!searchIcon" class="fill-current self-center text-sm" viewBox="0 0 12 12"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M7.0042 6.84417L11.8042 2.04417V-0.355835H-0.195801V2.04417L4.6042 6.84417V11.6442L7.0042 9.24417V6.84417Z" />
-        </svg>
-
-        <span *ngIf="searchLabel" class="font-semibold text-sm ml-2">
-            {{ searchLabel }}
-        </span>
+        @if (searchLabel()) {
+            <span class="font-semibold text-sm ml-2">
+                {{ searchLabel() }}
+            </span>
+        }
 
         <ng-content select='[customSearchHeader]'></ng-content>
     </ngt-modal-header>
 
     <ngt-modal-body [isDisabled]="false" [ngtStyle]="filterModalBodyStyle">
-        <ngt-input *ngIf="!hasCustomSearch" jit='true' [(ngModel)]='searchTerm' (ngModelChange)='search($event)'
-            placeholder='Pesquisar...' name='{{ reference }}_filter' #searchInput>
-        </ngt-input>
-
-        <div [hidden]='!hasCustomSearch'>
-            <ng-content select='[customSearch]'></ng-content>
-        </div>
+        @if (!hasCustomSearch()) {
+            <ngt-input jit="true" [ngModel]="searchTerm()" (ngModelChange)="onSearchTermChange($event)"
+                placeholder="Pesquisar..." name="{{ reference() }}_filter" #searchInput>
+            </ngt-input>
+        } @else {
+            <div>
+                <ng-content select='[customSearch]'></ng-content>
+            </div>
+        }
     </ngt-modal-body>
 </ng-template>

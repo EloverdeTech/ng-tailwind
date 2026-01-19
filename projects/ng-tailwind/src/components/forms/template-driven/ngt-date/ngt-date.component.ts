@@ -1,19 +1,26 @@
 import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
+    computed,
+    effect,
     Host,
     Injector,
-    Input,
+    input,
     OnDestroy,
     OnInit,
     Optional,
     output,
     Self,
-    SimpleChanges,
+    Signal,
+    signal,
     SkipSelf,
     ViewChild,
     ViewEncapsulation,
+    WritableSignal,
 } from '@angular/core';
-import { ControlContainer, NgForm, Validators } from '@angular/forms';
+import { ControlContainer, NgForm, TouchedChangeEvent, ValidatorFn, Validators, ValueChangeEvent } from '@angular/forms';
 import { english } from 'flatpickr/dist/l10n/default.js';
 import { Portuguese } from 'flatpickr/dist/l10n/pt.js';
 import moment from 'moment';
@@ -23,13 +30,13 @@ import { Subscription } from 'rxjs';
 
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
-import { getEnumFromString } from '../../../../helpers/enum/enum';
 import { applyInputMask, InputMaskEnum } from '../../../../helpers/input-mask/input-mask.helper';
 import { uuid } from '../../../../helpers/uuid';
 import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-stylizable.service';
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
+import { NgtDateFormatterService } from './services/ngt-date-formatter.service';
 
 export enum NgtDateLocale {
     BRAZIL = 'BRAZIL',
@@ -46,62 +53,103 @@ export enum NgtDateMode {
     templateUrl: './ngt-date.component.html',
     styleUrls: ['./ngt-date.component.css'],
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [
         NgtValueAccessorProvider(NgtDateComponent),
+        NgtDateFormatterService,
     ],
     viewProviders: [
         { provide: ControlContainer, useExisting: NgForm }
     ],
     standalone: false
 })
-export class NgtDateComponent extends NgtControlValueAccessor implements OnInit, OnDestroy {
+export class NgtDateComponent extends NgtControlValueAccessor implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('evDatePicker', { static: true }) public evDatePicker: EvDatePickerComponent;
 
-    // Visual
-    @Input() public label: string = '';
-    @Input() public placeholder: string = 'dd/mm/yyyy';
-    @Input() public helpTitle: string;
-    @Input() public helpText: string;
-    @Input() public helpTextColor: string = 'text-green-500';
-    @Input() public shining = false;
-    @Input() public dateFormat: string = 'd/m/Y H:i';
-    @Input() public dateFormatNgModel = 'YYYY-MM-DD HH:mm:00';
-    @Input() public showCalendarIcon: boolean = false;
-    @Input() public helperReverseYPosition: boolean;
+    /** Visual Inputs */
 
-    // Behavior
-    @Input() public name: string;
-    @Input() public isDisabled: boolean = false;
-    @Input() public isReadonly: boolean = false;
-    @Input() public mode: NgtDateMode;
-    @Input() public time_24hr: boolean = true;
-    @Input() public enableTime: boolean = true;
-    @Input() public noCalendar: boolean = false;
-    @Input() public minuteIncrement: number = 1;
-    @Input() public allowInput: boolean = false;
-    @Input() public locale: NgtDateLocale = NgtDateLocale.BRAZIL;
-    @Input() public allowClear: boolean = true;
-    @Input() public minDate: string;
-    @Input() public maxDate: string;
-    @Input() public defaultDate: string;
+    public readonly label = input<string>('');
+    public readonly placeholder = input<string>('dd/mm/yyyy');
+    public readonly helpTitle = input<string>();
+    public readonly helpText = input<string>();
+    public readonly helpTextColor = input<string>('text-green-500');
+    public readonly dateFormat = input<string>('d/m/Y H:i');
+    public readonly dateFormatNgModel = input<string>('YYYY-MM-DD HH:mm:00');
+    public readonly showCalendarIcon = input<boolean>(false);
+    public readonly helperReverseYPosition = input<boolean>(false);
+    public readonly shining = input<boolean>(false);
 
-    // Validation
-    @Input() public isRequired: boolean = false;
+    /** Behavior Inputs */
+
+    public readonly name = input.required<string>();
+    public readonly mode = input<NgtDateMode | string>(NgtDateMode.SINGLE);
+    public readonly locale = input<NgtDateLocale | string>(NgtDateLocale.BRAZIL);
+    public readonly time_24hr = input<boolean>(true);
+    public readonly enableTime = input<boolean>(true);
+    public readonly noCalendar = input<boolean>(false);
+    public readonly minuteIncrement = input<number>(1);
+    public readonly allowInput = input<boolean>(false);
+    public readonly allowClear = input<boolean>(true);
+    public readonly minDate = input<string>();
+    public readonly maxDate = input<string>();
+    public readonly defaultDate = input<string>();
+    public readonly isDisabled = input<boolean>(false);
+    public readonly isReadonly = input<boolean>(false);
+
+    /** Validation Inputs */
+
+    public readonly isRequired = input<boolean>(false);
+
+    /** Outputs */
 
     public readonly onValueChange = output<any>();
 
-    public ngtStyle: NgtStylizableService;
-    public dateConfig: FlatpickrOptions;
-    public nativeValue: any;
-    public componentReady = false;
-    public nativeName = uuid();
-    public inputProperties: {
-        htmlType?: string;
-        length?: number;
-    } = {};
+    /** Computed Signals */
 
-    private subscriptions: Array<Subscription> = [];
+    public readonly isShining: Signal<boolean> = computed(
+        () => this.shining() || this.ngtForm?.shining()
+    );
+
+    public readonly isDisabledByParent: Signal<boolean> = computed(
+        () => !!(this.ngtForm?.isDisabled() || this.ngtSection?.isDisabledState() || this.ngtModal?.isDisabledState())
+    );
+
+    public readonly isDisabledState: Signal<boolean> = computed(
+        () => this.isDisabled() || this.isDisabledByParent()
+    );
+
+    public readonly isReadonlyState: Signal<boolean> = computed(
+        () => this.isReadonly() || this.isDisabledState()
+    );
+
+    public readonly currentValue: Signal<any> = computed(() => this.value);
+
+    public readonly shouldShowClearButton: Signal<boolean> = computed(
+        () => !this.isDisabledState() && this.allowClear() && this.currentValue()
+    );
+
+    public readonly formattedDisplayValue: Signal<string> = computed(() =>
+        this.getFormattedNativeValue()
+    );
+
+    public readonly containerClasses: Signal<string> = computed(() =>
+        this.getContainerClasses()
+    );
+
+    /** Internal Control */
+
+    public ngtStyle: NgtStylizableService;
+
+    public readonly dateConfig: WritableSignal<FlatpickrOptions> = signal(null);
+    public readonly nativeValue: WritableSignal<any> = signal(null);
+    public readonly componentReady: WritableSignal<boolean> = signal(false);
+    public readonly nativeName: WritableSignal<string> = signal(uuid());
+
+    private readonly formControlHasErrors: WritableSignal<boolean> = signal(false);
+    private readonly formControlIsDirty: WritableSignal<boolean> = signal(false);
+
     private lastInputedDateString: string;
+    private subscriptions: Subscription[] = [];
 
     public constructor(
         @Optional() @Host()
@@ -119,127 +167,80 @@ export class NgtDateComponent extends NgtControlValueAccessor implements OnInit,
         @Optional() @SkipSelf()
         private ngtModal: NgtModalComponent,
 
+        private formatterService: NgtDateFormatterService,
+
+        private cdr: ChangeDetectorRef,
+
         protected override injector: Injector,
     ) {
         super();
 
-        if (this.ngtForm) {
-            this.shining = this.ngtForm.isShining();
+        this.setupNgtStylizable();
 
-            this.subscriptions.push(
-                this.ngtForm.onShiningChange.subscribe((shining: boolean) => {
-                    this.shining = shining;
-                })
-            );
-        }
-
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
-
-        this.ngtStyle.load(this.injector, 'NgtDate', {
-            h: 'h-10',
-            text: 'text-xs',
-            px: 'px-4',
-            fontCase: '',
-            color: {
-                text: 'text-gray-800'
-            }
-        });
+        this.registerEffects();
     }
 
-    public ngOnChanges(changes: SimpleChanges) {
-        if (changes.isRequired) {
-            this.updateValidations();
-        }
-
-        if (changes.mode) {
-            this.mode = getEnumFromString(changes.mode.currentValue, NgtDateMode);
-        }
-
-        if (changes.locale) {
-            this.locale = getEnumFromString(changes.locale.currentValue, NgtDateLocale);
-        }
-    }
-
-    public ngOnInit() {
-        this.dateConfig = {
-            dateFormat: this.dateFormat,
-            mode: this.getDateMode(),
-            minuteIncrement: this.minuteIncrement,
-            minDate: this.minDate,
-            maxDate: this.maxDate,
-            time_24hr: this.time_24hr,
-            enableTime: this.enableTime,
-            noCalendar: this.noCalendar,
-            allowInput: this.allowInput && !this.enableTime,
-            locale: this.getLocale(),
-            onChange: (selectedDates, dateStr, instance) => this.onNativeChange(selectedDates, dateStr, instance, true),
-            onClose: (selectedDates, dateStr, instance) => this.onNativeChange(selectedDates, dateStr, instance, false),
-        };
+    public ngOnInit(): void {
+        this.setupDateConfig();
 
         if (!this.formContainer) {
             console.error("The element must be inside a <form #form='ngForm'> tag!");
         }
 
-        if (!this.name) {
+        if (!this.name()) {
             console.error("The element must contain a name attribute!");
-        } else {
-            setTimeout(() => {
-                this.componentReady = true;
-                setTimeout(() => {
-                    this.initComponent();
-                });
-            }, 500);
         }
     }
 
-    public ngOnDestroy() {
-        this.evDatePicker.flatpickr['calendarContainer']?.remove();
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.componentReady.set(true);
+
+            setTimeout(() => {
+                this.initComponent();
+                this.cdr.markForCheck();
+            });
+        }, 500);
+    }
+
+    public ngOnDestroy(): void {
+        this.evDatePicker?.flatpickr?.['calendarContainer']?.remove();
 
         this.destroySubscriptions();
     }
 
-    public clearInput(clearInstance = false) {
-        this.value = '';
-        this.nativeValue = '';
-
-        if (this.evDatePicker && clearInstance) {
-            this.evDatePicker.setDateFromInput('');
-        }
-    }
-
-    public change(value: any) {
-        if (this.componentReady) {
+    public change(value: string | string[]): void {
+        if (this.componentReady()) {
             this.onValueChange.emit(this.value);
         }
 
-        if (!value || (value instanceof Object && !Object.keys(value).length)) {
+        if (!value || (Array.isArray(value) && !value.length)) {
             return this.clearInput();
         }
 
-        if (value && value != this.nativeValue) {
-            let firstValue = moment(value);
+        if (value && this.hasChangeBetweenValues(value, this.nativeValue())) {
+            if (Array.isArray(value) && value.length == 2) {
+                const firstDate = moment(value[0]);
+                const secondDate = moment(value[1]);
 
-            if ((value instanceof Object && Object.keys(value).length) || (value instanceof Array && value.length)) {
-                firstValue = moment(value[0]);
-
-                if (value.length == 2) {
-                    let secondValue = moment(value[1]);
-
-                    if (firstValue.isValid() && secondValue.isValid()) {
-                        return (<any>this.evDatePicker.flatpickr).setDate([
-                            firstValue.format(this.getMomentDateFormat()),
-                            secondValue.format(this.getMomentDateFormat())
-                        ], true, this.dateFormat);
-                    }
+                if (firstDate.isValid() && secondDate.isValid()) {
+                    return this.setDateOnDatePicker(
+                        [
+                            firstDate.format(this.getMomentDateFormat()),
+                            secondDate.format(this.getMomentDateFormat())
+                        ]
+                    );
                 }
+
+                return;
             }
 
-            if (firstValue.isValid()) {
-                return (<any>this.evDatePicker.flatpickr).setDate(firstValue.format(this.getMomentDateFormat()), true, this.dateFormat);
+            const date = moment(value);
+
+            if (date.isValid()) {
+                return this.setDateOnDatePicker(
+                    date.format(this.getMomentDateFormat())
+                );
             }
 
             this.evDatePicker.setDateFromInput('');
@@ -247,8 +248,8 @@ export class NgtDateComponent extends NgtControlValueAccessor implements OnInit,
         }
     }
 
-    public onNativeChange(value: any, dateStr: string, instance: any, triggerClose: boolean) {
-        if (dateStr && this.allowInput && !this.enableTime && dateStr != this.lastInputedDateString) {
+    public onNativeChange(value: any, dateStr: string, instance: any, triggerClose: boolean): void {
+        if (dateStr && this.allowInput() && !this.enableTime() && dateStr != this.lastInputedDateString) {
             this.lastInputedDateString = dateStr;
 
             return this.change(this.convertDateToAmericanFormat(dateStr));
@@ -262,189 +263,170 @@ export class NgtDateComponent extends NgtControlValueAccessor implements OnInit,
             return this.clearInput();
         }
 
-        if (this.mode == NgtDateMode.RANGE) {
-            this.nativeValue = [];
+        if (this.mode() == NgtDateMode.RANGE) {
+            const dateArray: string[] = [];
 
-            value.forEach(element => {
-                element = moment(element);
+            value.forEach(date => {
+                date = moment(date);
 
-                if (element && element.isValid()) {
-                    this.nativeValue.push(element.format(this.dateFormatNgModel));
+                if (date?.isValid()) {
+                    dateArray.push(date.format(this.dateFormatNgModel()));
                 }
             });
+
+            this.nativeValue.set(dateArray.length == 2 ? dateArray : []);
         } else if (value[0]) {
-            value = moment(value[0]);
+            const momentValue = moment(value[0]);
 
-            if (value && value.isValid()) {
-                this.nativeValue = value.format(this.dateFormatNgModel);
+            if (momentValue?.isValid()) {
+                this.nativeValue.set(momentValue.format(this.dateFormatNgModel()));
             }
         }
 
-        if (this.value != this.nativeValue) {
-            this.value = this.nativeValue;
+        if (this.hasChangeBetweenValues(this.value, this.nativeValue())) {
+            this.value = this.nativeValue();
+
+            this.cdr.markForCheck();
         }
     }
 
-    public getNativeValue() {
-        let nativeValue: any = this.nativeValue;
+    public clearInput(clearInstance = false, event?: Event): void {
+        event?.stopPropagation();
 
-        if (nativeValue && nativeValue.format) {
-            nativeValue = nativeValue.format(this.dateFormatNgModel);
+        if (this.hasChangeBetweenValues(this.value, '')) {
+            this.value = '';
         }
 
-        return nativeValue;
-    }
-
-    public getFormattedNativeValue() {
-        let nativeValue: any = this.nativeValue;
-
-        if (nativeValue && Array.isArray(nativeValue)) {
-            let formattedNativeValue: string = '';
-
-            nativeValue.forEach(element => {
-                element = moment(element);
-
-                if (element.format && !this.enableTime) {
-                    formattedNativeValue += element.format('DD/MM/YYYY') + ' ';
-                } else if (element.format && this.enableTime) {
-                    formattedNativeValue += element.format('DD/MM/YYYY HH:mm:00') + ' ';
-                }
-            });
-
-            return formattedNativeValue;
-        } else if (this.dateFormat == 'H:i') {
-            return nativeValue;
-        } else if (nativeValue) {
-            nativeValue = moment(nativeValue);
-
-            if (nativeValue.format && !this.enableTime) {
-                return nativeValue.format('DD/MM/YYYY') + ' ';
-            } else if (nativeValue.format && this.enableTime) {
-                return nativeValue.format('DD/MM/YYYY HH:mm:00') + ' ';
-            }
+        if (this.hasChangeBetweenValues(this.nativeValue(), '')) {
+            this.nativeValue.set('');
         }
 
-        return this.placeholder;
+        if (this.evDatePicker && clearInstance) {
+            this.evDatePicker.setDateFromInput('');
+        }
+
+        this.cdr.markForCheck();
     }
 
-    public hasErrors(): boolean {
-        return this.formControl?.errors && (this.formControl?.dirty || (this.formContainer && this.formContainer['submitted']));
-    }
+    private setupComponent(): void {
+        this.setupValidators();
+        this.setupSubscriptions();
 
-    public disabled(): boolean {
-        return this.isDisabled || this.isDisabledByParent();
-    }
+        if (this.defaultDate() && !this.value) {
+            this.value = moment(this.defaultDate()).format(this.dateFormatNgModel());
+        }
 
-    private initComponent() {
-        if (this.formContainer && this.formContainer.control && (this.formControl = this.formContainer.control.get(this.name))) {
-            if (this.defaultDate && !this.value) {
-                this.value = moment(this.defaultDate).format(this.dateFormatNgModel);
-            }
-
-            this.updateValidations();
-
-            if (this.value) {
-                this.formControl.markAsDirty();
-            } else {
-                this.formControl.markAsPristine();
-            }
-
-            if (this.allowInput && !this.enableTime) {
-                this.setupDateInputMask();
-            }
+        if (this.allowInput() && !this.enableTime()) {
+            this.setupDateInputMask();
         }
     }
 
-    private setupDateInputMask(): void {
-        if (this.locale == NgtDateLocale.BRAZIL) {
-            return applyInputMask(this.evDatePicker.flatpickr['input'], InputMaskEnum.DATE, { mask: '99/99/9999' });
-        }
+    private setupDateConfig(): void {
+        this.dateConfig.set({
+            dateFormat: this.dateFormat(),
+            mode: this.getDateMode(),
+            minuteIncrement: this.minuteIncrement(),
+            minDate: this.minDate(),
+            maxDate: this.maxDate(),
+            time_24hr: this.time_24hr(),
+            enableTime: this.enableTime(),
+            noCalendar: this.noCalendar(),
+            allowInput: this.allowInput() && !this.enableTime(),
+            locale: this.getLocale(),
+            onChange: (selectedDates, dateStr, instance) => this.onNativeChange(selectedDates, dateStr, instance, true),
+            onClose: (selectedDates, dateStr, instance) => this.onNativeChange(selectedDates, dateStr, instance, false),
+        });
+    }
 
-        if (this.locale == NgtDateLocale.US) {
-            return applyInputMask(this.evDatePicker.flatpickr['input'], InputMaskEnum.DATE, { mask: '9999-99-99' });
+    private setupSubscriptions(): void {
+        if (this.formControl) {
+            this.subscriptions.push(
+                this.formControl.events.subscribe((event) => {
+                    if (event instanceof TouchedChangeEvent) {
+                        this.touched.set(event.touched);
+                    }
+
+                    if (event instanceof ValueChangeEvent) {
+                        this.onValueChange.emit(event.value);
+                    }
+
+                    this.formControlHasErrors.set(!!this.formControl?.errors);
+                    this.formControlIsDirty.set(this.formControl?.dirty);
+
+                    this.cdr.markForCheck();
+                })
+            );
         }
     }
 
-    private updateValidations() {
+    private registerEffects(): void {
+        effect(() => this.setupValidators());
+    }
+
+    private setupValidators(): void {
         if (!this.formControl) {
             return;
         }
 
-        let syncValidators = [];
+        const syncValidators: ValidatorFn[] = [];
 
-        if (this.isRequired) {
+        if (this.isRequired()) {
             syncValidators.push(Validators.required);
         }
 
-        setTimeout(() => {
-            this.formControl.setValidators(syncValidators);
-            this.formControl.updateValueAndValidity();
+        this.formControl.setValidators(syncValidators);
+        this.formControl.updateValueAndValidity();
+
+        if (this.value) {
+            this.markAsDirty();
+
+            this.formControlHasErrors.set(!!this.formControl.errors);
+            this.formControlIsDirty.set(true);
+        }
+    }
+
+    private setupDateInputMask(): void {
+        if (this.locale() == NgtDateLocale.BRAZIL) {
+            return applyInputMask(this.evDatePicker.flatpickr['input'], InputMaskEnum.DATE, { mask: '99/99/9999' });
+        }
+
+        if (this.locale() == NgtDateLocale.US) {
+            return applyInputMask(this.evDatePicker.flatpickr['input'], InputMaskEnum.DATE, { mask: '9999-99-99' });
+        }
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
+
+        this.ngtStyle.load(this.injector, 'NgtDate', {
+            h: 'h-10',
+            text: 'text-xs',
+            px: 'px-4',
+            py: 'py-0',
+            rounded: 'rounded',
+            fontCase: '',
+            color: {
+                text: 'text-gray-800',
+                bg: 'bg-white',
+                border: 'border-gray-400 focus:border-gray-700'
+            }
         });
     }
 
-    private getLocale() {
-        return this.locale == NgtDateLocale.US
-            ? english
-            : Portuguese;
-    }
-
-    private getDateMode() {
-        if (this.mode) {
-            if (this.mode == NgtDateMode.RANGE) {
-                return 'range';
-            }
-        }
-
-        return 'single';
-    }
-
-    private getMomentDateFormat() {
-        let dateFormat = '';
-
-        for (let i = 0; i < this.dateFormat.length; i++) {
-            switch (this.dateFormat.charAt(i)) {
-                case 'd':
-                    dateFormat += 'DD';
-                    break;
-                case 'm':
-                    dateFormat += 'MM';
-                    break;
-                case 'M':
-                    dateFormat += 'MMM';
-                    break;
-                case 'Y':
-                    dateFormat += 'YYYY';
-                    break;
-                case '/':
-                    dateFormat += '/';
-                    break;
-                case '-':
-                    dateFormat += '-';
-                    break;
-                case ':':
-                    dateFormat += ':';
-                    break;
-                case 'H':
-                    dateFormat += 'HH';
-                    break;
-                case 'i':
-                    dateFormat += 'mm';
-                    break;
-                case 's':
-                    dateFormat += 'ss';
-                    break;
-                default:
-                    if (this.dateFormat.charAt(i) != '.') {
-                        dateFormat += this.dateFormat.charAt(i);
-                    }
-            }
-        }
-
-        return dateFormat ? dateFormat : 'DD/MM/YYYY HH:mm:00';
+    private setDateOnDatePicker(dates: string | string[]): void {
+        setTimeout(() => {
+            (<any>this.evDatePicker.flatpickr).setDate(
+                dates,
+                true,
+                this.dateFormat()
+            );
+        });
     }
 
     private convertDateToAmericanFormat(dateTimeString: string): string {
-        if (this.locale == NgtDateLocale.US) {
+        if (this.locale() == NgtDateLocale.US) {
             return dateTimeString;
         }
 
@@ -453,13 +435,53 @@ export class NgtDateComponent extends NgtControlValueAccessor implements OnInit,
         return `${splittedDate[2]}-${splittedDate[1]}-${splittedDate[0]}`;
     }
 
-    private isDisabledByParent(): boolean {
-        return this.ngtForm?.isDisabled
-            || this.ngtSection?.isDisabledState()
-            || this.ngtModal?.isDisabledState();
+    private getLocale() {
+        return this.locale() == NgtDateLocale.US
+            ? english
+            : Portuguese;
     }
 
-    private destroySubscriptions() {
+    private getDateMode(): 'single' | 'range' {
+        return this.mode() == NgtDateMode.RANGE ? 'range' : 'single';
+    }
+
+    private getMomentDateFormat(): string {
+        return this.formatterService.convertFlatpickrToMomentFormat(this.dateFormat());
+    }
+
+    private getFormattedNativeValue(): string {
+        return this.formatterService.formatToDisplay(
+            this.nativeValue(),
+            this.enableTime(),
+            this.dateFormat(),
+            this.placeholder()
+        );
+    }
+
+    private getContainerClasses(): string {
+        const classes: string[] = [
+            'overflow-hidden border',
+            this.ngtStyle.compile(['h', 'color.text', 'px', 'py', 'text', 'rounded', 'color.bg', 'color.border'])
+        ];
+
+        if (this.formControlHasErrors() && (this.formControlIsDirty() || this.touched())) {
+            classes.push('border-error');
+        }
+
+        return classes.join(' ');
+    }
+
+    private hasChangeBetweenValues(a: any, b: any): boolean {
+        return JSON.stringify(a) != JSON.stringify(b);
+    }
+
+    private initComponent(): void {
+        if (this.formContainer && this.formContainer.control && (this.formControl = this.formContainer.control.get(this.name()))) {
+            this.setupComponent();
+        }
+    }
+
+    private destroySubscriptions(): void {
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
         this.subscriptions = [];
     }

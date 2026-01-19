@@ -1,15 +1,14 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
-    ChangeDetectorRef,
+    ChangeDetectionStrategy,
     Component,
     computed,
-    EventEmitter,
     Injector,
     input,
-    Input,
+    NgZone,
     Optional,
-    Output,
+    output,
     Self,
     signal,
     WritableSignal,
@@ -32,29 +31,42 @@ import { NgtAbilityValidationService } from '../../services/validation/ngt-abili
             ])
         ])
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtModalComponent implements AfterViewInit {
-    @Input() public customLayout: boolean = false;
-    @Input() public disableDefaultCloses: boolean = false;
-    @Input() public ngtStyle: NgtStylizableService;
+    /** Inputs */
 
-    @Output() public onCloseModal: EventEmitter<void> = new EventEmitter();
-    @Output() public onOpenModal: EventEmitter<void> = new EventEmitter();
+    public readonly customLayout = input<boolean>(false);
+    public readonly disableDefaultCloses = input<boolean>(false);
+    public readonly ngtStyle = input<NgtStylizableService>();
+
+    /** Outputs */
+
+    public readonly onCloseModal = output<void>();
+    public readonly onOpenModal = output<void>();
+
+    /** Signals */
 
     public readonly isDisabled = input<boolean>();
     public readonly isDisabledState = computed(() => this.isDisabled() || this.internalDisabledState());
+    public readonly isOpenSignal: WritableSignal<boolean> = signal(false);
+    public readonly viewMode: WritableSignal<boolean> = signal(false);
 
-    public isOpen: boolean = false;
-    public viewMode: boolean = false;
+    public readonly resolvedStyle = computed(
+        () => this.ngtStyle() ?? this.localStyle
+    );
+
+    /** Internal */
 
     private readonly internalDisabledState: WritableSignal<boolean> = signal(false);
-
+    private localStyle: NgtStylizableService;
     private keydownEventWasAdded: boolean = false;
+    private keydownListener: (event: KeyboardEvent) => void;
     private subscriptions: Array<Subscription> = [];
 
     public constructor(
-        private changeDetectorRef: ChangeDetectorRef,
+        private zone: NgZone,
         private injector: Injector,
 
         @Self() @Optional()
@@ -63,20 +75,11 @@ export class NgtModalComponent implements AfterViewInit {
         @Optional()
         private ngtAbilityValidationService: NgtAbilityValidationService
     ) {
-        if (this.tailStylizableDirective) {
-            this.ngtStyle = this.tailStylizableDirective.getNgtStylizableService();
-        } else if (!this.ngtStyle) {
-            this.ngtStyle = new NgtStylizableService();
-        }
+        this.setupNgtStylizable();
+    }
 
-        this.ngtStyle.load(this.injector, 'NgtModal', {
-            w: 'md:max-w-md',
-            py: 'py-4',
-            px: 'px-6',
-            border: 'border border-teal-500',
-            overflow: 'overflow-visible',
-            color: {}
-        });
+    public get isOpen(): boolean {
+        return this.isOpenSignal();
     }
 
     public async ngAfterViewInit(): Promise<void> {
@@ -84,23 +87,20 @@ export class NgtModalComponent implements AfterViewInit {
             this.internalDisabledState.set(
                 !(await this.ngtAbilityValidationService.hasManagePermission())
             );
-
-            this.changeDetectorRef.detectChanges();
         }
     }
 
     public close() {
-        this.isOpen = false;
-        this.changeDetectorRef.detectChanges();
+        this.isOpenSignal.set(false);
 
+        this.removeKeydownEventListener();
         this.destroySubscriptions();
 
         this.onCloseModal.emit();
     }
 
     public open() {
-        this.isOpen = true;
-        this.changeDetectorRef.detectChanges();
+        this.isOpenSignal.set(true);
 
         this.addKeydownEventListener();
         this.bindOnCloseModalByHeaderSubscription();
@@ -109,17 +109,31 @@ export class NgtModalComponent implements AfterViewInit {
     }
 
     private addKeydownEventListener() {
-        if (!this.disableDefaultCloses && !this.keydownEventWasAdded) {
+        if (!this.disableDefaultCloses() && !this.keydownEventWasAdded) {
             this.keydownEventWasAdded = true;
 
-            window.addEventListener('keydown', (event: any) => {
-                if (event.keyCode == 27) {
-                    if (this.viewMode) {
-                        this.closeViewMode();
-                        event.stopPropagation();
+            this.zone.runOutsideAngular(() => {
+                this.keydownListener = (event: KeyboardEvent) => {
+                    if ((event as any).keyCode == 27) {
+                        if (this.viewMode()) {
+                            this.zone.run(() => {
+                                this.closeViewMode();
+                            });
+                            event.stopPropagation();
+                        }
                     }
-                }
-            }, true);
+                };
+
+                window.addEventListener('keydown', this.keydownListener, true);
+            });
+        }
+    }
+
+    private removeKeydownEventListener(): void {
+        if (this.keydownListener) {
+            window.removeEventListener('keydown', this.keydownListener, true);
+            this.keydownListener = null;
+            this.keydownEventWasAdded = false;
         }
     }
 
@@ -136,6 +150,21 @@ export class NgtModalComponent implements AfterViewInit {
     }
 
     private closeViewMode(): void {
-        this.viewMode = false;
+        this.viewMode.set(false);
+    }
+
+    private setupNgtStylizable(): void {
+        this.localStyle = this.tailStylizableDirective
+            ? this.tailStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
+
+        this.localStyle.load(this.injector, 'NgtModal', {
+            w: 'md:max-w-md',
+            py: 'py-4',
+            px: 'px-6',
+            border: 'border border-teal-500',
+            overflow: 'overflow-visible',
+            color: {}
+        });
     }
 }

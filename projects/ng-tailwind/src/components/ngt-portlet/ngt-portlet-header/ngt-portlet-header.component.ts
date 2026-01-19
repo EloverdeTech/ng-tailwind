@@ -1,4 +1,11 @@
-import { Component, Injector, Input, Optional, Self } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Injector,
+    Optional,
+    Self,
+    input,
+} from '@angular/core';
 
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
@@ -6,15 +13,18 @@ import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-styli
 @Component({
     selector: 'ngt-portlet-header',
     templateUrl: './ngt-portlet-header.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtPortletHeaderComponent {
-    @Input() public caption: string = '';
-    @Input() public icon: string = '';
-    @Input() public iconSize: string = 'text-xl';
-    @Input() public helperTitle: string = '';
-    @Input() public helperText: string = '';
-    @Input() public helperIconColor: string = '';
+    /** Inputs */
+
+    public readonly caption = input<string>('');
+    public readonly icon = input<string>('');
+    public readonly iconSize = input<string>('text-xl');
+    public readonly helperTitle = input<string>('');
+    public readonly helperText = input<string>('');
+    public readonly helperIconColor = input<string>('');
 
     public ngtStyle: NgtStylizableService;
 
@@ -22,11 +32,13 @@ export class NgtPortletHeaderComponent {
         private injector: Injector,
         @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
     ) {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
+        this.setupNgtStylizable();
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
 
         this.ngtStyle.load(this.injector, 'NgtPortletHeader', {
             h: 'h-auto',

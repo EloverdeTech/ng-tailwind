@@ -1,4 +1,11 @@
-import { Component, Injector, Input, Optional, Self } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Injector,
+    Optional,
+    Self,
+    input,
+} from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -14,10 +21,13 @@ export enum NgtShiningWidth {
     selector: 'ngt-shining',
     templateUrl: './ngt-shining.component.html',
     styleUrls: ['./ngt-shining.component.css'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtShiningComponent {
-    @Input() public shiningWidth: NgtShiningWidth = NgtShiningWidth.xs;
+    /** Inputs */
+
+    public readonly shiningWidth = input<NgtShiningWidth>(NgtShiningWidth.xs);
 
     public ngtStyle: NgtStylizableService;
 
@@ -25,11 +35,13 @@ export class NgtShiningComponent {
         private injector: Injector,
         @Self() @Optional() private ngtStylizableDirective: NgtStylizableDirective,
     ) {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
+        this.setupNgtStylizable();
+    }
+
+    private setupNgtStylizable(): void {
+        this.ngtStyle = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
 
         this.ngtStyle.load(this.injector, 'NgtShining', {
             rounded: 'rounded-none',

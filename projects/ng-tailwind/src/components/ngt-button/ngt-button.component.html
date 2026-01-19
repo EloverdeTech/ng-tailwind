@@ -2,33 +2,34 @@
     <ng-content></ng-content>
 </ng-template>
 
-<div class="relative {{ngtStyle.compile(['w', 'h'])}}" (click)='onClick($event)'>
-    <ng-container *ngIf='!link'>
-        <button [ngClass]="{ 'disabled-button': disabled(), 'loading-button': loading }" [disabled]="disabled()"
-            [type]="(loading || disabled() || noSubmit) ? 'button' : 'submit'"
-            class="flex justify-center items-center focus:outline-none cursor-pointer {{ ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border', 'text', 'font', 'w', 'h', 'rounded']) }}">
+<div [class]="wrapperClass()" (click)="onClick($event)">
+    @if (!link()) {
+        <button [ngClass]="stateClasses()" [disabled]="isDisabledState()" [type]="buttonType()" [class]="containerClass()">
             <ng-container *ngTemplateOutlet="content"></ng-container>
 
-            <span *ngIf="loading" class="ml-2">
+            @if (loadingState()) {
+            <span class="ml-2">
                 <div class="div-loader h-5 w-5"></div>
             </span>
+            }
         </button>
-    </ng-container>
-
-    <ng-container *ngIf='link'>
-        <a [routerLink]='href ? href : null' [ngClass]="{ 'disabled-button': disabled(), 'loading-button': loading }"
-            class="flex justify-center items-center focus:outline-none cursor-pointer {{ ngtStyle.compile(['color.bg', 'color.text', 'color.border', 'px', 'py', 'border', 'text', 'font','w', 'h', 'rounded']) }}">
+    } @else {
+        <a [routerLink]="href() ? href() : null" [ngClass]="stateClasses()" [class]="containerClass()">
             <span class="w-full">
                 <ng-container *ngTemplateOutlet="content"></ng-container>
             </span>
 
-            <span *ngIf="loading" class="ml-1">
+            @if (loadingState()) {
+            <span class="ml-1">
                 <div class="div-loader"></div>
             </span>
+            }
         </a>
-    </ng-container>
+    }
 
-    <legend *ngIf="forceEnable" class="absolute top-0 cursor-pointer hover:opacity-25 hover:bg-gray-100 {{ ngtStyle.compile(['w', 'h']) }}"
-        (click)='onClick($event)'>
-    </legend>
+    @if (forceEnable()) {
+        <legend [class]="'absolute top-0 cursor-pointer hover:opacity-25 hover:bg-gray-100 ' + ngtStyle.compile(['w', 'h'])"
+            (click)="onClick($event)">
+        </legend>
+    }
 </div>

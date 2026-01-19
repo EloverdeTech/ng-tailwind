@@ -1,5 +1,13 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, HostListener, Output, TemplateRef } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    HostListener,
+    TemplateRef,
+    output,
+    signal,
+    WritableSignal,
+} from '@angular/core';
 
 export enum NgtPopoverPosition {
     DEFAULT = 'TOP',
@@ -18,24 +26,29 @@ export enum NgtPopoverPosition {
             ])
         ]),
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class NgtPopoverTooltipComponent {
-    @Output() public onMouseHoverEvent: EventEmitter<void> = new EventEmitter();
-    @Output() public onMouseLeaveEvent: EventEmitter<void> = new EventEmitter();
+    /** Outputs */
 
-    public popover: string;
-    public popoverTemplate: TemplateRef<any>;
-    public position: NgtPopoverPosition = NgtPopoverPosition.DEFAULT;
-    public positionX: number;
-    public positionY: number;
+    public readonly onMouseHoverEvent = output<void>();
+    public readonly onMouseLeaveEvent = output<void>();
+
+    /** Signals */
+
+    public readonly popover: WritableSignal<string> = signal(null);
+    public readonly popoverTemplate: WritableSignal<TemplateRef<any>> = signal(null);
+    public readonly position: WritableSignal<NgtPopoverPosition> = signal(NgtPopoverPosition.DEFAULT);
+    public readonly positionX: WritableSignal<number> = signal(null);
+    public readonly positionY: WritableSignal<number> = signal(null);
 
     public positionClasses: any = {
         [NgtPopoverPosition.TOP]: '-mt-10',
         [NgtPopoverPosition.BOTTOM]: '-mb-10',
     };
 
-    public popoverTemplateStyle: string = 'text-xxs';
+    public readonly popoverTemplateStyle: WritableSignal<string> = signal('text-xxs');
 
     @HostListener('mouseleave')
     public onMouseLeave(): void {

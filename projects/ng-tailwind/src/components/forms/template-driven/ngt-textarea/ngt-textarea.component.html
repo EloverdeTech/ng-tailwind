@@ -1,42 +1,50 @@
-<label class="{{ shining ? '' : 'block' }} mb-2 flex {{ ngtStyle.compile(['text', 'font', 'color.text']) }}"
-    *ngIf="label" [hidden]='shining'>
-    <span class="truncate" [title]="label">
-        {{ label }}:
-    </span>
+@if (label()) {
+    <label class="mb-2 flex {{ ngtStyle.compile(['text', 'font', 'color.text']) }}" [class.block]="!isShining()"
+        [hidden]="isShining()">
+        <span class="truncate" [title]="label()">
+            {{ label() }}:
+        </span>
 
-    <span class="text-red-500 font-bold text-md ml-1" *ngIf="isRequired">*</span>
+        @if (isRequired()) {
+            <span class="text-red-500 font-bold text-md ml-1">*</span>
+        }
 
-    <ngt-helper *ngIf="helpText" [helpTitle]="helpTitle" [iconColor]="helpTextColor" class="ml-1">
-        {{ helpText }}
-    </ngt-helper>
-</label>
+        @if (helpText()) {
+            <ngt-helper [helpTitle]="helpTitle()" [iconColor]="helpTextColor()" class="ml-1">
+                {{ helpText() }}
+            </ngt-helper>
+        }
+    </label>
+}
 
 <div class="flex flex-col">
-    <div class="{{ shining ? '' : 'flex'}}" [hidden]='shining'>
-        <textarea [rows]='rows' autocomplete="new-password" attr.type="text"
-            class="appearance-none block border focus:outline-none leading-tight text-xs px-3 py-3 rounded w-full {{ ngtStyle.compile(['h', 'color.border', 'color.bg', 'color.text']) }}"
-            [disabled]="isDisabled" [readonly]="isReadonly" placeholder="{{ placeholder ? placeholder : ''}}"
-            [ngClass]="{'textarea-has-error border-red-700': formControl?.errors && (formControl?.dirty || (formContainer && formContainer['submitted']))}"
-            #element>
-        </textarea>
-    </div>
+    @if (!isShining()) {
+        <div class="flex">
+            <textarea #element [rows]="rows()" autocomplete="new-password" attr.type="text" [class]="textareaClasses()"
+                [disabled]="isDisabled()" [readonly]="isReadonly()" [placeholder]="placeholder() || ''">
+                </textarea>
+        </div>
+    }
 
-    <ng-container *ngIf="showCharactersLength && !shining">
+    @if (showCharactersLength() && !isShining()) {
         <p class="text-xxs mt-1">
-            {{ ngtTranslateService.ngtTextAreaRemainingCharacters }}: <span class="font-semibold">
-                {{ getRemainingCharacters() }}
+            {{ ngtTranslateService?.ngtTextAreaRemainingCharacters }}:
+            <span class="font-semibold">
+                {{ remainingCharacters() }}
             </span>
         </p>
-    </ng-container>
+    }
 </div>
 
-<ng-container *ngIf='shining'>
+@if (isShining()) {
     <div class="flex">
         <ngt-shining class="h-10 w-full"></ngt-shining>
     </div>
-</ng-container>
+}
 
-<input *ngIf='componentReady' class="text-xs" type="hidden" [ngModel]="value" [name]="name" [value]="value">
+@if (componentReady()) {
+    <input class="text-xs" type="hidden" [ngModel]="value" [name]="name()" [value]="value">
+}
 
 <ng-content></ng-content>
 <ngt-validation [control]="formControl" [container]="formContainer"></ngt-validation>
