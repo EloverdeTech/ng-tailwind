@@ -1,12 +1,14 @@
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     computed,
     effect,
     ElementRef,
     Injector,
     input,
+    NgZone,
     OnDestroy,
     Optional,
     output,
@@ -20,7 +22,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AsyncValidatorFn, ReactiveFormsModule, TouchedChangeEvent, ValidatorFn, ValueChangeEvent } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -114,6 +117,9 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
     private readonly formControlHasErrors: WritableSignal<boolean> = signal(false);
     private readonly formControlIsDirty: WritableSignal<boolean> = signal(false);
 
+    private inputSubject$ = new Subject<string>();
+    private isUserTyping = false;
+
     private subscriptions: Subscription[] = [];
     private listeners: Array<() => void> = [];
 
@@ -134,7 +140,8 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
         private translateService: NgtTranslateService,
 
         private validationService: NgtReactiveTextareaValidationService,
-        private renderer: Renderer2,
+        private changeDetector: ChangeDetectorRef,
+        private ngZone: NgZone,
 
         protected override injector: Injector,
     ) {
@@ -149,12 +156,18 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
         this.formControl = this.getControl();
 
         this.setupComponent();
+
+        this.changeDetector.detach();
     }
 
     public ngOnDestroy(): void {
         this.destroySubscriptions();
 
         this.destroyListeners();
+
+        this.inputSubject$.complete();
+
+        this.changeDetector.reattach();
     }
 
     public onNativeChange(): void {
@@ -186,12 +199,18 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
         this.setupValidators();
 
         this.setupSubscriptions();
+
+        this.setupListeners();
     }
 
     private setupSubscriptions(): void {
         if (this.formControl) {
             this.subscriptions.push(
                 this.formControl.events.subscribe((event) => {
+                    if (this.isUserTyping) {
+                        return;
+                    }
+
                     if (event instanceof TouchedChangeEvent) {
                         this.touched.set(event.touched);
                     }
@@ -202,22 +221,83 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
 
                     this.formControlHasErrors.set(!!this.formControl?.errors);
                     this.formControlIsDirty.set(this.formControl?.dirty);
+
+                    if (event instanceof TouchedChangeEvent) {
+                        this.changeDetector.detectChanges();
+                    }
                 })
             );
         }
 
-        const unlistenKeydown = this.renderer.listen(this.textareaElement.nativeElement, 'keydown', (event) => {
-            if (this.getNativeValue()?.length >= this.maxLength()) {
-                /** Backspace and delete */
-                if (event.keyCode != 8 && event.keyCode != 46) {
-                    event.preventDefault();
+        this.subscriptions.push(
+            this.inputSubject$
+                .pipe(
+                    debounceTime(100),
+                    distinctUntilChanged()
+                )
+                .subscribe(value => {
+                    this.isUserTyping = false;
 
-                    return false;
+                    if (this.hasChangesBetweenValues()) {
+                        this.value = value;
+                    }
+
+                    this.changeDetector.detectChanges();
+                })
+        );
+    }
+
+    private setupListeners(): void {
+        const textarea = this.textareaElement.nativeElement;
+
+        this.ngZone.runOutsideAngular(() => {
+            const inputHandler = (event: Event) => {
+                this.isUserTyping = true;
+
+                const value = (event.target as HTMLTextAreaElement).value;
+
+                this.inputSubject$.next(value);
+            };
+
+            const keydownHandler = (event: KeyboardEvent) => {
+                const currentLength = (event.target as HTMLTextAreaElement).value?.length || 0;
+
+                if (currentLength >= this.maxLength()) {
+                    if (event.key !== 'Backspace' && event.key !== 'Delete') {
+                        event.preventDefault();
+
+                        return false;
+                    }
                 }
-            }
+            };
+
+            const blurHandler = () => {
+                this.isUserTyping = false;
+
+                this.ngZone.run(() => {
+                    this.onTouched();
+                    this.changeDetector.detectChanges();
+                });
+            };
+
+            const focusHandler = () => {
+                // Prevent default CD
+            };
+
+            textarea.addEventListener('input', inputHandler, { passive: true });
+            textarea.addEventListener('keydown', keydownHandler);
+            textarea.addEventListener('blur', blurHandler);
+            textarea.addEventListener('focus', focusHandler, { passive: true });
+
+            this.listeners.push(
+                () => textarea.removeEventListener('input', inputHandler),
+                () => textarea.removeEventListener('keydown', keydownHandler),
+                () => textarea.removeEventListener('blur', blurHandler),
+                () => textarea.removeEventListener('focus', focusHandler)
+            );
         });
 
-        this.listeners.push(unlistenKeydown);
+        this.changeDetector.detectChanges();
     }
 
     private registerEffects(): void {
@@ -227,7 +307,11 @@ export class NgtReactiveTextareaComponent extends NgtControlValueAccessor implem
             }
         });
 
-        effect(() => this.setupValidators());
+        effect(() => {
+            this.setupValidators();
+
+            this.changeDetector.detectChanges();
+        });
     }
 
     private setupValidators(): void {
