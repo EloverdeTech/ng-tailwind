@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
-    AfterViewInit, ChangeDetectorRef, Component, computed, ElementRef, EventEmitter, Injector, input, Input, Optional, Output, Self, signal, ViewChild,
+    AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, Input, OnChanges, Optional, Output, Self, signal, SimpleChanges, ViewChild,
     WritableSignal
 } from '@angular/core';
 
@@ -21,7 +21,7 @@ import { NgtAbilityValidationService } from '../../services/validation/ngt-abili
     ],
     standalone: false
 })
-export class NgtSectionComponent implements AfterViewInit {
+export class NgtSectionComponent implements AfterViewInit, OnChanges {
     @ViewChild('elementRef') public elementRef: ElementRef;
 
     @Input() public name: string;
@@ -34,12 +34,10 @@ export class NgtSectionComponent implements AfterViewInit {
     @Input() public helpTitle: string;
     @Input() public helpText: string;
     @Input() public helpIconColor: string;
+    @Input() public isDisabled: boolean;
 
     @Output() public onRemove: EventEmitter<void> = new EventEmitter();
-
     @Output() public onToggleSection: EventEmitter<boolean> = new EventEmitter();
-    public readonly isDisabled = input<boolean>();
-    public readonly isDisabledState = computed(() => this.isDisabled() || this.internalDisabledState());
 
     public ngtSectionStyle: NgtStylizableService;
     public ngtCaptionStyle: NgtStylizableService;
@@ -47,7 +45,7 @@ export class NgtSectionComponent implements AfterViewInit {
 
     public canDisplay: boolean;
 
-    private readonly internalDisabledState: WritableSignal<boolean> = signal(false);
+    public readonly isDisabledState: WritableSignal<boolean> = signal(false);
 
     public constructor(
         private injector: Injector,
@@ -106,6 +104,12 @@ export class NgtSectionComponent implements AfterViewInit {
         });
     }
 
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.isDisabled) {
+            this.isDisabledState.set(changes.isDisabled.currentValue);
+        }
+    }
+
     public async ngAfterViewInit(): Promise<void> {
         if (!this.ngtAbilityValidationService || !this.name) {
             this.canDisplay = true;
@@ -114,8 +118,8 @@ export class NgtSectionComponent implements AfterViewInit {
         }
 
         if (this.ngtAbilityValidationService && this.name) {
-            if (this.isDisabled() === undefined) {
-                this.internalDisabledState.set(
+            if (this.isDisabled === undefined) {
+                this.isDisabledState.set(
                     !(await this.ngtAbilityValidationService.isSectionEnabled(this.name))
                 );
             }
