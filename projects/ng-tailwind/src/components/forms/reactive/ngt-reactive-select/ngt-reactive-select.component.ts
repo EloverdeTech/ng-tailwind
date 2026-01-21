@@ -259,6 +259,8 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
                     this.stateService.updateFormControlState(this.formControl);
                 })
             );
+
+            this.setupValidators();
         }
     }
 
@@ -449,7 +451,6 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
 
         const config: NgtReactiveSelectValidationConfig = {
             isRequired: this.isRequired(),
-            multiple: this.multiple(),
             customSyncValidators: this.customSyncValidators(),
         };
 
@@ -458,7 +459,7 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
         this.formControl.setValidators(syncValidators);
         this.formControl.updateValueAndValidity();
 
-        if (this.value) {
+        if (this.value && (!Array.isArray(this.value) || this.value.length)) {
             this.markAsDirty();
 
             this.stateService.formControlHasErrors.set(!!this.formControl.errors);
