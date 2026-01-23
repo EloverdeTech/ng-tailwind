@@ -12,7 +12,6 @@ import {
     OnDestroy,
     Optional,
     output,
-    Renderer2,
     Self,
     Signal,
     signal,
