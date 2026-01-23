@@ -503,16 +503,6 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
         });
 
         effect(() => {
-            setTimeout(() => {
-                if (this.isDisabledState()) {
-                    this.formControl.disable();
-                } else {
-                    this.formControl.enable();
-                }
-            });
-        });
-
-        effect(() => {
             if (!this.stateService.hadFirstItemsLoad() && this.canLoadItems() && this.ngSelectComponent) {
                 this.stateService.markFirstItemsLoaded();
 

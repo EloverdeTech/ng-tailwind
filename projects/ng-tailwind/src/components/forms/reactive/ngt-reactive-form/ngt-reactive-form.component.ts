@@ -68,7 +68,6 @@ export class NgtReactiveFormComponent implements OnInit, OnDestroy {
     public readonly isDisabledState = computed(() => this.isDisabled() || this.isFormGroupDisabled());
 
     private subscriptions: Array<Subscription> = [];
-    private isSubmitted: boolean;
 
     public constructor(
         @Optional()
@@ -96,8 +95,6 @@ export class NgtReactiveFormComponent implements OnInit, OnDestroy {
 
     public onSubmit(): void {
         this.form().markAllAsTouched();
-
-        this.isSubmitted = true;
 
         if (!this.form().valid) {
             NgtReactiveFormComponent.onSubmitInvalidForm.emit(this.form());
@@ -194,8 +191,6 @@ export class NgtReactiveFormComponent implements OnInit, OnDestroy {
             const hasPermission = await this.abilityValidationService.hasManagePermission();
 
             if (!hasPermission) {
-                this.form().disable();
-
                 this.isFormGroupDisabled.set(true);
             }
         }
