@@ -144,9 +144,14 @@ export class NgtReactiveCheckboxComponent extends NgtControlValueAccessor implem
         this.formControl = this.getControl();
     }
 
-    public change(value: boolean): void {
+    public change(value: boolean | number | string): void {
         if (this.hasChangeBetweenValues()) {
-            this.setNativeValue(value);
+            if (value == 0) {
+                value = false;
+                this.value = false;
+            }
+
+            this.setNativeValue(<boolean>value);
         }
     }
 
