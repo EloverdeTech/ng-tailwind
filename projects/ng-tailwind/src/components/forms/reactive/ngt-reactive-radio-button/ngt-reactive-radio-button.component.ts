@@ -169,6 +169,11 @@ export class NgtReactiveRadioButtonComponent extends NgtControlValueAccessor imp
         }
     }
 
+    public markAsActive(): void {
+        this.change(true);
+        this.onNativeChange();
+    }
+
     private setupSubscriptions(): void {
         if (this.container) {
             const onActiveRadioButtonChange = this.container.onActiveRadioButtonChange
