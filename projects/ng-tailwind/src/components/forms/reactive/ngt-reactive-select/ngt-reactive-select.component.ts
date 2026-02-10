@@ -319,7 +319,7 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
         if (this.hasChangesBetweenValues(this.value, value)) {
             value = this.sortSelectedItems(value);
 
-            if (this.valueAsArray() && !Array.isArray(value)) {
+            if (value && this.valueAsArray() && !Array.isArray(value)) {
                 value = [value];
             }
 
@@ -330,7 +330,7 @@ export class NgtReactiveSelectComponent extends NgtControlValueAccessor implemen
 
     public change(value: any): void {
         if (this.hasChangesBetweenValues(value, this.nativeValue)) {
-            if (this.valueAsArray() && !Array.isArray(value)) {
+            if (value && this.valueAsArray() && !Array.isArray(value)) {
                 value = [value];
             }
 
