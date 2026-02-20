@@ -12,6 +12,8 @@ import {
     SimpleChanges,
     TemplateRef,
     ViewChild,
+    WritableSignal,
+    signal,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
@@ -89,7 +91,6 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
 
     public searchModalTemplate: TemplateRef<any>;
     public data = [];
-    public loading = false;
     public cleaningFilter = false;
     public componentReady = false;
     public filtersTranslated = [];
@@ -97,6 +98,8 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     public columnCount = [];
     public hasSelectedAllElements: boolean;
     public selectedElements: Array<NgtCheckedElement> = [];
+
+    public readonly loadingSignal: WritableSignal<boolean> = signal(false);
 
     public filterModalStyle: NgtStylizableService = new NgtStylizableService();
 
@@ -130,6 +133,14 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             overflow: 'overflow-visible',
             color: {}
         });
+    }
+
+    public get loading(): boolean {
+        return this.loadingSignal();
+    }
+
+    public set loading(value: boolean) {
+        this.loadingSignal.set(value);
     }
 
     public ngOnInit() {

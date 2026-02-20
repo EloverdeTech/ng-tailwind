@@ -24,7 +24,7 @@
         {{ ngtTranslateService.ngtDatatableNoDataFound }}
     </p>
 
-    <div *ngIf="loading">
+    <div *ngIf="loadingSignal()">
         <div *ngFor="let i of [1, 2, 3, 4]" class="flex w-full mt-3">
             <ng-container *ngIf="columnCount.length >= 2">
                 <ng-container *ngFor="let j of columnCount; let last = last">
