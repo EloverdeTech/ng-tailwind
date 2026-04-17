@@ -26,11 +26,14 @@
                 </div>
 
                 <div class="flex flex-col w-full px-8 mt-6">
-                    <ngt-input class="block" name='cpfCnpj' label='CPF/CNPJ' [(ngModel)]="cpfCnpj" mask='cnpj-cpf'
+                    <ngt-input class="block" name='cpfCnpj' label='CPF/CNPJ (alphanumeric CNPJ)' [(ngModel)]="cpfCnpj" mask='cnpj-cpf'
                         innerRightIcon='assets/images/icons/clipboard.svg'>
                     </ngt-input>
                     <span class="my-2 font-semibold text-sm">
                         NgModel value: <span class="font-normal">{{ cpfCnpj }}</span>
+                    </span>
+                    <span class="text-xs text-gray-600">
+                        Example CNPJ input: AB.123.CD4/EF56-78 (stored without punctuation and uppercase).
                     </span>
                 </div>
 
