@@ -169,19 +169,22 @@ export class NgtDropzoneComponent extends NgtBaseNgModel implements OnInit, OnDe
         this.destroySubscriptions();
     }
 
-    public imagePreview(index) {
+    public imagePreview(uploadedResourcesIndex: number): void {
         const images = this.uploadedResources.filter((resource) => this.isImage(resource));
-        const imagesDiv = document.createElement("div");
+        const imagesDiv = document.createElement('div');
 
         images.forEach((image) => {
-            let imageElement = document.createElement("img");
+            let imageElement = document.createElement('img');
 
             imageElement.src = image.file.url;
 
             imagesDiv.appendChild(imageElement);
         });
 
-        this.onImageClick(imagesDiv, index);
+        const clickedResource = this.uploadedResources[uploadedResourcesIndex];
+        const imageIndexInGallery = images.indexOf(clickedResource);
+
+        this.onImageClick(imagesDiv, imageIndexInGallery >= 0 ? imageIndexInGallery : 0);
     }
 
     public onImageClick(element, index?) {
