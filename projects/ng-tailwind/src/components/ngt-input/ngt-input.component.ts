@@ -483,15 +483,24 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             return this.clearInput();
         }
 
+        const cnpjMaskPattern = 'XX.XXX.XXX/XXXX-99';
+        const cnpjMaskParameters = {
+            mask: [cnpjMaskPattern],
+            definitions: {
+                X: {
+                    validator: '[0-9A-Za-z]',
+                    casing: 'upper'
+                }
+            },
+            showMaskOnHover: false
+        };
+
         let masks = {
             [InputMaskEnum.CPF]: {
                 mask: ['999.999.999-99'],
                 showMaskOnHover: false
             },
-            [InputMaskEnum.CNPJ]: {
-                mask: ['99.999.999/9999-99'],
-                showMaskOnHover: false
-            },
+            [InputMaskEnum.CNPJ]: cnpjMaskParameters,
             [InputMaskEnum.CUIT]: {
                 mask: ['99-99999999-9'],
                 clearMaskOnLostFocus: false
@@ -501,13 +510,15 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 clearMaskOnLostFocus: false
             },
             [InputMaskEnum.CPF_CNPJ_RUT]: {
-                mask: ['999.999.999-99', '999999999999', '99.999.999/9999-99'],
+                mask: ['999.999.999-99', '999999999999', cnpjMaskPattern],
                 keepStatic: true,
+                definitions: cnpjMaskParameters.definitions,
                 showMaskOnHover: false
             },
             [InputMaskEnum.CPF_CNPJ]: {
-                mask: ['999.999.999-99', '99.999.999/9999-99'],
+                mask: ['999.999.999-99', cnpjMaskPattern],
                 keepStatic: true,
+                definitions: cnpjMaskParameters.definitions,
                 showMaskOnHover: false
             },
             [InputMaskEnum.DECIMAL]: {
@@ -642,16 +653,18 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 return null;
             }
 
-            if (control.value && control.value.length <= 11) {
-                if (this.validatorCPF(control.value)) {
+            const normalizedDocument = this.removeMasks(control.value);
+
+            if (normalizedDocument && normalizedDocument.length <= 11) {
+                if (this.validatorCPF(normalizedDocument)) {
                     return null;
                 } else {
                     return { 'cpf': true };
                 }
-            } else if (control.value && control.value.length == 12) {
+            } else if (normalizedDocument && normalizedDocument.length == 12) {
                 return null;
             } else {
-                if (control.value && this.validatorCNPJ(control.value)) {
+                if (normalizedDocument && this.validatorCNPJ(normalizedDocument)) {
                     return null;
                 } else {
                     return { 'cnpj': true };
@@ -794,8 +807,20 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         };
     }
 
-    private validatorCNPJ(value) {
-        let b = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    private validatorCNPJ(value: string): boolean {
+        const normalizedValue = this.normalizeDocument(value);
+
+        if (normalizedValue.length != 14) {
+            return false;
+        }
+
+        return /[A-Z]/.test(normalizedValue)
+            ? this.validatorAlphaNumericCNPJ(normalizedValue)
+            : this.validatorNumericCNPJ(normalizedValue);
+    }
+
+    private validatorNumericCNPJ(value: string): boolean {
+        const b = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
 
         if ((value = value.replace(/[^\d]/g, "")).length != 14) {
             return false;
@@ -807,26 +832,60 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
 
         let n = 0;
 
-        for (let i = 0; i < 12; n += value[i] * b[++i]) {
-            ;
+        for (let i = 0; i < 12; i++) {
+            n += Number(value[i]) * b[i + 1];
         }
 
-        if (value[12] != (((n %= 11) < 2) ? 0 : 11 - n)) {
+        if (Number(value[12]) != (((n %= 11) < 2) ? 0 : 11 - n)) {
             return false;
         }
 
         n = 0;
 
-        for (let i = 0; i <= 12; n += value[i] * b[i++]) {
-            ;
+        for (let i = 0; i <= 12; i++) {
+            n += Number(value[i]) * b[i];
         }
 
-        if (value[13] != (((n %= 11) < 2) ? 0 : 11 - n)) {
+        if (Number(value[13]) != (((n %= 11) < 2) ? 0 : 11 - n)) {
             return false;
         }
 
         return true;
-    };
+    }
+
+    private validatorAlphaNumericCNPJ(value: string): boolean {
+        if (!/^[A-Z0-9]{12}[0-9]{2}$/.test(value)) {
+            return false;
+        }
+
+        const firstWeights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+        const firstDigit = this.getCnpjVerificationDigit(value.substring(0, 12), firstWeights);
+
+        if (firstDigit !== Number(value[12])) {
+            return false;
+        }
+
+        const secondWeights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+        const secondDigit = this.getCnpjVerificationDigit(`${value.substring(0, 12)}${firstDigit}`, secondWeights);
+
+        return secondDigit === Number(value[13]);
+    }
+
+    private getCnpjVerificationDigit(value: string, weights: number[]): number {
+        const weightedTotal = value
+            .split('')
+            .reduce((total, currentValue, index) => total + (this.getCnpjCharacterValue(currentValue) * weights[index]), 0);
+
+        const modulo = weightedTotal % 11;
+
+        return modulo < 2 ? 0 : 11 - modulo;
+    }
+
+    private getCnpjCharacterValue(value: string): number {
+        return /^[0-9]$/.test(value)
+            ? Number(value)
+            : value.charCodeAt(0) - 48;
+    }
 
     private validatorCPF(value) {
         let numeros, digitos, soma, i, resultado, digitos_iguais;
@@ -892,8 +951,11 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                 .replace(/\./g, '')
                 .replace(',', '.');
         } else if (this.mask == "cnpj-cpf" || this.mask == "cpf" || this.mask == "cnpj" || this.mask == "cnpj-cpf-rut" || this.mask == "cuit") {
-            value = (value + "")
-                .replace(/[^\d]/g, '');
+            value = this.normalizeDocument(value);
+
+            if (this.mask == "cpf" || this.mask == "cuit") {
+                value = value.replace(/[^\d]/g, '');
+            }
         } else if (
             this.mask == InputMaskEnum.CELLPHONE
             || this.mask == InputMaskEnum.INTERNATIONAL_PHONE
@@ -908,6 +970,13 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }
 
         return value;
+    }
+
+    private normalizeDocument(value: string): string {
+        return (value || '')
+            .toString()
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, '');
     }
 
     private hasEmailServiceValidation(): boolean {
