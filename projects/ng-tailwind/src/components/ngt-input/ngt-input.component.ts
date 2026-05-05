@@ -22,6 +22,7 @@ import { Subscription } from 'rxjs';
 
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
+import Inputmask from 'inputmask/dist/inputmask.es6.js';
 import { applyInputMask, InputMaskEnum, removeInputMask } from '../../helpers/input-mask/input-mask.helper';
 import {
     NgtHttpFindExistingResourceInterface,
@@ -484,6 +485,7 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         }
 
         const cnpjMaskPattern = 'XX.XXX.XXX/XXXX-99';
+        const onBeforeCnpjPaste = (pastedValue: string) => pastedValue.toUpperCase().replace(/[^A-Z0-9]/g, '');
         const cnpjMaskParameters = {
             mask: [cnpjMaskPattern],
             definitions: {
@@ -492,7 +494,8 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
                     casing: 'upper'
                 }
             },
-            showMaskOnHover: false
+            showMaskOnHover: false,
+            onBeforePaste: onBeforeCnpjPaste
         };
 
         let masks = {
@@ -511,15 +514,15 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
             },
             [InputMaskEnum.CPF_CNPJ_RUT]: {
                 mask: ['999.999.999-99', '999999999999', cnpjMaskPattern],
-                keepStatic: true,
                 definitions: cnpjMaskParameters.definitions,
-                showMaskOnHover: false
+                showMaskOnHover: false,
+                onBeforePaste: onBeforeCnpjPaste
             },
             [InputMaskEnum.CPF_CNPJ]: {
                 mask: ['999.999.999-99', cnpjMaskPattern],
-                keepStatic: true,
                 definitions: cnpjMaskParameters.definitions,
-                showMaskOnHover: false
+                showMaskOnHover: false,
+                onBeforePaste: onBeforeCnpjPaste
             },
             [InputMaskEnum.DECIMAL]: {
                 digits: this.decimalMaskPrecision,
@@ -570,6 +573,47 @@ export class NgtInputComponent extends NgtBaseNgModel implements OnInit, OnDestr
         } else {
             applyInputMask(this.element.nativeElement, masks[this.mask]);
         }
+
+        if (this.mask == InputMaskEnum.CPF_CNPJ || this.mask == InputMaskEnum.CPF_CNPJ_RUT) {
+            this.setupAlphanumericPasteHandler();
+        }
+    }
+
+    private setupAlphanumericPasteHandler(): void {
+        const handler = (event: ClipboardEvent) => {
+            const pastedText = event.clipboardData?.getData('text/plain') ?? '';
+            const normalized = pastedText.toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+            if (normalized.length !== 14 || !/[A-Z]/.test(normalized)) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            const formatted = `${normalized.substring(0, 2)}.${normalized.substring(2, 5)}.${normalized.substring(5, 8)}/${normalized.substring(8, 12)}-${normalized.substring(12, 14)}`;
+            const input = this.element.nativeElement as HTMLInputElement;
+            const inputmaskInstance = (input as any).inputmask;
+
+            const alphaMaskOptions = {
+                mask: ['XX.XXX.XXX/XXXX-99'],
+                definitions: { X: { validator: '[0-9A-Za-z]', casing: 'upper' } },
+                showMaskOnHover: false
+            };
+
+            if (inputmaskInstance && typeof inputmaskInstance.option === 'function') {
+                inputmaskInstance.option(alphaMaskOptions);
+            } else {
+                removeInputMask(input as any);
+                Inputmask(alphaMaskOptions).mask(input as any);
+            }
+
+            input.value = formatted;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        };
+
+        this.element.nativeElement.addEventListener('paste', handler, true);
     }
 
     private setupProperties() {
