@@ -20,9 +20,9 @@ import {
 import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
+import Inputmask from 'inputmask/dist/inputmask.es6.js';
 import { NgtBaseNgModel, NgtMakeProvider } from '../../base/ngt-base-ng-model';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
-import Inputmask from 'inputmask/dist/inputmask.es6.js';
 import { applyInputMask, InputMaskEnum, removeInputMask } from '../../helpers/input-mask/input-mask.helper';
 import {
     NgtHttpFindExistingResourceInterface,
