@@ -20,9 +20,9 @@ import {
 import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
+import Inputmask from 'inputmask/dist/inputmask.es6.js';
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { applyInputMask, InputMaskEnum, removeInputMask } from '../../../../helpers/input-mask/input-mask.helper';
-import Inputmask from 'inputmask/dist/inputmask.es6.js';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import {
     NgtHttpFindExistingResourceInterface,
@@ -35,7 +35,6 @@ import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-st
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
-import { validateCNPJ, validateCPF } from '../../../../helpers/validators/validation.helper';
 
 @Component({
     selector: 'ngt-input',
