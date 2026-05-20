@@ -21,9 +21,9 @@ import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, Validators
 import { Subscription } from 'rxjs';
 
 import Inputmask from 'inputmask/dist/inputmask.es6.js';
+import { NgtStylizableDirective } from 'projects/ng-tailwind/src/public-api';
 import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { applyInputMask, InputMaskEnum, removeInputMask } from '../../../../helpers/input-mask/input-mask.helper';
-import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import {
     NgtHttpFindExistingResourceInterface,
     NgtHttpFindExistingResourceResponse,
