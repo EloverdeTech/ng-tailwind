@@ -23,7 +23,7 @@ export class NgtInputPageComponent implements OnInit {
     innerLeftIcon='assets/images/icons/keyboard.svg' mask='decimal'>
   </ngt-input>
 
-  <ngt-input class="block" name='cpfCnpj' label='CPF/CNPJ' [(ngModel)]="cpfCnpj" 
+  <ngt-input class="block" name='cpfCnpj' label='CPF/CNPJ (alphanumeric CNPJ)' [(ngModel)]="cpfCnpj" 
     mask='cnpj-cpf'>
   </ngt-input>
 

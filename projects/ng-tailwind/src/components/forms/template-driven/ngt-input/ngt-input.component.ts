@@ -20,8 +20,9 @@ import {
 import { AbstractControl, AsyncValidatorFn, ControlContainer, NgForm, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
-import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
+import Inputmask from 'inputmask/dist/inputmask.es6.js';
 import { NgtStylizableDirective } from '../../../../directives/ngt-stylizable/ngt-stylizable.directive';
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
 import { applyInputMask, InputMaskEnum, removeInputMask } from '../../../../helpers/input-mask/input-mask.helper';
 import {
     NgtHttpFindExistingResourceInterface,
@@ -34,7 +35,6 @@ import { NgtStylizableService } from '../../../../services/ngt-stylizable/ngt-st
 import { NgtFormComponent } from '../ngt-form/ngt-form.component';
 import { NgtSectionComponent } from '../../../ngt-section/ngt-section.component';
 import { NgtModalComponent } from '../../../ngt-modal/ngt-modal.component';
-import { validateCNPJ, validateCPF } from '../../../../helpers/validators/validation.helper';
 
 @Component({
     selector: 'ngt-input',
@@ -486,15 +486,26 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
             return this.clearInput();
         }
 
+        const cnpjMaskPattern = 'XX.XXX.XXX/XXXX-99';
+        const onBeforeCnpjPaste = (pastedValue: string) => pastedValue.toUpperCase().replace(/[^A-Z0-9]/g, '');
+        const cnpjMaskParameters = {
+            mask: [cnpjMaskPattern],
+            definitions: {
+                X: {
+                    validator: '[0-9A-Za-z]',
+                    casing: 'upper'
+                }
+            },
+            showMaskOnHover: false,
+            onBeforePaste: onBeforeCnpjPaste
+        };
+
         let masks = {
             [InputMaskEnum.CPF]: {
                 mask: ['999.999.999-99'],
                 showMaskOnHover: false
             },
-            [InputMaskEnum.CNPJ]: {
-                mask: ['99.999.999/9999-99'],
-                showMaskOnHover: false
-            },
+            [InputMaskEnum.CNPJ]: cnpjMaskParameters,
             [InputMaskEnum.CUIT]: {
                 mask: ['99-99999999-9'],
                 clearMaskOnLostFocus: false
@@ -504,14 +515,16 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
                 clearMaskOnLostFocus: false
             },
             [InputMaskEnum.CPF_CNPJ_RUT]: {
-                mask: ['999.999.999-99', '999999999999', '99.999.999/9999-99'],
-                keepStatic: true,
-                showMaskOnHover: false
+                mask: ['999.999.999-99', '999999999999', cnpjMaskPattern],
+                definitions: cnpjMaskParameters.definitions,
+                showMaskOnHover: false,
+                onBeforePaste: onBeforeCnpjPaste
             },
             [InputMaskEnum.CPF_CNPJ]: {
-                mask: ['999.999.999-99', '99.999.999/9999-99'],
-                keepStatic: true,
-                showMaskOnHover: false
+                mask: ['999.999.999-99', cnpjMaskPattern],
+                definitions: cnpjMaskParameters.definitions,
+                showMaskOnHover: false,
+                onBeforePaste: onBeforeCnpjPaste
             },
             [InputMaskEnum.DECIMAL]: {
                 digits: this.decimalMaskPrecision,
@@ -562,6 +575,47 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
         } else {
             applyInputMask(this.element.nativeElement, masks[this.mask]);
         }
+
+        if (this.mask == InputMaskEnum.CPF_CNPJ || this.mask == InputMaskEnum.CPF_CNPJ_RUT) {
+            this.setupAlphanumericPasteHandler();
+        }
+    }
+
+    private setupAlphanumericPasteHandler(): void {
+        const handler = (event: ClipboardEvent) => {
+            const pastedText = event.clipboardData?.getData('text/plain') ?? '';
+            const normalized = pastedText.toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+            if (normalized.length !== 14 || !/[A-Z]/.test(normalized)) {
+                return;
+            }
+
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            const formatted = `${normalized.substring(0, 2)}.${normalized.substring(2, 5)}.${normalized.substring(5, 8)}/${normalized.substring(8, 12)}-${normalized.substring(12, 14)}`;
+            const input = this.element.nativeElement as HTMLInputElement;
+            const inputmaskInstance = (input as any).inputmask;
+
+            const alphaMaskOptions = {
+                mask: ['XX.XXX.XXX/XXXX-99'],
+                definitions: { X: { validator: '[0-9A-Za-z]', casing: 'upper' } },
+                showMaskOnHover: false
+            };
+
+            if (inputmaskInstance && typeof inputmaskInstance.option === 'function') {
+                inputmaskInstance.option(alphaMaskOptions);
+            } else {
+                removeInputMask(input as any);
+                Inputmask(alphaMaskOptions).mask(input as any);
+            }
+
+            input.value = formatted;
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.dispatchEvent(new Event('change', { bubbles: true }));
+        };
+
+        this.element.nativeElement.addEventListener('paste', handler, true);
     }
 
     private setupProperties() {
@@ -645,16 +699,18 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
                 return null;
             }
 
-            if (control.value && control.value.length <= 11) {
-                if (validateCPF(control.value)) {
+            const normalizedDocument = this.removeMasks(control.value);
+
+            if (normalizedDocument && normalizedDocument.length <= 11) {
+                if (this.validatorCPF(normalizedDocument)) {
                     return null;
                 } else {
                     return { 'cpf': true };
                 }
-            } else if (control.value && control.value.length == 12) {
+            } else if (normalizedDocument && normalizedDocument.length == 12) {
                 return null;
             } else {
-                if (control.value && validateCNPJ(control.value)) {
+                if (normalizedDocument && this.validatorCNPJ(normalizedDocument)) {
                     return null;
                 } else {
                     return { 'cnpj': true };
@@ -797,6 +853,136 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
         };
     }
 
+    private validatorCNPJ(value: string): boolean {
+        const normalizedValue = this.normalizeDocument(value);
+
+        if (normalizedValue.length != 14) {
+            return false;
+        }
+
+        return /[A-Z]/.test(normalizedValue)
+            ? this.validatorAlphaNumericCNPJ(normalizedValue)
+            : this.validatorNumericCNPJ(normalizedValue);
+    }
+
+    private validatorNumericCNPJ(value: string): boolean {
+        const b = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+
+        if ((value = value.replace(/[^\d]/g, "")).length != 14) {
+            return false;
+        }
+
+        if (/0{14}/.test(value)) {
+            return false;
+        }
+
+        let n = 0;
+
+        for (let i = 0; i < 12; i++) {
+            n += Number(value[i]) * b[i + 1];
+        }
+
+        if (Number(value[12]) != (((n %= 11) < 2) ? 0 : 11 - n)) {
+            return false;
+        }
+
+        n = 0;
+
+        for (let i = 0; i <= 12; i++) {
+            n += Number(value[i]) * b[i];
+        }
+
+        if (Number(value[13]) != (((n %= 11) < 2) ? 0 : 11 - n)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private validatorAlphaNumericCNPJ(value: string): boolean {
+        if (!/^[A-Z0-9]{12}[0-9]{2}$/.test(value)) {
+            return false;
+        }
+
+        const firstWeights = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+        const firstDigit = this.getCnpjVerificationDigit(value.substring(0, 12), firstWeights);
+
+        if (firstDigit !== Number(value[12])) {
+            return false;
+        }
+
+        const secondWeights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+        const secondDigit = this.getCnpjVerificationDigit(`${value.substring(0, 12)}${firstDigit}`, secondWeights);
+
+        return secondDigit === Number(value[13]);
+    }
+
+    private getCnpjVerificationDigit(value: string, weights: number[]): number {
+        const weightedTotal = value
+            .split('')
+            .reduce((total, currentValue, index) => total + (this.getCnpjCharacterValue(currentValue) * weights[index]), 0);
+
+        const modulo = weightedTotal % 11;
+
+        return modulo < 2 ? 0 : 11 - modulo;
+    }
+
+    private getCnpjCharacterValue(value: string): number {
+        return /^[0-9]$/.test(value)
+            ? Number(value)
+            : value.charCodeAt(0) - 48;
+    }
+
+    private validatorCPF(value) {
+        let numeros, digitos, soma, i, resultado, digitos_iguais;
+
+        digitos_iguais = 1;
+
+        if (value.length < 11) {
+            return false;
+        }
+
+        for (i = 0; i < value.length - 1; i++) {
+            if (value.charAt(i) != value.charAt(i + 1)) {
+                digitos_iguais = 0;
+                break;
+            }
+        }
+
+        if (!digitos_iguais) {
+            numeros = value.substring(0, 9);
+            digitos = value.substring(9);
+            soma = 0;
+
+            for (i = 10; i > 1; i--) {
+                soma += numeros.charAt(10 - i) * i;
+            }
+
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+
+            if (resultado != digitos.charAt(0)) {
+                return false;
+            }
+
+            numeros = value.substring(0, 10);
+            soma = 0;
+
+            for (i = 11; i > 1; i--) {
+                soma += numeros.charAt(11 - i) * i;
+            }
+
+            resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+
+            if (resultado != digitos.charAt(1)) {
+                return false;
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private getNativeValue() {
         return this.element.nativeElement.value;
     }
@@ -811,8 +997,11 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
                 .replace(/\./g, '')
                 .replace(',', '.');
         } else if (this.mask == "cnpj-cpf" || this.mask == "cpf" || this.mask == "cnpj" || this.mask == "cnpj-cpf-rut" || this.mask == "cuit") {
-            value = (value + "")
-                .replace(/[^\d]/g, '');
+            value = this.normalizeDocument(value);
+
+            if (this.mask == "cpf" || this.mask == "cuit") {
+                value = value.replace(/[^\d]/g, '');
+            }
         } else if (
             this.mask == InputMaskEnum.CELLPHONE
             || this.mask == InputMaskEnum.INTERNATIONAL_PHONE
@@ -827,6 +1016,13 @@ export class NgtInputComponent extends NgtControlValueAccessor implements OnInit
         }
 
         return value;
+    }
+
+    private normalizeDocument(value: string): string {
+        return (value || '')
+            .toString()
+            .toUpperCase()
+            .replace(/[^A-Z0-9]/g, '');
     }
 
     private hasEmailServiceValidation(): boolean {

@@ -39,6 +39,10 @@ export class NgtTranslateDefaultService extends NgtTranslateService {
         return 'O Campo deve ter no mínimo ' + minLenth + ' caracteres';
     }
 
+    public ngtValidationMinItemsField(minItems?: string | number): string {
+        return 'Selecione pelo menos ' + minItems + ' itens';
+    }
+
     public ngtPagination(from: string | number, to: string | number, total: string | number): string {
         return `Visualizando ${from} - ${to} de ${total} registros`;
     }
