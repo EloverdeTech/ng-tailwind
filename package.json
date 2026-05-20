@@ -12,7 +12,6 @@
     "fix-lint": "eslint . --ext .ts --fix",
     "e2e": "ng e2e"
   },
-  "private": true,
   "dependencies": {
     "@angular-devkit/core": "^19.2.3",
     "@angular/animations": "^19.2.2",
