@@ -1,7 +1,20 @@
+import { CommonModule } from '@angular/common';
 import {
-    Component, ElementRef, Injector, Input, Optional, Self, ViewChild, ViewEncapsulation
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    Injector,
+    input,
+    Optional,
+    Self,
+    Signal,
+    signal,
+    ViewEncapsulation,
+    WritableSignal,
 } from '@angular/core';
 
+import { NgtDropdownComponent, NgtDropdownOpenMethod } from '../ngt-dropdown/ngt-dropdown.component';
+import { NgtSvgModule } from '../ngt-svg/ngt-svg.module';
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -10,38 +23,63 @@ import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizab
     selector: 'ngt-helper',
     templateUrl: './ngt-helper.component.html',
     encapsulation: ViewEncapsulation.None,
-    standalone: false
+    standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        NgtDropdownComponent,
+        NgtSvgModule
+    ],
 })
 export class NgtHelperComponent {
-    @ViewChild('dropdownRef', { static: true }) public dropdownRef: ElementRef;
+    /** Visual Inputs */
 
-    @Input() public helpTextColor: string;
-    @Input() public helpText: string;
-    @Input() public helpTitle: string;
-    @Input() public icon: string;
-    @Input() public iconSize: string;
-    @Input() public iconColor: string;
-    @Input() public iconTitle: string;
-    @Input() public tooltipSize: string = 'max-w-xs';
-    @Input() public autoXReverse: boolean = true;
-    @Input() public helperReverseYPosition: boolean;
+    public readonly helpTextColor = input<string>();
+    public readonly helpText = input<string>();
+    public readonly helpTitle = input<string>();
+    public readonly icon = input<string>();
+    public readonly iconSize = input<string>();
+    public readonly iconColor = input<string>('text-green-500');
+    public readonly iconTitle = input<string>();
+    public readonly tooltipSize = input<string>('max-w-xs');
 
-    public ngtStyle: NgtStylizableService;
+    /** Behavior Inputs */
+
+    public readonly autoXReverse = input<boolean>(true);
+    public readonly helperReverseYPosition = input<boolean>();
+
+    /** Computed Signals */
+
+    public readonly hasIcon: Signal<boolean> = computed(() => !!this.icon());
+    public readonly hasHelpText: Signal<boolean> = computed(() => !!this.helpText());
+    public readonly hasIconTitle: Signal<boolean> = computed(() => !!this.iconTitle());
+    public readonly displayHelpTitle: Signal<string> = computed(() =>
+        this.helpTitle() || this.ngtTranslateService?.ngtStandardHelperTitle
+    );
+
+    /** Internal Signals */
+
+    public readonly ngtStyle: WritableSignal<NgtStylizableService> = signal(new NgtStylizableService());
+    public readonly NgtDropdownOpenMethod = NgtDropdownOpenMethod;
 
     public constructor(
         @Optional() @Self()
         public ngtStylizableDirective: NgtStylizableDirective,
+
         @Optional()
         public ngtTranslateService: NgtTranslateService,
+
         private injector: Injector,
     ) {
-        if (this.ngtStylizableDirective) {
-            this.ngtStyle = this.ngtStylizableDirective.getNgtStylizableService();
-        } else {
-            this.ngtStyle = new NgtStylizableService();
-        }
+        this.setupNgtStylizable();
+    }
 
-        this.ngtStyle.load(this.injector, 'NgtHelper', {
+    private setupNgtStylizable(): void {
+        const styleService = this.ngtStylizableDirective
+            ? this.ngtStylizableDirective.getNgtStylizableService()
+            : new NgtStylizableService();
+
+        styleService.load(this.injector, 'NgtHelper', {
             text: 'text-xs',
             fontCase: '',
             px: 'px-2',
@@ -51,5 +89,7 @@ export class NgtHelperComponent {
                 bg: 'bg-gray-200'
             }
         });
+
+        this.ngtStyle.set(styleService);
     }
 }

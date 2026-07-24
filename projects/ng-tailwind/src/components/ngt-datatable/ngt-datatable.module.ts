@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { NgtStylizableModule } from '../../directives/ngt-stylizable/ngt-stylizable.module';
 import { NgtActionModule } from '../ngt-action/ngt-action.module';
-import { NgtCheckboxModule } from '../ngt-checkbox/ngt-checkbox.module';
-import { NgtInputModule } from '../ngt-input/ngt-input.module';
+import { NgtCheckboxModule } from '../forms/template-driven/ngt-checkbox/ngt-checkbox.module';
+import { NgtInputModule } from '../forms/template-driven/ngt-input/ngt-input.module';
 import { NgtModalModule } from '../ngt-modal/ngt-modal.module';
 import { NgtPaginationModule } from '../ngt-pagination/ngt-pagination.module';
 import { NgtShiningModule } from '../ngt-shining/ngt-shining.module';

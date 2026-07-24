@@ -1,0 +1,96 @@
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    Host,
+    Input,
+    OnDestroy,
+    Optional,
+    Renderer2,
+    SkipSelf,
+    ViewChild,
+} from '@angular/core';
+import { ControlContainer, NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
+
+import { NgtControlValueAccessor, NgtValueAccessorProvider } from '../../../../base/ngt-control-value-accessor';
+import { NgtFormComponent } from '../ngt-form/ngt-form.component';
+
+export enum NgtSliderColorSchemeEnum {
+    PRIMARY = 'primary',
+    SUCCESS = 'success',
+    WARNING = 'warning',
+    DANGER = 'danger'
+};
+
+@Component({
+    selector: 'ngt-slider',
+    templateUrl: './ngt-slider.component.html',
+    styleUrls: ['./ngt-slider.component.css'],
+    providers: [
+        NgtValueAccessorProvider(NgtSliderComponent),
+    ],
+    viewProviders: [
+        { provide: ControlContainer, useExisting: NgForm }
+    ],
+    standalone: false
+})
+export class NgtSliderComponent extends NgtControlValueAccessor implements AfterViewInit, OnDestroy {
+    @ViewChild('element', { static: true }) public element: ElementRef;
+    @ViewChild('display', { static: true }) public display: ElementRef;
+
+    @Input() public label: string;
+    @Input() public shining: boolean;
+    @Input() public isDisabled: boolean;
+    @Input() public showPercentageSymbol: boolean;
+    @Input() public name: string;
+    @Input() public min: string = '0';
+    @Input() public max: string = '100';
+    @Input() public step: string = '1';
+    @Input() public color: NgtSliderColorSchemeEnum = NgtSliderColorSchemeEnum.PRIMARY;
+
+    private subscriptions: Array<Subscription> = [];
+
+    public constructor(
+        @Optional() @Host()
+        public formContainer: ControlContainer,
+        private renderer: Renderer2,
+        @Optional() @SkipSelf()
+        private ngtFormComponent: NgtFormComponent,
+    ) {
+        super();
+
+        if (this.ngtFormComponent) {
+            this.shining = this.ngtFormComponent.isShining();
+
+            this.subscriptions.push(
+                this.ngtFormComponent.onShiningChange.subscribe((shining: boolean) => {
+                    this.shining = shining;
+                })
+            );
+        }
+    }
+
+    public ngAfterViewInit() {
+        this.renderer.listen(this.element.nativeElement, 'change', () => {
+            this.onNativeChange(this.element.nativeElement.value);
+        });
+    }
+
+    public ngOnDestroy() {
+        this.destroySubscriptions();
+    }
+
+    public change(value: boolean) {
+        this.element.nativeElement.value = value;
+    }
+
+    public onNativeChange(value: boolean) {
+        this.value = value;
+    }
+
+    private destroySubscriptions() {
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+        this.subscriptions = [];
+    }
+}

@@ -1,0 +1,24 @@
+@if (label()) {
+    <label class="flex mb-2 text-sm" [hidden]='isShining()'>
+        <span class="truncate" [title]="label()">
+            {{ label() }}:
+        </span>
+    </label>
+}
+
+<div [class]="isShining() ? 'hidden' : 'flex items-center'">
+    <input [class]="sliderClasses()" type="range" [min]='min()' [max]='max()' [step]='step()'
+        [disabled]="isDisabledState()" (change)="onNativeChange()" (blur)="onTouched()" #sliderElement>
+
+    <span class="text-xs ml-2 font-semibold">{{ value || min() }}</span>
+
+    @if (showPercentageSymbol()) {
+        <span class="text-xs font-semibold">%</span>
+    }
+</div>
+
+@if (isShining()) {
+    <ngt-shining class="block w-full h-6"></ngt-shining>
+}
+
+<ng-content></ng-content>

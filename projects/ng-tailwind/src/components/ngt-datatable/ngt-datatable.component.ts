@@ -12,13 +12,15 @@ import {
     SimpleChanges,
     TemplateRef,
     ViewChild,
+    WritableSignal,
+    signal,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { getEnumFromString } from '../../helpers/enum/enum';
 import { NgtHttpPagination, NgtHttpResponse, NgtHttpService } from '../../services/http/ngt-http.service';
 import { NgtTranslateService } from '../../services/http/ngt-translate.service';
-import { NgtInputComponent } from '../ngt-input/ngt-input.component';
+import { NgtInputComponent } from '../forms/template-driven/ngt-input/ngt-input.component';
 import { NgtModalComponent } from '../ngt-modal/ngt-modal.component';
 import { NgtPaginationComponent } from '../ngt-pagination/ngt-pagination.component';
 import { NgtStylizableService } from '../../services/ngt-stylizable/ngt-stylizable.service';
@@ -89,7 +91,6 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
 
     public searchModalTemplate: TemplateRef<any>;
     public data = [];
-    public loading = false;
     public cleaningFilter = false;
     public componentReady = false;
     public filtersTranslated = [];
@@ -97,6 +98,8 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
     public columnCount = [];
     public hasSelectedAllElements: boolean;
     public selectedElements: Array<NgtCheckedElement> = [];
+
+    public readonly loadingSignal: WritableSignal<boolean> = signal(false);
 
     public filterModalStyle: NgtStylizableService = new NgtStylizableService();
 
@@ -130,6 +133,14 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
             overflow: 'overflow-visible',
             color: {}
         });
+    }
+
+    public get loading(): boolean {
+        return this.loadingSignal();
+    }
+
+    public set loading(value: boolean) {
+        this.loadingSignal.set(value);
     }
 
     public ngOnInit() {
@@ -472,7 +483,7 @@ export class NgtDatatableComponent implements OnInit, OnDestroy {
 
     private initSearchWithInput() {
         this.subscriptions.push(
-            this.inputSearch.onValueChange().subscribe((value: string) => {
+            this.inputSearch.onValueChange.subscribe((value: string) => {
                 if (this.currentState.filters.defaultFilters['term']) {
                     if (!value) {
                         this.removeFilter('term');

@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { NgtDropdownModule } from '../ngt-dropdown/ngt-dropdown.module';
 import { NgtPopoverTooltipComponent } from './ngt-popover-tooltip/ngt-popover-tooltip.component';
 import { NgtPopoverComponent } from './ngt-popover.component';
 import { NgtPopoverDirective } from './ngt-popover.directive';
+import { NgtDropdownComponent } from '../ngt-dropdown/ngt-dropdown.component';
 
 @NgModule({
     exports: [
@@ -18,7 +18,7 @@ import { NgtPopoverDirective } from './ngt-popover.directive';
     ],
     imports: [
         CommonModule,
-        NgtDropdownModule
+        NgtDropdownComponent
     ]
 })
 export class NgtPopoverModule { }

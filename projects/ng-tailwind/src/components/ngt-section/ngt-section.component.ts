@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
-    AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, Input, Optional, Output, Self, ViewChild
+    AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Injector, Input, OnChanges, Optional, Output, Self, signal, SimpleChanges, ViewChild,
+    WritableSignal
 } from '@angular/core';
 
 import { NgtStylizableDirective } from '../../directives/ngt-stylizable/ngt-stylizable.directive';
@@ -20,7 +21,7 @@ import { NgtAbilityValidationService } from '../../services/validation/ngt-abili
     ],
     standalone: false
 })
-export class NgtSectionComponent implements AfterViewInit {
+export class NgtSectionComponent implements AfterViewInit, OnChanges {
     @ViewChild('elementRef') public elementRef: ElementRef;
 
     @Input() public name: string;
@@ -43,6 +44,8 @@ export class NgtSectionComponent implements AfterViewInit {
     public ngtSubtitleStyle: NgtStylizableService;
 
     public canDisplay: boolean;
+
+    public readonly isDisabledState: WritableSignal<boolean> = signal(false);
 
     public constructor(
         private injector: Injector,
@@ -101,6 +104,12 @@ export class NgtSectionComponent implements AfterViewInit {
         });
     }
 
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes.isDisabled) {
+            this.isDisabledState.set(changes.isDisabled.currentValue);
+        }
+    }
+
     public async ngAfterViewInit(): Promise<void> {
         if (!this.ngtAbilityValidationService || !this.name) {
             this.canDisplay = true;
@@ -110,7 +119,9 @@ export class NgtSectionComponent implements AfterViewInit {
 
         if (this.ngtAbilityValidationService && this.name) {
             if (this.isDisabled === undefined) {
-                this.isDisabled = !(await this.ngtAbilityValidationService.isSectionEnabled(this.name));
+                this.isDisabledState.set(
+                    !(await this.ngtAbilityValidationService.isSectionEnabled(this.name))
+                );
             }
 
             this.canDisplay = !(await this.ngtAbilityValidationService.isSectionHidden(this.name));

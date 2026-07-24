@@ -35,6 +35,7 @@ export abstract class NgtTranslateService {
     public abstract ngtValidationExternalServerUnavailable: string;
     public abstract ngtValidationValueMustBeGreaterThan(minValue?: number | string): string;
     public abstract ngtValidationMinLengthField(minLenth?: number | string): string;
+    public abstract ngtValidationMinItemsField(minItems?: number | string): string;
 
     public abstract ngtPagination(from: number | string, to: number | string, total: number | string): string;
 }
