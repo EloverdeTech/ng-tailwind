@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import {
     NgtCheckboxModule,
-    NgtDropdownModule,
+    NgtDropdownComponent,
     NgtPortletModule,
     NgtStylizableModule,
 } from 'projects/ng-tailwind/src/public-api';
@@ -31,7 +31,7 @@ const routes: Routes = [
         NgtCheckboxModule,
         NgtStylizableModule,
         NgtStylizableTemplateModule,
-        NgtDropdownModule
+        NgtDropdownComponent
     ]
 })
 export class NgtDropdownPageModule { }

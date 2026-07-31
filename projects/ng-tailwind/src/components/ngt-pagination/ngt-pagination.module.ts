@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { NgtStylizableModule } from '../../directives/ngt-stylizable/ngt-stylizable.module';
 import { NgtActionModule } from '../ngt-action/ngt-action.module';
-import { NgtSelectModule } from '../ngt-select/ngt-select.module';
+import { NgtSelectModule } from '../forms/template-driven/ngt-select/ngt-select.module';
 import { NgtPaginationComponent } from './ngt-pagination.component';
 
 @NgModule({

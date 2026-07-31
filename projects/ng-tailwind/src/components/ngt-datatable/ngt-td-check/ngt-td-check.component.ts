@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
 import { NgtStylizableDirective } from '../../../directives/ngt-stylizable/ngt-stylizable.directive';
 import { uuid } from '../../../helpers/uuid';
 import { NgtStylizableService } from '../../../services/ngt-stylizable/ngt-stylizable.service';
-import { NgtCheckboxComponent } from '../../ngt-checkbox/ngt-checkbox.component';
+import { NgtCheckboxComponent } from '../../forms/template-driven/ngt-checkbox/ngt-checkbox.component';
 import { NgtDatatableComponent } from '../ngt-datatable.component';
 
 @Component({
